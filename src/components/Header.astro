@@ -8,7 +8,19 @@
       </a>
       
       <div class="hidden md:flex items-center space-x-8">
-        <a href="/" class="text-gray-600 hover:text-brand font-medium">Home</a>
+        <!-- Worship Dropdown -->
+        <div class="relative group">
+          <button class="text-gray-600 hover:text-brand font-medium flex items-center gap-1">
+            Worship
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div class="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+            <a href="/worship" class="block px-4 py-3 text-gray-700 hover:bg-gray-50">Service Times</a>
+            <a href="/children-youth" class="block px-4 py-3 text-gray-700 hover:bg-gray-50">Children & Youth</a>
+          </div>
+        </div>
         
         <!-- About Dropdown -->
         <div class="relative group">
@@ -20,29 +32,27 @@
           </button>
           <div class="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
             <a href="/about" class="block px-4 py-3 text-gray-700 hover:bg-gray-50">Who We Are</a>
+            <a href="/lake-chimes" class="block px-4 py-3 text-gray-700 hover:bg-gray-50">Newsletter</a>
             <a href="/staff" class="block px-4 py-3 text-gray-700 hover:bg-gray-50">Staff</a>
-            <a href="/chimes" class="block px-4 py-3 text-gray-700 hover:bg-gray-50">Lake Chimes</a>
-            <a href="/children-youth" class="block px-4 py-3 text-gray-700 hover:bg-gray-50">Children & Youth</a>
             <a href="/bylaws" class="block px-4 py-3 text-gray-700 hover:bg-gray-50">Bylaws</a>
           </div>
         </div>
-        
-        <!-- Worship Dropdown -->
+
+        <!-- Events Dropdown -->
         <div class="relative group">
           <button class="text-gray-600 hover:text-brand font-medium flex items-center gap-1">
-            Worship
+            Events
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
           <div class="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-            <a href="/worship" class="block px-4 py-3 text-gray-700 hover:bg-gray-50">Service Times</a>
+            <a href="/weddings" class="block px-4 py-3 text-gray-700 hover:bg-gray-50">Weddings</a>
+            <a href="/calendar" class="block px-4 py-3 text-gray-700 hover:bg-gray-50">Calendar</a>
           </div>
         </div>
         
-        <a href="/weddings" class="text-gray-600 hover:text-brand font-medium">Weddings</a>
         <a href="/giving" class="text-gray-600 hover:text-brand font-medium">Giving</a>
-        <a href="/calendar" class="text-gray-600 hover:text-brand font-medium">Calendar</a>
         
         <a href="https://www.youtube.com/channel/UCUcLKfZo5Su6-ypmt1dkPKA" 
            target="_blank"
@@ -62,15 +72,38 @@
     <!-- Mobile menu -->
     <div class="md:hidden hidden" id="mobile-menu">
       <div class="px-2 pt-2 pb-3 space-y-1">
-        <a href="/" class="block px-3 py-2 text-gray-600 hover:text-brand font-medium">Home</a>
-        <a href="/about" class="block px-3 py-2 text-gray-600 hover:text-brand font-medium">Who We Are</a>
-        <a href="/staff" class="block px-3 py-2 text-gray-600 hover:text-brand font-medium">Staff</a>
-        <a href="/chimes" class="block px-3 py-2 text-gray-600 hover:text-brand font-medium">Lake Chimes</a>
-        <a href="/worship" class="block px-3 py-2 text-gray-600 hover:text-brand font-medium">Worship</a>
-        <a href="/weddings" class="block px-3 py-2 text-gray-600 hover:text-brand font-medium">Weddings</a>
-        <a href="/giving" class="block px-3 py-2 text-gray-600 hover:text-brand font-medium">Giving</a>
-        <a href="/calendar" class="block px-3 py-2 text-gray-600 hover:text-brand font-medium">Calendar</a>
-        <a href="/bylaws" class="block px-3 py-2 text-gray-600 hover:text-brand font-medium">Bylaws</a>
+        <!-- Worship -->
+        <div class="border-b border-gray-100 pb-2 mb-2">
+          <div class="font-medium px-3 py-2 text-gray-800">Worship</div>
+          <a href="/worship" class="block px-3 py-2 text-gray-600 hover:text-brand">Service Times</a>
+          <a href="/children-youth" class="block px-3 py-2 text-gray-600 hover:text-brand">Children & Youth</a>
+        </div>
+
+        <!-- About -->
+        <div class="border-b border-gray-100 pb-2 mb-2">
+          <div class="font-medium px-3 py-2 text-gray-800">About</div>
+          <a href="/about" class="block px-3 py-2 text-gray-600 hover:text-brand">Who We Are</a>
+          <a href="/lake-chimes" class="block px-3 py-2 text-gray-600 hover:text-brand">Newsletter</a>
+          <a href="/staff" class="block px-3 py-2 text-gray-600 hover:text-brand">Staff</a>
+          <a href="/bylaws" class="block px-3 py-2 text-gray-600 hover:text-brand">Bylaws</a>
+        </div>
+
+        <!-- Events -->
+        <div class="border-b border-gray-100 pb-2 mb-2">
+          <div class="font-medium px-3 py-2 text-gray-800">Events</div>
+          <a href="/weddings" class="block px-3 py-2 text-gray-600 hover:text-brand">Weddings</a>
+          <a href="/calendar" class="block px-3 py-2 text-gray-600 hover:text-brand">Calendar</a>
+        </div>
+
+        <!-- Other Links -->
+        <a href="/giving" class="block px-3 py-2 text-gray-600 hover:text-brand">Giving</a>
+        <a 
+          href="https://www.youtube.com/channel/UCUcLKfZo5Su6-ypmt1dkPKA" 
+          target="_blank"
+          class="block px-3 py-2 text-brand font-semibold hover:text-brand-dark"
+        >
+          Watch Live
+        </a>
       </div>
     </div>
   </nav>
