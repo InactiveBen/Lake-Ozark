@@ -12,23 +12,13 @@ const { title } = Astro.props;
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="description" content="Lake Ozark Christian Church - A welcoming community committed to spreading the love and teachings of Jesus Christ.">
-    <meta name="keywords" content="Lake Ozark, Christian Church, faith, Jesus, gospel, community, worship, Missouri">
-    <meta name="author" content="Lake Ozark Christian Church">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="index, follow">
-    <meta property="og:title" content="Lake Ozark Christian Church - A Community of Faith">
-    <meta property="og:description" content="Join Lake Ozark Christian Church in our mission to share the Gospel and support each other through faith.">
-    <meta property="og:image" content="/path-to-image.jpg"> <!-- Replace with your image path -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.lakeozarkchristianchurch.com"> <!-- Replace with your website URL -->
-    <link rel="icon" type="image/svg+xml" href="https://cdn-locc-org.vercel.app/images/cropped-LOCC-shortcut-32x32.png">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Gochi+Hand&display=swap">
-    <title>{{title}} - Lake Ozark Christian Church</title>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Lake Ozark Christian Church - A community of faith dedicated to sharing the Gospel of Jesus Christ" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="https://cdn-locc-org.vercel.app/images/cropped-LOCC-shortcut-32x32.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Gochi+Hand&display=swap" rel="stylesheet">
+    <title>{title} - Lake Ozark Christian Church</title>
   </head>
-</html>
-
   <body class="min-h-screen flex flex-col">
     <Header />
     <main class="flex-grow pt-20">
