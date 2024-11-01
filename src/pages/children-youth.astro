@@ -1,0 +1,140 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Slideshow from '../components/Slideshow.astro';
+
+const heroImages = [
+  {
+    url: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80",
+    alt: "Children in VBS"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1445633629932-0029acc44e88?auto=format&fit=crop&q=80",
+    alt: "Children learning about Jesus"
+  }
+];
+
+const programs = [
+  {
+    title: "Children's Church",
+    description: "Children ages 3 years to 6th grade are invited to join us for Children's Church during our 10:30 am Worship Service. Children attend the first part of the service and then leave as a group for the remainder of the morning.",
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />`
+  },
+  {
+    title: "Pastor's Baptism Class",
+    description: "It is the practice of the Disciples of Christ to baptize folks when they are ready to accept Jesus as their Lord and Savior and seek to follow him as his disciple. To help young people in their faith, each year Pastor Ron teaches a Baptism class to prepare them.",
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />`
+  },
+  {
+    title: "Boy Scouts",
+    description: "Lake Ozark Christian Church is a proud sponsor of Boy Scout and Cub Scout Pack #21.",
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" />`
+  },
+  {
+    title: "Vacation Bible School (VBS)",
+    description: "Our VBS program is a week-long camp offered each summer. Early morning child care is available for parents needing to drop off their children before going to work. The camp is designed for children ages 3 years through completed 6th grade. (Youth grades 7th through 12th are invited to assist station leaders.)",
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />`
+  }
+];
+---
+
+<Layout title="Children & Youth">
+  <!-- Hero Section with Background Image -->
+  <div class="relative">
+    <div class="absolute inset-0">
+      <Slideshow images={heroImages} />
+      <div class="absolute inset-0 bg-black/50"></div>
+    </div>
+
+    <div class="relative min-h-[60vh] flex items-center">
+      <div class="container mx-auto px-4 py-16 text-center text-white">
+        <h1 class="text-5xl md:text-6xl font-bold mb-4">Children & Youth</h1>
+        <blockquote class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto italic">
+          "Let the little children come to me, and do not stop them; for it is to such as these that the kingdom of heaven belongs."
+          <footer class="text-sm mt-2">- Matthew 19:14</footer>
+        </blockquote>
+        
+        <div class="flex flex-wrap justify-center gap-4">
+          <a 
+            href="/connect" 
+            class="bg-brand hover:bg-brand-dark text-white px-8 py-3 rounded-full transition transform hover:scale-105"
+          >
+            Contact Us
+          </a>
+          <a 
+            href="#programs" 
+            class="bg-white hover:bg-gray-100 text-gray-900 px-8 py-3 rounded-full transition transform hover:scale-105"
+          >
+            Learn More
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Introduction -->
+  <div class="container mx-auto px-4 py-16">
+    <div class="bg-white p-8 rounded-2xl shadow-lg max-w-4xl mx-auto">
+      <p class="text-xl text-gray-600">
+        At Lake Ozark Christian Church, we create space for people of all ages to grow, learn, and discover our loving God, Creator of the universe. 
+        For our youngest people, we strive to teach and show them the love of our Savior, who walks with them throughout their lives, 
+        always available with guidance, assurance, and grace.
+      </p>
+    </div>
+  </div>
+
+  <!-- Programs -->
+  <div id="programs" class="container mx-auto px-4 py-16">
+    <h2 class="text-3xl font-bold mb-12 text-center">Our Programs</h2>
+    <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+      {programs.map(program => (
+        <div class="bg-white p-8 rounded-2xl shadow-lg">
+          <div class="flex items-start gap-6">
+            <div class="p-3 bg-brand/10 rounded-xl text-brand">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <Fragment set:html={program.icon} />
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold mb-4">{program.title}</h3>
+              <p class="text-gray-600">{program.description}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- VBS Video -->
+  <div class="container mx-auto px-4 py-16">
+    <div class="bg-white p-8 rounded-2xl shadow-lg max-w-4xl mx-auto">
+      <h2 class="text-3xl font-bold mb-8 text-center">VBS Adventure Island Highlights</h2>
+      <div class="aspect-video rounded-xl overflow-hidden">
+        <iframe
+          class="w-full h-full"
+          src="https://www.youtube.com/embed/CtTnZn2lR9A"
+          title="VBS Adventure Island Highlights"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Section -->
+  <div class="container mx-auto px-4 py-16">
+    <div class="bg-gray-50 p-8 rounded-2xl text-center max-w-4xl mx-auto">
+      <h2 class="text-2xl font-bold mb-4">Get Involved</h2>
+      <p class="text-gray-600 mb-6">
+        Want to learn more about our children's programs or get involved? 
+        We'd love to hear from you!
+      </p>
+      <a 
+        href="/connect" 
+        class="inline-flex items-center gap-2 bg-brand text-white px-8 py-3 rounded-full hover:bg-brand-dark transition"
+      >
+        Contact Us
+      </a>
+    </div>
+  </div>
+</Layout>
