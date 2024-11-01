@@ -1,0 +1,160 @@
+---
+import Layout from '../layouts/Layout.astro';
+import YouTubePopup from '../components/YouTubePopup.astro';
+import Slideshow from '../components/Slideshow.astro';
+
+const welcomeImage = {
+  url: "https://www.tiptopwebsite.com/photos3/bestqualityaudioproductions/loccsanct.jpg",
+  alt: "Church Sanctuary"
+};
+
+const recentServices = [
+  {
+    id: "raPRdmVIuP4",
+    title: "Sunday Service - April 21, 2024",
+    thumbnail: `https://img.youtube.com/vi/raPRdmVIuP4/maxresdefault.jpg`
+  },
+  {
+    id: "I6DtUm7hjlI",
+    title: "Sunday Service - April 14, 2024",
+    thumbnail: `https://img.youtube.com/vi/I6DtUm7hjlI/maxresdefault.jpg`
+  },
+  {
+    id: "b8lPbrYl3O4",
+    title: "Sunday Service - April 7, 2024",
+    thumbnail: `https://img.youtube.com/vi/b8lPbrYl3O4/maxresdefault.jpg`
+  }
+];
+---
+
+<Layout title="Welcome">
+  <!-- Hero Section with Background Image -->
+  <div class="relative">
+    <div class="absolute inset-0">
+      <img 
+        src={welcomeImage.url} 
+        alt={welcomeImage.alt}
+        class="w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-black/50"></div>
+    </div>
+
+    <div class="relative min-h-[60vh] flex items-center">
+      <div class="container mx-auto px-4 py-16 text-center text-white">
+        <h1 class="text-5xl md:text-6xl font-bold mb-4">Welcome to Lake Ozark Christian</h1>
+        <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+          A community of faith dedicated to sharing the Gospel of Jesus Christ. All are welcome in our congregation.
+        </p>
+        
+        <div class="flex flex-wrap justify-center gap-4 mb-12">
+          <a 
+            href="/worship" 
+            class="bg-brand hover:bg-brand-dark text-white px-8 py-3 rounded-full transition transform hover:scale-105"
+          >
+            Plan Your Visit
+          </a>
+          <a 
+            href="https://www.youtube.com/channel/UCUcLKfZo5Su6-ypmt1dkPKA" 
+            target="_blank"
+            class="bg-white hover:bg-gray-100 text-gray-900 px-8 py-3 rounded-full transition transform hover:scale-105"
+          >
+            Watch Online
+          </a>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          <div class="bg-white/10 backdrop-blur-sm p-6 rounded-xl">
+            <h3 class="font-bold mb-2">Sunday Service</h3>
+            <p>10:30 AM</p>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm p-6 rounded-xl">
+            <h3 class="font-bold mb-2">Location</h3>
+            <p>1560 Bagnell Dam Blvd.</p>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm p-6 rounded-xl">
+            <h3 class="font-bold mb-2">After-School Program</h3>
+            <p>Wed 3:30-5:30 PM</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- After School Program -->
+  <div class="container mx-auto px-4 py-16">
+    <div class="bg-white p-8 rounded-2xl shadow-lg max-w-4xl mx-auto">
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <h2 class="text-3xl font-bold mb-4">After-School Program</h2>
+          <p class="text-gray-600 mb-4">
+            Lake Ozark Christian Church is offering a free after-school program for children, 
+            grades Kindergarten through 5th grade (Heritage and Upper Elementary Schools), 
+            on Wednesdays from 3:30pm to 5:30pm.
+          </p>
+          <a 
+            href="/connect" 
+            class="inline-block bg-brand text-white px-6 py-2 rounded-full hover:bg-brand-dark transition"
+          >
+            Learn More
+          </a>
+        </div>
+        <div class="rounded-xl overflow-hidden">
+          <img 
+            src="https://lakeozarkdisciples.org/wp-content/uploads/slider/cache/c7e16e5a07fd0f79176c0d4f17e59bdb/kids.png"
+            alt="After School Program"
+            class="w-full h-full object-cover"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Services -->
+  <div class="container mx-auto px-4 py-16">
+    <h2 class="text-3xl font-bold mb-8 text-center">Recent Services</h2>
+    <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      {recentServices.map(service => (
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+          <a 
+            href={`https://www.youtube.com/watch?v=${service.id}`}
+            target="_blank"
+            class="block group"
+          >
+            <div class="relative aspect-video">
+              <img 
+                src={service.thumbnail}
+                alt={service.title}
+                class="w-full h-full object-cover"
+              />
+              <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+              </div>
+            </div>
+            <div class="p-4">
+              <h3 class="font-semibold group-hover:text-brand transition">{service.title}</h3>
+            </div>
+          </a>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Calendar Section -->
+  <div class="container mx-auto px-4 py-16">
+    <h2 class="text-3xl font-bold mb-8 text-center">Upcoming Events</h2>
+    <div class="bg-white p-8 rounded-2xl shadow-lg max-w-4xl mx-auto">
+      <div class="w-full" style="position: relative; padding-bottom: 75%;">
+        <iframe 
+          src="https://calendar.google.com/calendar/embed?src=lakeozarkdisciples%40gmail.com&ctz=America%2FChicago" 
+          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
+          frameborder="0" 
+          scrolling="no"
+        ></iframe>
+      </div>
+    </div>
+  </div>
+
+  <YouTubePopup />
+</Layout>

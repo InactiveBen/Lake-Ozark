@@ -1,0 +1,97 @@
+---
+import Layout from '../layouts/Layout.astro';
+import StaffModal from '../components/StaffModal';
+
+const staff = [
+  {
+    name: "Rev. Ron Trimmer",
+    title: "Pastor",
+    image: "https://cdn-locc-org.vercel.app/images/Ron-Trimmer-image-2-400x600-1.jpg",
+    bio: "Greetings! My name is Pastor Ron Trimmer, and I’m the senior minister at Lake Ozark Christian Church. I’ve been in ministry for over twenty years, and I have been truly blessed by our God who allows me to take part in the amazing, life-giving work of Jesus Christ. I believe in a God of extravagant welcome, for the Lord loves each and every one of us, who is always inviting us to follow in the footsteps of Jesus Christ. Our God is an active presence in our lives, still moving, still creating and renewing in this world and in our lives. Our Lord continues to transform and resurrect, bringing grace and love, peace and justice, hope and new life. And our faith must propel us outside our doors to bring healing and love to this broken world. I have two children, Ben and Aaron, one in high school and the other in middle school. My wife died of Ovarian cancer, leaving just the three of us. But by faith, we know of God’s renewing love and life. Come and join us, for we welcome you on the journey of faith that you might experience the richness of God’s blessings, the joy of service, and the hope of new life in Jesus Christ."
+  },
+  {
+    name: "Michael Lindeman",
+    title: "Director of Music",
+    image: "https://cdn-locc-org.vercel.app/images/Michael-Lindeman-400x600.jpg",
+    bio: "Michael Lindeman leads our music ministry with creativity and dedication. His extensive background in music ministry helps create meaningful worship experiences that inspire and uplift our congregation."
+  },
+  {
+    name: "Angela Edwards",
+    title: "Administrative Assistant – Office Manager",
+    image: "https://cdn-locc-org.vercel.app/images/angelaedwards-400x565.jpg",
+    bio: "Angela Edwards keeps our church operations running smoothly. Her organizational skills and warm personality help coordinate our various ministries and maintain communication with our congregation."
+  }
+];
+---
+
+<Layout title="Staff">
+  <div class="container mx-auto px-4 py-16">
+    <h1 class="text-4xl font-bold mb-12 text-center">Our Staff</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      {staff.map(member => (
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+          <div class="aspect-square bg-gray-200">
+            <img 
+              src={member.image} 
+              alt={member.name}
+              class="w-full h-full object-cover"
+              onerror="this.src='/placeholder-staff.jpg'"
+            />
+          </div>
+          <div class="p-6">
+            <h2 class="text-xl font-bold mb-2">{member.name}</h2>
+            <p class="text-gray-600 mb-4">{member.title}</p>
+            <button
+              class="bg-brand text-white px-4 py-2 rounded-full hover:bg-brand-dark transition"
+              onclick={`showStaffBio(${JSON.stringify(member)})`}
+            >
+              Learn more
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</Layout>
+
+<script>
+  function showStaffBio(member) {
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50';
+    modal.innerHTML = `
+      <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="p-6">
+          <div class="flex justify-between items-start mb-4">
+            <h2 class="text-2xl font-bold">${member.name}</h2>
+            <button 
+              onclick="this.closest('.fixed').remove()"
+              class="p-2 hover:bg-gray-100 rounded-full transition"
+            >
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          
+          <div class="aspect-square mb-6 bg-gray-200 rounded-xl overflow-hidden">
+            <img 
+              src="${member.image}" 
+              alt="${member.name}"
+              class="w-full h-full object-cover"
+              onerror="this.src='/placeholder-staff.jpg'"
+            />
+          </div>
+          
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold text-gray-600">${member.title}</h3>
+            <p class="text-gray-600 leading-relaxed">${member.bio}</p>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+  
+  window.showStaffBio = showStaffBio;
+</script>
