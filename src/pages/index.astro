@@ -1,33 +1,101 @@
 ---
-
 import Layout from '../layouts/Layout.astro';
 import YouTubePopup from '../components/YouTubePopup.astro';
 import Slideshow from '../components/Slideshow.astro';
+import YouTubeVideoGrid from '../components/YouTubeVideoGrid.astro';
 
 const welcomeImage = {
   url: "https://www.tiptopwebsite.com/photos3/bestqualityaudioproductions/loccsanct.jpg",
   alt: "Interior view of Lake Ozark Christian Church sanctuary"
 };
 
+// Easy to update video section
 const recentServices = [
   {
     id: "raPRdmVIuP4",
-    title: "Sunday Service - April 21, 2024",
-    thumbnail: `https://img.youtube.com/vi/raPRdmVIuP4/maxresdefault.jpg`
+    title: "Knowing Jesus - August 27, 2023",
+    customThumbnail: "https://cdn-locc-org.vercel.app/images/Thumbnail_Aug282023.png?raw=true"
   },
   {
     id: "I6DtUm7hjlI",
-    title: "Sunday Service - April 14, 2024",
-    thumbnail: `https://img.youtube.com/vi/I6DtUm7hjlI/maxresdefault.jpg`
+    title: "The Courage of Faith - August 20, 2023",
+    customThumbnail: "https://cdn-locc-org.vercel.app/images/The%20Courage%20of%20Faith.png?raw=true"
   },
   {
     id: "b8lPbrYl3O4",
-    title: "Sunday Service - April 7, 2024",
-    thumbnail: `https://img.youtube.com/vi/b8lPbrYl3O4/maxresdefault.jpg`
+    title: "More Than Enough - August 6, 2023",
+    customThumbnail: "https://cdn-locc-org.vercel.app/images/More%20Than%20Enough.png?raw=true"
+  },
+  {
+    id: "ZU1o1US-kj8",
+    title: "First Glimpses of God - July 16, 2023",
+    customThumbnail: "https://cdn-locc-org.vercel.app/images/First%20Glimpses%20of%20God.png?raw=true"
+  },
+  {
+    id: "ySGwhmp7630",
+    title: "Faith and Sacrifice - July 2, 2023",
+    customThumbnail: "https://cdn-locc-org.vercel.app/images/Faith%20and%20Sacrifice.png?raw=true"
+  },
+  {
+    id: "dJFAlALIKxs",
+    title: "Grace for the Unwanted - June 25, 2023",
+    customThumbnail: "https://cdn-locc-org.vercel.app/images/Grace%20for%20the%20Unwanted.png?raw=true"
+  },
+  {
+    id: "jvz4ih6x_NY",
+    title: "Laughing Doubt - June 18, 2023",
+    customThumbnail: "https://cdn-locc-org.vercel.app/images/Laughing%20Doubt.png?raw=true"
+  },
+  {
+    id: "lfEnlH_z998",
+    title: "Promise of Blessing - June 11, 2023",
+    customThumbnail: "https://cdn-locc-org.vercel.app/images/Promise%20of%20Blessing.png?raw=true"
+  },
+  {
+    id: "TgJyHmQqYiA",
+    title: "God as Community - June 4, 2023",
+    customThumbnail: "https://cdn-locc-org.vercel.app/images/God%20as%20Community.png?raw=true"
+  },
+  {
+    id: "LuPsEbFND10",
+    title: "Where Will the Spirit Take You - May 28, 2023",
+    customThumbnail: "https://cdn-locc-org.vercel.app/images/Where%20Will%20the%20Spirit%20Take%20You.png?raw=true"
+  },
+  {
+    id: "yFZ-GXCi0Jk",
+    title: "A Prayer for Us - May 21, 2023",
+    customThumbnail: "https://cdn-locc-org.vercel.app/images/A%20Prayer%20for%20Us.png?raw=true"
+  },
+  {
+    id: "0FuPRt6COU4",
+    title: "Promised Support - May 14, 2023",
+    customThumbnail: "https://cdn-locc-org.vercel.app/images/Promised%20Support.png?raw=true"
+  },
+  {
+    id: "e-9mEwaopaQ",
+    title: "The Way of Faith - May 7, 2023",
+    customThumbnail: "https://cdn-locc-org.vercel.app/images/The%20Way%20of%20Faith.png?raw=true"
+  },
+  {
+    id: "lkZh3EU0LSc",
+    title: "Walking Presence - April 23, 2023",
+    customThumbnail: "https://cdn-locc-org.vercel.app/images/Walking%20Presence.png?raw=true"
+  },
+  {
+    id: "yjClz_yocjI",
+    title: "Reaching Thomas - April 16, 2023",
+    customThumbnail: "https://cdn-locc-org.vercel.app/images/Reaching%20Thomas.png?raw=true"
+  },
+  {
+    id: "EuNkJEFXsTo",
+    title: "Fully Alive - April 9, 2023",
+    customThumbnail: "https://cdn-locc-org.vercel.app/images/Fully%20Alive.png?raw=true"
   }
 ];
+
+
+
 ---
-  <!-- ⭐ This website was created by https://Benji.Services ⭐ -->
 
 <Layout title="Welcome">
   <!-- Hero Section with Background Image -->
@@ -118,36 +186,7 @@ const recentServices = [
   <!-- Recent Services -->
   <div class="container mx-auto px-4 py-16">
     <h2 class="text-3xl font-bold mb-8 text-center">Recent Services</h2>
-    <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-      {recentServices.map(service => (
-        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-          <a 
-            href={`https://www.youtube.com/watch?v=${service.id}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="block group"
-            aria-label={`Watch ${service.title} on YouTube (opens in new tab)`}
-          >
-            <div class="relative aspect-video">
-              <img 
-                src={service.thumbnail}
-                alt={`Thumbnail for ${service.title}`}
-                class="w-full h-full object-cover"
-              />
-              <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                <span class="sr-only">Play video</span>
-                <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M8 5v14l11-7z"/>
-                </svg>
-              </div>
-            </div>
-            <div class="p-4">
-              <h3 class="font-semibold group-hover:text-brand transition">{service.title}</h3>
-            </div>
-          </a>
-        </div>
-      ))}
-    </div>
+    <YouTubeVideoGrid videos={recentServices} />
   </div>
 
   <!-- Calendar Section -->
