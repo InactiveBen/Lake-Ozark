@@ -22,12 +22,29 @@ const mailtoLink = "mailto:office@lakeozarkdisciples.org?subject=Newsletter%20He
       <div class="absolute inset-0 bg-black/50"></div>
     </div>
 
-    <div class="relative min-h-[40vh] flex items-center">
+    <div class="relative min-h-[60vh] flex items-center">
       <div class="container mx-auto px-4 py-16 text-center text-white">
         <h1 class="text-5xl md:text-6xl font-bold mb-4">Lake Chimes Newsletter</h1>
         <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
           Stay connected with our church community through our monthly newsletter.
         </p>
+        
+        <div class="flex flex-wrap justify-center gap-4">
+          <a 
+            href={mailchimpSignupUrl}
+            target="_blank"
+            class="bg-brand hover:bg-brand-dark text-white px-8 py-3 rounded-full transition transform hover:scale-105"
+          >
+            Subscribe Now
+          </a>
+          <a 
+            href={mailchimpArchiveUrl}
+            target="_blank"
+            class="bg-white hover:bg-gray-100 text-gray-900 px-8 py-3 rounded-full transition transform hover:scale-105"
+          >
+            View Archive
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -68,19 +85,19 @@ const mailtoLink = "mailto:office@lakeozarkdisciples.org?subject=Newsletter%20He
             <h3 class="font-semibold mb-4">What you'll receive:</h3>
             <ul class="space-y-3">
               <li class="flex items-center gap-3">
-                <svg class="w-5 h-5 text-brand" fill="currentColor" viewBox="0 0 20 20">
+                <svg class="w-5 h-5 text-brand flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                 </svg>
                 <span>Monthly church updates</span>
               </li>
               <li class="flex items-center gap-3">
-                <svg class="w-5 h-5 text-brand" fill="currentColor" viewBox="0 0 20 20">
+                <svg class="w-5 h-5 text-brand flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                 </svg>
                 <span>Upcoming events</span>
               </li>
               <li class="flex items-center gap-3">
-                <svg class="w-5 h-5 text-brand" fill="currentColor" viewBox="0 0 20 20">
+                <svg class="w-5 h-5 text-brand flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                 </svg>
                 <span>Community stories</span>
