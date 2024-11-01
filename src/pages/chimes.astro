@@ -1,0 +1,71 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const mailchimpArchiveUrl = "https://us7.campaign-archive.com/home/?u=9816d09f0ebdd5f8ce1af28b4&id=b26607b7c1";
+const mailchimpSignupUrl = "https://lakeozarkdisciples.us7.list-manage.com/subscribe?u=9816d09f0ebdd5f8ce1af28b4&id=b26607b7c1";
+const mailtoLink = "mailto:office@lakeozarkdisciples.org?subject=Newsletter%20Help";
+---
+
+<Layout title="Lake Chimes Newsletter">
+  <div class="container mx-auto px-4 py-16">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-5xl font-bold mb-12 text-center">Lake Chimes Newsletter</h1>
+      
+      <div class="space-y-12">
+        <!-- Introduction -->
+        <div class="bg-white p-8 rounded-2xl shadow-lg">
+          <h2 class="text-3xl font-bold mb-6">Stay Connected</h2>
+          <p class="text-xl text-gray-600">
+            Lake Chimes is our monthly newsletter, keeping our community informed about upcoming events, 
+            important announcements, and inspiring stories from our congregation.
+          </p>
+        </div>
+
+        <!-- Subscribe Section -->
+        <div class="bg-white p-8 rounded-2xl shadow-lg">
+          <h2 class="text-2xl font-bold mb-6">Get Lake Chimes in Your Inbox</h2>
+          <p class="text-gray-600 mb-6">
+            Want to receive Lake Chimes directly in your email? Click below to subscribe to our mailing list.
+          </p>
+          <a 
+            href={mailchimpSignupUrl}
+            target="_blank"
+            class="inline-flex items-center gap-2 bg-brand text-white px-6 py-3 rounded-full hover:bg-brand-dark transition"
+          >
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+              <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+            </svg>
+            Subscribe to Newsletter
+          </a>
+        </div>
+
+        <!-- Newsletter Archive -->
+        <div class="bg-white p-8 rounded-2xl shadow-lg">
+          <h2 class="text-2xl font-bold mb-6">Newsletter Archive</h2>
+          <p class="text-gray-600 mb-6">
+            Access our complete archive of past newsletters to stay up-to-date with church news and events.
+          </p>
+          <a 
+            href={mailchimpArchiveUrl}
+            target="_blank"
+            class="inline-flex items-center gap-2 bg-gray-100 text-gray-800 px-6 py-3 rounded-full hover:bg-gray-200 transition"
+          >
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
+            </svg>
+            View Newsletter Archive
+          </a>
+        </div>
+
+        <!-- Help Section -->
+        <div class="bg-gray-50 p-8 rounded-2xl text-center">
+          <p class="text-gray-600">
+            Having trouble accessing the newsletter? 
+            <a href={mailtoLink} class="text-brand hover:text-brand-dark">Contact us</a> for assistance.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
