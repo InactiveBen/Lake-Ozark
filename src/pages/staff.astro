@@ -1,13 +1,20 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import StaffModal from '../components/StaffModal';
+import Slideshow from '../components/Slideshow.astro';
+
+const heroImages = [
+  {
+    url: "https://www.tiptopwebsite.com/photos3/bestqualityaudioproductions/loccsanct.jpg",
+    alt: "Church Sanctuary"
+  }
+];
 
 const staff = [
   {
     name: "Rev. Ron Trimmer",
     title: "Pastor",
     image: "https://cdn-locc-org.vercel.app/images/Ron-Trimmer-image-2-400x600-1.jpg",
-    bio: "Greetings! My name is Pastor Ron Trimmer, and I’m the senior minister at Lake Ozark Christian Church. I’ve been in ministry for over twenty years, and I have been truly blessed by our God who allows me to take part in the amazing, life-giving work of Jesus Christ. I believe in a God of extravagant welcome, for the Lord loves each and every one of us, who is always inviting us to follow in the footsteps of Jesus Christ. Our God is an active presence in our lives, still moving, still creating and renewing in this world and in our lives. Our Lord continues to transform and resurrect, bringing grace and love, peace and justice, hope and new life. And our faith must propel us outside our doors to bring healing and love to this broken world. I have two children, Ben and Aaron, one in high school and the other in middle school. My wife died of Ovarian cancer, leaving just the three of us. But by faith, we know of God’s renewing love and life. Come and join us, for we welcome you on the journey of faith that you might experience the richness of God’s blessings, the joy of service, and the hope of new life in Jesus Christ."
+    bio: "Greetings! My name is Pastor Ron Trimmer, and I'm the senior minister at Lake Ozark Christian Church. I've been in ministry for over twenty years, and I have been truly blessed by our God who allows me to take part in the amazing, life-giving work of Jesus Christ. I believe in a God of extravagant welcome, for the Lord loves each and every one of us, who is always inviting us to follow in the footsteps of Jesus Christ. Our God is an active presence in our lives, still moving, still creating and renewing in this world and in our lives. Our Lord continues to transform and resurrect, bringing grace and love, peace and justice, hope and new life. And our faith must propel us outside our doors to bring healing and love to this broken world. I have two children, Ben and Aaron, one in high school and the other in middle school. My wife died of Ovarian cancer, leaving just the three of us. But by faith, we know of God's renewing love and life. Come and join us, for we welcome you on the journey of faith that you might experience the richness of God's blessings, the joy of service, and the hope of new life in Jesus Christ."
   },
   {
     name: "Michael Lindeman",
@@ -25,13 +32,29 @@ const staff = [
 ---
 
 <Layout title="Staff">
+  <!-- Hero Section -->
+  <div class="relative">
+    <div class="absolute inset-0">
+      <Slideshow images={heroImages} />
+      <div class="absolute inset-0 bg-black/50"></div>
+    </div>
+
+    <div class="relative min-h-[60vh] flex items-center">
+      <div class="container mx-auto px-4 py-16 text-center text-white">
+        <h1 class="text-5xl md:text-6xl font-bold mb-4">Our Staff</h1>
+        <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+          Meet the dedicated team serving our church community with love and devotion.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Staff Grid -->
   <div class="container mx-auto px-4 py-16">
-    <h1 class="text-4xl font-bold mb-12 text-center">Our Staff</h1>
-    
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
       {staff.map(member => (
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-          <div class="aspect-square bg-gray-200">
+          <div class="aspect-[3/4] bg-gray-200">
             <img 
               src={member.image} 
               alt={member.name}
@@ -43,7 +66,7 @@ const staff = [
             <h2 class="text-xl font-bold mb-2">{member.name}</h2>
             <p class="text-gray-600 mb-4">{member.title}</p>
             <button
-              class="bg-brand text-white px-4 py-2 rounded-full hover:bg-brand-dark transition"
+              class="bg-brand text-white px-4 py-2 rounded-full hover:bg-brand-dark transition w-full"
               onclick={`showStaffBio(${JSON.stringify(member)})`}
             >
               Learn more
@@ -51,6 +74,22 @@ const staff = [
           </div>
         </div>
       ))}
+    </div>
+  </div>
+
+  <!-- Contact Section -->
+  <div class="container mx-auto px-4 py-16">
+    <div class="bg-gray-50 p-8 rounded-2xl text-center max-w-4xl mx-auto">
+      <h2 class="text-2xl font-bold mb-4">Get in Touch</h2>
+      <p class="text-gray-600 mb-6">
+        Have questions for our staff? We'd love to hear from you!
+      </p>
+      <a 
+        href="/connect" 
+        class="inline-flex items-center gap-2 bg-brand text-white px-8 py-3 rounded-full hover:bg-brand-dark transition"
+      >
+        Contact Us
+      </a>
     </div>
   </div>
 </Layout>
@@ -67,6 +106,7 @@ const staff = [
             <button 
               onclick="this.closest('.fixed').remove()"
               class="p-2 hover:bg-gray-100 rounded-full transition"
+              aria-label="Close modal"
             >
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
