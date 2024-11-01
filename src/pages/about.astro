@@ -1,79 +1,150 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Slideshow from '../components/Slideshow.astro';
+
+const heroImages = [
+  {
+    url: "https://www.tiptopwebsite.com/photos3/bestqualityaudioproductions/loccsanct.jpg",
+    alt: "Church Sanctuary"
+  },
+  {
+    url: "https://i.ytimg.com/vi/P3dRp1zPrxc/hq720.jpg",
+    alt: "Church Interior"
+  }
+];
+
+const beliefs = [
+  {
+    title: "Scripture",
+    description: "We look to the Word of God for inspiration, guidance, comfort, and challenge.",
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />`
+  },
+  {
+    title: "Active Faith",
+    description: "We believe in a God who is still saving lives, still working for peace and justice, still surprising us with miraculous wonder.",
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />`
+  },
+  {
+    title: "Service",
+    description: "We believe in a God who invites us to share in the ministry of Jesus Christ, through service to our neighbor.",
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11" />`
+  },
+  {
+    title: "Growth",
+    description: "We believe in a God who invites us to grow as disciples, following in the footsteps of Jesus Christ.",
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />`
+  }
+];
 ---
 
 <Layout title="Who We Are">
-  <div class="container mx-auto px-4 py-16">
-    <div class="max-w-4xl mx-auto">
-      <h1 class="text-5xl font-bold mb-12 text-center">Who We Are</h1>
-      
-      <div class="space-y-12">
-        <!-- Introduction -->
-        <div class="bg-white p-8 rounded-2xl shadow-lg">
-          <p class="text-xl leading-relaxed text-gray-600">
-            Lake Ozark Christian Church is a community of faith that is dedicated to sharing the Gospel of Jesus Christ. 
-            All are welcome in our congregation, for Christ's table is open to all. Our faith is not simply a set of beliefs, 
-            but a way of life as we share the light of our Savior with the world.
-          </p>
-        </div>
+  <!-- Hero Section -->
+  <div class="relative">
+    <div class="absolute inset-0">
+      <Slideshow images={heroImages} />
+      <div class="absolute inset-0 bg-black/50"></div>
+    </div>
 
-        <!-- Our Beliefs -->
+    <div class="relative min-h-[60vh] flex items-center">
+      <div class="container mx-auto px-4 py-16 text-center text-white">
+        <h1 class="text-5xl md:text-6xl font-bold mb-4">Who We Are</h1>
+        <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+          A community of faith dedicated to sharing the Gospel of Jesus Christ. 
+          All are welcome in our congregation, for Christ's table is open to all.
+        </p>
+        
+        <div class="flex flex-wrap justify-center gap-4">
+          <a 
+            href="/worship" 
+            class="bg-brand hover:bg-brand-dark text-white px-8 py-3 rounded-full transition transform hover:scale-105"
+          >
+            Join Us
+          </a>
+          <a 
+            href="#beliefs" 
+            class="bg-white hover:bg-gray-100 text-gray-900 px-8 py-3 rounded-full transition transform hover:scale-105"
+          >
+            Learn More
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Introduction -->
+  <div class="container mx-auto px-4 py-16">
+    <div class="bg-white p-8 rounded-2xl shadow-lg max-w-4xl mx-auto">
+      <p class="text-xl text-gray-600">
+        Lake Ozark Christian Church is a community of faith that is dedicated to sharing the Gospel of Jesus Christ. 
+        Our faith is not simply a set of beliefs, but a way of life as we share the light of our Savior with the world.
+      </p>
+    </div>
+  </div>
+
+  <!-- Our Beliefs -->
+  <div id="beliefs" class="container mx-auto px-4 py-16">
+    <h2 class="text-3xl font-bold mb-12 text-center">Our Beliefs</h2>
+    <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+      {beliefs.map(belief => (
         <div class="bg-white p-8 rounded-2xl shadow-lg">
-          <h2 class="text-3xl font-bold mb-6">Our Beliefs</h2>
-          <div class="space-y-6">
-            <div class="flex items-start gap-4">
-              <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+          <div class="flex items-start gap-6">
+            <div class="p-3 bg-brand/10 rounded-xl text-brand">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <Fragment set:html={belief.icon} />
               </svg>
-              <p class="text-gray-600">We look to the Word of God for inspiration, guidance, comfort, and challenge.</p>
             </div>
-            <div class="flex items-start gap-4">
-              <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
-              </svg>
-              <p class="text-gray-600">We believe in a God who is still saving lives, still working for peace and justice, still surprising us with miraculous wonder.</p>
-            </div>
-            <div class="flex items-start gap-4">
-              <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
-              </svg>
-              <p class="text-gray-600">We believe in a God who invites us to share in the ministry of Jesus Christ, through service to our neighbor.</p>
+            <div>
+              <h3 class="text-2xl font-bold mb-4">{belief.title}</h3>
+              <p class="text-gray-600">{belief.description}</p>
             </div>
           </div>
         </div>
+      ))}
+    </div>
+  </div>
 
-        <!-- Our Mission -->
-        <div class="bg-white p-8 rounded-2xl shadow-lg">
-          <h2 class="text-3xl font-bold mb-6">Our Mission</h2>
-          <p class="text-gray-600 mb-6">
-            Our Lord calls us out to care for others—to love God and neighbor, and to work for a better world through service, 
-            mission, and prophetic witness.
-          </p>
-          <blockquote class="border-l-4 border-brand pl-4 italic text-gray-600">
-            "To bring Good News to the poor … proclaim release to the captives and recovery of sight to the blind, 
-            to let the oppressed go free, to proclaim the year of the Lord's favor." (Luke 4:18-19)
-          </blockquote>
-        </div>
+  <!-- Our Mission -->
+  <div class="container mx-auto px-4 py-16">
+    <div class="bg-white p-8 rounded-2xl shadow-lg max-w-4xl mx-auto">
+      <h2 class="text-3xl font-bold mb-6">Our Mission</h2>
+      <p class="text-gray-600 mb-8">
+        Our Lord calls us out to care for others—to love God and neighbor, and to work for a better world through service, 
+        mission, and prophetic witness.
+      </p>
+      <blockquote class="border-l-4 border-brand pl-6 italic text-gray-600">
+        "To bring Good News to the poor … proclaim release to the captives and recovery of sight to the blind, 
+        to let the oppressed go free, to proclaim the year of the Lord's favor."
+        <footer class="mt-2 text-sm">- Luke 4:18-19</footer>
+      </blockquote>
+    </div>
+  </div>
 
-        <!-- Our Journey -->
-        <div class="bg-white p-8 rounded-2xl shadow-lg">
-          <h2 class="text-3xl font-bold mb-6">Our Journey Together</h2>
-          <p class="text-gray-600">
-            We believe in a God who invites us to grow as disciples. We are all on a journey, but God is always calling us 
-            out to be more than we are, to follow in the footsteps of Jesus Christ, to grow in faith and service and love. 
-            Our Lord walks with us that we might find meaning in our lives and make a difference in the lives of others. 
-            We offer safe space where people of all ages can explore, grow, and learn about God and the Christian faith.
-          </p>
-        </div>
+  <!-- Our Journey -->
+  <div class="container mx-auto px-4 py-16">
+    <div class="bg-white p-8 rounded-2xl shadow-lg max-w-4xl mx-auto">
+      <h2 class="text-3xl font-bold mb-6">Our Journey Together</h2>
+      <p class="text-gray-600">
+        We believe in a God who invites us to grow as disciples. We are all on a journey, but God is always calling us 
+        out to be more than we are, to follow in the footsteps of Jesus Christ, to grow in faith and service and love. 
+        Our Lord walks with us that we might find meaning in our lives and make a difference in the lives of others. 
+        We offer safe space where people of all ages can explore, grow, and learn about God and the Christian faith.
+      </p>
+    </div>
+  </div>
 
-        <!-- Affiliation -->
-        <div class="bg-white p-8 rounded-2xl shadow-lg text-center">
-          <p class="text-xl font-semibold text-gray-600">
-            We are affiliated with the Christian Church (Disciples of Christ),<br>
-            "A movement for wholeness in a fragmented world."
-          </p>
-        </div>
-      </div>
+  <!-- Affiliation -->
+  <div class="container mx-auto px-4 py-16">
+    <div class="bg-gray-50 p-8 rounded-2xl text-center max-w-4xl mx-auto">
+      <p class="text-xl font-semibold text-gray-600">
+        We are affiliated with the Christian Church (Disciples of Christ),<br>
+        "A movement for wholeness in a fragmented world."
+      </p>
+      <a 
+        href="/connect" 
+        class="inline-flex items-center gap-2 bg-brand text-white px-8 py-3 rounded-full hover:bg-brand-dark transition mt-8"
+      >
+        Connect With Us
+      </a>
     </div>
   </div>
 </Layout>
