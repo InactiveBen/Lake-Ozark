@@ -2,99 +2,131 @@
 import Layout from '../layouts/Layout.astro';
 import Slideshow from '../components/Slideshow.astro';
 
-const weddingImages = [
+const heroImages = [
   {
     url: "https://www.tiptopwebsite.com/photos3/bestqualityaudioproductions/loccsanct.jpg",
     alt: "Church Sanctuary"
+  }
+];
+
+const features = [
+  {
+    title: "Beautiful Sanctuary",
+    description: "Our traditional sanctuary provides a stunning backdrop for your special day.",
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />`
   },
   {
-    url: "https://i.ytimg.com/vi/P3dRp1zPrxc/hq720.jpg",
-    alt: "Church Interior"
+    title: "Seating Capacity",
+    description: "Comfortable seating for up to 200 guests in our main sanctuary.",
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />`
+  },
+  {
+    title: "Wedding Coordinator",
+    description: "Professional assistance to help plan and coordinate your ceremony.",
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />`
+  },
+  {
+    title: "Preparation Areas",
+    description: "Dedicated rooms for the wedding party to prepare and gather.",
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />`
   }
 ];
 ---
 
 <Layout title="Weddings">
-  <Slideshow images={weddingImages} height="h-[50vh]" />
-  
+  <!-- Hero Section -->
+  <div class="relative">
+    <div class="absolute inset-0">
+      <Slideshow images={heroImages} />
+      <div class="absolute inset-0 bg-black/50"></div>
+    </div>
+
+    <div class="relative min-h-[60vh] flex items-center">
+      <div class="container mx-auto px-4 py-16 text-center text-white">
+        <h1 class="text-5xl md:text-6xl font-bold mb-4">Weddings</h1>
+        <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+          Begin your journey together in our beautiful sanctuary.
+          Let us help make your special day memorable.
+        </p>
+        
+        <div class="flex flex-wrap justify-center gap-4">
+          <a 
+            href="tel:573-365-3366" 
+            class="bg-brand hover:bg-brand-dark text-white px-8 py-3 rounded-full transition transform hover:scale-105"
+          >
+            Call us
+          </a>
+          <a 
+            href="#venue-features" 
+            class="bg-white hover:bg-gray-100 text-gray-900 px-8 py-3 rounded-full transition transform hover:scale-105"
+          >
+            Learn More
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Introduction -->
   <div class="container mx-auto px-4 py-16">
-    <div class="max-w-4xl mx-auto">
-      <h1 class="text-5xl font-bold mb-12 text-center">Weddings at Lake Ozark Christian Church</h1>
-      
-      <div class="space-y-12">
-        <!-- Introduction -->
-        <div class="bg-white p-8 rounded-2xl shadow-lg">
-          <h2 class="text-3xl font-bold mb-6">Your Special Day</h2>
-          <p class="text-xl text-gray-600">
-            Our beautiful sanctuary provides the perfect setting for your wedding ceremony. 
-            With its stunning architecture and peaceful atmosphere, Lake Ozark Christian Church 
-            offers a meaningful place to begin your journey together.
-          </p>
-        </div>
+    <div class="bg-white p-8 rounded-2xl shadow-lg max-w-4xl mx-auto">
+      <p class="text-xl text-gray-600">
+        Our beautiful sanctuary provides the perfect setting for your wedding ceremony. 
+        With its stunning architecture and peaceful atmosphere, Lake Ozark Christian Church 
+        offers a meaningful place to begin your journey together.
+      </p>
+    </div>
+  </div>
 
-        <!-- Venue Features -->
+  <!-- Venue Features -->
+  <div id="venue-features" class="container mx-auto px-4 py-16">
+    <h2 class="text-3xl font-bold mb-12 text-center">Venue Features</h2>
+    <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+      {features.map(feature => (
         <div class="bg-white p-8 rounded-2xl shadow-lg">
-          <h2 class="text-2xl font-bold mb-6">Venue Features</h2>
-          <div class="grid md:grid-cols-2 gap-8">
-            <ul class="space-y-4">
-              <li class="flex items-center gap-3">
-                <svg class="w-6 h-6 text-brand flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
-                </svg>
-                <span>Beautiful traditional sanctuary</span>
-              </li>
-              <li class="flex items-center gap-3">
-                <svg class="w-6 h-6 text-brand flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
-                </svg>
-                <span>Seating for up to 400 guests</span>
-              </li>
-              <li class="flex items-center gap-3">
-                <svg class="w-6 h-6 text-brand flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
-                </svg>
-                <span>Preparation rooms for wedding party</span>
-              </li>
-            </ul>
-            <ul class="space-y-4">
-              <li class="flex items-center gap-3">
-                <svg class="w-6 h-6 text-brand flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
-                </svg>
-                <span>Wedding coordinator assistance</span>
-              </li>
-              <li class="flex items-center gap-3">
-                <svg class="w-6 h-6 text-brand flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
-                </svg>
-                <span>Sound system and audio support</span>
-              </li>
-              <li class="flex items-center gap-3">
-                <svg class="w-6 h-6 text-brand flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
-                </svg>
-                <span>Premarital counseling available</span>
-              </li>
-            </ul>
+          <div class="flex items-start gap-6">
+            <div class="p-3 bg-brand/10 rounded-xl text-brand">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <Fragment set:html={feature.icon} />
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold mb-4">{feature.title}</h3>
+              <p class="text-gray-600">{feature.description}</p>
+            </div>
           </div>
         </div>
+      ))}
+    </div>
+  </div>
 
-        <!-- Contact Section -->
-        <div class="bg-white p-8 rounded-2xl shadow-lg">
-          <h2 class="text-2xl font-bold mb-6">Schedule Your Wedding</h2>
-          <p class="text-gray-600 mb-6">
-            To learn more about having your wedding at Lake Ozark Christian Church or to check available dates, 
-            please contact our church office.
-          </p>
-          <div class="flex gap-4">
-            <a href="tel:573-365-3366" class="bg-brand text-white px-6 py-3 rounded-full hover:bg-brand-dark transition">
-              Call Us: 573-365-3366
-            </a>
-            <a href="mailto:office@lakeozarkdisciples.org" class="bg-gray-100 text-gray-800 px-6 py-3 rounded-full hover:bg-gray-200 transition">
-              Send Email
-            </a>
-          </div>
-        </div>
+  <!-- Contact Section -->
+  <div class="container mx-auto px-4 py-16">
+    <div class="bg-white p-8 rounded-2xl shadow-lg max-w-4xl mx-auto">
+      <h2 class="text-3xl font-bold mb-8 text-center">Schedule Your Wedding</h2>
+      <p class="text-xl text-gray-600 text-center mb-8">
+        To learn more about having your wedding at Lake Ozark Christian Church or to check available dates, 
+        please contact our church office.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a 
+          href="tel:573-365-3366" 
+          class="inline-flex items-center gap-2 bg-brand text-white px-8 py-3 rounded-full hover:bg-brand-dark transition"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+          </svg>
+          Call: 573-365-3366
+        </a>
+        <a 
+          href="mailto:office@lakeozarkdisciples.org" 
+          class="inline-flex items-center gap-2 bg-gray-100 text-gray-800 px-8 py-3 rounded-full hover:bg-gray-200 transition"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          Send Email
+        </a>
       </div>
     </div>
   </div>
