@@ -1,18 +1,39 @@
-# Lake Ozark Christian Church Website
+# Lake Ozark Christian Church
 
-This is the codebase for the Lake Ozark Christian Church website, built with Astro.
+This is the codebase for the Lake Ozark Christian Church website, built with Astro. For more information, visit [lakeozarkdisciples.org](https://lakeozarkdisciples.org). This project was built by [@InactiveBen](https://benji.services).
 
 ## 📁 Project Structure
 
-- `src/pages/`: Contains `.astro` and `.md` files that automatically become website routes
-- `src/components/`: Houses reusable Astro components used throughout the site
-- `src/layouts/`: Contains page layout templates
-- `public/`: Stores static assets like images and fonts
-- `src/styles/`: Contains global CSS styles
+Our codebase is organized into several key directories:
 
-## 🧞 Commands
+- `src/pages/`: The heart of our routing system
+  - Contains `.astro` and `.md` files that automatically generate website routes
+  - Each file corresponds to a page on the site
+  - Markdown files power our content-heavy pages
 
-All commands are run from the root of the project, from a terminal:
+- `src/components/`: Our component library
+  - Houses reusable Astro components for consistent UI elements
+  - Includes navigation, footer, cards, and other shared elements
+  - Promotes maintainability and DRY (Don't Repeat Yourself) principles
+
+- `src/layouts/`: Page templates and structures
+  - Contains base layouts that wrap our pages
+  - Ensures consistent styling and structure across the site
+  - Handles common elements like headers and meta tags
+
+- `public/`: Static asset storage
+  - Stores images, fonts, and other unchanging files
+  - Directly copied to the build directory
+  - Optimized for performance and caching
+
+- `src/styles/`: Global styling
+  - Contains site-wide CSS styles
+  - Manages theme variables and design tokens
+  - Handles responsive design rules
+
+## 🧞 Development Commands
+
+To work with this project, use these NPM commands from the project root:
 
 | Command                   | Action                                           |
 | :------------------------ | :----------------------------------------------- |
@@ -23,7 +44,8 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro ...`       | Run Astro CLI commands (add, check, etc.)       |
 | `npm run astro -- --help` | Get help with the Astro CLI                     |
 
-## 🔗 Quick Links
+## 🔗 Important Links
 
-- [Live Site](https://lakeozarkdisciples.org)
-- [Report an Issue](https://lakeozarkdisciples.org/report)
+- [Live Site](https://lakeozarkdisciples.org) - Visit our main website
+- [CDN Site](https://cdn.lakeozarkdisciples.org) - Content delivery network
+- [Report an Issue](https://lakeozarkdisciples.org/report) - Help us improve
