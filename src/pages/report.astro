@@ -1,0 +1,132 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Report an Issue">
+  <!-- Hero Section -->
+  <div class="relative">
+    <div class="absolute inset-0">
+      <img 
+        src="https://cdn-locc-org.vercel.app/media/6408A096-4585-4540-806B-66A6EB4027D7.jpeg"
+        alt="Interior view of Lake Ozark Christian Church sanctuary"
+        class="w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-black/50"></div>
+    </div>
+
+    <div class="relative min-h-[60vh] flex items-center">
+      <div class="container mx-auto px-4 py-16 text-center text-white">
+        <h1 class="text-5xl md:text-6xl font-bold mb-4">Report an Issue</h1>
+        <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+          Help us improve by reporting any technical issues or security concerns you encounter.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Report Form Section -->
+  <div class="container mx-auto px-4 py-16">
+    <div class="bg-white p-8 rounded-2xl shadow-lg max-w-4xl mx-auto">
+      <p class="text-gray-600 mb-8 text-lg">
+        If you've found a security vulnerability or encountered any technical issues with our website, 
+        please report them using the form below or contact us directly.
+      </p>
+
+      <form 
+        action="https://formspree.io/f/xkgndlaw" 
+        method="POST" 
+        class="space-y-8"
+      >
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+              placeholder="Your name"
+            />
+          </div>
+
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+              placeholder="your.email@example.com"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="type" class="block text-sm font-medium text-gray-700 mb-2">Issue Type</label>
+          <select
+            id="type"
+            name="type"
+            required
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent bg-white"
+          >
+            <option value="" disabled selected>Select an issue type</option>
+            <option value="security">Security Vulnerability</option>
+            <option value="bug">Website Bug/Error</option>
+            <option value="content">Content/Information Issue</option>
+            <option value="accessibility">Accessibility Concern</option>
+            <option value="performance">Performance Problem</option>
+            <option value="other">Other Issue</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="message" class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+          <textarea
+            id="message"
+            name="message"
+            required
+            rows="6"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+            placeholder="Please provide as much detail as possible about the issue..."
+          ></textarea>
+        </div>
+
+        <div class="flex items-start">
+          <div class="flex items-center h-5">
+            <input
+              type="checkbox"
+              id="followup"
+              name="followup"
+              class="h-4 w-4 text-brand border-gray-300 rounded focus:ring-brand"
+            />
+          </div>
+          <div class="ml-3">
+            <label for="followup" class="text-sm text-gray-700">
+              Would you like us to follow up with you about this issue?
+            </label>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          class="w-full bg-brand hover:bg-brand-dark text-white px-8 py-4 rounded-full font-medium text-lg"
+        >
+          Submit Report
+        </button>
+      </form>
+
+      <div class="mt-12 p-8 bg-gray-50 rounded-xl">
+        <h2 class="text-xl font-bold mb-3">Urgent Concerns?</h2>
+        <p class="text-gray-600 mb-2">For immediate assistance, please contact us directly:</p>
+        <a 
+          href="mailto:office@lakeozarkdisciples.org" 
+          class="text-brand hover:text-brand-dark transition font-medium"
+        >
+          office@lakeozarkdisciples.org
+        </a>
+      </div>
+    </div>
+  </div>
+</Layout>
