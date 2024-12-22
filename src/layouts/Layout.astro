@@ -5,19 +5,34 @@ import Footer from '../components/Footer.astro';
 interface Props {
   title: string;
 }
-
 const { title } = Astro.props;
 ---
-
 <!doctype html>
+<!-- ✨ Built by Benji.Services • https://benji.services/ -->
+<!-- ⚠️ Report issues via our Report page • https://lakeozarkdisciples.org/report -->
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="Lake Ozark Christian Church - A community of faith dedicated to sharing the Gospel of Jesus Christ" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/png" href="https://cdn-locc-org.vercel.app/media/cropped-LOCC-shortcut.png" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Gochi+Hand&display=swap" rel="stylesheet">
-    <title>{title} - Lake Ozark Christian Church</title>
+    <meta name="description" content="Lake Ozark Christian Church - A welcoming Christian community in Lake Ozark, MO dedicated to sharing the Gospel of Jesus Christ through worship, fellowship, and service." />
+    <meta name="keywords" content="Lake Ozark Christian Church, church, Christian, Lake Ozark, Missouri, worship, fellowship, Jesus Christ, Disciples of Christ" />
+    <meta name="author" content="Lake Ozark Christian Church" />
+    <meta property="og:title" content={`${title} - Lake Ozark Christian Church`} />
+    <meta property="og:description" content="Lake Ozark Christian Church - A welcoming Christian community in Lake Ozark, MO dedicated to sharing the Gospel of Jesus Christ through worship, fellowship, and service." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg" />
+    <meta property="og:url" content={Astro.url} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={`${title} - Lake Ozark Christian Church`} />
+    <meta name="twitter:description" content="Lake Ozark Christian Church - A welcoming Christian community in Lake Ozark, MO dedicated to sharing the Gospel of Jesus Christ through worship, fellowship, and service." />
+    <meta name="twitter:image" content="https://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={Astro.url} />
+    <link rel="icon" type="image/png" href="https://cdn.lakeozarkdisciples.org/media/cropped-LOCC-shortcut.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Gochi+Hand&display=swap" rel="stylesheet" />
+    <title>{title} - Lake Ozark Christian Church | Lake Ozark, MO</title>
   </head>
   <body class="min-h-screen flex flex-col bg-gray-50">
     <Header />
