@@ -5,7 +5,7 @@
     <div class="flex justify-between items-center h-20">
       <!-- Logo -->
       <a href="/" class="flex items-center gap-4" aria-label="Lake Ozark Christian Church - Home">
-        <img src="https://cdn-locc-org.vercel.app/media/LOCC-header.png" alt="Lake Ozark Christian Church Logo" class="h-12" />
+        <img src="https://cdn-locc-org.vercel.app/media/LOCC-header.png" alt="Lake Ozark Christian Church Logo" class="h-12" width="auto" height="48" />
       </a>
       
       <!-- Desktop Navigation -->
@@ -13,69 +13,78 @@
         <!-- Worship Dropdown -->
         <div class="relative group">
           <button 
-            class="text-gray-800 hover:text-brand font-medium flex items-center gap-1"
+            class="text-gray-800 hover:text-brand focus:text-brand focus:outline-none font-medium flex items-center gap-1"
             aria-expanded="false"
             aria-haspopup="true"
+            aria-controls="worship-menu"
+            onKeyDown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true');document.getElementById('worship-menu').classList.toggle('hidden')}"
+            onClick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true');document.getElementById('worship-menu').classList.toggle('hidden')"
           >
             Worship
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
-          <div class="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200" role="menu">
-            <a href="/worship" class="block px-4 py-3 text-gray-800 hover:bg-gray-50" role="menuitem">Service Times</a>
-            <a href="/children-youth" class="block px-4 py-3 text-gray-800 hover:bg-gray-50" role="menuitem">Children & Youth</a>
+          <div id="worship-menu" class="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 hidden" role="menu">
+            <a href="/worship" class="block px-4 py-3 text-gray-800 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none" role="menuitem" tabindex="0">Service Times</a>
+            <a href="/children-youth" class="block px-4 py-3 text-gray-800 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none" role="menuitem" tabindex="0">Children & Youth</a>
           </div>
         </div>
         
         <!-- About Dropdown -->
         <div class="relative group">
           <button 
-            class="text-gray-800 hover:text-brand font-medium flex items-center gap-1"
+            class="text-gray-800 hover:text-brand focus:text-brand focus:outline-none font-medium flex items-center gap-1"
             aria-expanded="false"
             aria-haspopup="true"
+            aria-controls="about-menu"
+            onKeyDown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true');document.getElementById('about-menu').classList.toggle('hidden')}"
+            onClick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true');document.getElementById('about-menu').classList.toggle('hidden')"
           >
             About
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
-          <div class="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200" role="menu">
-            <a href="/about" class="block px-4 py-3 text-gray-800 hover:bg-gray-50" role="menuitem">Who We Are</a>
-            <a href="/chimes" class="block px-4 py-3 text-gray-800 hover:bg-gray-50" role="menuitem">Newsletter</a>
-            <a href="/staff" class="block px-4 py-3 text-gray-800 hover:bg-gray-50" role="menuitem">Staff</a>
-            <a href="/bylaws" class="block px-4 py-3 text-gray-800 hover:bg-gray-50" role="menuitem">Bylaws</a>
+          <div id="about-menu" class="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 hidden" role="menu">
+            <a href="/about" class="block px-4 py-3 text-gray-800 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none" role="menuitem" tabindex="0">Who We Are</a>
+            <a href="/chimes" class="block px-4 py-3 text-gray-800 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none" role="menuitem" tabindex="0">Newsletter</a>
+            <a href="/staff" class="block px-4 py-3 text-gray-800 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none" role="menuitem" tabindex="0">Staff</a>
+            <a href="/bylaws" class="block px-4 py-3 text-gray-800 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none" role="menuitem" tabindex="0">Bylaws</a>
           </div>
         </div>
 
         <!-- Events Dropdown -->
         <div class="relative group">
           <button 
-            class="text-gray-800 hover:text-brand font-medium flex items-center gap-1"
+            class="text-gray-800 hover:text-brand focus:text-brand focus:outline-none font-medium flex items-center gap-1"
             aria-expanded="false"
             aria-haspopup="true"
+            aria-controls="events-menu"
+            onKeyDown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true');document.getElementById('events-menu').classList.toggle('hidden')}"
+            onClick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true');document.getElementById('events-menu').classList.toggle('hidden')"
           >
             Events
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
-          <div class="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200" role="menu">
-            <a href="/weddings" class="block px-4 py-3 text-gray-800 hover:bg-gray-50" role="menuitem">Weddings</a>
-            <a href="/calendar" class="block px-4 py-3 text-gray-800 hover:bg-gray-50" role="menuitem">Calendar</a>
+          <div id="events-menu" class="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 hidden" role="menu">
+            <a href="/weddings" class="block px-4 py-3 text-gray-800 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none" role="menuitem" tabindex="0">Weddings</a>
+            <a href="/calendar" class="block px-4 py-3 text-gray-800 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none" role="menuitem" tabindex="0">Calendar</a>
           </div>
         </div>
         
         <!-- Regular Links -->
-        <a href="/giving" class="text-gray-800 hover:text-brand font-medium">Giving</a>
-        <a href="/shelter" class="text-gray-800 hover:text-brand font-medium">Pantry of Blessings</a>
+        <a href="/giving" class="text-gray-800 hover:text-brand focus:text-brand focus:outline-none font-medium">Giving</a>
+        <a href="/shelter" class="text-gray-800 hover:text-brand focus:text-brand focus:outline-none font-medium">Pantry of Blessings</a>
         
         <!-- Watch Live Button -->
         <a 
           href="https://www.youtube.com/channel/UCUcLKfZo5Su6-ypmt1dkPKA" 
           target="_blank"
           rel="noopener noreferrer"
-          class="bg-brand hover:bg-brand-dark text-white px-6 py-2 rounded-full font-semibold transition"
+          class="bg-brand hover:bg-brand-dark focus:bg-brand-dark focus:outline-none text-white px-6 py-2 rounded-full font-semibold transition"
           aria-label="Watch Live Services on YouTube (opens in new tab)"
         >
           Watch Live
@@ -84,7 +93,7 @@
       
       <!-- Mobile Menu Button -->
       <button 
-        class="md:hidden p-2" 
+        class="md:hidden p-2 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none rounded-lg" 
         id="mobile-menu-button"
         aria-expanded="false"
         aria-controls="mobile-menu"
@@ -100,32 +109,32 @@
     <div class="md:hidden hidden" id="mobile-menu" role="navigation" aria-label="Mobile navigation">
       <div class="px-2 pt-2 pb-3 space-y-1">
         <div class="border-b border-gray-100 pb-2 mb-2">
-          <div class="font-medium px-3 py-2 text-gray-800">Worship</div>
-          <a href="/worship" class="block px-3 py-2 text-gray-800 hover:text-brand">Service Times</a>
-          <a href="/children-youth" class="block px-3 py-2 text-gray-800 hover:text-brand">Children & Youth</a>
+          <h2 class="font-medium px-3 py-2 text-gray-800">Worship</h2>
+          <a href="/worship" class="block px-3 py-2 text-gray-800 hover:text-brand focus:text-brand focus:outline-none">Service Times</a>
+          <a href="/children-youth" class="block px-3 py-2 text-gray-800 hover:text-brand focus:text-brand focus:outline-none">Children & Youth</a>
         </div>
 
         <div class="border-b border-gray-100 pb-2 mb-2">
-          <div class="font-medium px-3 py-2 text-gray-800">About</div>
-          <a href="/about" class="block px-3 py-2 text-gray-800 hover:text-brand">Who We Are</a>
-          <a href="/chimes" class="block px-3 py-2 text-gray-800 hover:text-brand">Newsletter</a>
-          <a href="/staff" class="block px-3 py-2 text-gray-800 hover:text-brand">Staff</a>
-          <a href="/bylaws" class="block px-3 py-2 text-gray-800 hover:text-brand">Bylaws</a>
+          <h2 class="font-medium px-3 py-2 text-gray-800">About</h2>
+          <a href="/about" class="block px-3 py-2 text-gray-800 hover:text-brand focus:text-brand focus:outline-none">Who We Are</a>
+          <a href="/chimes" class="block px-3 py-2 text-gray-800 hover:text-brand focus:text-brand focus:outline-none">Newsletter</a>
+          <a href="/staff" class="block px-3 py-2 text-gray-800 hover:text-brand focus:text-brand focus:outline-none">Staff</a>
+          <a href="/bylaws" class="block px-3 py-2 text-gray-800 hover:text-brand focus:text-brand focus:outline-none">Bylaws</a>
         </div>
 
         <div class="border-b border-gray-100 pb-2 mb-2">
-          <div class="font-medium px-3 py-2 text-gray-800">Events</div>
-          <a href="/weddings" class="block px-3 py-2 text-gray-800 hover:text-brand">Weddings</a>
-          <a href="/calendar" class="block px-3 py-2 text-gray-800 hover:text-brand">Calendar</a>
+          <h2 class="font-medium px-3 py-2 text-gray-800">Events</h2>
+          <a href="/weddings" class="block px-3 py-2 text-gray-800 hover:text-brand focus:text-brand focus:outline-none">Weddings</a>
+          <a href="/calendar" class="block px-3 py-2 text-gray-800 hover:text-brand focus:text-brand focus:outline-none">Calendar</a>
         </div>
 
-        <a href="/giving" class="block px-3 py-2 text-gray-800 hover:text-brand">Giving</a>
-        <a href="/shelter" class="block px-3 py-2 text-gray-800 hover:text-brand">Pantry of Blessings</a>
+        <a href="/giving" class="block px-3 py-2 text-gray-800 hover:text-brand focus:text-brand focus:outline-none">Giving</a>
+        <a href="/shelter" class="block px-3 py-2 text-gray-800 hover:text-brand focus:text-brand focus:outline-none">Pantry of Blessings</a>
         <a 
           href="https://www.youtube.com/channel/UCUcLKfZo5Su6-ypmt1dkPKA" 
           target="_blank"
           rel="noopener noreferrer"
-          class="block px-3 py-2 text-brand font-semibold hover:text-brand-dark"
+          class="block px-3 py-2 text-brand font-semibold hover:text-brand-dark focus:text-brand-dark focus:outline-none"
           aria-label="Watch Live Services on YouTube (opens in new tab)"
         >
           Watch Live
@@ -136,13 +145,11 @@
 </header>
 
 <!-- Christmas Eve Service Alert -->
-<!-- The alert is stored in the header file -->
-<div class="bg-brand text-white py-3">
+<div class="bg-brand text-white py-3" role="alert" aria-label="Special announcement">
   <div class="container mx-auto px-4 text-center">
     <p class="font-bold">Join us for our Christmas Eve Service at 6:00 PM on December 24th! 🎄</p>
   </div>
 </div>
-<!-- End Christmas Eve Service Alert -->
 
 <script>
   const mobileMenuButton = document.getElementById('mobile-menu-button');
@@ -152,5 +159,33 @@
     const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
     mobileMenuButton.setAttribute('aria-expanded', (!isExpanded).toString());
     mobileMenu?.classList.toggle('hidden');
+  });
+
+  // Close dropdown menus when clicking outside
+  document.addEventListener('click', (event) => {
+    const dropdowns = ['worship-menu', 'about-menu', 'events-menu'];
+    dropdowns.forEach(id => {
+      const menu = document.getElementById(id);
+      const button = menu?.previousElementSibling;
+      if (menu && button && !button.contains(event.target)) {
+        menu.classList.add('hidden');
+        button.setAttribute('aria-expanded', 'false');
+      }
+    });
+  });
+
+  // Handle Escape key to close dropdowns
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      const dropdowns = ['worship-menu', 'about-menu', 'events-menu'];
+      dropdowns.forEach(id => {
+        const menu = document.getElementById(id);
+        const button = menu?.previousElementSibling;
+        if (menu && button) {
+          menu.classList.add('hidden');
+          button.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
   });
 </script>
