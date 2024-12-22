@@ -9,15 +9,17 @@ const welcomeImage = {
   alt: "Interior view of Lake Ozark Christian Church sanctuary"
 };
 
+
+// Easy to update video section
 const recentServices = [
-{
+   {
     id: "fLRG9qGhfi0", 
-    title: "Service - December, 8, 2024",
+    title: "Service - 12-8-2024",
     customThumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-h97Ps6wGczQkXuWLMNNIIjvV8XWW2PvzLO5y3WfuNY0uCazN7ElxHfnqCI7hwwUOvis&usqp=CAU"
   },
    {
     id: "pDzV9eAPpdE",
-    title: "Service - December, 1, 2024",
+    title: "Service - 12-1-2024",
     customThumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-h97Ps6wGczQkXuWLMNNIIjvV8XWW2PvzLO5y3WfuNY0uCazN7ElxHfnqCI7hwwUOvis&usqp=CAU"
   },
   {
@@ -104,21 +106,18 @@ const recentServices = [
 
 
 
-
-
 ---
 
 <Layout title="Welcome">
 <!-- Hero Section with Background Image -->
-  <div class="relative" role="banner">
+  <div class="relative">
     <div class="absolute inset-0">
       <img 
         src={welcomeImage.url} 
         alt={welcomeImage.alt}
         class="w-full h-full object-cover"
-        role="presentation"
       />
-      <div class="absolute inset-0 bg-black/50" aria-hidden="true"></div>
+      <div class="absolute inset-0 bg-black/50"></div>
     </div>
 
     <div class="relative min-h-[60vh] flex items-center">
