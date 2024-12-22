@@ -3,10 +3,12 @@
 <header class="sticky top-0 w-full z-50 bg-white/95 backdrop-blur-sm shadow-sm">
   <nav class="container mx-auto px-4" aria-label="Main navigation">
     <div class="flex justify-between items-center h-20">
+      <!-- Logo -->
       <a href="/" class="flex items-center gap-4" aria-label="Lake Ozark Christian Church - Home">
         <img src="https://cdn-locc-org.vercel.app/media/LOCC-header.png" alt="Lake Ozark Christian Church Logo" class="h-12" />
       </a>
       
+      <!-- Desktop Navigation -->
       <div class="hidden md:flex items-center space-x-8">
         <!-- Worship Dropdown -->
         <div class="relative group">
@@ -64,10 +66,11 @@
           </div>
         </div>
         
+        <!-- Regular Links -->
         <a href="/giving" class="text-gray-800 hover:text-brand font-medium">Giving</a>
         <a href="/shelter" class="text-gray-800 hover:text-brand font-medium">Pantry of Blessings</a>
-
         
+        <!-- Watch Live Button -->
         <a 
           href="https://www.youtube.com/channel/UCUcLKfZo5Su6-ypmt1dkPKA" 
           target="_blank"
@@ -79,7 +82,7 @@
         </a>
       </div>
       
-      <!-- Mobile menu button -->
+      <!-- Mobile Menu Button -->
       <button 
         class="md:hidden p-2" 
         id="mobile-menu-button"
@@ -93,17 +96,15 @@
       </button>
     </div>
     
-    <!-- Mobile menu -->
+    <!-- Mobile Menu -->
     <div class="md:hidden hidden" id="mobile-menu" role="navigation" aria-label="Mobile navigation">
       <div class="px-2 pt-2 pb-3 space-y-1">
-        <!-- Worship -->
         <div class="border-b border-gray-100 pb-2 mb-2">
           <div class="font-medium px-3 py-2 text-gray-800">Worship</div>
           <a href="/worship" class="block px-3 py-2 text-gray-800 hover:text-brand">Service Times</a>
           <a href="/children-youth" class="block px-3 py-2 text-gray-800 hover:text-brand">Children & Youth</a>
         </div>
 
-        <!-- About -->
         <div class="border-b border-gray-100 pb-2 mb-2">
           <div class="font-medium px-3 py-2 text-gray-800">About</div>
           <a href="/about" class="block px-3 py-2 text-gray-800 hover:text-brand">Who We Are</a>
@@ -112,17 +113,14 @@
           <a href="/bylaws" class="block px-3 py-2 text-gray-800 hover:text-brand">Bylaws</a>
         </div>
 
-        <!-- Events -->
         <div class="border-b border-gray-100 pb-2 mb-2">
           <div class="font-medium px-3 py-2 text-gray-800">Events</div>
           <a href="/weddings" class="block px-3 py-2 text-gray-800 hover:text-brand">Weddings</a>
           <a href="/calendar" class="block px-3 py-2 text-gray-800 hover:text-brand">Calendar</a>
         </div>
 
-        <!-- Other Links -->
         <a href="/giving" class="block px-3 py-2 text-gray-800 hover:text-brand">Giving</a>
         <a href="/shelter" class="block px-3 py-2 text-gray-800 hover:text-brand">Pantry of Blessings</a>
-
         <a 
           href="https://www.youtube.com/channel/UCUcLKfZo5Su6-ypmt1dkPKA" 
           target="_blank"
@@ -137,27 +135,14 @@
   </nav>
 </header>
 
-
-
-
-
-
-
-<!-- Special Alert for Christmas Eve Service -->
+<!-- Christmas Eve Service Alert -->
+<!-- The alert is stored in the header file -->
 <div class="bg-brand text-white py-3">
   <div class="container mx-auto px-4 text-center">
     <p class="font-bold">Join us for our Christmas Eve Service at 6:00 PM on December 24th! 🎄</p>
   </div>
 </div>
-<!-- Special Alert for Christmas Eve Service -->
-
-
-
-
-
-
-
-
+<!-- End Christmas Eve Service Alert -->
 
 <script>
   const mobileMenuButton = document.getElementById('mobile-menu-button');
