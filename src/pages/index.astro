@@ -9,8 +9,6 @@ const welcomeImage = {
   alt: "Interior view of Lake Ozark Christian Church sanctuary"
 };
 
-
-// Easy to update video section
 const recentServices = [
 {
     id: "fLRG9qGhfi0", 
@@ -106,24 +104,26 @@ const recentServices = [
 
 
 
+
+
 ---
 
 <Layout title="Welcome">
-
-  <!-- Hero Section with Background Image -->
-  <div class="relative">
+<!-- Hero Section with Background Image -->
+  <div class="relative" role="banner">
     <div class="absolute inset-0">
       <img 
         src={welcomeImage.url} 
         alt={welcomeImage.alt}
         class="w-full h-full object-cover"
+        role="presentation"
       />
-      <div class="absolute inset-0 bg-black/50"></div>
+      <div class="absolute inset-0 bg-black/50" aria-hidden="true"></div>
     </div>
 
     <div class="relative min-h-[60vh] flex items-center">
       <div class="container mx-auto px-4 py-16 text-center text-white">
-        <h1 class="text-5xl md:text-6xl font-bold mb-4">Welcome to Lake Ozark Christian</h1>
+        <h1 class="text-5xl md:text-6xl font-bold mb-4" tabindex="0">Welcome to Lake Ozark Christian</h1>
         <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
           A community of faith dedicated to sharing the Gospel of Jesus Christ. All are welcome in our congregation.
         </p>
@@ -147,10 +147,10 @@ const recentServices = [
           </a>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto" role="region" aria-label="Service Information">
           <div class="bg-white/10 backdrop-blur-sm p-6 rounded-xl">
             <h2 class="text-lg font-bold mb-2">Sunday Service</h2>
-            <p>10:30 AM</p>
+            <p role="timer">10:30 AM</p>
           </div>
           <div class="bg-white/10 backdrop-blur-sm p-6 rounded-xl">
             <h2 class="text-lg font-bold mb-2">Location</h2>
