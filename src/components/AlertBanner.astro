@@ -1,0 +1,144 @@
+---
+interface Props {
+  message: string;
+  title?: string;
+  type?: 'warning' | 'info' | 'error' | 'brand';
+  dismissText?: string;
+}
+
+const { message, title = 'Important Notice', type = 'warning', dismissText = 'Dismiss' } = Astro.props;
+
+// Map type to colors
+const colors = {
+  warning: {
+    bg: 'bg-amber-50',
+    text: 'text-amber-800',
+    icon: 'text-amber-600',
+    button: 'bg-amber-600 hover:bg-amber-700'
+  },
+  info: {
+    bg: 'bg-blue-50',
+    text: 'text-blue-800', 
+    icon: 'text-blue-600',
+    button: 'bg-blue-600 hover:bg-blue-700'
+  },
+  error: {
+    bg: 'bg-red-50',
+    text: 'text-red-800',
+    icon: 'text-red-600', 
+    button: 'bg-red-600 hover:bg-red-700'
+  },
+  brand: {
+    bg: 'bg-white',
+    text: 'text-brand-dark',
+    icon: 'text-brand', 
+    button: 'bg-brand hover:bg-brand-dark'
+  }
+};
+
+// Ensure type is a valid key before accessing colors
+const color = colors[type as keyof typeof colors];
+if (!color) {
+  throw new Error(`Invalid alert type: ${type}`);
+}
+
+// Split message by newlines and add indentation
+const messageLines = message.split('\n').map(line => line.trim());
+---
+
+<div 
+  class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center animate-fadeIn" 
+  id="alertModal" 
+  role="alertdialog" 
+  aria-modal="true"
+  aria-labelledby="alertTitle"
+>
+  <div class={`${color.bg} rounded-xl shadow-2xl max-w-md w-full mx-4 p-8 transform transition-all animate-slideIn`}>
+    <div class="flex flex-col items-center gap-5">
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        class={`h-14 w-14 ${color.icon}`} 
+        fill="none" 
+        viewBox="0 0 24 24" 
+        stroke="currentColor" 
+        aria-hidden="true"
+      >
+        <path 
+          stroke-linecap="round" 
+          stroke-linejoin="round" 
+          stroke-width="2" 
+          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" 
+        />
+      </svg>
+      <div class="text-center">
+        <h2 id="alertTitle" class={`text-2xl font-bold mb-2 ${color.text}`}>{title}</h2>
+        <div class={`${color.text} text-lg whitespace-pre-line`}>
+          {messageLines.join('\n')}
+        </div>
+      </div>
+      <button
+        id="closeAlert"
+        class={`${color.button} text-white font-bold py-3 px-10 rounded-full transition transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-opacity-50`}
+        aria-label="Close alert"
+      >
+        {dismissText}
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideIn {
+    from { 
+      opacity: 0;
+      transform: translateY(-10%);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .animate-slideIn {
+    animation: slideIn 0.4s ease-out;
+  }
+</style>
+
+<script>
+  const modal = document.getElementById('alertModal');
+  const closeButton = document.getElementById('closeAlert');
+  
+  function closeModal() {
+    if (modal) {
+      modal.classList.add('opacity-0');
+      modal.style.transition = 'opacity 0.2s ease-out';
+      setTimeout(() => modal.remove(), 200);
+    }
+  }
+
+  // Close on button click
+  closeButton?.addEventListener('click', closeModal);
+
+  // Close on escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeModal();
+    }
+  });
+
+  // Close on backdrop click
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+</script>
