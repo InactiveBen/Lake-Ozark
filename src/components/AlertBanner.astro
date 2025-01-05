@@ -4,9 +4,10 @@ interface Props {
   title?: string;
   type?: 'warning' | 'info' | 'error' | 'brand';
   dismissText?: string;
+  showMailingList?: boolean;
 }
 
-const { message, title = 'Important Notice', type = 'warning', dismissText = 'Dismiss' } = Astro.props;
+const { message, title = 'Important Notice', type = 'warning', dismissText = 'Dismiss', showMailingList = false } = Astro.props;
 
 // Map type to colors
 const colors = {
@@ -53,36 +54,74 @@ const messageLines = message.split('\n').map(line => line.trim());
   aria-modal="true"
   aria-labelledby="alertTitle"
 >
-  <div class={`${color.bg} rounded-xl shadow-2xl max-w-md w-full mx-4 p-8 transform transition-all animate-slideIn`}>
+  <div class={`${color.bg} rounded-xl shadow-2xl max-w-md w-full mx-4 p-8 transform transition-all animate-slideIn relative`}>
     <div class="flex flex-col items-center gap-5">
-      <svg 
-        xmlns="http://www.w3.org/2000/svg" 
-        class={`h-14 w-14 ${color.icon}`} 
-        fill="none" 
-        viewBox="0 0 24 24" 
-        stroke="currentColor" 
-        aria-hidden="true"
-      >
-        <path 
-          stroke-linecap="round" 
-          stroke-linejoin="round" 
-          stroke-width="2" 
-          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" 
-        />
-      </svg>
+      {type === 'brand' ? (
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          class={`h-14 w-14 ${color.icon}`} 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path 
+            stroke-linecap="round" 
+            stroke-linejoin="round" 
+            stroke-width="2" 
+            d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"
+          />
+        </svg>
+      ) : (
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          class={`h-14 w-14 ${color.icon}`} 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor" 
+          aria-hidden="true"
+        >
+          <path 
+            stroke-linecap="round" 
+            stroke-linejoin="round" 
+            stroke-width="2" 
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" 
+          />
+        </svg>
+      )}
       <div class="text-center">
         <h2 id="alertTitle" class={`text-2xl font-bold mb-2 ${color.text}`}>{title}</h2>
         <div class={`${color.text} text-lg whitespace-pre-line`}>
           {messageLines.join('\n')}
         </div>
       </div>
-      <button
-        id="closeAlert"
-        class={`${color.button} text-white font-bold py-3 px-10 rounded-full transition transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-opacity-50`}
-        aria-label="Close alert"
-      >
-        {dismissText}
-      </button>
+      <div class="flex flex-col sm:flex-row gap-3 items-center">
+        <button
+          id="closeAlert"
+          class={`${color.button} text-white font-bold py-3 px-10 rounded-full transition transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-opacity-50`}
+          aria-label="Close alert"
+        >
+          {dismissText}
+        </button>
+        {showMailingList && (
+          <a
+            href="https://lakeozarkdisciples.us7.list-manage.com/subscribe?u=9816d09f0ebdd5f8ce1af28b4&id=b26607b7c1"
+            target="_blank"
+            class={`${color.text} border-2 border-current hover:bg-gray-100 px-6 py-3 rounded-full font-medium transition transform hover:scale-105 hover:shadow-lg flex items-center gap-2`}
+          >
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              class="h-4 w-4" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            Join Mailing List
+          </a>
+        )}
+      </div>
     </div>
   </div>
 </div>
