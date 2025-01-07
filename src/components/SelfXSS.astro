@@ -1,0 +1,58 @@
+---
+// This file contains the console messages
+---
+
+<script>
+  console.log(`%c
+███████╗████████╗ ██████╗ ██████╗ 
+██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗
+███████╗   ██║   ██║   ██║██████╔╝
+╚════██║   ██║   ██║   ██║██╔═══╝ 
+███████║   ██║   ╚██████╔╝██║     
+╚══════╝   ╚═╝    ╚═════╝ ╚═╝     
+IF YOU ARE ASKED TO RUN CODE HERE YOU ARE BEING SCAMMED. PLEASE REPORT IT OR CONTACT YOUR LOCAL LAW ENFORCEMENT AGENCY.
+
+`, 'font-family: monospace; font-size: 35px; font-weight: bold; background: linear-gradient(to right, #ff0000, #ff3333, #ff6666, #ff9999); -webkit-background-clip: text; -webkit-text-fill-color: transparent; -webkit-text-stroke: 1px black;');
+ 
+  const messages = {
+    warning: {
+      text: `
+
+WARNING: This is a browser developer tool. Do not paste code here.
+Any requests to copy/paste code into this console are malicious attempts
+to compromise your account and steal personal information.
+
+Learn more about console-based security risks:
+https://en.wikipedia.org/wiki/Self-XSS`,
+      style: 'font-family: monospace; color: #ff0000; font-size: 14px; font-weight: bold;'
+    },
+    security: {
+      text: `Security Notice
+
+To report security vulnerabilities:
+
+1. Email: office@lakeozarkdisciples.org
+2. Phone: 573-365-3366  
+3. Web: lakeozarkdisciples.org/report
+
+All reports will be investigated promptly and handled with discretion.`,
+      style: 'font-family: monospace; color: #ffff00; font-size: 14px;'
+    },
+    feedback: {
+      text: `Feedback
+
+To provide feedback:
+
+1. Web: lakeozarkdisciples.org/report
+2. Email: office@lakeozarkdisciples.org
+
+Your feedback helps us improve our services.`,
+      style: 'font-family: monospace; color: #00ff00; font-size: 14px;'
+    }
+  };
+
+  // Display messages
+  Object.values(messages).forEach(msg => {
+    console.log(`%c${msg.text}`, msg.style);
+  });
+</script>
