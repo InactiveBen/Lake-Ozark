@@ -1,0 +1,730 @@
+---
+const color = {
+  bg: 'bg-white',
+  text: 'text-gray-900', 
+  button: 'bg-brand hover:bg-brand-dark'
+};
+---
+
+<button
+  id="accessibility-toggle"
+  class="fixed top-1/2 right-0 transform -translate-y-1/2 z-50 p-3 bg-brand text-white rounded-l-full shadow-lg hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+  aria-label="Toggle accessibility menu"
+  aria-expanded="false"
+  aria-controls="accessibility-menu"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v2m0 8v2M6 12h2m8 0h2"/>
+    <circle cx="12" cy="12" r="3"/>
+  </svg>
+</button>
+
+<div id="accessibility-notification" class="fixed top-4 right-4 z-50 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded hidden" role="alert">
+  <span class="block sm:inline" id="notification-message"></span>
+</div>
+
+<div
+  id="accessibility-menu"
+  class="fixed top-1/2 right-16 transform -translate-y-1/2 z-50 w-80 bg-white rounded-lg shadow-xl p-4 hidden transition-transform duration-200 ease-in-out"
+  role="dialog"
+  aria-labelledby="accessibility-title"
+  style="font-size: 16px"
+>
+  <!-- Rest of the menu HTML stays the same until the script tag -->
+  <div class="flex justify-between items-center mb-4">
+    <h2 id="accessibility-title" class="text-lg font-semibold text-gray-900">Accessibility Settings</h2>
+    <button
+      id="close-accessibility"
+      class="text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 rounded"
+      aria-label="Close accessibility menu"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="space-y-4">
+    <!-- Font Size -->
+    <div>
+      <label for="font-size" class="block text-sm font-medium text-gray-700 mb-1">Font Size</label>
+      <div class="flex items-center gap-2">
+        <button
+          id="decrease-font"
+          class="p-2 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+          aria-label="Decrease font size"
+        >A-</button>
+        <input
+          type="range"
+          id="font-size"
+          min="80"
+          max="150"
+          value="100"
+          step="10"
+          class="flex-1"
+          aria-label="Font size adjustment"
+        />
+        <button
+          id="increase-font"
+          class="p-2 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+          aria-label="Increase font size"
+        >A+</button>
+      </div>
+    </div>
+
+    <!-- Contrast -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-2">Contrast</label>
+      <div class="flex gap-2">
+        <button
+          id="normal-contrast"
+          class="flex-1 py-2 px-3 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm"
+          aria-pressed="true"
+        >
+          Normal
+        </button>
+        <button
+          id="high-contrast"
+          class="flex-1 py-2 px-3 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm"
+          aria-pressed="false"
+        >
+          High Contrast
+        </button>
+      </div>
+    </div>
+
+    <!-- Highlight Links -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-2">Highlight Links</label>
+      <div class="flex gap-2">
+        <button
+          id="normal-links"
+          class="flex-1 py-2 px-3 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm"
+          aria-pressed="true"
+        >
+          Normal
+        </button>
+        <button
+          id="highlight-links"
+          class="flex-1 py-2 px-3 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm"
+          aria-pressed="false"
+        >
+          Highlight
+        </button>
+      </div>
+    </div>
+
+    <!-- Hide Images -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-2">Images</label>
+      <div class="flex gap-2">
+        <button
+          id="show-images"
+          class="flex-1 py-2 px-3 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm"
+          aria-pressed="true"
+        >
+          Show
+        </button>
+        <button
+          id="hide-images"
+          class="flex-1 py-2 px-3 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm"
+          aria-pressed="false"
+        >
+          Hide
+        </button>
+      </div>
+    </div>
+
+    <!-- Font Family -->
+    <div>
+      <label for="font-family" class="block text-sm font-medium text-gray-700 mb-1">Font Type</label>
+      <select
+        id="font-family"
+        class="w-full rounded-md border-gray-300 shadow-sm focus:border-brand focus:ring-brand text-sm"
+      >
+        <option value="default">Default</option>
+        <option value="readable">More Readable</option>
+        <option value="dyslexic">Dyslexic Friendly</option>
+        <option value="bionic">Bionic Reading</option>
+      </select>
+    </div>
+
+    <!-- Line Height -->
+    <div>
+      <label for="line-height" class="block text-sm font-medium text-gray-700 mb-1">Line Spacing</label>
+      <select
+        id="line-height"
+        class="w-full rounded-md border-gray-300 shadow-sm focus:border-brand focus:ring-brand text-sm"
+      >
+        <option value="normal">Normal</option>
+        <option value="relaxed">Relaxed</option>
+        <option value="loose">Loose</option>
+      </select>
+    </div>
+
+    <!-- Reset Button -->
+    <button
+      id="reset-accessibility"
+      class="w-full mt-4 py-2 px-4 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm font-medium"
+    >
+      Reset to Default
+    </button>
+  </div>
+
+  <div 
+    id="cookie-consent-modal" 
+    class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[101] hidden"
+    role="dialog"
+    aria-labelledby="cookie-consent-title"
+  >
+    <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-xl p-6 max-w-md w-[95%]">
+      <h3 id="cookie-consent-title" class="text-lg font-semibold mb-3">Save Your Settings?</h3>
+      <p class="text-gray-600 text-sm mb-4">
+        To save your accessibility preferences, we need your permission to use cookies. Would you like to:
+      </p>
+      <div class="flex flex-col gap-2">
+        <button
+          id="enable-cookies"
+          class="w-full py-2 px-4 bg-brand text-white rounded hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm font-medium"
+        >
+          Open Your Cookie Preferences
+        </button>
+        <button
+          id="continue-without-saving"
+          class="w-full py-2 px-4 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm font-medium"
+        >
+          Continue Without Saving
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="accessibility-notification" class="fixed bottom-4 right-4 p-4 rounded-lg border hidden transition-opacity duration-300 z-50">
+  <p id="notification-message" class="text-sm"></p>
+</div>
+
+<script>
+  // Store default values
+  const defaultSettings = {
+    fontSize: 100,
+    contrast: 'normal',
+    fontFamily: 'default',
+    lineHeight: 'normal',
+    highlightLinks: 'normal',
+    hideImages: false
+  };
+
+  // Debounce function
+  function debounce(func: Function, wait: number) {
+    let timeout: ReturnType<typeof setTimeout>;
+    return function executedFunction(...args: any[]) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
+
+  // Check if cookies are enabled
+  function areCookiesEnabled() {
+    const cookieEnabled = navigator.cookieEnabled;
+    if (!cookieEnabled) {
+      showNotification("Cookie access is required to save accessibility settings.", "warning");
+      return false;
+    }
+    return true;
+  }
+
+  // Show notification
+  const showNotification = debounce((message: string, type: 'success' | 'warning' = 'success') => {
+    const notification = document.getElementById('accessibility-notification');
+    const messageEl = document.getElementById('notification-message');
+    if (notification && messageEl) {
+      messageEl.textContent = message;
+      notification.classList.remove('hidden', 'bg-green-100', 'border-green-400', 'text-green-700', 'bg-yellow-100', 'border-yellow-400', 'text-yellow-700');
+      
+      if (type === 'warning') {
+        notification.classList.add('bg-yellow-100', 'border-yellow-400', 'text-yellow-700');
+      } else {
+        notification.classList.add('bg-green-100', 'border-green-400', 'text-green-700');
+      }
+      
+      notification.classList.remove('hidden');
+      setTimeout(() => {
+        notification.classList.add('hidden');
+      }, 5000);
+    }
+  }, 1000); // 1 second debounce
+
+  // Load saved settings from cookies
+  function loadSettings() {
+    if (!areCookiesEnabled()) {
+      return defaultSettings;
+    }
+    
+    // Check for personalization cookie consent
+    const cookieConsent = document.cookie.split('; ').find(row => row.startsWith('cookie-consent='));
+    if (!cookieConsent) {
+      return defaultSettings;
+    }
+
+    const consentValue = decodeURIComponent(cookieConsent.split('=')[1]);
+    // Check if personalization is allowed based on consent level
+    if (consentValue !== 'all' && consentValue !== 'partial') {
+      return defaultSettings;
+    }
+    
+    const saved = document.cookie.split('; ').find(row => row.startsWith('accessibility-settings='));
+    if (saved) {
+      try {
+        const settings = JSON.parse(decodeURIComponent(saved.split('=')[1]));
+        return settings;
+      } catch (e) {
+        console.error('Error parsing accessibility settings:', e);
+        return defaultSettings;
+      }
+    }
+    return defaultSettings;
+  }
+
+  // Save settings to cookies
+  function saveSettings(settings: typeof defaultSettings) {
+    if (!areCookiesEnabled()) {
+      showNotification("Cannot save settings - please enable cookies in your privacy settings.", "warning");
+      return;
+    }
+
+    // Check for personalization cookie consent
+    const cookieConsent = document.cookie.split('; ').find(row => row.startsWith('cookie-consent='));
+    if (!cookieConsent) {
+      showNotification("Please enable personalization cookies in the cookie settings to save your accessibility preferences.", "warning");
+      return;
+    }
+
+    const consentValue = decodeURIComponent(cookieConsent.split('=')[1]);
+    // Only allow saving if user has accepted all or partial cookies
+    if (consentValue !== 'all' && consentValue !== 'partial') {
+      showNotification("Please enable personalization cookies in the cookie settings to save your accessibility preferences.", "warning");
+      return;
+    }
+    
+    const oneYear = 365 * 24 * 60 * 60 * 1000;
+    const expires = new Date(Date.now() + oneYear).toUTCString();
+    document.cookie = `accessibility-settings=${encodeURIComponent(JSON.stringify(settings))}; expires=${expires}; path=/`;
+    showNotification("Settings saved successfully");
+  }
+
+  // Apply settings to the page
+  function applySettings(settings: typeof defaultSettings) {
+    // Font size
+    document.documentElement.style.setProperty('--base-font-scale', `${settings.fontSize}%`);
+    
+    // Contrast
+    if (settings.contrast === 'high') {
+      document.body.classList.add('high-contrast');
+      document.documentElement.style.setProperty('--text-color', '#000000');
+      document.documentElement.style.setProperty('--background-color', '#FFFFFF');
+      document.documentElement.style.setProperty('--link-color', '#0000EE');
+    } else {
+      document.body.classList.remove('high-contrast');
+      document.documentElement.style.removeProperty('--text-color');
+      document.documentElement.style.removeProperty('--background-color');
+      document.documentElement.style.removeProperty('--link-color');
+    }
+
+    // Highlight Links
+    if (settings.highlightLinks === 'highlight') {
+      document.body.classList.add('highlight-links');
+    } else {
+      document.body.classList.remove('highlight-links');
+    }
+
+    // Hide Images
+    if (settings.hideImages) {
+      document.body.classList.add('hide-images');
+    } else {
+      document.body.classList.remove('hide-images');
+    }
+
+    // Font family
+    if (settings.fontFamily === 'readable') {
+      document.documentElement.style.setProperty('--font-family', '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif');
+    } else if (settings.fontFamily === 'dyslexic') {
+      document.documentElement.style.setProperty('--font-family', 'OpenDyslexic, "Comic Sans MS", cursive');
+    } else if (settings.fontFamily === 'bionic') {
+      enableBionicReading();
+    } else {
+      document.documentElement.style.removeProperty('--font-family');
+      disableBionicReading();
+    }
+
+    // Line height
+    if (settings.lineHeight === 'relaxed') {
+      document.documentElement.style.setProperty('--line-height', '1.75');
+    } else if (settings.lineHeight === 'loose') {
+      document.documentElement.style.setProperty('--line-height', '2');
+    } else {
+      document.documentElement.style.removeProperty('--line-height');
+    }
+
+    showNotification("Accessibility settings updated successfully");
+  }
+
+  // Enable bionic reading
+  function enableBionicReading() {
+    const textNodes = document.evaluate(
+      "//text()[not(ancestor::script) and not(ancestor::style)]",
+      document.body,
+      null,
+      XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
+      null
+    );
+
+    for (let i = 0; i < textNodes.snapshotLength; i++) {
+      const node = textNodes.snapshotItem(i);
+      if (node && node.textContent && node.parentElement && !node.parentElement.classList.contains('bionic-processed')) {
+        const words = node.textContent.split(/\s+/);
+        const bionicWords = words.map(word => {
+          if (word.length <= 3) return word;
+          const midPoint = Math.ceil(word.length * 0.4);
+          return `<strong>${word.slice(0, midPoint)}</strong>${word.slice(midPoint)}`;
+        });
+        const span = document.createElement('span');
+        span.classList.add('bionic-processed');
+        span.innerHTML = bionicWords.join(' ');
+        node.parentElement.replaceChild(span, node);
+      }
+    }
+  }
+
+  // Disable bionic reading
+  function disableBionicReading() {
+    const bionicElements = document.querySelectorAll('.bionic-processed');
+    bionicElements.forEach(element => {
+      if (element.parentElement) {
+        const text = element.textContent || '';
+        const textNode = document.createTextNode(text);
+        element.parentElement.replaceChild(textNode, element);
+      }
+    });
+  }
+
+  // Update the showCookieWarning function with debounce
+  const showCookieWarning = debounce(() => {
+    const cookieConsent = document.cookie.split('; ').find(row => row.startsWith('cookie-consent='));
+    const consentValue = cookieConsent ? decodeURIComponent(cookieConsent.split('=')[1]) : null;
+    
+    if (!cookieConsent || (consentValue !== 'all' && consentValue !== 'partial')) {
+      const modal = document.getElementById('cookie-consent-modal');
+      const enableButton = document.getElementById('enable-cookies');
+      const continueButton = document.getElementById('continue-without-saving');
+      
+      if (modal && enableButton && continueButton) {
+        modal.classList.remove('hidden');
+        
+        // Enable cookies button
+        enableButton.onclick = () => {
+          modal.classList.add('hidden');
+          document.getElementById('cookie-banner')?.classList.remove('hidden');
+          document.getElementById('cookie-banner-backdrop')?.classList.remove('hidden');
+        };
+        
+        // Continue without saving button
+        continueButton.onclick = () => {
+          modal.classList.add('hidden');
+          showNotification("Changes will not be saved due to your cookie preferences", "warning");
+        };
+        
+        // Close modal on escape
+        modal.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            modal.classList.add('hidden');
+          }
+        });
+        
+        // Close on backdrop click
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            modal.classList.add('hidden');
+          }
+        });
+      }
+      return true;
+    }
+    return false;
+  }, 10000); // 10 second debounce
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const settings = loadSettings();
+    const menu = document.getElementById('accessibility-menu');
+    const toggle = document.getElementById('accessibility-toggle');
+    const fontSizeInput = document.getElementById('font-size') as HTMLInputElement;
+    const fontFamily = document.getElementById('font-family') as HTMLSelectElement;
+    const lineHeight = document.getElementById('line-height') as HTMLSelectElement;
+    const normalContrast = document.getElementById('normal-contrast');
+    const highContrast = document.getElementById('high-contrast');
+    const normalLinks = document.getElementById('normal-links');
+    const highlightLinks = document.getElementById('highlight-links');
+    const showImages = document.getElementById('show-images');
+    const hideImages = document.getElementById('hide-images');
+    const decreaseFont = document.getElementById('decrease-font');
+    const increaseFont = document.getElementById('increase-font');
+    const resetButton = document.getElementById('reset-accessibility');
+
+    // Toggle menu - Moving this before any cookie checks
+    toggle?.addEventListener('click', () => {
+      const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', (!isExpanded).toString());
+      menu?.classList.toggle('hidden');
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!menu?.contains(e.target as Node) && 
+          !toggle?.contains(e.target as Node) && 
+          !menu?.classList.contains('hidden')) {
+        toggle?.setAttribute('aria-expanded', 'false');
+        menu?.classList.add('hidden');
+      }
+    });
+
+    // Handle escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !menu?.classList.contains('hidden')) {
+        toggle?.setAttribute('aria-expanded', 'false');
+        menu?.classList.add('hidden');
+      }
+    });
+
+    // Apply initial settings
+    applySettings(settings);
+
+    // Initialize UI with saved settings
+    if (fontSizeInput) fontSizeInput.value = settings.fontSize.toString();
+    if (fontFamily) fontFamily.value = settings.fontFamily;
+    if (lineHeight) lineHeight.value = settings.lineHeight;
+    if (normalContrast) normalContrast.setAttribute('aria-pressed', (settings.contrast === 'normal').toString());
+    if (highContrast) highContrast.setAttribute('aria-pressed', (settings.contrast === 'high').toString());
+    if (normalLinks) normalLinks.setAttribute('aria-pressed', (settings.highlightLinks === 'normal').toString());
+    if (highlightLinks) highlightLinks.setAttribute('aria-pressed', (settings.highlightLinks === 'highlight').toString());
+    if (showImages) showImages.setAttribute('aria-pressed', (!settings.hideImages).toString());
+    if (hideImages) hideImages.setAttribute('aria-pressed', settings.hideImages.toString());
+
+    // Font size controls
+    fontSizeInput?.addEventListener('input', (e) => {
+      if (showCookieWarning()) return;
+      const value = parseInt((e.target as HTMLInputElement).value);
+      settings.fontSize = value;
+      saveSettings(settings);
+      applySettings(settings);
+    });
+
+    decreaseFont?.addEventListener('click', () => {
+      if (showCookieWarning()) return;
+      const newValue = Math.max(80, parseInt(fontSizeInput.value) - 10);
+      fontSizeInput.value = newValue.toString();
+      settings.fontSize = newValue;
+      saveSettings(settings);
+      applySettings(settings);
+    });
+
+    increaseFont?.addEventListener('click', () => {
+      if (showCookieWarning()) return;
+      const newValue = Math.min(150, parseInt(fontSizeInput.value) + 10);
+      fontSizeInput.value = newValue.toString();
+      settings.fontSize = newValue;
+      saveSettings(settings);
+      applySettings(settings);
+    });
+
+    // Contrast controls
+    normalContrast?.addEventListener('click', () => {
+      if (showCookieWarning()) return;
+      settings.contrast = 'normal';
+      normalContrast.setAttribute('aria-pressed', 'true');
+      highContrast?.setAttribute('aria-pressed', 'false');
+      saveSettings(settings);
+      applySettings(settings);
+    });
+
+    highContrast?.addEventListener('click', () => {
+      if (showCookieWarning()) return;
+      settings.contrast = 'high';
+      highContrast.setAttribute('aria-pressed', 'true');
+      normalContrast?.setAttribute('aria-pressed', 'false');
+      saveSettings(settings);
+      applySettings(settings);
+    });
+
+    // Link highlight controls
+    normalLinks?.addEventListener('click', () => {
+      if (showCookieWarning()) return;
+      settings.highlightLinks = 'normal';
+      normalLinks.setAttribute('aria-pressed', 'true');
+      highlightLinks?.setAttribute('aria-pressed', 'false');
+      saveSettings(settings);
+      applySettings(settings);
+    });
+
+    highlightLinks?.addEventListener('click', () => {
+      if (showCookieWarning()) return;
+      settings.highlightLinks = 'highlight';
+      highlightLinks.setAttribute('aria-pressed', 'true');
+      normalLinks?.setAttribute('aria-pressed', 'false');
+      saveSettings(settings);
+      applySettings(settings);
+    });
+
+    // Image visibility controls
+    showImages?.addEventListener('click', () => {
+      if (showCookieWarning()) return;
+      settings.hideImages = false;
+      showImages.setAttribute('aria-pressed', 'true');
+      hideImages?.setAttribute('aria-pressed', 'false');
+      saveSettings(settings);
+      applySettings(settings);
+    });
+
+    hideImages?.addEventListener('click', () => {
+      if (showCookieWarning()) return;
+      settings.hideImages = true;
+      hideImages.setAttribute('aria-pressed', 'true');
+      showImages?.setAttribute('aria-pressed', 'false');
+      saveSettings(settings);
+      applySettings(settings);
+    });
+
+    // Font family control
+    fontFamily?.addEventListener('change', (e) => {
+      if (showCookieWarning()) return;
+      settings.fontFamily = (e.target as HTMLSelectElement).value;
+      saveSettings(settings);
+      applySettings(settings);
+    });
+
+    // Line height control
+    lineHeight?.addEventListener('change', (e) => {
+      if (showCookieWarning()) return;
+      settings.lineHeight = (e.target as HTMLSelectElement).value;
+      saveSettings(settings);
+      applySettings(settings);
+    });
+
+    // Reset button
+    resetButton?.addEventListener('click', () => {
+      if (showCookieWarning()) return;
+      settings.fontSize = defaultSettings.fontSize;
+      settings.contrast = defaultSettings.contrast;
+      settings.fontFamily = defaultSettings.fontFamily;
+      settings.lineHeight = defaultSettings.lineHeight;
+      settings.highlightLinks = defaultSettings.highlightLinks;
+      settings.hideImages = defaultSettings.hideImages;
+      
+      if (fontSizeInput) fontSizeInput.value = defaultSettings.fontSize.toString();
+      if (fontFamily) fontFamily.value = defaultSettings.fontFamily;
+      if (lineHeight) lineHeight.value = defaultSettings.lineHeight;
+      if (normalContrast) normalContrast.setAttribute('aria-pressed', 'true');
+      if (highContrast) highContrast.setAttribute('aria-pressed', 'false');
+      if (normalLinks) normalLinks.setAttribute('aria-pressed', 'true');
+      if (highlightLinks) highlightLinks.setAttribute('aria-pressed', 'false');
+      if (showImages) showImages.setAttribute('aria-pressed', 'true');
+      if (hideImages) hideImages.setAttribute('aria-pressed', 'false');
+      
+      saveSettings(settings);
+      applySettings(settings);
+      showNotification("Settings reset to default");
+      window.location.reload(); // Refresh the page after resetting settings
+    });
+
+    // Make the notification clickable to open cookie settings
+    const notification = document.getElementById('accessibility-notification');
+    notification?.addEventListener('click', () => {
+      document.getElementById('cookie-banner')?.classList.remove('hidden');
+      document.getElementById('cookie-banner-backdrop')?.classList.remove('hidden');
+    });
+  });
+</script>
+
+<style is:global>
+  :root {
+    --base-font-scale: 100%;
+    --text-color: inherit;
+    --background-color: inherit;
+    --link-color: inherit;
+    --font-family: inherit;
+    --line-height: inherit;
+  }
+
+  body {
+    font-size: var(--base-font-scale);
+    color: var(--text-color);
+    background-color: var(--background-color);
+    font-family: var(--font-family);
+    line-height: var(--line-height);
+  }
+
+  .high-contrast {
+    --text-color: #000000;
+    --background-color: #FFFFFF;
+    --link-color: #0000EE;
+  }
+
+  .high-contrast a {
+    color: var(--link-color) !important;
+  }
+
+  .high-contrast button,
+  .high-contrast [role="button"] {
+    border: 2px solid currentColor !important;
+  }
+
+  .highlight-links a {
+    background-color: #ffd900 !important;
+    color: #000000 !important;
+    font-weight: bold !important;
+    font-size: calc(100% + 5%) !important;
+    padding: 0 2px;
+    border-radius: 2px;
+    text-decoration: underline;
+  }
+
+  .hide-images img {
+    display: none !important;
+  }
+
+  .bionic-processed strong {
+    font-weight: 700;
+    color: inherit;
+  }
+
+  /* Slider styling */
+  input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: #E5E7EB;
+    outline: none;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--brand-color, #1D4ED8);
+    cursor: pointer;
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--brand-color, #1D4ED8);
+    cursor: pointer;
+  }
+</style>
