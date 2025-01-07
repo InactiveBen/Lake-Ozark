@@ -91,9 +91,9 @@ const isExpired = expiresAt ? new Date() > new Date(expiresAt) : false;
         
         <div class="flex-1 pt-1">
           {title && (
-            <h3 class={`font-semibold ${color.text} text-sm`}>{title}</h3>
+            <h3 class={`font-semibold ${color.text} text-sm`} set:html={title} />
           )}
-          <p class={`${color.text} text-sm mt-1`}>{message}</p>
+          <p class={`${color.text} text-sm mt-1`} set:html={message} />
           {fullMessages && fullMessages.length > 0 && (
             <button 
               class={`${color.button} text-white font-bold py-2 px-4 rounded-full mt-3 transition transform hover:scale-105 hover:shadow-lg flex items-center gap-2`}
@@ -145,10 +145,8 @@ const isExpired = expiresAt ? new Date() > new Date(expiresAt) : false;
               </svg>
             </div>
             <div class="text-center">
-              <h2 class={`text-2xl font-bold mb-2 ${color.text}`}>{fullMessage.title}</h2>
-              <div class={`${color.text} text-lg whitespace-pre-line`}>
-                {fullMessage.message}
-              </div>
+              <h2 class={`text-2xl font-bold mb-2 ${color.text}`} set:html={fullMessage.title} />
+              <div class={`${color.text} text-lg whitespace-pre-line`} set:html={fullMessage.message} />
             </div>
             <div class="flex flex-col sm:flex-row gap-3">
               <button
