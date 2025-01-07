@@ -1,0 +1,317 @@
+---
+interface Props {
+  message: string;
+  title?: string;
+  type?: 'warning' | 'info' | 'error' | 'brand';
+  icon?: 'cloud' | 'warning' | 'note' | 'info' | 'error' | 'mail';
+  messageId?: string;
+  expiresAt?: string;
+  fullMessages?: {
+    title: string;
+    message: string;
+    icon?: 'cloud' | 'warning' | 'note' | 'info' | 'error' | 'mail';
+  }[];
+  readMoreText?: string;
+  showMailingList?: boolean; // Added prop for mailing list toggle
+}
+
+const { message, title, type = 'brand', icon = 'info', messageId, expiresAt, fullMessages, readMoreText = 'Read Full Alert', showMailingList = false } = Astro.props;
+
+// Map type to colors
+const colors = {
+  warning: {
+    bg: 'bg-amber-50',
+    text: 'text-amber-800',
+    icon: 'text-amber-600',
+    iconBg: 'bg-amber-100',
+    button: 'bg-amber-600 hover:bg-amber-700'
+  },
+  info: {
+    bg: 'bg-blue-50', 
+    text: 'text-blue-800',
+    icon: 'text-blue-600',
+    iconBg: 'bg-blue-100',
+    button: 'bg-blue-600 hover:bg-blue-700'
+  },
+  error: {
+    bg: 'bg-red-50',
+    text: 'text-red-800',
+    icon: 'text-red-600', 
+    iconBg: 'bg-red-100',
+    button: 'bg-red-600 hover:bg-red-700'
+  },
+  brand: {
+    bg: 'bg-white',
+    text: 'text-brand-dark',
+    icon: 'text-brand',
+    iconBg: 'bg-brand/10',
+    button: 'bg-brand hover:bg-brand-dark'
+  }
+};
+
+// Map icons to SVG paths
+const icons = {
+  cloud: "M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z",
+  warning: "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z",
+  note: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z",
+  info: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
+  error: "M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z",
+  mail: "M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+};
+
+const color = colors[type];
+const uniqueId = messageId || Math.random().toString(36).substring(2, 15);
+const isExpired = expiresAt ? new Date() > new Date(expiresAt) : false;
+---
+
+{!isExpired && (
+  <>
+    <div 
+      id={`alertSmall-${uniqueId}`}
+      class={`fixed bottom-4 right-4 z-50 ${color.bg} shadow-lg rounded-lg p-4 max-w-sm w-full animate-slideUp`}
+      role="alert"
+    >
+      <div class="flex items-start gap-4">
+        <div class={`${color.iconBg} rounded-full p-2 flex-shrink-0`}>
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            class={`h-5 w-5 ${color.icon}`}
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path 
+              stroke-linecap="round" 
+              stroke-linejoin="round" 
+              stroke-width="2" 
+              d={icons[icon]}
+            />
+          </svg>
+        </div>
+        
+        <div class="flex-1 pt-1">
+          {title && (
+            <h3 class={`font-semibold ${color.text} text-sm`}>{title}</h3>
+          )}
+          <p class={`${color.text} text-sm mt-1`}>{message}</p>
+          {fullMessages && fullMessages.length > 0 && (
+            <button 
+              class={`${color.button} text-white font-bold py-2 px-4 rounded-full mt-3 transition transform hover:scale-105 hover:shadow-lg flex items-center gap-2`}
+              onclick={`document.getElementById('alertModal-${uniqueId}-0').classList.remove('hidden')`}
+            >
+              <span>{readMoreText}{fullMessages.length > 1 ? 's' : ''}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </button>
+          )}
+        </div>
+
+        <button
+          class={`${color.text} hover:opacity-75 transition flex-shrink-0`}
+          onclick={`document.getElementById('alertSmall-${uniqueId}').remove()`}
+          aria-label="Dismiss"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    {fullMessages && fullMessages.map((fullMessage, index) => (
+      <div 
+        id={`alertModal-${uniqueId}-${index}`}
+        class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] flex items-center justify-center animate-fadeIn"
+        role="dialog"
+        aria-modal="true"
+      >
+        <div class={`${color.bg} rounded-xl shadow-2xl max-w-md w-full mx-4 p-8 transform transition-all animate-slideIn`}>
+          <div class="flex flex-col items-center gap-5">
+            <div class={`${color.iconBg} rounded-full p-4`}>
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                class={`h-14 w-14 ${color.icon}`}
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round" 
+                  stroke-width="2" 
+                  d={icons[fullMessage.icon || icon]}
+                />
+              </svg>
+            </div>
+            <div class="text-center">
+              <h2 class={`text-2xl font-bold mb-2 ${color.text}`}>{fullMessage.title}</h2>
+              <div class={`${color.text} text-lg whitespace-pre-line`}>
+                {fullMessage.message}
+              </div>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <button
+                class={`${color.button} text-white font-bold py-3 px-10 rounded-full transition transform hover:scale-105 hover:shadow-lg`}
+                onclick={`document.getElementById('alertModal-${uniqueId}-${index}').classList.add('hidden')`}
+              >
+                Close
+              </button>
+              {index < fullMessages.length - 1 && (
+                <button
+                  class={`${color.button} text-white font-bold py-3 px-10 rounded-full transition transform hover:scale-105 hover:shadow-lg`}
+                  onclick={`
+                    document.getElementById('alertModal-${uniqueId}-${index}').classList.add('hidden');
+                    document.getElementById('alertModal-${uniqueId}-${index + 1}').classList.remove('hidden');
+                  `}
+                >
+                  Next Alert
+                </button>
+              )}
+              {showMailingList && index === fullMessages.length - 1 && (
+                <button
+                  onclick={`document.getElementById('mailingListConfirm-${uniqueId}').classList.remove('hidden')`}
+                  class={`${color.text} border-2 border-current hover:bg-gray-100 px-6 py-3 rounded-full font-medium transition transform hover:scale-105 hover:shadow-lg text-center`}
+                >
+                  Join Mailing List
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    ))}
+
+    {/* Mailing List Confirmation Modal */}
+    <div
+      id={`mailingListConfirm-${uniqueId}`}
+      class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-[70] flex items-center justify-center animate-fadeIn"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div class={`${color.bg} rounded-xl shadow-2xl max-w-md w-full mx-4 p-8 transform transition-all animate-slideIn`}>
+        <div class="flex flex-col items-center gap-5">
+          <div class={`${color.iconBg} rounded-full p-4`}>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              class={`h-14 w-14 ${color.icon}`}
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path 
+                stroke-linecap="round" 
+                stroke-linejoin="round" 
+                stroke-width="2" 
+                d={icons.mail}
+              />
+            </svg>
+          </div>
+          <div class="text-center">
+            <h2 class={`text-2xl font-bold mb-2 ${color.text}`}>Join Our Mailing List</h2>
+            <p class={`${color.text} text-lg`}>
+              You will be redirected to our mailing list signup page on MailChimp.
+              Would you like to continue?
+            </p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <a
+              href="https://lakeozarkdisciples.us7.list-manage.com/subscribe?u=9816d09f0ebdd5f8ce1af28b4&id=b26607b7c1"
+              target="_blank"
+              class={`${color.button} text-white font-bold py-3 px-10 rounded-full transition transform hover:scale-105 hover:shadow-lg text-center`}
+            >
+              Continue
+            </a>
+            <button
+              onclick={`document.getElementById('mailingListConfirm-${uniqueId}').classList.add('hidden')`}
+              class={`${color.text} border-2 border-current hover:bg-gray-100 px-6 py-3 rounded-full font-medium transition transform hover:scale-105 hover:shadow-lg`}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </>
+)}
+
+<style>
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideIn {
+    from { 
+      opacity: 0;
+      transform: translateY(-10%);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-slideUp {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .animate-slideIn {
+    animation: slideIn 0.4s ease-out;
+  }
+</style>
+
+<script define:vars={{ uniqueId, messageId, expiresAt }}>
+  const alert = document.getElementById(`alertSmall-${uniqueId}`);
+  const modals = Array.from(document.querySelectorAll(`[id^="alertModal-${uniqueId}-"]`));
+  const mailingListConfirm = document.getElementById(`mailingListConfirm-${uniqueId}`);
+  
+  if (messageId) {
+    // Check if alert has expired or was dismissed
+    const isExpired = expiresAt ? new Date() > new Date(expiresAt) : false;
+    if (sessionStorage.getItem(`alert-${messageId}`) === 'dismissed' || isExpired) {
+      alert?.remove();
+      modals.forEach(modal => modal.remove());
+      mailingListConfirm?.remove();
+    }
+  }
+
+  // Close modal on escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      modals.forEach(modal => modal.classList.add('hidden'));
+      mailingListConfirm?.classList.add('hidden');
+    }
+  });
+
+  // Close modal on backdrop click
+  modals.forEach(modal => {
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.add('hidden');
+      }
+    });
+  });
+
+  // Close mailing list confirm on backdrop click
+  mailingListConfirm?.addEventListener('click', (e) => {
+    if (e.target === mailingListConfirm) {
+      mailingListConfirm.classList.add('hidden');
+    }
+  });
+</script>
