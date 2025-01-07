@@ -3,7 +3,9 @@ import { fade } from 'astro:transitions';
 import AlertBanner from '../components/AlertBanner.astro';
 import AlertSmall from '../components/AlertSmall.astro';
 import CookieBanner from '../components/CookieBanner.astro';
+import SelfXSS from '../components/SelfXSS.astro';
 ---
+<SelfXSS />
 <CookieBanner />
 <header class="sticky top-0 w-full z-50 bg-white/95 backdrop-blur-sm shadow-sm">
   <nav class="container mx-auto px-4" aria-label="Main navigation">
