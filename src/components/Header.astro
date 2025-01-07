@@ -186,3 +186,58 @@ import AlertBanner from '../components/AlertBanner.astro';
 </script>
 
 
+
+
+
+<AlertBanner 
+title="Get Email Updates"
+message="Would you like to receive these alerts via email next time?"
+type="brand"
+dismissText="No Thanks"
+icon="info"
+expiresAt="2025-01-9"
+showMailingList={true}
+messageId="program-423-1-8-2025"
+/>
+
+<AlertBanner 
+title="Program Cancelled"
+message="Due to weather and road conditions, the Wednesday after school program will not be in session this Wednesday, January 8, 2025."
+type="brand"
+dismissText="I understand"
+showMailingList={false}
+expiresAt="2025-01-09"
+messageId="program-cancellation-1-8-2025"
+/>
+
+
+<AlertBanner 
+title="DWM Meeting Cancellation"
+message="Due to the weather, the DWM meeting for Wednesday, January 8, 2024, has been canceled."
+type="brand"
+dismissText="Next Alert"
+expiresAt="2025-01-09"
+showMailingList={false}
+messageId="dwn-meeting-cancellation-1-8-2025"
+/>
+
+<AlertBanner 
+title="Bible Study Cancellation"
+message="Due to weather, Bible Study is cancelled for Tuesday, January 7, 2025. Additionally, Bible Study will not be held on Tuesday, January 14, 2025 as Pastor Ron will be away. Bible Study will resume on Tuesday, January 21, 2025."
+type="brand"
+dismissText="Next Alert"
+showMailingList={false}
+expiresAt="2025-01-08"
+messageId="bible-study-cancellation-1-7-2025"
+/>
+
+<AlertBanner 
+title="Multiple Program Cancellations"
+message="Due to hazardous road conditions this week, multiple church programs have been cancelled. \n\nPlease click through each alert to see specific cancellations and updates."
+type="brand"
+dismissText="Next Alert"
+showMailingList={false}
+expiresAt="2025-01-09"
+messageId="multiple-program-cancellations-1-7-2025"
+/>
+
