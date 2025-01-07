@@ -221,7 +221,6 @@ const color = {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   }
 </style>
-
 <script>
   declare global {
     interface Window {
@@ -269,7 +268,6 @@ const color = {
   function loadGoogleAnalytics() {
     // Only proceed if the script hasn't been loaded yet
     if (!document.querySelector('script[src*="googletagmanager"]')) {
-      console.log('🔍 Loading Google Analytics...');
       // Create and append the first script (gtag.js)
       const gtagScript = document.createElement('script');
       gtagScript.async = true;
@@ -285,20 +283,22 @@ const color = {
         gtag('config', 'G-T4PD8XC0SC');
       `;
       document.head.appendChild(configScript);
-      console.log('✅ Google Analytics loaded successfully');
+      console.log(
+  '[G_CONSENT] You have consented to Google Analytics by accepting the cookie banner, enabling analytics cookies, or clicking "Accept All Cookies." Google Analytics is now being loaded.'
+);
     } else {
-      console.log('ℹ️ Google Analytics is already loaded');
+      console.log('[G_LOADED] Google Analytics was already loaded, we have nothing to do here.');
     }
   }
 
   function unloadGoogleAnalytics() {
-    console.log('🔄 Unloading Google Analytics...');
+    console.log('[G_UNLOAD] User has rejected Google Analytics, we are unloading it.');
     
     // Remove the gtag.js script
     const gtagScript = document.querySelector('script[src*="googletagmanager"]');
     if (gtagScript) {
       gtagScript.remove();
-      console.log('✅ Removed gtag.js script');
+      console.log('[G_UNLOAD] User has rejected Google Analytics. It has been successfully unloaded.');
     }
 
     // Remove the configuration script by finding all inline scripts and checking their content
@@ -307,7 +307,7 @@ const color = {
       const script = scripts[i];
       if (!script.src && script.textContent?.includes('gtag')) {
         script.remove();
-        console.log('✅ Removed gtag configuration script');
+        console.log('[G_UNLOAD] Removed gtag configuration script');
         break;
       }
     }
@@ -315,16 +315,16 @@ const color = {
     // Clear any existing dataLayer
     if (window.dataLayer) {
       window.dataLayer = [];
-      console.log('✅ Cleared dataLayer');
+      console.log('[G_UNLOAD] Successfully cleared dataLayer and removed all analytics data');
     }
 
     // Set gtag to undefined instead of trying to delete it
     if (window.gtag) {
       window.gtag = undefined as any;
-      console.log('✅ Removed gtag function');
+      console.log('[G_UNLOAD] Successfully removed gtag function from window object');
     }
     
-    console.log('✅ Google Analytics unloaded successfully');
+    console.log('[G_UNLOAD] Google Analytics has been successfully unloaded and all tracking data cleared');
   }
 
   function handleCookieConsent(preferences: CookiePreferences) {
