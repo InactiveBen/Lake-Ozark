@@ -72,14 +72,14 @@ const isExpired = expiresAt ? new Date() > new Date(expiresAt) : false;
   <>
     <div 
       id={`alertSmall-${uniqueId}`}
-      class={`fixed bottom-4 right-4 z-50 ${color.bg} shadow-lg rounded-lg p-4 max-w-sm w-full animate-slideUp animate-bounce-temp`}
+      class={`fixed md:bottom-4 md:right-4 bottom-0 right-0 left-0 md:left-auto z-50 ${color.bg} shadow-lg rounded-lg md:p-4 p-3 md:max-w-sm w-full md:w-auto animate-slideUp animate-bounce-temp`}
       role="alert"
     >
-      <div class="flex items-start gap-4">
-        <div class={`${color.iconBg} rounded-full p-2 flex-shrink-0`}>
+      <div class="flex items-start gap-3 md:gap-4">
+        <div class={`${color.iconBg} rounded-full p-1.5 md:p-2 flex-shrink-0`}>
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
-            class={`h-5 w-5 ${color.icon}`}
+            class={`h-4 w-4 md:h-5 md:w-5 ${color.icon}`}
             fill="none" 
             viewBox="0 0 24 24" 
             stroke="currentColor"
@@ -93,30 +93,32 @@ const isExpired = expiresAt ? new Date() > new Date(expiresAt) : false;
           </svg>
         </div>
         
-        <div class="flex-1 pt-1">
+        <div class="flex-1 pt-0.5 md:pt-1">
           {title && (
-            <h3 class={`font-semibold ${color.text} text-sm`} set:html={title} />
+            <h3 class={`font-semibold ${color.text} text-xs md:text-sm`} set:html={title} />
           )}
-          <p class={`${color.text} text-sm mt-1`} set:html={message} />
+          <p class={`${color.text} text-xs md:text-sm mt-0.5 md:mt-1`} set:html={message} />
           {fullMessages && fullMessages.length > 0 && (
-            <button 
-              class={`${color.button} text-white font-bold py-2 px-4 rounded-full mt-3 transition transform hover:scale-105 hover:shadow-lg flex items-center gap-2`}
-              onclick={`document.getElementById('alertModal-${uniqueId}-0').classList.remove('hidden')`}
-            >
-              <span>{readMoreText}{fullMessages.length > 1 ? 's' : ''}</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </button>
+            <div class="flex justify-center mt-2">
+              <button 
+                class={`${color.button} text-white font-bold text-xs md:text-sm py-1.5 md:py-2 px-3 md:px-4 rounded-full transition transform hover:scale-105 hover:shadow-lg flex items-center gap-1 md:gap-2`}
+                onclick={`document.getElementById('alertModal-${uniqueId}-0').classList.remove('hidden')`}
+              >
+                <span>{readMoreText}{fullMessages.length > 1 ? 's' : ''}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 md:h-4 md:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </button>
+            </div>
           )}
         </div>
 
         <button
           class={`${color.text} hover:opacity-75 transition flex-shrink-0`}
-          onclick={`document.getElementById('alertSmall-${uniqueId}').remove()`}
+          onclick={`document.getElementById('closeConfirm-${uniqueId}').classList.remove('hidden')`}
           aria-label="Dismiss"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
@@ -130,12 +132,12 @@ const isExpired = expiresAt ? new Date() > new Date(expiresAt) : false;
         role="dialog"
         aria-modal="true"
       >
-        <div class={`${color.bg} rounded-xl shadow-2xl max-w-md w-full mx-4 p-8 transform transition-all animate-slideIn`}>
-          <div class="flex flex-col items-center gap-5">
-            <div class={`${color.iconBg} rounded-full p-4`}>
+        <div class={`${color.bg} rounded-xl shadow-2xl max-w-md w-full mx-4 p-4 md:p-8 transform transition-all animate-slideIn`}>
+          <div class="flex flex-col items-center gap-3 md:gap-5">
+            <div class={`${color.iconBg} rounded-full p-2 md:p-4`}>
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
-                class={`h-14 w-14 ${color.icon}`}
+                class={`h-8 w-8 md:h-14 md:w-14 ${color.icon}`}
                 fill="none" 
                 viewBox="0 0 24 24" 
                 stroke="currentColor"
@@ -149,19 +151,19 @@ const isExpired = expiresAt ? new Date() > new Date(expiresAt) : false;
               </svg>
             </div>
             <div class="text-center">
-              <h2 class={`text-2xl font-bold mb-2 ${color.text}`} set:html={fullMessage.title} />
-              <div class={`${color.text} text-lg whitespace-pre-line`} set:html={fullMessage.message} />
+              <h2 class={`text-xl md:text-2xl font-bold mb-2 ${color.text}`} set:html={fullMessage.title} />
+              <div class={`${color.text} text-sm md:text-lg whitespace-pre-line`} set:html={fullMessage.message} />
             </div>
-            <div class="flex flex-col sm:flex-row gap-3">
+            <div class="flex flex-col sm:flex-row gap-2 md:gap-3 justify-center">
               <button
-                class={`${color.button} text-white font-bold py-3 px-10 rounded-full transition transform hover:scale-105 hover:shadow-lg`}
+                class={`${color.button} text-white font-bold py-2 md:py-3 px-6 md:px-10 rounded-full transition transform hover:scale-105 hover:shadow-lg text-sm md:text-base`}
                 onclick={`document.getElementById('alertModal-${uniqueId}-${index}').classList.add('hidden')`}
               >
                 Close
               </button>
               {index < fullMessages.length - 1 && (
                 <button
-                  class={`${color.button} text-white font-bold py-3 px-10 rounded-full transition transform hover:scale-105 hover:shadow-lg`}
+                  class={`${color.button} text-white font-bold py-2 md:py-3 px-6 md:px-10 rounded-full transition transform hover:scale-105 hover:shadow-lg text-sm md:text-base`}
                   onclick={`
                     document.getElementById('alertModal-${uniqueId}-${index}').classList.add('hidden');
                     document.getElementById('alertModal-${uniqueId}-${index + 1}').classList.remove('hidden');
@@ -171,12 +173,13 @@ const isExpired = expiresAt ? new Date() > new Date(expiresAt) : false;
                 </button>
               )}
               {showMailingList && index === fullMessages.length - 1 && (
-                <button
-                  onclick={`document.getElementById('mailingListConfirm-${uniqueId}').classList.remove('hidden')`}
-                  class={`${color.text} border-2 border-current hover:bg-gray-100 px-6 py-3 rounded-full font-medium transition transform hover:scale-105 hover:shadow-lg text-center`}
+                <a
+                  href="https://lakeozarkdisciples.us7.list-manage.com/subscribe?u=9816d09f0ebdd5f8ce1af28b4&id=b26607b7c1"
+                  target="_blank"
+                  class={`${color.text} border-2 border-current hover:bg-gray-100 px-6 py-2 md:py-3 rounded-full font-medium transition transform hover:scale-105 hover:shadow-lg text-sm md:text-base text-center`}
                 >
                   Join Mailing List
-                </button>
+                </a>
               )}
             </div>
           </div>
@@ -229,6 +232,94 @@ const isExpired = expiresAt ? new Date() > new Date(expiresAt) : false;
               class={`${color.text} border-2 border-current hover:bg-gray-100 px-6 py-3 rounded-full font-medium transition transform hover:scale-105 hover:shadow-lg`}
             >
               Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Close Confirmation Modal */}
+    <div 
+      id={`closeConfirm-${uniqueId}`}
+      class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-[70] flex items-center justify-center animate-fadeIn"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div class={`${color.bg} rounded-xl shadow-2xl max-w-sm w-full mx-4 p-4 md:p-6 transform transition-all animate-slideIn`}>
+        <div class="text-center">
+          <h3 class={`text-lg md:text-xl font-bold mb-2 ${color.text}`}>Close Alert?</h3>
+          <p class={`${color.text} text-sm md:text-base mb-4`} id={`closeMessage-${uniqueId}`}>
+            This alert won't be shown again.
+            <br>
+            <b>Are you sure you want to close it?</b>
+          </p>
+          <div class="flex justify-center gap-3">
+            <button
+              class={`${color.button} text-white font-bold py-2 px-6 rounded-full text-sm`}
+              onclick={`
+                const cookieConsent = document.cookie.match(/cookie-consent=(all|required|none)/)?.[1];
+                const messageEl = document.getElementById('closeMessage-${uniqueId}');
+                const closeConfirmModal = document.getElementById('closeConfirm-${uniqueId}');
+                
+                if (!cookieConsent) {
+                  // No choice made yet - show cookie banner and update message
+                  if (messageEl) {
+                    messageEl.innerHTML = 'Please choose your cookie preferences first.<br>This will help us remember your choice about this alert.';
+                  }
+                  document.getElementById('cookie-banner')?.classList.remove('hidden');
+                  document.getElementById('cookie-banner-backdrop')?.classList.remove('hidden');
+                  
+                  // Set up a one-time event listener for cookie changes
+                  const checkCookieInterval = setInterval(() => {
+                    const currentConsent = document.cookie.match(/cookie-consent=(all|required|none)/)?.[1];
+                    if (currentConsent) {
+                      clearInterval(checkCookieInterval);
+                      
+                      if (currentConsent === 'all' || currentConsent === 'required') {
+                        // User accepted cookies - set cookie and close
+                        const date = new Date();
+                        date.setTime(date.getTime() + (5 * 60 * 1000));
+                        document.cookie = 'alert-${uniqueId}-hidden=true;expires=' + date.toUTCString() + ';path=/';
+                        document.getElementById('alertSmall-${uniqueId}')?.remove();
+                        closeConfirmModal?.classList.add('hidden');
+                      } else if (currentConsent === 'none') {
+                        // User declined cookies - show message and close
+                        if (messageEl) {
+                          messageEl.innerHTML = 'You have chosen to disable cookies.<br>This alert will reappear on your next visit due to your cookie preferences.';
+                          setTimeout(() => {
+                            document.getElementById('alertSmall-${uniqueId}')?.remove();
+                            closeConfirmModal?.classList.add('hidden');
+                          }, 3000);
+                        }
+                      }
+                    }
+                  }, 500);
+                } else if (cookieConsent === 'all' || cookieConsent === 'required') {
+                  // User already accepted cookies - set cookie and close
+                  const date = new Date();
+                  date.setTime(date.getTime() + (5 * 60 * 1000));
+                  document.cookie = 'alert-${uniqueId}-hidden=true;expires=' + date.toUTCString() + ';path=/';
+                  document.getElementById('alertSmall-${uniqueId}')?.remove();
+                  closeConfirmModal?.classList.add('hidden');
+                } else if (cookieConsent === 'none') {
+                  // User already declined cookies - show message and close
+                  if (messageEl) {
+                    messageEl.innerHTML = 'You have chosen to disable cookies.<br>This alert will reappear on your next visit due to your cookie preferences.';
+                    setTimeout(() => {
+                      document.getElementById('alertSmall-${uniqueId}')?.remove();
+                      closeConfirmModal?.classList.add('hidden');
+                    }, 3000);
+                  }
+                }
+              `}
+            >
+              Yes, close it
+            </button>
+            <button
+              class={`${color.text} border border-current px-6 py-2 rounded-full text-sm`}
+              onclick={`document.getElementById('closeConfirm-${uniqueId}').classList.add('hidden')`}
+            >
+              Keep open
             </button>
           </div>
         </div>
@@ -342,6 +433,57 @@ const isExpired = expiresAt ? new Date() > new Date(expiresAt) : false;
   mailingListConfirm?.addEventListener('click', (e) => {
     if (e.target === mailingListConfirm) {
       mailingListConfirm.classList.add('hidden');
+    }
+  });
+
+  function checkCookieConsent() {
+    const cookieConsent = document.cookie.match(/cookie-consent=(all|partial|required|none)/)?.[1];
+    return cookieConsent === 'all' || cookieConsent === 'partial' || cookieConsent === 'required';
+  }
+
+  function canSetCookies() {
+    const cookieConsent = document.cookie.match(/cookie-consent=(all|partial|required|none)/)?.[1];
+    return cookieConsent === 'all' || cookieConsent === 'required';
+  }
+
+  function handleAlertClose(alertId) {
+    if (canSetCookies()) {
+      const date = new Date();
+      date.setTime(date.getTime() + (5 * 60 * 1000));
+      document.cookie = `alert-${alertId}-hidden=true;expires=${date.toUTCString()};path=/;SameSite=Strict`;
+      document.getElementById(`alertSmall-${alertId}`)?.remove();
+    } else {
+      // If cookies are not allowed, just hide the alert for this session
+      document.getElementById(`alertSmall-${alertId}`)?.remove();
+    }
+  }
+
+  // Update the cookie check at load
+  if (canSetCookies() && document.cookie.includes(`alert-${uniqueId}-hidden=true`)) {
+    document.getElementById(`alertSmall-${uniqueId}`)?.remove();
+  }
+
+  // Listen for cookie preference changes
+  window.addEventListener('cookiePreferencesChanged', (event) => {
+    const { consentLevel } = event.detail;
+    if (consentLevel === 'none') {
+      // Remove any existing alert cookies
+      document.cookie = `alert-${uniqueId}-hidden=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+    }
+  });
+
+  // Close confirmation modal on backdrop click
+  const closeConfirm = document.getElementById(`closeConfirm-${uniqueId}`);
+  closeConfirm?.addEventListener('click', (e) => {
+    if (e.target === closeConfirm) {
+      closeConfirm.classList.add('hidden');
+    }
+  });
+
+  // Close confirmation modal on escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeConfirm?.classList.add('hidden');
     }
   });
 </script>
