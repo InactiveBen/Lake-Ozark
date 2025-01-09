@@ -116,7 +116,7 @@ const breadcrumbs = [
     <div class="relative container mx-auto px-4 py-24">
       <div class="max-w-4xl mx-auto text-center text-white">
         <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-          Church Blog
+          Church News
         </h1>
         <p class="text-xl md:text-2xl text-gray-100 max-w-2xl mx-auto leading-relaxed">
           Stay connected with our community through stories, updates, and inspirational messages that bring us closer together in faith and fellowship.
@@ -146,8 +146,13 @@ const breadcrumbs = [
         <div class="post-item" style={index >= 3 ? "display: none;" : ""}>
           <a 
             href={`/blog/${post.frontmatter.id}`}
-            class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition group block"
+            class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition group block relative"
           >
+            {index === 0 && (
+              <div class="absolute top-4 right-4 bg-brand text-white px-3 py-1 rounded-full text-sm font-medium z-10">
+                LATEST
+              </div>
+            )}
             <div class="aspect-video overflow-hidden">
               <img 
                 src={post.frontmatter.image || 'https://cdn-locc-org.vercel.app/media/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg'} 
