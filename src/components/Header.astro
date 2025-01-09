@@ -11,8 +11,6 @@ import AccessibilityMenu from '../components/AccessibilityMenu.astro';
 <SelfXSS />
 <AccessibilityMenu />
 <CookieBanner />
-
-
 <header class="sticky top-0 w-full z-50 bg-white/95 backdrop-blur-sm shadow-sm">
   <nav class="container mx-auto px-4" aria-label="Main navigation">
     <div class="flex justify-between items-center h-20">
@@ -30,8 +28,8 @@ import AccessibilityMenu from '../components/AccessibilityMenu.astro';
             aria-expanded="false"
             aria-haspopup="true"
             aria-controls="worship-menu"
-            onKeyDown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true');document.getElementById('worship-menu').classList.toggle('hidden')}"
-            onClick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true');document.getElementById('worship-menu').classList.toggle('hidden')"
+            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true');document.getElementById('worship-menu').classList.toggle('hidden')}"
+            onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true');document.getElementById('worship-menu').classList.toggle('hidden')"
           >
             Worship
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -51,8 +49,8 @@ import AccessibilityMenu from '../components/AccessibilityMenu.astro';
             aria-expanded="false"
             aria-haspopup="true"
             aria-controls="about-menu"
-            onKeyDown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true');document.getElementById('about-menu').classList.toggle('hidden')}"
-            onClick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true');document.getElementById('about-menu').classList.toggle('hidden')"
+            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true');document.getElementById('about-menu').classList.toggle('hidden')}"
+            onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true');document.getElementById('about-menu').classList.toggle('hidden')"
           >
             About
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -63,6 +61,7 @@ import AccessibilityMenu from '../components/AccessibilityMenu.astro';
             <a href="/about" class="block px-4 py-3 text-gray-800 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none" role="menuitem" tabindex="0">Who We Are</a>
             <a href="/chimes" class="block px-4 py-3 text-gray-800 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none" role="menuitem" tabindex="0">Newsletter</a>
             <a href="/staff" class="block px-4 py-3 text-gray-800 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none" role="menuitem" tabindex="0">Staff</a>
+            <a href="/shelter" class="block px-4 py-3 text-gray-800 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none" role="menuitem" tabindex="0">Pantry of Blessings</a>
             <a href="/bylaws" class="block px-4 py-3 text-gray-800 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none" role="menuitem" tabindex="0">Bylaws</a>
           </div>
         </div>
@@ -74,8 +73,8 @@ import AccessibilityMenu from '../components/AccessibilityMenu.astro';
             aria-expanded="false"
             aria-haspopup="true"
             aria-controls="events-menu"
-            onKeyDown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true');document.getElementById('events-menu').classList.toggle('hidden')}"
-            onClick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true');document.getElementById('events-menu').classList.toggle('hidden')"
+            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true');document.getElementById('events-menu').classList.toggle('hidden')}"
+            onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true');document.getElementById('events-menu').classList.toggle('hidden')"
           >
             Events
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -90,17 +89,13 @@ import AccessibilityMenu from '../components/AccessibilityMenu.astro';
         
         <!-- Regular Links -->
         <a href="/giving" class="text-gray-800 hover:text-brand focus:text-brand focus:outline-none font-medium">Giving</a>
-        <a href="/shelter" class="text-gray-800 hover:text-brand focus:text-brand focus:outline-none font-medium">Pantry of Blessings</a>
         
-        <!-- Watch Live Button -->
+        <!-- Blog Link (Replacing Watch Live) -->
         <a 
-          href="https://www.youtube.com/channel/UCUcLKfZo5Su6-ypmt1dkPKA" 
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/blog"
           class="bg-brand hover:bg-brand-dark focus:bg-brand-dark focus:outline-none text-white px-6 py-2 rounded-full font-semibold transition"
-          aria-label="Watch Live Services on YouTube (opens in new tab)"
         >
-          Watch Live
+          Church News
         </a>
       </div>
       
@@ -132,6 +127,7 @@ import AccessibilityMenu from '../components/AccessibilityMenu.astro';
           <a href="/about" class="block px-3 py-2 text-gray-800 hover:text-brand focus:text-brand focus:outline-none">Who We Are</a>
           <a href="/chimes" class="block px-3 py-2 text-gray-800 hover:text-brand focus:text-brand focus:outline-none">Newsletter</a>
           <a href="/staff" class="block px-3 py-2 text-gray-800 hover:text-brand focus:text-brand focus:outline-none">Staff</a>
+          <a href="/shelter" class="block px-3 py-2 text-gray-800 hover:text-brand focus:text-brand focus:outline-none">Pantry of Blessings</a>
           <a href="/bylaws" class="block px-3 py-2 text-gray-800 hover:text-brand focus:text-brand focus:outline-none">Bylaws</a>
         </div>
 
@@ -142,16 +138,7 @@ import AccessibilityMenu from '../components/AccessibilityMenu.astro';
         </div>
 
         <a href="/giving" class="block px-3 py-2 text-gray-800 hover:text-brand focus:text-brand focus:outline-none">Giving</a>
-        <a href="/shelter" class="block px-3 py-2 text-gray-800 hover:text-brand focus:text-brand focus:outline-none">Pantry of Blessings</a>
-        <a 
-          href="https://www.youtube.com/channel/UCUcLKfZo5Su6-ypmt1dkPKA" 
-          target="_blank"
-          rel="noopener noreferrer"
-          class="block px-3 py-2 text-brand font-semibold hover:text-brand-dark focus:text-brand-dark focus:outline-none"
-          aria-label="Watch Live Services on YouTube (opens in new tab)"
-        >
-          Watch Live
-        </a>
+        <a href="/blog" class="block px-3 py-2 text-brand font-semibold hover:text-brand-dark focus:text-brand-dark focus:outline-none">Church News</a>
       </div>
     </div>
   </nav>
@@ -174,7 +161,7 @@ import AccessibilityMenu from '../components/AccessibilityMenu.astro';
     dropdowns.forEach(id => {
       const menu = document.getElementById(id);
       const button = menu?.previousElementSibling;
-      if (menu && button && !button.contains(event.target)) {
+      if (menu && button && !button.contains(event.target as Node)) {
         menu.classList.add('hidden');
         button.setAttribute('aria-expanded', 'false');
       }
@@ -197,39 +184,20 @@ import AccessibilityMenu from '../components/AccessibilityMenu.astro';
   });
 </script>
 
-
-
 <AlertSmall
-  title="Multiple Program Cancellations"
-  message="Due to hazardous road conditions this week, multiple church programs have been cancelled."
+  title="Test Alert" 
+  message="This is a test alert to confirm the alert system is working properly."
   type="brand"
-  icon="warning"
-  messageId="multiple-cancellations-1-8-2025"
-  expiresAt="2025-01-09"
+  icon="info"
+  messageId="test-alert-2024-01-09"
+  expiresAt="2005-01-30"
   fullMessages={[
     {
-      title: "After School Program Cancelled",
-      message: "Due to weather and road conditions, the After School Program will <b>NOT</b> be in session on Wednesday, January 8th, 2025.\n\nWe will <b>NOT</b> be picking up any children from school.\n\n<b>Action Required:</b> Please make alternative arrangements for your child's after-school care as our program will not be operating.",
-      icon: "warning"
-    },
-    {
-      title: "DWM Meeting Cancelled", 
-      message: "The <b>DWM Meeting</b> scheduled for Wednesday, January 8, 2024, has been <b>CANCELLED</b> due to hazardous weather conditions.\n\nPlease stay safe and watch for updates about next month's meeting.",
-      icon: "warning"
-    },
-    {
-      title: "Bible Study Updates",
-      message: "Due to inclement weather, Bible Study will <b>NOT</b> be held on Tuesday, January 7, 2025.\n\n<b>Additional Cancellation:</b> Bible Study will <b>NOT</b> be held on Tuesday, January 14, 2025 as Pastor Ron is out of town.\n\n<b>Resuming:</b> Bible Study sessions will resume as normal on Tuesday, January 21, 2025.",
-      icon: "warning"
-    },
-    {
-      title: "Stay Informed with Email Updates",
-      message: "Want to receive these alerts and updates directly in your inbox?",
-      icon: "mail"
+      title: "Test Alert Details",
+      message: "This is a test alert to verify that our alert system is functioning as expected.\n\nIf you're seeing this message, the alert system is working correctly.",
+      icon: "info"
     }
   ]}
-  readMoreText="View Cancellations"
-  showMailingList={true}
+  readMoreText="View Details"
+  showMailingList={false}
 />
-
-
