@@ -38,7 +38,7 @@ function formatDate(dateStr: string): string {
   }
 }
 
-// Sort posts by date (newest first) and calculate reading time
+// Sort posts by ID (highest first) and calculate reading time
 const sortedPosts = posts
   .map(post => {
     const wordCount = post.rawContent().split(/\s+/).length;
@@ -54,7 +54,7 @@ const sortedPosts = posts
   })
   .sort((a, b) => {
     try {
-      return new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime();
+      return b.frontmatter.id - a.frontmatter.id;
     } catch (e) {
       return 0;
     }
