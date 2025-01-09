@@ -1,0 +1,285 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import type { GetStaticPaths } from 'astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
+import SharePost from '../../components/SharePost.astro';
+
+// Define the Props interface for better type safety
+interface Props {
+  post: {
+    frontmatter: {
+      id: number;
+      title: string;
+      date: string;
+      image?: string;
+      excerpt: string;
+      author?: string;
+      authorRole?: string;
+      authorImage?: string;
+      location?: string;
+      readingTime?: number;
+    };
+    Content: any;
+    rawContent: () => string;
+  };
+}
+
+// Export the getStaticPaths function for dynamic routing
+export const getStaticPaths = (async () => {
+  const posts = await Astro.glob('../../blogs/*.md');
+
+  return posts.map((post) => {
+    // Calculate reading time based on word count
+    const wordCount = post.rawContent().split(/\s+/).length;
+    const readingTime = Math.ceil(wordCount / 200);
+
+    return {
+      params: { ID: post.frontmatter.id.toString() },
+      props: {
+        post: {
+          ...post,
+          frontmatter: {
+            ...post.frontmatter,
+            readingTime,
+            authorImage: post.frontmatter.authorImage || 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'
+          },
+        },
+      },
+    };
+  });
+}) satisfies GetStaticPaths;
+
+// Get the post from props
+const { post } = Astro.props;
+const { Content } = post;
+
+// Format date helper function
+function formatDate(dateStr: string): string {
+  try {
+    return new Date(dateStr).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  } catch {
+    return 'Date unavailable';
+  }
+}
+
+// Navigation breadcrumbs
+const breadcrumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Blog', href: '/blog' },
+  { name: post.frontmatter.title, href: `/blog/${post.frontmatter.id}`, current: true },
+];
+
+const mailchimpSignupUrl = "https://lakeozarkdisciples.us7.list-manage.com/subscribe?u=9816d09f0ebdd5f8ce1af28b4&id=b26607b7c1";
+---
+
+<Layout title={post.frontmatter.title}>
+  <!-- Navigation -->
+  <nav class="bg-gray-50 py-4">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center space-x-4">
+        {
+          breadcrumbs.map((item, index) => (
+            <div class="flex items-center">
+              {index > 0 && (
+                <svg
+                  class="h-5 w-5 flex-shrink-0 text-gray-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
+                </svg>
+              )}
+              <a
+                href={item.href}
+                class:list={[
+                  'ml-4 text-sm font-medium',
+                  item.current
+                    ? 'text-brand cursor-default'
+                    : 'text-gray-500 hover:text-gray-700',
+                ]}
+                aria-current={item.current ? 'page' : undefined}
+              >
+                {item.name}
+              </a>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <div class="relative min-h-[60vh] flex items-center">
+    <div class="absolute inset-0">
+      <img
+        src={post.frontmatter.image || "https://cdn-locc-org.vercel.app/media/6408A096-4585-4540-806B-66A6EB4027D7.jpeg"}
+        alt={post.frontmatter.title}
+        class="w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+    </div>
+    <div class="relative container mx-auto px-4 py-24">
+      <div class="max-w-4xl mx-auto text-center text-white">
+        <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+          {post.frontmatter.title}
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-100 max-w-2xl mx-auto leading-relaxed">
+          {post.frontmatter.excerpt}
+        </p>
+        <div class="mt-8 flex justify-center gap-4">
+          <a href="#post-content" class="bg-white text-brand px-8 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors">
+            Read Post
+          </a>
+          <a href={mailchimpSignupUrl} target="_blank" class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-medium hover:bg-white/10 transition-colors">
+            Subscribe to Updates
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <article id="post-content" class="min-h-screen bg-white py-12">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto">
+        <!-- Post Content -->
+        <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+          <!-- Author and Meta Info -->
+          <div class="flex flex-col md:flex-row md:items-center gap-6 mb-8 pb-8 border-b border-gray-200">
+            <div class="flex items-center gap-4">
+              <img
+                src={post.frontmatter.authorImage}
+                alt={post.frontmatter.author || 'Author Image'}
+                class="w-12 h-12 rounded-full object-cover ring-2 ring-gray-200"
+                onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'"
+              />
+              <div>
+                <div class="font-medium text-gray-900">
+                  {post.frontmatter.author || '[Unknown Author]'}
+                </div>
+                <div class="text-sm text-gray-500">
+                  {post.frontmatter.authorRole || '[Content Writer for LOCC]'}
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+              <time datetime={new Date(post.frontmatter.date).toISOString()}>
+                {formatDate(post.frontmatter.date)}
+              </time>
+              <span>·</span>
+              <span>{post.frontmatter.readingTime} min read</span>
+              {
+                post.frontmatter.location && (
+                  <>
+                    <span>·</span>
+                    <span>{post.frontmatter.location}</span>
+                  </>
+                )
+              }
+            </div>
+          </div>
+
+          <!-- Post Body -->
+          <div class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-600 prose-a:text-brand hover:prose-a:text-brand/80 prose-strong:text-gray-900 prose-code:text-gray-800 prose-img:rounded-lg prose-img:shadow-lg">
+            <Content />
+          </div>
+        </div>
+
+        <!-- Share Section -->
+        <SharePost title={post.frontmatter.title} postId={post.frontmatter.id} />
+
+        <!-- Related Posts -->
+        <RelatedPosts currentPostId={post.frontmatter.id} />
+      </div>
+    </div>
+  </article>
+</Layout>
+
+<style is:global>
+  /* Custom image styles */
+  .prose img {
+    @apply mx-auto my-8 rounded-lg shadow-lg;
+  }
+
+  /* Support for image dimensions */
+  .prose img[width] {
+    @apply w-auto h-auto;
+  }
+
+  /* Support for image alignment */
+  .prose img[align="left"] {
+    @apply float-left mr-8;
+  }
+
+  .prose img[align="right"] {
+    @apply float-right ml-8;
+  }
+
+  .prose img[align="center"] {
+    @apply mx-auto;
+  }
+
+  /* Figure styles */
+  .prose figure {
+    @apply my-8;
+  }
+
+  .prose figure img {
+    @apply my-0;
+  }
+
+  .prose figcaption {
+    @apply text-center text-gray-500 mt-2 text-sm;
+  }
+
+  /* Link styles */
+  .prose a {
+    @apply transition-colors duration-200 text-brand hover:text-brand/80;
+  }
+
+  /* List styles - Disabled */
+  .prose ul, .prose ol {
+    @apply hidden;
+  }
+
+  /* Code block styles */
+  .prose pre {
+    @apply bg-gray-50 border border-gray-200 shadow-sm;
+  }
+
+  .prose code {
+    @apply bg-gray-50 px-1 py-0.5 rounded text-sm;
+  }
+
+  /* Blockquote styles */
+  .prose blockquote {
+    @apply border-l-4 border-brand bg-gray-50 py-2 px-4 italic;
+  }
+
+  /* Table styles */
+  .prose table {
+    @apply border-collapse border border-gray-200;
+  }
+
+  .prose th {
+    @apply bg-gray-50 px-4 py-2 border border-gray-200;
+  }
+
+  .prose td {
+    @apply px-4 py-2 border border-gray-200;
+  }
+
+  /* Heading styles */
+  .prose h1 {
+    @apply text-4xl font-bold mb-6;
+  }
+
+  .prose h2 {
+    @apply text-3xl font-semibold mb-4;
+  }
+</style>
