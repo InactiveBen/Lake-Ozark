@@ -1,0 +1,286 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Slideshow from '../../components/Slideshow.astro';
+
+interface BlogPost {
+  frontmatter: {
+    id: number;
+    title: string;
+    date: string;
+    image?: string;
+    excerpt: string;
+    readingTime?: number;
+    author?: string;
+    authorRole?: string;
+    authorImage?: string;
+    location?: string;
+  };
+  rawContent: () => string;
+  Content: any;
+}
+
+const mailchimpSignupUrl = "https://lakeozarkdisciples.us7.list-manage.com/subscribe?u=9816d09f0ebdd5f8ce1af28b4&id=b26607b7c1";
+const mailchimpArchiveUrl = "https://us7.campaign-archive.com/home/?u=9816d09f0ebdd5f8ce1af28b4&id=b26607b7c1";
+
+// Get all blog posts
+const posts = await Astro.glob<BlogPost>('../../blogs/*.md');
+
+// Format date helper function
+function formatDate(dateStr: string): string {
+  try {
+    return new Date(dateStr).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  } catch {
+    return 'Date unavailable';
+  }
+}
+
+// Sort posts by date (newest first) and calculate reading time
+const sortedPosts = posts
+  .map(post => {
+    const wordCount = post.rawContent().split(/\s+/).length;
+    const readingTime = Math.ceil(wordCount / 200);
+    return {
+      ...post,
+      frontmatter: {
+        ...post.frontmatter,
+        readingTime,
+        authorImage: post.frontmatter.authorImage || 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'
+      }
+    };
+  })
+  .sort((a, b) => {
+    try {
+      return new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime();
+    } catch (e) {
+      return 0;
+    }
+  });
+
+// Navigation breadcrumbs
+const breadcrumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Blog', href: '/blog', current: true }
+];
+---
+
+<Layout title="Church Blog">
+  <!-- Navigation -->
+  <nav class="bg-gray-50 py-4">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center space-x-4">
+        {
+          breadcrumbs.map((item, index) => (
+            <div class="flex items-center">
+              {index > 0 && (
+                <svg
+                  class="h-5 w-5 flex-shrink-0 text-gray-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
+                </svg>
+              )}
+              <a
+                href={item.href}
+                class:list={[
+                  'ml-4 text-sm font-medium',
+                  item.current
+                    ? 'text-brand cursor-default'
+                    : 'text-gray-500 hover:text-gray-700',
+                ]}
+                aria-current={item.current ? 'page' : undefined}
+              >
+                {item.name}
+              </a>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <div class="relative min-h-[60vh] flex items-center">
+    <div class="absolute inset-0">
+      <img
+        src="https://cdn-locc-org.vercel.app/media/6408A096-4585-4540-806B-66A6EB4027D7.jpeg"
+        alt="Church interior"
+        class="w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+    </div>
+    <div class="relative container mx-auto px-4 py-24">
+      <div class="max-w-4xl mx-auto text-center text-white">
+        <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+          Church Blog
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-100 max-w-2xl mx-auto leading-relaxed">
+          Stay connected with our community through stories, updates, and inspirational messages that bring us closer together in faith and fellowship.
+        </p>
+        <div class="mt-8 flex justify-center gap-4">
+          <a href="#posts" class="bg-white text-brand px-8 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors">
+            Read Latest Posts
+          </a>
+          <a href={mailchimpSignupUrl} target="_blank" class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-medium hover:bg-white/10 transition-colors">
+            Subscribe to Updates
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mx-auto px-4 py-16">
+    <!-- Section Title -->
+    <div class="max-w-7xl mx-auto mb-12">
+      <h2 class="text-3xl font-bold text-gray-900">Latest Posts</h2>
+      <p class="mt-2 text-gray-600">Discover our most recent articles and updates</p>
+    </div>
+
+    <!-- Blog Posts Grid -->
+    <div id="posts" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-16">
+      {sortedPosts.map((post, index) => (
+        <div class="post-item" style={index >= 3 ? "display: none;" : ""}>
+          <a 
+            href={`/blog/${post.frontmatter.id}`}
+            class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition group block"
+          >
+            <div class="aspect-video overflow-hidden">
+              <img 
+                src={post.frontmatter.image || 'https://cdn-locc-org.vercel.app/media/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg'} 
+                alt={post.frontmatter.title}
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                loading="lazy"
+                onerror="this.src='https://cdn-locc-org.vercel.app/media/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg'"
+              />
+            </div>
+            <div class="p-6">
+              <h2 class="text-2xl font-bold mb-2 group-hover:text-brand">
+                {post.frontmatter.title}
+              </h2>
+              <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
+                <time datetime={new Date(post.frontmatter.date).toISOString()}>
+                  {formatDate(post.frontmatter.date)}
+                </time>
+                <span>·</span>
+                <span>{post.frontmatter.readingTime} min read</span>
+              </div>
+              <p class="text-gray-600 line-clamp-3">
+                {post.frontmatter.excerpt}
+              </p>
+            </div>
+          </a>
+        </div>
+      ))}
+    </div>
+
+    {sortedPosts.length > 3 && (
+      <div class="text-center mb-16">
+        <button
+          id="view-more-btn"
+          class="bg-brand hover:bg-brand-dark text-white px-8 py-3 rounded-full transition transform hover:scale-105"
+        >
+          View More Posts
+        </button>
+      </div>
+    )}
+
+    <!-- Newsletter Subscribe Section -->
+    <div class="max-w-4xl mx-auto">
+      <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition">
+        <div class="p-8">
+          <div class="grid md:grid-cols-2 gap-8 items-center">
+            <div>
+              <h2 class="text-3xl font-bold text-gray-900 mb-4">Subscribe to Lake Chimes</h2>
+              <p class="text-gray-600 mb-6">
+                Get Lake Chimes delivered directly to your inbox each month. Stay up-to-date with church news, 
+                events, and inspiring stories from our community.
+              </p>
+              <a 
+                href={mailchimpSignupUrl}
+                target="_blank"
+                class="inline-flex items-center gap-2 bg-brand text-white px-8 py-3 rounded-full font-medium hover:bg-brand-dark transition transform hover:scale-105"
+              >
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                </svg>
+                Subscribe Now
+              </a>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-6">
+              <h3 class="text-xl font-bold text-gray-900 mb-4">What you'll receive:</h3>
+              <ul class="space-y-4">
+                <li class="flex items-center gap-3">
+                  <svg class="w-5 h-5 text-brand flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                  </svg>
+                  <span class="text-gray-600">Monthly Chimes Newsletters</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <svg class="w-5 h-5 text-brand flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                  </svg>
+                  <span class="text-gray-600">Event notifications and updates</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <svg class="w-5 h-5 text-brand flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                  </svg>
+                  <span class="text-gray-600">General church information</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <svg class="w-5 h-5 text-brand flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                  </svg>
+                  <span class="text-gray-600">Friday Worship Teasers</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  function setupPostGrid() {
+    const grid = document.getElementById('posts');
+    const viewMoreBtn = document.getElementById('view-more-btn');
+    const posts = Array.from(grid?.querySelectorAll('.post-item') || []);
+    let expanded = false;
+
+    if (!grid || !viewMoreBtn || posts.length <= 3) return;
+
+    viewMoreBtn.addEventListener('click', () => {
+      if (!expanded) {
+        // Show all posts with a fade-in effect
+        posts.slice(3).forEach(post => {
+          (post as HTMLElement).style.display = 'block';
+          (post as HTMLElement).style.opacity = '0';
+          requestAnimationFrame(() => {
+            (post as HTMLElement).style.transition = 'opacity 0.3s ease-in-out';
+            (post as HTMLElement).style.opacity = '1';
+          });
+        });
+        viewMoreBtn.textContent = 'Show Less';
+      } else {
+        // Hide posts beyond the first 3
+        posts.slice(3).forEach(post => {
+          (post as HTMLElement).style.display = 'none';
+        });
+        viewMoreBtn.textContent = 'View More Posts';
+      }
+      expanded = !expanded;
+    });
+  }
+
+  // Setup on page load
+  setupPostGrid();
+  // Setup on client-side navigation
+  document.addEventListener('astro:page-load', setupPostGrid);
+</script>
