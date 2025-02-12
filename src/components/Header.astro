@@ -185,19 +185,20 @@ import AccessibilityMenu from '../components/AccessibilityMenu.astro';
 </script>
 
 <AlertSmall
-  title="Test Alert" 
-  message="This is a test alert to confirm the alert system is working properly."
-  type="brand"
+  title="After School Program Canceled" 
+  message="The after school program for Monday, February 12th, 2025 has been canceled due to inclement weather."
+  type="warning"
   icon="info"
-  messageId="test-alert-2024-01-09"
-  expiresAt="2005-01-30"
+  messageId="weather-cancel-2025-02-12"
+  expiresAt="2025-02-13"
   fullMessages={[
     {
-      title: "Test Alert Details",
-      message: "This is a test alert to verify that our alert system is functioning as expected.\n\nIf you're seeing this message, the alert system is working correctly.",
+      title: "After School Program Cancellation Details",
+      message: "Due to forecasted inclement weather conditions, the after school program scheduled for Monday, February 12th, 2025 has been canceled.\n\nParents and guardians should make alternate arrangements for student pickup at regular dismissal time.\n\nWe apologize for any inconvenience this may cause.",
       icon: "info"
     }
   ]}
-  readMoreText="View Details"
+  readMoreText="View Full Details"
   showMailingList={false}
 />
+
