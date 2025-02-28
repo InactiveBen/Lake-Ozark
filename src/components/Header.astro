@@ -1,6 +1,7 @@
 ---
 import { fade } from 'astro:transitions';
 import AlertBanner from '../components/AlertBanner.astro';
+import EventPromotion from '../components/EventPromotion.astro';
 import AlertSmall from '../components/AlertSmall.astro';
 import CookieBanner from '../components/CookieBanner.astro';
 import SelfXSS from '../components/SelfXSS.astro';
@@ -11,6 +12,21 @@ import AccessibilityMenu from '../components/AccessibilityMenu.astro';
 <SelfXSS />
 <AccessibilityMenu />
 <CookieBanner />
+
+<EventPromotion
+  title="Crucifixion Sculpture Viewing"
+  subtitle="Crucifixion Sculpture by Michael Mistler"
+  date="Sunday, March 9, 2024"
+  time="2:00 PM"
+  persistent={true}
+  location="Lake Ozark Christian Church"
+  description="Join us to view **The Crucifixion**, a stunning **12-foot sculpture** by Michael Mistler depicting Christ's sacrifice. Public viewing on **Sunday, March 9 at 2:00 PM**, and **Monday-Saturday, March 11-16, from 10:00 AM to 2:00 PM**.\n\nView the press release for full details."
+  buttonText="View Press Release"
+  buttonLink="https://cdn.lakeozarkdisciples.org/Press/2025/crucifixion_event_2025.pdf"
+  messageId="dfhbdf235a"
+  expiresAt="2025-03-16T14:30:00-05:00"
+/>
+
 <header class="sticky top-0 w-full z-50 bg-white/95 backdrop-blur-sm shadow-sm">
   <nav class="container mx-auto px-4" aria-label="Main navigation">
     <div class="flex justify-between items-center h-20">
@@ -201,4 +217,3 @@ import AccessibilityMenu from '../components/AccessibilityMenu.astro';
   readMoreText="View Full Details"
   showMailingList={false}
 />
-

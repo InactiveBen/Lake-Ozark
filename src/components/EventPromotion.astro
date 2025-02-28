@@ -1,0 +1,230 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+  date: string;
+  time?: string;
+  location?: string;
+  description: string;
+  image?: string;
+  buttonText?: string;
+  buttonLink?: string;
+  messageId?: string;
+  expiresAt?: string;
+  persistent?: boolean; // Controls if promo reappears on refresh
+}
+
+const { 
+  title, 
+  subtitle = '', 
+  date, 
+  time = '', 
+  location = '', 
+  description, 
+  image = 'https://cdn-locc-org.vercel.app/media/6408A096-4585-4540-806B-66A6EB4027D7.jpeg',
+  buttonText = 'Learn More',
+  buttonLink = '',
+  messageId,
+  expiresAt,
+  persistent = false // Default to false for backwards compatibility
+} = Astro.props;
+
+// Generate unique ID for this promo instance
+const uniqueId = messageId || Math.random().toString(36).substring(2, 15);
+
+// Check if promo has expired
+const isExpired = expiresAt ? new Date() > new Date(expiresAt) : false;
+
+// Format description with line breaks and bold text
+const formattedDescription = description
+  .replace(/\n/g, '<br>')
+  .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+  .replace(/<b>(.*?)<\/b>/g, '<b>$1</b>');
+---
+
+{!isExpired && (
+  <div 
+    id={`eventPromo-${uniqueId}`}
+    class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center animate-fadeIn"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby={`eventTitle-${uniqueId}`}
+  >
+    <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full mx-4 overflow-hidden animate-slideIn">
+      <div class="grid md:grid-cols-2">
+        <!-- Image Section -->
+        <div class="relative h-48 md:h-full">
+          <img 
+            src={image} 
+            alt={title}
+            class="w-full h-full object-cover"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-4 md:hidden">
+            <h2 id={`eventTitle-${uniqueId}`} class="text-xl font-bold text-white mb-1">{title}</h2>
+            {subtitle && <p class="text-white/90 text-base">{subtitle}</p>}
+          </div>
+        </div>
+        
+        <!-- Content Section -->
+        <div class="p-4 md:p-6 flex flex-col">
+          <div class="hidden md:block mb-4">
+            <h2 id={`eventTitle-${uniqueId}`} class="text-2xl font-bold text-gray-900 mb-1">{title}</h2>
+            {subtitle && <p class="text-lg text-gray-700">{subtitle}</p>}
+          </div>
+          
+          <!-- Event Details -->
+          <div class="bg-gray-50 rounded-xl p-3 mb-4 space-y-2">
+            <div class="flex items-start gap-2">
+              <svg class="w-5 h-5 text-brand mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <div>
+                <p class="font-medium text-gray-900">Date</p>
+                <p class="text-gray-700">{date}</p>
+              </div>
+            </div>
+            
+            {time && (
+              <div class="flex items-start gap-2">
+                <svg class="w-5 h-5 text-brand mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div>
+                  <p class="font-medium text-gray-900">Time</p>
+                  <p class="text-gray-700">{time}</p>
+                </div>
+              </div>
+            )}
+            
+            {location && (
+              <div class="flex items-start gap-2">
+                <svg class="w-5 h-5 text-brand mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <div>
+                  <p class="font-medium text-gray-900">Location</p>
+                  <p class="text-gray-700">{location}</p>
+                </div>
+              </div>
+            )}
+          </div>
+          
+          <!-- Description -->
+          <div class="flex-grow mb-4 overflow-y-auto max-h-32 md:max-h-48 pr-2 custom-scrollbar">
+            <div class="text-gray-700 text-sm md:text-base" set:html={formattedDescription} />
+          </div>
+          
+          <!-- Buttons -->
+          <div class="flex flex-col sm:flex-row gap-2 mt-auto">
+            {buttonLink && (
+              <a 
+                href={buttonLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="bg-brand hover:bg-brand-dark text-white font-medium py-2 px-4 rounded-full transition transform hover:scale-105 text-center flex-1 text-sm"
+              >
+                {buttonText}
+              </a>
+            )}
+            <button
+              id={`closeEvent-${uniqueId}`}
+              class="border-2 border-gray-300 hover:border-gray-400 text-gray-700 font-medium py-2 px-4 rounded-full transition transform hover:scale-105 flex-1 text-sm"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideIn {
+    from { 
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .animate-slideIn {
+    animation: slideIn 0.4s ease-out;
+  }
+  
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(156, 163, 175, 0.5);
+    border-radius: 20px;
+  }
+</style>
+
+<script define:vars={{ uniqueId, messageId, expiresAt, persistent }}>
+  const modal = document.getElementById(`eventPromo-${uniqueId}`);
+  const closeButton = document.getElementById(`closeEvent-${uniqueId}`);
+  
+  function closeModal() {
+    if (modal) {
+      modal.classList.add('opacity-0');
+      modal.style.transition = 'opacity 0.2s ease-out';
+      setTimeout(() => modal.remove(), 200);
+
+      // Only store dismissal in sessionStorage if not persistent
+      if (!persistent && messageId) {
+        sessionStorage.setItem(`event-${messageId}`, 'dismissed');
+      }
+    }
+  }
+  
+  if (messageId && !persistent) {
+    // Check if event has expired
+    const isExpired = expiresAt ? new Date() > new Date(expiresAt) : false;
+    
+    // Only check session storage if not persistent
+    if (sessionStorage.getItem(`event-${messageId}`) === 'dismissed' || isExpired) {
+      modal?.remove();
+    }
+  }
+  
+  // Add event listeners for closing
+  closeButton?.addEventListener('click', closeModal);
+  
+  // Close on escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeModal();
+    }
+  });
+  
+  // Close on backdrop click
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+</script>

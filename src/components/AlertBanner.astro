@@ -8,9 +8,20 @@ interface Props {
   showMailingList?: boolean;
   messageId?: string;
   expiresAt?: string; // ISO date string for expiration
+  externalLink?: string; // New prop for external links
 }
 
-const { message, title = 'Important Notice', type = 'warning', icon = 'warning', dismissText = 'Dismiss', showMailingList = false, messageId, expiresAt } = Astro.props;
+const { 
+  message, 
+  title = 'Important Notice', 
+  type = 'warning', 
+  icon = 'warning', 
+  dismissText = 'Dismiss', 
+  showMailingList = false, 
+  messageId, 
+  expiresAt,
+  externalLink
+} = Astro.props;
 
 // Map type to colors
 const colors = {
@@ -120,13 +131,27 @@ const isExpired = expiresAt ? new Date() > new Date(expiresAt) : false;
         </div>
         <div class="flex flex-col sm:flex-row gap-3 items-center">
           {messageId && (
-            <button
-              id={`closeAlert-${uniqueId}`}
-              class={`${color.button} text-white font-bold py-3 px-10 rounded-full transition transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-opacity-50`}
-              aria-label="Close alert"
-            >
-              {dismissText}
-            </button>
+            externalLink ? (
+              <a
+                href={externalLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                id={`externalLink-${uniqueId}`}
+                class={`${color.button} text-white font-bold py-3 px-10 rounded-full transition transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-opacity-50 text-center`}
+                aria-label={`${dismissText} (opens in new tab)`}
+                onclick={`sessionStorage.setItem('alert-${messageId}', 'dismissed'); document.getElementById('alertModal-${uniqueId}').remove();`}
+              >
+                {dismissText}
+              </a>
+            ) : (
+              <button
+                id={`closeAlert-${uniqueId}`}
+                class={`${color.button} text-white font-bold py-3 px-10 rounded-full transition transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-opacity-50`}
+                aria-label="Close alert"
+              >
+                {dismissText}
+              </button>
+            )
           )}
           {showMailingList && (
             <a
