@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Slideshow from '../components/Slideshow.astro';
+import StaffCard from '../components/StaffCard.astro';
 
 const heroImages = [
   {
@@ -14,19 +15,21 @@ const staff = [
     name: "Rev. Ron Trimmer",
     title: "Senior Minister",
     image: "https://cdn-locc-org.vercel.app/media/0AB4CB10-0C10-487F-BE24-28F19AD01DBB.jpeg",
-    bio: "Greetings! My name is Pastor Ron Trimmer, and I'm the senior minister at Lake Ozark Christian Church. I've been ministry for over twenty-five years, and I have been truly blessed by our God who allows me to take part in the amazing, life-giving work of Jesus Christ. I believe in a God of extravagant welcome, for the Lord loves each and every one of us, who is always inviting us to follow in the footsteps of Jesus Christ. God is still speaking, still moving, still creating and renewing in this world and in our lives. Our Lord continues to transform and resurrect, bringing grace and love, peace and justice, hope and new life. And our faith must propel us outside our doors to bring healing and love to this broken world. After being a widow for a few years after my first wife died of Ovarian cancer, I recently married Wendy, and we are blessed with four children, one of them still in high school. Wendy is a nurse practitioner at the OB/GYN Clinic at Lake Regional Hospital. Come and join us, for we welcome you on the journey of faith that you might experience the richness of God's blessings, the joy of service, and the hope of new life in Jesus Christ. Blessing and peace, Pastor Ron Trimmer"
+    bio: "Greetings! My name is Pastor Ron Trimmer, and I'm the senior minister at Lake Ozark Christian Church. I've been ministry for over twenty-five years, and I have been truly blessed by our God who allows me to take part in the amazing, life-giving work of Jesus Christ. I believe in a God of extravagant welcome, for the Lord loves each and every one of us, who is always inviting us to follow in the footsteps of Jesus Christ. God is still speaking, still moving, still creating and renewing in this world and in our lives. Our Lord continues to transform and resurrect, bringing grace and love, peace and justice, hope and new life. And our faith must propel us outside our doors to bring healing and love to this broken world. After being a widow for a few years after my first wife died of Ovarian cancer, I recently married Wendy, and we are blessed with four children, one of them still in high school. Wendy is a nurse practitioner at the OB/GYN Clinic at Lake Regional Hospital. Come and join us, for we welcome you on the journey of faith that you might experience the richness of God's blessings, the joy of service, and the hope of new life in Jesus Christ. Blessing and peace, Pastor Ron Trimmer",
+    showPhoto: true
   },
   {
     name: "Michael Lindeman",
     title: "Director of Music",
     image: "https://cdn-locc-org.vercel.app/media/88041345-79DE-4CC1-9AE1-B2BD94B13DEF.jpeg",
-    bio: "Michael Lindeman leads our music ministry with creativity and dedication. His extensive background in music ministry helps create meaningful worship experiences that inspire and uplift our congregation."
+    bio: "Michael Lindeman leads our music ministry with creativity and dedication. His extensive background in music ministry helps create meaningful worship experiences that inspire and uplift our congregation.",
+    showPhoto: true
   },
   {
     name: "Angela Edwards",
     title: "Administrative Assistant",
-    image: "https://cdn-locc-org.vercel.app/employees/angelaedwards-400x565.jpg",
-    bio: "Angela Edwards keeps our church operations running smoothly. Her organizational skills and warm personality help coordinate our various ministries and maintain communication with our congregation."
+    bio: "Angela Edwards keeps our church operations running smoothly. Her organizational skills and warm personality help coordinate our various ministries and maintain communication with our congregation. Angela ensures that all administrative aspects of church life function efficiently, from managing the church calendar to preparing weekly bulletins and coordinating with ministry leaders.",
+    showPhoto: false
   }
 ];
 ---
@@ -53,26 +56,13 @@ const staff = [
   <div class="container mx-auto px-4 py-16">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
       {staff.map(member => (
-        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-          <div class="aspect-[3/4] bg-gray-200">
-            <img 
-              src={member.image} 
-              alt={member.name}
-              class="w-full h-full object-cover"
-              onerror="this.src='/placeholder-staff.jpg'"
-            />
-          </div>
-          <div class="p-6">
-            <h2 class="text-xl font-bold mb-2">{member.name}</h2>
-            <p class="text-gray-600 mb-4">{member.title}</p>
-            <button
-              class="bg-brand text-white px-4 py-2 rounded-full hover:bg-brand-dark transition w-full"
-              onclick={`showStaffBio(${JSON.stringify(member)})`}
-            >
-              Learn more
-            </button>
-          </div>
-        </div>
+        <StaffCard 
+          name={member.name}
+          title={member.title}
+          image={member.image}
+          bio={member.bio}
+          showPhoto={member.showPhoto}
+        />
       ))}
     </div>
   </div>
@@ -104,6 +94,29 @@ const staff = [
   function showStaffBio(member) {
     const modal = document.createElement('div');
     modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50';
+    
+    // Create different modal content based on whether to show photo
+    const photoContent = member.showPhoto 
+      ? `<div class="aspect-square mb-6 bg-gray-200 rounded-xl overflow-hidden">
+           <img 
+             src="${member.image || ''}" 
+             alt="${member.name}"
+             class="w-full h-full object-cover"
+             onerror="this.src='/placeholder-staff.jpg'"
+           />
+         </div>`
+      : `<div class="aspect-square mb-6 bg-gradient-to-br from-brand/10 to-brand/20 rounded-xl flex items-center justify-center">
+           <div class="text-center p-6">
+             <div class="w-24 h-24 bg-brand/10 rounded-full mx-auto mb-4 flex items-center justify-center">
+               <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-brand/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+               </svg>
+             </div>
+             <p class="text-brand-dark/70 italic text-sm">
+Photo Unavailable             </p>
+           </div>
+         </div>`;
+    
     modal.innerHTML = `
       <div class="bg-white rounded-xl max-w-lg w-full">
         <div class="p-6">
@@ -122,6 +135,8 @@ const staff = [
               </svg>
             </button>
           </div>
+          
+          ${photoContent}
           
           <p class="text-gray-600 text-sm leading-relaxed">${member.bio}</p>
         </div>
