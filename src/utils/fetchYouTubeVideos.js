@@ -11,7 +11,12 @@ export async function fetchLatestVideos() {
       throw new Error('No videos found in playlist');
     }
     
-    const videos = playlist.videos.map(video => ({
+    const filteredVideos = playlist.videos.filter(video => {
+      const title = video.title.toLowerCase();
+      return title.includes('service') || title.includes('locc');
+    });
+    
+    const videos = filteredVideos.map(video => ({
       id: video.id,
       title: video.title,
     }));
