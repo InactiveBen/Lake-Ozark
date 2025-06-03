@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import YouTubePopup from '../components/YouTubePopup.astro';
 import Slideshow from '../components/Slideshow.astro';
 import YouTubeVideoGrid from '../components/YouTubeVideoGrid.astro';
+import { fetchLatestVideos } from '../utils/fetchYouTubeVideos.js';
 
 const welcomeImage = {
   url: "https://cdn-locc-org.vercel.app/media/6408A096-4585-4540-806B-66A6EB4027D7.jpeg",
@@ -10,114 +11,7 @@ const welcomeImage = {
 };
 
 
-// Easy to update video section
-const recentServices = [
-  {
-    id: "FIkeDt8Wcqw", 
-    title: "Service - 12-29-2024",
-    customThumbnail: "https://cdn-locc-org.vercel.app/images/12-29-24.png?raw=true"
-  },
-  {
-    id: "jDp0lVpSzWI", 
-    title: "Service - 12-24-2024",
-    customThumbnail: "https://cdn-locc-org.vercel.app/images/12-24-24.png?raw=true"
-  },
-   {
-    id: "1ffwnu_KJIA", 
-    title: "Service - 12-15-2024",
-    customThumbnail: "https://cdn-locc-org.vercel.app/images/12-15-24.png?raw=true"
-  },
-   {
-    id: "fLRG9qGhfi0", 
-    title: "Service - 12-8-2024",
-    customThumbnail: "https://cdn-locc-org.vercel.app/images/12-8-24.png?raw=true"
-  },
-   {
-    id: "pDzV9eAPpdE",
-    title: "Service - 12-1-2024",
-    customThumbnail: "https://cdn-locc-org.vercel.app/images/12-1-24.png?raw=true"
-  },
-  {
-    id: "raPRdmVIuP4",
-    title: "Knowing Jesus - August 27, 2023",
-    customThumbnail: "https://cdn-locc-org.vercel.app/images/Thumbnail_Aug282023.png?raw=true"
-  },
-  {
-    id: "I6DtUm7hjlI",
-    title: "The Courage of Faith - August 20, 2023",
-    customThumbnail: "https://cdn-locc-org.vercel.app/images/The%20Courage%20of%20Faith.png?raw=true"
-  },
-  {
-    id: "b8lPbrYl3O4",
-    title: "More Than Enough - August 6, 2023",
-    customThumbnail: "https://cdn-locc-org.vercel.app/images/More%20Than%20Enough.png?raw=true"
-  },
-  {
-    id: "ZU1o1US-kj8",
-    title: "First Glimpses of God - July 16, 2023",
-    customThumbnail: "https://cdn-locc-org.vercel.app/images/First%20Glimpses%20of%20God.png?raw=true"
-  },
-  {
-    id: "ySGwhmp7630",
-    title: "Faith and Sacrifice - July 2, 2023",
-    customThumbnail: "https://cdn-locc-org.vercel.app/images/Faith%20and%20Sacrifice.png?raw=true"
-  },
-  {
-    id: "dJFAlALIKxs",
-    title: "Grace for the Unwanted - June 25, 2023",
-    customThumbnail: "https://cdn-locc-org.vercel.app/images/Grace%20for%20the%20Unwanted.png?raw=true"
-  },
-  {
-    id: "jvz4ih6x_NY",
-    title: "Laughing Doubt - June 18, 2023",
-    customThumbnail: "https://cdn-locc-org.vercel.app/images/Laughing%20Doubt.png?raw=true"
-  },
-  {
-    id: "lfEnlH_z998",
-    title: "Promise of Blessing - June 11, 2023",
-    customThumbnail: "https://cdn-locc-org.vercel.app/images/Promise%20of%20Blessing.png?raw=true"
-  },
-  {
-    id: "TgJyHmQqYiA",
-    title: "God as Community - June 4, 2023",
-    customThumbnail: "https://cdn-locc-org.vercel.app/images/God%20as%20Community.png?raw=true"
-  },
-  {
-    id: "LuPsEbFND10",
-    title: "Where Will the Spirit Take You - May 28, 2023",
-    customThumbnail: "https://cdn-locc-org.vercel.app/images/Where%20Will%20the%20Spirit%20Take%20You.png?raw=true"
-  },
-  {
-    id: "yFZ-GXCi0Jk",
-    title: "A Prayer for Us - May 21, 2023",
-    customThumbnail: "https://cdn-locc-org.vercel.app/images/A%20Prayer%20for%20Us.png?raw=true"
-  },
-  {
-    id: "0FuPRt6COU4",
-    title: "Promised Support - May 14, 2023",
-    customThumbnail: "https://cdn-locc-org.vercel.app/images/Promised%20Support.png?raw=true"
-  },
-  {
-    id: "e-9mEwaopaQ",
-    title: "The Way of Faith - May 7, 2023",
-    customThumbnail: "https://cdn-locc-org.vercel.app/images/The%20Way%20of%20Faith.png?raw=true"
-  },
-  {
-    id: "lkZh3EU0LSc",
-    title: "Walking Presence - April 23, 2023",
-    customThumbnail: "https://cdn-locc-org.vercel.app/images/Walking%20Presence.png?raw=true"
-  },
-  {
-    id: "yjClz_yocjI",
-    title: "Reaching Thomas - April 16, 2023",
-    customThumbnail: "https://cdn-locc-org.vercel.app/images/Reaching%20Thomas.png?raw=true"
-  },
-  {
-    id: "EuNkJEFXsTo",
-    title: "Fully Alive - April 9, 2023",
-    customThumbnail: "https://cdn-locc-org.vercel.app/images/Fully%20Alive.png?raw=true"
-  }
-];
+const recentServices = await fetchLatestVideos();
 
 
 
