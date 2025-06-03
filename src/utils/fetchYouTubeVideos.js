@@ -1,4 +1,4 @@
-import YouTube from 'youtube-sr';
+import { YouTube } from 'youtube-sr';
 
 export async function fetchLatestVideos() {
   try {
