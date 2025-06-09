@@ -24,6 +24,53 @@ const customThumbnailMap = {
   "EuNkJEFXsTo": "https://cdn-locc-org.vercel.app/images/Fully%20Alive.png?raw=true"
 };
 
+function parseDateFromTitle(title) {
+  const cleanTitle = title.replace(/^(Service|LOCC)\s*[-|]\s*/i, '').replace(/\s*[-|]\s*(Service)$/i, '');
+  
+  const patterns = [
+    /(\d{1,2})\/(\d{1,2})\/(\d{2,4})/,
+    /(\d{1,2})-(\d{1,2})-(\d{2,4})/,
+    /(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),?\s+(\d{4})/i,
+    /(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})\s+(\d{4})/i,
+    /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),?\s+(\d{4})/i,
+    /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})(st|nd|rd|th)\s+(\d{4})/i
+  ];
+  
+  for (const pattern of patterns) {
+    const match = cleanTitle.match(pattern);
+    if (match) {
+      let month, day, year;
+      
+      if (pattern.source.includes('January|February')) {
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                           'July', 'August', 'September', 'October', 'November', 'December'];
+        month = monthNames.indexOf(match[1]) + 1;
+        day = parseInt(match[2]);
+        year = parseInt(match[3]);
+      } else if (pattern.source.includes('Jan|Feb')) {
+        const monthAbbr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                          'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        month = monthAbbr.indexOf(match[1]) + 1;
+        day = parseInt(match[2]);
+        year = parseInt(match[4] || match[3]);
+      } else {
+        month = parseInt(match[1]);
+        day = parseInt(match[2]);
+        year = parseInt(match[3]);
+      }
+      
+      if (year < 50) year += 2000;
+      else if (year < 100) year += 1900;
+      
+      if (month >= 1 && month <= 12 && day >= 1 && day <= 31 && year >= 1900) {
+        return new Date(year, month - 1, day);
+      }
+    }
+  }
+  
+  return null;
+}
+
 export async function fetchLatestVideos() {
   try {
     const uploadsPlaylistId = 'UUUcLKfZo5Su6-ypmt1dkPKA';
@@ -35,15 +82,20 @@ export async function fetchLatestVideos() {
       throw new Error('No videos found in playlist');
     }
     
+    const excludedVideoIds = ['-29vYs8MAhc'];
+    
     const filteredVideos = playlist.videos.filter(video => {
       const title = video.title.toLowerCase();
-      return title.includes('service') || title.includes('locc');
+      const isServiceVideo = title.includes('service') || title.includes('locc');
+      const isNotExcluded = !excludedVideoIds.includes(video.id);
+      return isServiceVideo && isNotExcluded;
     });
     
-    const videos = filteredVideos.map(video => {
+    const videosWithDates = filteredVideos.map(video => {
       const videoData = {
         id: video.id,
         title: video.title,
+        parsedDate: parseDateFromTitle(video.title)
       };
       
       if (customThumbnailMap[video.id]) {
@@ -52,6 +104,17 @@ export async function fetchLatestVideos() {
       
       return videoData;
     });
+    
+    const sortedVideos = videosWithDates.sort((a, b) => {
+      if (a.parsedDate && b.parsedDate) {
+        return b.parsedDate - a.parsedDate;
+      }
+      if (a.parsedDate && !b.parsedDate) return -1;
+      if (!a.parsedDate && b.parsedDate) return 1;
+      return 0;
+    });
+    
+    const videos = sortedVideos.map(({ parsedDate, ...video }) => video);
     
     return videos;
   } catch (error) {

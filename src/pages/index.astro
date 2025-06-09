@@ -2,16 +2,11 @@
 import Layout from '../layouts/Layout.astro';
 import YouTubePopup from '../components/YouTubePopup.astro';
 import Slideshow from '../components/Slideshow.astro';
-import YouTubeVideoGrid from '../components/YouTubeVideoGrid.astro';
-import { fetchLatestVideos } from '../utils/fetchYouTubeVideos.js';
 
 const welcomeImage = {
   url: "https://cdn-locc-org.vercel.app/media/6408A096-4585-4540-806B-66A6EB4027D7.jpeg",
   alt: "Interior view of Lake Ozark Christian Church sanctuary"
 };
-
-
-const recentServices = await fetchLatestVideos();
 
 
 
@@ -122,7 +117,14 @@ const recentServices = await fetchLatestVideos();
   <!-- Recent Services -->
   <div class="container mx-auto px-4 py-16">
     <h2 class="text-3xl font-bold mb-8 text-center">Recent Services</h2>
-    <YouTubeVideoGrid videos={recentServices} />
+    <div id="video-loading" class="text-center py-8">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-brand"></div>
+      <p class="mt-2 text-gray-600">Loading recent services...</p>
+    </div>
+    <div id="video-error" class="text-center py-8 hidden">
+      <p class="text-red-600">Failed to load recent services. Please try again later.</p>
+    </div>
+    <div id="video-container"></div>
   </div>
 
   <!-- Calendar Section -->
@@ -141,4 +143,110 @@ const recentServices = await fetchLatestVideos();
   </div>
 
   <YouTubePopup />
+
+<script>
+  async function loadVideos() {
+    const loadingEl = document.getElementById('video-loading');
+    const errorEl = document.getElementById('video-error');
+    const containerEl = document.getElementById('video-container');
+    
+    try {
+      const response = await fetch('/api/videos.json');
+      if (!response.ok) throw new Error('Failed to fetch videos');
+      
+      const videos = await response.json();
+      
+      if (loadingEl) loadingEl.style.display = 'none';
+      
+      const videoGridHTML = `
+        <div class="space-y-8">
+          <div class="grid md:grid-cols-3 gap-8" id="video-grid">
+            ${videos.map((video, index) => `
+              <div class="video-item" style="${index >= 3 ? 'display: none;' : ''}">
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                  <a 
+                    href="https://www.youtube.com/watch?v=${video.id}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="block group"
+                    aria-label="Watch ${video.title} on YouTube (opens in new tab)"
+                  >
+                    <div class="relative aspect-video">
+                      <img 
+                        src="${video.customThumbnail || `https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}"
+                        alt="Thumbnail for ${video.title}"
+                        class="w-full h-full object-cover"
+                      />
+                      <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                        <span class="sr-only">Play video</span>
+                        <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M8 5v14l11-7z"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <div class="p-4">
+                      <h3 class="font-semibold group-hover:text-brand transition">${video.title}</h3>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+          ${videos.length > 3 ? `
+            <div class="text-center">
+              <button
+                id="view-more-btn"
+                class="bg-brand hover:bg-brand-dark text-white px-8 py-3 rounded-full transition transform hover:scale-105"
+              >
+                View More Services
+              </button>
+            </div>
+          ` : ''}
+        </div>
+      `;
+      
+      if (containerEl) {
+        containerEl.innerHTML = videoGridHTML;
+        setupVideoGrid();
+      }
+      
+    } catch (error) {
+      console.error('Error loading videos:', error);
+      if (loadingEl) loadingEl.style.display = 'none';
+      if (errorEl) errorEl.style.display = 'block';
+    }
+  }
+
+  function setupVideoGrid() {
+    const grid = document.getElementById('video-grid');
+    const viewMoreBtn = document.getElementById('view-more-btn');
+    const videos = Array.from(grid?.querySelectorAll('.video-item') || []);
+    let expanded = false;
+
+    if (!grid || !viewMoreBtn || videos.length <= 3) return;
+
+    viewMoreBtn.addEventListener('click', () => {
+      if (!expanded) {
+        videos.slice(3).forEach(video => {
+          video.style.display = 'block';
+          video.style.opacity = '0';
+          requestAnimationFrame(() => {
+            video.style.transition = 'opacity 0.3s ease-in-out';
+            video.style.opacity = '1';
+          });
+        });
+        viewMoreBtn.textContent = 'Show Less';
+      } else {
+        videos.slice(3).forEach(video => {
+          video.style.display = 'none';
+        });
+        viewMoreBtn.textContent = 'View More Services';
+      }
+      expanded = !expanded;
+    });
+  }
+
+  loadVideos();
+  document.addEventListener('astro:page-load', loadVideos);
+</script>
 </Layout>
