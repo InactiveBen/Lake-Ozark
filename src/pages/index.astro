@@ -1,7 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import YouTubePopup from '../components/YouTubePopup.astro';
-import Slideshow from '../components/Slideshow.astro';
 
 // Toggle this to show/hide the announcement banner
 const showAnnouncementBanner = true;
@@ -151,26 +150,51 @@ function formatDate(dateStr: string): string {
           <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
             After-School Program
           </h2>
-          <p class="text-lg text-gray-600 mb-8 leading-relaxed">
-            Lake Ozark Christian Church is offering a free after-school program for children, 
-            grades Kindergarten through 5th grade (Heritage and Upper Elementary Schools), 
-            on Wednesdays from 3:30pm to 5:30pm.
-          </p>
-          <div class="flex flex-col sm:flex-row gap-4">
-            <a 
-              href="https://docs.google.com/forms/d/e/1FAIpQLSdIri3EaabwsN84Al7Xd7zVnWI7Jzfaoyu6NVkENI6w9FRaeA/viewform?usp=sf_link"
-              target="_blank"
-              rel="noopener noreferrer" 
-              class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
-            >
-              Sign Up Now
-            </a>
-            <a 
-              href="/children-youth" 
-              class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
-            >
-              Learn More
-            </a>
+          <div class="space-y-6">
+            <p class="text-lg text-gray-600 leading-relaxed">
+              Give your child a safe, engaging space to grow after school! Our program combines fun activities, homework help, and meaningful connections - all in a nurturing environment.
+            </p>
+            <div class="bg-gray-50 rounded-xl p-6 space-y-4">
+              <div class="flex items-start gap-3">
+                <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div>
+                  <h3 class="font-medium text-gray-900">Perfect for Busy Parents</h3>
+                  <p class="text-gray-600">Wednesdays 3:30-5:30 PM, giving you time to handle errands or work commitments</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                </svg>
+                <div>
+                  <h3 class="font-medium text-gray-900">Safe & Supervised</h3>
+                  <p class="text-gray-600 group relative">
+                    Qualified staff and volunteers ensure a secure, caring environment
+                    <span class="tooltip invisible group-hover:visible absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg">
+                      For your child's safety, every staff member and volunteer must pass comprehensive background checks. 
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-4">
+              <a 
+                href="https://docs.google.com/forms/d/e/1FAIpQLSdIri3EaabwsN84Al7Xd7zVnWI7Jzfaoyu6NVkENI6w9FRaeA/viewform?usp=sf_link"
+                target="_blank"
+                rel="noopener noreferrer" 
+                class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
+              >
+                Reserve Your Spot
+              </a>
+              <a 
+                href="/children-youth" 
+                class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
+              >
+                Learn More
+              </a>
+            </div>
           </div>
         </div>
         <div class="relative hidden lg:block">
@@ -665,6 +689,23 @@ function formatDate(dateStr: string): string {
   .homepage-amount-btn.selected {
     border-color: #8B5A2B;
     background-color: rgba(139, 90, 43, 0.05);
+  }
+
+  .tooltip {
+    z-index: 50;
+    transform: translateX(-50%);
+    left: 50%;
+  }
+
+  .tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #1f2937 transparent transparent transparent;
   }
 </style>
 </Layout>
