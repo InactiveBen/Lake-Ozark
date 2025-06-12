@@ -1,27 +1,20 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Slideshow from '../components/Slideshow.astro';
 
-const heroImages = [
-   {
-    url: "https://www.churchleadership.com/wp-content/uploads/2016/02/iStock_000001013097Medium2.jpg",
-    alt: "Donation Plate"
-  },
-{
-    url: "https://churchanswers.com/wp-content/uploads/2023/10/Blog-Article-Picture-new-84.png",
-    alt: "Donation Plate"
-  },
-];
+const heroImage = {
+  url: "https://cdn-locc-org.vercel.app/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg",
+  alt: "Church Sanctuary"
+};
 
 const givingMethods = [
   {
-    title: "Online Banking",
-    description: "Set up one-time or recurring contributions through your bank's online bill pay service.",
+    title: "Online Giving",
+    description: "Secure online donations with one-time or monthly giving options.",
     icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />`
   },
   {
     title: "Mail Your Gift",
-    description: "Send your contribution directly to our church office.",
+    description: "Send your contribution to our church office at P.O. Box 194, Lake Ozark, MO 65049.",
     icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />`
   },
   {
@@ -57,120 +50,362 @@ const impactAreas = [
 
 <Layout title="Giving">
   <!-- Hero Section -->
-  <div class="relative">
+  <section class="relative overflow-hidden bg-white">
     <div class="absolute inset-0">
-      <Slideshow images={heroImages} />
-      <div class="absolute inset-0 bg-black/50"></div>
+      <img 
+        src={heroImage.url} 
+        alt={heroImage.alt}
+        class="w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-black/40"></div>
     </div>
 
-    <div class="relative min-h-[60vh] flex items-center">
-      <div class="container mx-auto px-4 py-16 text-center text-white">
-        <h1 class="text-5xl md:text-6xl font-bold mb-4">Giving</h1>
-        <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-          Supporting our ministry through faithful stewardship.
-          Your generosity helps us share God's love with our community and beyond.
+    <div class="relative container mx-auto px-6 py-32 md:py-40">
+      <div class="max-w-4xl">
+        <p class="text-xl md:text-2xl text-white/90 mb-4 font-light leading-relaxed">
+          Your generosity makes a difference.
+        </p>
+        <h1 class="text-5xl md:text-7xl font-semibold text-white mb-8 leading-tight tracking-tight">
+          Giving
+        </h1>
+        <p class="text-lg md:text-xl text-white/80 mb-12 max-w-2xl font-light leading-relaxed">
+          Supporting our ministry through faithful stewardship. Your gifts help us share God's love with our community and beyond.
         </p>
         
-        <blockquote class="italic text-lg mb-8">
-          "Each of you should give what you have decided in your heart to give, not reluctantly or under compulsion, for God loves a cheerful giver."
-          <footer class="text-sm mt-2">- 2 Corinthians 9:7</footer>
-        </blockquote>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a 
+            href="#donate" 
+            class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300 text-lg"
+          >
+            Give Now
+          </a>
+          <a 
+            href="#ways-to-give" 
+            class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-medium rounded-lg transition-all duration-300 text-lg"
+          >
+            Other Ways to Give
+          </a>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- Introduction -->
-  <div class="container mx-auto px-4 py-16">
-    <div class="bg-white p-8 rounded-2xl shadow-lg max-w-4xl mx-auto">
-      <p class="text-xl text-gray-600">
-        We genuinely thank our supporters for their continuing financial generosity to the ministries 
-        of Lake Ozark Christian Church. For those who are considering a visit to us, please understand 
-        that you are our guests and we want you to feel no obligation to give.
-      </p>
+  <!-- Online Donation Form -->
+  <section id="donate" class="py-20 bg-white">
+    <div class="container mx-auto px-6">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-16">
+          <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
+            Secure Online Giving
+          </span>
+          <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Give Online</h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Make a secure donation with flexible giving options
+          </p>
+        </div>
+        
+        <div class="bg-gray-50 rounded-2xl p-8 md:p-12">
+          <form id="donation-form" class="space-y-8">
+            <!-- Donation Type -->
+            <div>
+              <label class="block text-lg font-semibold text-gray-900 mb-4">
+                Donation Type
+              </label>
+              <div class="grid grid-cols-2 gap-4">
+                <label class="relative">
+                  <input 
+                    type="radio" 
+                    name="donationType" 
+                    value="one-time" 
+                    checked 
+                    class="peer sr-only"
+                  />
+                  <div class="p-4 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-brand peer-checked:bg-brand/5 transition-all duration-300 bg-white">
+                    <div class="text-center">
+                      <div class="text-lg font-medium text-gray-900">One-time</div>
+                      <div class="text-sm text-gray-600">Single donation</div>
+                    </div>
+                  </div>
+                </label>
+                <label class="relative">
+                  <input 
+                    type="radio" 
+                    name="donationType" 
+                    value="monthly" 
+                    class="peer sr-only"
+                  />
+                  <div class="p-4 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-brand peer-checked:bg-brand/5 transition-all duration-300 bg-white">
+                    <div class="text-center">
+                      <div class="text-lg font-medium text-gray-900">Monthly</div>
+                      <div class="text-sm text-gray-600">Recurring donation</div>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Amount Selection -->
+            <div>
+              <label class="block text-lg font-semibold text-gray-900 mb-4">
+                Donation Amount
+              </label>
+              <div class="grid grid-cols-3 gap-4 mb-4">
+                <button type="button" class="amount-btn p-4 border-2 border-gray-200 rounded-lg hover:border-brand transition-all duration-300 bg-white" data-amount="25">
+                  <div class="text-lg font-medium">$25</div>
+                </button>
+                <button type="button" class="amount-btn p-4 border-2 border-gray-200 rounded-lg hover:border-brand transition-all duration-300 bg-white" data-amount="50">
+                  <div class="text-lg font-medium">$50</div>
+                </button>
+                <button type="button" class="amount-btn p-4 border-2 border-gray-200 rounded-lg hover:border-brand transition-all duration-300 bg-white" data-amount="100">
+                  <div class="text-lg font-medium">$100</div>
+                </button>
+              </div>
+              <div class="relative">
+                <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg">$</span>
+                <input 
+                  type="number" 
+                  id="custom-amount" 
+                  name="amount"
+                  min="5" 
+                  max="999999"
+                  step="0.01"
+                  placeholder="Enter custom amount"
+                  class="w-full pl-8 pr-4 py-4 border-2 border-gray-200 rounded-lg focus:border-brand focus:outline-none text-lg bg-white"
+                />
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div>
+              <label for="email" class="block text-lg font-semibold text-gray-900 mb-4">
+                Email Address
+              </label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email"
+                required
+                placeholder="your@email.com"
+                class="w-full px-4 py-4 border-2 border-gray-200 rounded-lg focus:border-brand focus:outline-none text-lg bg-white"
+              />
+            </div>
+
+            <!-- Submit Button -->
+            <div class="pt-4">
+              <button 
+                type="submit"
+                id="donate-btn"
+                class="w-full bg-brand hover:bg-brand-dark text-white font-medium py-4 px-8 rounded-lg transition-all duration-300 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <span id="btn-text">Continue to Secure Payment</span>
+                <span id="btn-loading" class="hidden">Processing...</span>
+              </button>
+            </div>
+
+            <!-- Security Note -->
+            <div class="text-center text-sm text-gray-600 pt-4">
+    
+              <p>Your tax-deductible donation will be processed securely through Stripe, with a receipt sent to your email. For monthly giving, you can manage, pause, or cancel your subscription anytime through the Stripe Payment Portal.</p>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-  </div>
+  </section>
 
   <!-- Ways to Give -->
-  <div class="container mx-auto px-4 py-16">
-    <h2 class="text-3xl font-bold mb-12 text-center">Ways to Give</h2>
-    <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-      {givingMethods.map(method => (
-        <div class="bg-white p-8 rounded-2xl shadow-lg">
-          <div class="flex flex-col items-center text-center">
-            <div class="p-3 bg-brand/10 rounded-xl text-brand mb-6">
-              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <Fragment set:html={method.icon} />
-              </svg>
-            </div>
-            <h3 class="text-2xl font-bold mb-4">{method.title}</h3>
-            <p class="text-gray-600">{method.description}</p>
-          </div>
+  <section id="ways-to-give" class="py-20 bg-gray-50">
+    <div class="container mx-auto px-6">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16">
+          <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
+            Giving Options
+          </span>
+          <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Other Ways to Give</h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Choose the giving method that works best for you
+          </p>
         </div>
-      ))}
-    </div>
-  </div>
-
-  <!-- Mailing Address -->
-  <div class="container mx-auto px-4 py-16">
-    <div class="bg-white p-8 rounded-2xl shadow-lg max-w-4xl mx-auto text-center">
-      <h2 class="text-2xl font-bold mb-6">Mailing Address</h2>
-      <address class="not-italic text-xl text-gray-600">
-        Lake Ozark Christian Church<br>
-        P.O. Box 194<br>
-        Lake Ozark, MO 65049
-      </address>
-    </div>
-  </div>
-
-  <!-- Your Impact -->
-  <div class="container mx-auto px-4 py-16">
-    <h2 class="text-3xl font-bold mb-12 text-center">Your Gift Makes a Difference</h2>
-    <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-      {impactAreas.map(area => (
-        <div class="bg-white p-8 rounded-2xl shadow-lg">
-          <div class="flex items-start gap-6">
-            <div class="p-3 bg-brand/10 rounded-xl text-brand">
-              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <Fragment set:html={area.icon} />
-              </svg>
+        
+        <div class="grid md:grid-cols-3 gap-8">
+          {givingMethods.map(method => (
+            <div class="bg-white p-8 rounded-2xl border border-gray-200 hover:shadow-lg transition-all duration-300 text-center">
+              <div class="w-16 h-16 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <Fragment set:html={method.icon} />
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold mb-4 text-gray-900">{method.title}</h3>
+              <p class="text-gray-600 leading-relaxed">{method.description}</p>
             </div>
-            <div>
-              <h3 class="text-2xl font-bold mb-4">{area.title}</h3>
-              <p class="text-gray-600">{area.description}</p>
-            </div>
-          </div>
+          ))}
         </div>
-      ))}
-    </div>
-  </div>
-
-  <!-- Questions Section -->
-  <div class="container mx-auto px-4 py-16">
-    <div class="bg-gray-50 p-8 rounded-2xl text-center max-w-4xl mx-auto">
-      <h2 class="text-2xl font-bold mb-4">Questions About Giving?</h2>
-      <p class="text-gray-600 mb-6">
-        We're here to help! Contact our church office for any questions about giving or stewardship.
-      </p>
-      <div class="flex flex-wrap justify-center gap-4">
-        <a 
-          href="tel:573-365-3366" 
-          class="inline-flex items-center gap-2 bg-brand text-white px-8 py-3 rounded-full hover:bg-brand-dark transition"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-          </svg>
-          Call Us
-        </a>
-        <a 
-          href="mailto:office@lakeozarkdisciples.org" 
-          class="inline-flex items-center gap-2 bg-gray-100 text-gray-800 px-8 py-3 rounded-full hover:bg-gray-200 transition"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-          </svg>
-          Email Us
-        </a>
       </div>
     </div>
-  </div>
+  </section>
+
+  <!-- Questions Section -->
+  <section class="py-20 bg-white">
+    <div class="container mx-auto px-6">
+      <div class="max-w-4xl mx-auto text-center">
+        <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
+          Need Help?
+        </span>
+        <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
+          Questions About Giving?
+        </h2>
+        <p class="text-lg text-gray-600 mb-12 leading-relaxed">
+          We're here to help! Contact our church office for any questions about giving or stewardship.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a 
+            href="tel:573-365-3366" 
+            class="inline-flex items-center justify-center gap-3 bg-brand text-white px-8 py-4 rounded-lg hover:bg-brand-dark transition-all duration-300 font-medium text-lg"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+            Call: 573-365-3366
+          </a>
+          <a 
+            href="mailto:office@lakeozarkdisciples.org" 
+            class="inline-flex items-center justify-center gap-3 bg-gray-900 text-white px-8 py-4 rounded-lg hover:bg-gray-800 transition-all duration-300 font-medium text-lg"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            Send Email
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    * {
+      font-family: 'Albert Sans', system-ui, sans-serif;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Albert Sans', system-ui, sans-serif;
+    }
+
+    .amount-btn.selected {
+      border-color: #8B5A2B;
+      background-color: rgba(139, 90, 43, 0.05);
+    }
+  </style>
+
+  <script>
+    // Amount button selection
+    document.querySelectorAll('.amount-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        // Remove selected class from all buttons
+        document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
+        // Add selected class to clicked button
+        this.classList.add('selected');
+        // Set the amount in the input
+        const customAmountInput = document.getElementById('custom-amount') as HTMLInputElement;
+        if (customAmountInput && this instanceof HTMLElement && this.dataset.amount) {
+          customAmountInput.value = this.dataset.amount;
+        }
+      });
+    });
+
+    // Custom amount input
+    const customAmountInput = document.getElementById('custom-amount');
+    if (customAmountInput) {
+      customAmountInput.addEventListener('input', function() {
+        // Remove selected class from preset buttons when typing custom amount
+        document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
+      });
+    }
+
+    // Form submission
+    const donationForm = document.getElementById('donation-form') as HTMLFormElement;
+    if (donationForm) {
+      donationForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const btn = document.getElementById('donate-btn') as HTMLButtonElement;
+        const btnText = document.getElementById('btn-text');
+        const btnLoading = document.getElementById('btn-loading');
+        
+        if (!btn || !btnText || !btnLoading) return;
+        
+        // Get form data
+        const formData = new FormData(this);
+        const amountValue = formData.get('amount');
+        const emailValue = formData.get('email');
+        const donationTypeValue = formData.get('donationType');
+        
+        // Type-safe conversions
+        const amount = parseFloat(amountValue?.toString() || '0');
+        const email = emailValue?.toString() || '';
+        const donationType = donationTypeValue?.toString() || '';
+        
+        // Validate amount
+        if (!amount || amount < 5) {
+          alert('Please enter a donation amount of at least $5');
+          return;
+        }
+        
+        if (amount > 999999) {
+          alert('Donation amount cannot exceed $999,999');
+          return;
+        }
+        
+        // Validate email
+        if (!email || !email.includes('@')) {
+          alert('Please enter a valid email address');
+          return;
+        }
+        
+        // Show loading state
+        btn.disabled = true;
+        btnText.classList.add('hidden');
+        btnLoading.classList.remove('hidden');
+        
+        try {
+          // Call the donation API
+          const response = await fetch('https://api.shelterinastorm.org/api/v2/donation', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              amount: amount,
+              email: email,
+              donationType: donationType
+            })
+          });
+          
+          const data = await response.json();
+          
+          if (data.success && data.url) {
+            // Redirect to Stripe checkout
+            window.location.href = data.url;
+          } else {
+            throw new Error(data.message || 'Failed to create donation session');
+          }
+          
+        } catch (error) {
+          console.error('Donation error:', error);
+          alert('There was an error processing your donation. Please try again or contact us for assistance.');
+          
+          // Reset button state
+          btn.disabled = false;
+          btnText.classList.remove('hidden');
+          btnLoading.classList.add('hidden');
+        }
+      });
+    }
+
+    // Set default amount
+    const defaultBtn = document.querySelector('[data-amount="50"]') as HTMLElement;
+    if (defaultBtn) {
+      defaultBtn.click();
+    }
+  </script>
 </Layout>

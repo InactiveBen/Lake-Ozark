@@ -3,38 +3,120 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="Calendar">
-  <div class="container mx-auto px-4 py-16">
-    <div class="max-w-4xl mx-auto">
-      <h1 class="text-4xl font-bold mb-12 text-center">Church Calendar</h1>
-      
-      <div class="bg-white p-8 rounded-2xl shadow-lg">
-        <div class="w-full" style="position: relative; padding-bottom: 75%;">
-            <iframe 
-          src="https://calendar.google.com/calendar/embed?src=lakeozarkdisciples%40gmail.com&ctz=America%2FChicago" 
-          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
-          frameborder="0" 
-          scrolling="no"
-        ></iframe>
-        </div>
+  <!-- Hero Section - Clean and Minimalist -->
+  <section class="relative overflow-hidden bg-white">
+    <div class="absolute inset-0">
+      <img 
+        src="https://cdn-locc-org.vercel.app/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg" 
+        alt="Church Sanctuary"
+        class="w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-black/40"></div>
+    </div>
 
-        <div class="mt-8 p-6 bg-gray-50 rounded-xl">
-          <h2 class="text-2xl font-bold mb-4">Regular Events</h2>
-          <ul class="space-y-3">
-            <li class="flex items-center gap-3">
-              <svg class="w-6 h-6 text-brand flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
-              </svg>
-              <span>Sunday Worship Service - 10:30 AM</span>
-            </li>
-            <li class="flex items-center gap-3">
-              <svg class="w-6 h-6 text-brand flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
-              </svg>
-              <span>After-School Program - Wednesdays 3:30-5:30 PM</span>
-            </li>
-          </ul>
+    <div class="relative container mx-auto px-6 py-32 md:py-40">
+      <div class="max-w-4xl">
+        <h1 class="text-5xl md:text-7xl font-semibold text-white mb-8 leading-tight tracking-tight">
+          Calendar
+        </h1>
+        <p class="text-lg md:text-xl text-white/80 mb-12 max-w-2xl font-light leading-relaxed">
+          Stay connected with all our upcoming events, services, and community gatherings.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a 
+            href="#calendar" 
+            class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300 text-lg"
+          >
+            View Calendar
+          </a>
+          <a 
+            href="/worship" 
+            class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-medium rounded-lg transition-all duration-300 text-lg"
+          >
+            Service Times
+          </a>
         </div>
       </div>
     </div>
-  </div>
+  </section>
+
+  <!-- Regular Events Section -->
+  <section class="py-20 bg-white">
+    <div class="container mx-auto px-6">
+      <div class="max-w-4xl mx-auto text-center">
+        <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
+          Weekly Schedule
+        </span>
+        <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
+          Regular Events
+        </h2>
+        <p class="text-lg text-gray-600 mb-12 leading-relaxed">
+          Join us for our weekly worship services and community programs
+        </p>
+        
+        <div class="grid sm:grid-cols-2 gap-8">
+          <div class="bg-white p-8 rounded-2xl border border-gray-200 hover:shadow-lg transition-all duration-300">
+            <div class="w-16 h-16 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-semibold mb-4 text-gray-900">Sunday Worship</h3>
+            <p class="text-lg text-gray-600 leading-relaxed">8:30 AM & 10:30 AM</p>
+          </div>
+          
+          <div class="bg-white p-8 rounded-2xl border border-gray-200 hover:shadow-lg transition-all duration-300">
+            <div class="w-16 h-16 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-semibold mb-4 text-gray-900">After-School Program</h3>
+            <p class="text-lg text-gray-600 leading-relaxed">Wednesdays 3:30-5:30 PM</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Calendar Section -->
+  <section id="calendar" class="py-20 bg-gray-50">
+    <div class="container mx-auto px-6">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+          <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
+            Stay Connected
+          </span>
+          <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Church Calendar</h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            View all upcoming events, services, and community gatherings
+          </p>
+        </div>
+        
+        <div class="bg-white border border-gray-200 overflow-hidden rounded-2xl">
+          <div class="p-8">
+            <div class="w-full rounded-xl overflow-hidden" style="position: relative; padding-bottom: 75%;">
+              <iframe 
+                src="https://calendar.google.com/calendar/embed?src=lakeozarkdisciples%40gmail.com&ctz=America%2FChicago" 
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
+                title="Lake Ozark Christian Church Calendar"
+                aria-label="Google Calendar showing upcoming church events"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    * {
+      font-family: 'Albert Sans', system-ui, sans-serif;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Albert Sans', system-ui, sans-serif;
+    }
+  </style>
 </Layout>

@@ -1,77 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Slideshow from '../components/Slideshow.astro';
 
-const heroImages = [
-    {
-    url: "https://cdn-locc-org.vercel.app/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg",
-    alt: "Church Sanctuary"
-  },
-  {
-    url: "https://cdn-locc-org.vercel.app/media/9D29A9E2-77E4-4862-83F9-137F28755D4E.jpeg",
-    alt: "Church Sanctuary"
-  },
-  {
-    url: "https://cdn-locc-org.vercel.app/media/F4D74B40-E3E0-4912-8ABD-B0D550A43D2C.jpeg",
-    alt: "Church Sanctuary"
-  },
-  {
-    url: "https://cdn-locc-org.vercel.app/media/09A90A95-A1D1-4452-ABC7-1A6A9FA3C894.jpeg",
-    alt: "Church Sanctuary"
-  },
-  {
-    url: "https://cdn-locc-org.vercel.app/media/4E1E856F-8E12-4397-BF93-BA55A21B4E7E.jpeg",
-    alt: "Church Sanctuary"
-  },
-  {
-    url: "https://cdn-locc-org.vercel.app/media/69CA977C-2462-4E2A-B067-A2FCD5D87A3F.jpeg",
-    alt: "Church Sanctuary"
-  },
-  {
-    url: "https://cdn-locc-org.vercel.app/media/30114A7D-B859-4852-90E7-32D32A030DAD.jpeg",
-    alt: "Church Sanctuary"
-  },
-  {
-    url: "https://cdn-locc-org.vercel.app/media/9893CDB4-B12F-434C-B330-45E7785054C3.jpeg",
-    alt: "Church Sanctuary"
-  },
-  {
-    url: "https://cdn-locc-org.vercel.app/media/4D56DD16-4B39-4F84-BA6F-53994720529E.jpeg",
-    alt: "Church Sanctuary"
-  },
-  {
-    url: "https://cdn-locc-org.vercel.app/media/A3C367F6-E610-43DF-8A2A-BA52AD44E205.jpeg",
-    alt: "Church Sanctuary"
-  },
-  {
-    url: "https://cdn-locc-org.vercel.app/media/88041345-79DE-4CC1-9AE1-B2BD94B13DEF.jpeg",
-    alt: "Church Sanctuary"
-  },
-  {
-    url: "https://cdn-locc-org.vercel.app/media/6B0FEED9-92ED-418D-A3C7-FCBD1CD2BCD8.jpeg",
-    alt: "Church Sanctuary"
-  },
-  {
-    url: "https://cdn-locc-org.vercel.app/media/2EB193E8-8D8B-47FD-BA10-0D16A305260D.jpeg",
-    alt: "Church Sanctuary"
-  },
-  {
-    url: "https://cdn-locc-org.vercel.app/media/C4EF0FDE-CF01-4665-9E5D-EB4E9A11A260.jpeg",
-    alt: "Church Sanctuary"
-  },
-  {
-    url: "https://cdn-locc-org.vercel.app/media/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg",
-    alt: "Church Sanctuary"
-  },
-  {
-    url: "https://cdn-locc-org.vercel.app/media/B7960749-126F-472A-AF5F-8269D4B0A033.jpeg",
-    alt: "Church Sanctuary"
-  },
-  {
-    url: "https://cdn-locc-org.vercel.app/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg",
-    alt: "Church Sanctuary"
-  }
-];
+const heroImage = {
+  url: "https://cdn-locc-org.vercel.app/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg",
+  alt: "Church Sanctuary"
+};
 
 const beliefs = [
   {
@@ -98,113 +31,198 @@ const beliefs = [
 ---
 
 <Layout title="Who We Are">
-  <!-- Hero Section -->
-  <div class="relative">
-    <div class="absolute inset-0">
-      <Slideshow images={heroImages} />
-      <div class="absolute inset-0 bg-black/50"></div>
-    </div>
+<!-- Hero Section - Clean and Minimalist -->
+<section class="relative overflow-hidden bg-white">
+  <div class="absolute inset-0">
+    <img 
+      src={heroImage.url} 
+      alt={heroImage.alt}
+      class="w-full h-full object-cover"
+    />
+    <div class="absolute inset-0 bg-black/40"></div>
+  </div>
 
-    <div class="relative min-h-[60vh] flex items-center">
-      <div class="container mx-auto px-4 py-16 text-center text-white">
-        <h1 class="text-5xl md:text-6xl font-bold mb-4">Who We Are</h1>
-        <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-          A community of faith dedicated to sharing the Gospel of Jesus Christ. 
-          All are welcome in our congregation, for Christ's table is open to all.
-        </p>
-        
-        <div class="flex flex-wrap justify-center gap-4">
-          <a 
-            href="/worship" 
-            class="bg-brand hover:bg-brand-dark text-white px-8 py-3 rounded-full transition transform hover:scale-105"
-          >
-            Join Us
-          </a>
-          <a 
-            href="#beliefs" 
-            class="bg-white hover:bg-gray-100 text-gray-900 px-8 py-3 rounded-full transition transform hover:scale-105"
-          >
-            Learn More
-          </a>
-        </div>
+  <div class="relative container mx-auto px-6 py-32 md:py-40">
+    <div class="max-w-4xl">
+      <p class="text-xl md:text-2xl text-white/90 mb-4 font-light leading-relaxed">
+        A community of faith
+      </p>
+      <h1 class="text-5xl md:text-7xl font-semibold text-white mb-8 leading-tight tracking-tight">
+        Who We Are
+      </h1>
+      <p class="text-lg md:text-xl text-white/80 mb-12 max-w-2xl font-light leading-relaxed">
+        Dedicated to sharing the Gospel of Jesus Christ. All are welcome in our congregation, for Christ's table is open to all.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a 
+          href="/worship" 
+          class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300 text-lg"
+        >
+          Join Us
+        </a>
+        <a 
+          href="/connect" 
+          class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-medium rounded-lg transition-all duration-300 text-lg"
+        >
+          Connect With Us
+        </a>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- Introduction -->
-  <div class="container mx-auto px-4 py-16">
-    <div class="bg-white p-8 rounded-2xl shadow-lg max-w-4xl mx-auto">
-      <p class="text-xl text-gray-600">
+<!-- Introduction -->
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
+        Our Foundation
+      </span>
+      <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900">Faith in Action</h2>
+      <p class="text-lg text-gray-600 leading-relaxed">
         Lake Ozark Christian Church is a community of faith that is dedicated to sharing the Gospel of Jesus Christ. 
         Our faith is not simply a set of beliefs, but a way of life as we share the light of our Savior with the world.
       </p>
     </div>
   </div>
+</section>
 
-  <!-- Our Beliefs -->
-  <div id="beliefs" class="container mx-auto px-4 py-16">
-    <h2 class="text-3xl font-bold mb-12 text-center">Our Beliefs</h2>
-    <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-      {beliefs.map(belief => (
-        <div class="bg-white p-8 rounded-2xl shadow-lg">
-          <div class="flex items-start gap-6">
-            <div class="p-3 bg-brand/10 rounded-xl text-brand">
-              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <Fragment set:html={belief.icon} />
-              </svg>
-            </div>
-            <div>
-              <h3 class="text-2xl font-bold mb-4">{belief.title}</h3>
-              <p class="text-gray-600">{belief.description}</p>
+<!-- Our Beliefs -->
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
+          Core Values
+        </span>
+        <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Our Beliefs</h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          The foundation of our faith journey and what guides us as a community
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        {beliefs.map(belief => (
+          <div class="bg-white p-8 rounded-2xl border border-gray-200 hover:shadow-lg transition-all duration-300">
+            <div class="flex items-start gap-6">
+              <div class="w-16 h-16 bg-brand/10 rounded-full flex items-center justify-center flex-shrink-0">
+                <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <Fragment set:html={belief.icon} />
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-2xl font-semibold mb-4 text-gray-900">{belief.title}</h3>
+                <p class="text-gray-600 leading-relaxed">{belief.description}</p>
+              </div>
             </div>
           </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Our Mission -->
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
+            Our Purpose
+          </span>
+          <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
+            Our Mission
+          </h2>
+          <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+            Our Lord calls us out to care for others—to love God and neighbor, and to work for a better world through service, 
+            mission, and prophetic witness.
+          </p>
+          <div class="bg-gray-50 p-6 rounded-xl border-l-4 border-brand">
+            <blockquote class="text-lg italic text-gray-700 mb-3">
+              "To bring Good News to the poor … proclaim release to the captives and recovery of sight to the blind, 
+              to let the oppressed go free, to proclaim the year of the Lord's favor."
+            </blockquote>
+            <p class="text-sm text-gray-600 font-medium">Luke 4:18-19</p>
+          </div>
         </div>
-      ))}
+        <div class="relative">
+          <img 
+            src="https://cdn-locc-org.vercel.app/media/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg"
+            alt="Church community gathering"
+            class="w-full h-[600px] object-cover rounded-2xl"
+          />
+        </div>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- Our Mission -->
-  <div class="container mx-auto px-4 py-16">
-    <div class="bg-white p-8 rounded-2xl shadow-lg max-w-4xl mx-auto">
-      <h2 class="text-3xl font-bold mb-6">Our Mission</h2>
-      <p class="text-gray-600 mb-8">
-        Our Lord calls us out to care for others—to love God and neighbor, and to work for a better world through service, 
-        mission, and prophetic witness.
-      </p>
-      <blockquote class="border-l-4 border-brand pl-6 italic text-gray-600">
-        "To bring Good News to the poor … proclaim release to the captives and recovery of sight to the blind, 
-        to let the oppressed go free, to proclaim the year of the Lord's favor."
-        <footer class="mt-2 text-sm">- Luke 4:18-19</footer>
-      </blockquote>
+<!-- Our Journey -->
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div class="relative">
+          <img 
+            src="https://cdn-locc-org.vercel.app/media/69CA977C-2462-4E2A-B067-A2FCD5D87A3F.jpeg"
+            alt="Church worship service"
+            class="w-full h-[600px] object-cover rounded-2xl"
+          />
+        </div>
+        <div>
+          <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
+            Growing Together
+          </span>
+          <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
+            Our Journey Together
+          </h2>
+          <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+            We believe in a God who invites us to grow as disciples. We are all on a journey, but God is always calling us 
+            out to be more than we are, to follow in the footsteps of Jesus Christ, to grow in faith and service and love.
+          </p>
+          <p class="text-lg text-gray-600 leading-relaxed">
+            Our Lord walks with us that we might find meaning in our lives and make a difference in the lives of others. 
+            We offer safe space where people of all ages can explore, grow, and learn about God and the Christian faith.
+          </p>
+        </div>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- Our Journey -->
-  <div class="container mx-auto px-4 py-16">
-    <div class="bg-white p-8 rounded-2xl shadow-lg max-w-4xl mx-auto">
-      <h2 class="text-3xl font-bold mb-6">Our Journey Together</h2>
-      <p class="text-gray-600">
-        We believe in a God who invites us to grow as disciples. We are all on a journey, but God is always calling us 
-        out to be more than we are, to follow in the footsteps of Jesus Christ, to grow in faith and service and love. 
-        Our Lord walks with us that we might find meaning in our lives and make a difference in the lives of others. 
-        We offer safe space where people of all ages can explore, grow, and learn about God and the Christian faith.
-      </p>
+<!-- Affiliation -->
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
+        Our Community
+      </span>
+      <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900">Part of Something Greater</h2>
+      <div class="bg-gray-50 p-12 rounded-2xl">
+        <p class="text-xl lg:text-2xl font-light text-gray-900 mb-8 leading-relaxed">
+          We are affiliated with the Christian Church (Disciples of Christ),<br class="hidden md:block">
+          "A movement for wholeness in a fragmented world."
+        </p>
+        <a 
+          href="/connect" 
+          class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
+        >
+          Connect With Us
+        </a>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- Affiliation -->
-  <div class="container mx-auto px-4 py-16">
-    <div class="bg-gray-50 p-8 rounded-2xl text-center max-w-4xl mx-auto">
-      <p class="text-xl font-semibold text-gray-600">
-        We are affiliated with the Christian Church (Disciples of Christ),<br>
-        "A movement for wholeness in a fragmented world."
-      </p>
-      <a 
-        href="/connect" 
-        class="inline-flex items-center gap-2 bg-brand text-white px-8 py-3 rounded-full hover:bg-brand-dark transition mt-8"
-      >
-        Connect With Us
-      </a>
-    </div>
-  </div>
+<style>
+  * {
+    font-family: 'Albert Sans', system-ui, sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Albert Sans', system-ui, sans-serif;
+  }
+</style>
 </Layout>

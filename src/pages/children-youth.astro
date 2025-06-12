@@ -1,160 +1,295 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Slideshow from '../components/Slideshow.astro';
 
-const heroImages = [
-  {
-    url: "https://cdn-locc-org.vercel.app/media/E88583FB-D8A2-4D0E-8391-7D97D11B710F.jpeg",
-    alt: "Children's Time"
-  }
-];
+const heroImage = {
+  url: "https://cdn-locc-org.vercel.app/media/E88583FB-D8A2-4D0E-8391-7D97D11B710F.jpeg",
+  alt: "Children's Time"
+};
 
 const programs = [
   {
     title: "Amos and Friends",
     time: "Sundays during 10:30 AM Service",
-    description: "An interactive puppet show featuring Amos the Mouse and Pastor Ron"
+    description: "Interactive puppet show with Amos the Mouse and Pastor Ron",
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />`
   },
   {
     title: "Children's Church",
-    time: "Sundays during 10:30 AM Service",
-    description: "Learning about God's love through lessons, crafts, and play"
+    time: "Sundays during 10:30 AM Service", 
+    description: "Learning about God's love through lessons, crafts, and play",
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />`
   },
   {
     title: "After-School Program",
     time: "Wednesdays 3:30-5:30 PM",
-    description: "Free program for K-5th grade with transportation provided"
-  }
-];
-
-const features = [
-  {
-    title: "Amos and Friends & Children's Church",
-    description: "Every Sunday morning at our 10:30 am Worship Service, our youngest are invited to come forward for some time with Amos and Friends (an interactive puppet show featuring Amos the Mouse and Pastor Ron). After Amos, the children are invited to Children's Church where they learn about God's love through learning, craft, and play.",
-    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />`
-  },
-  {
-    title: "Wednesday After-School Program",
-    description: "Lake Ozark Christian Church is offering a free after-school program for children, grades Kindergarten through 5th grade (Heritage and Upper Elementary Schools), on Wednesdays from 3:30pm to 5:30pm. We will transport the children from school to the church building. We will provide a snack, games and activities, and a brief lesson. A parent or guardian will need to pick up their children by 5:30pm. There is no cost to attend this program.",
-    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />`
-  },
-  {
-    title: "Pastor's Baptism Class",
-    description: "It is the practice of the Disciples of Christ to baptize folks when they are ready to accept Jesus as their Lord and Savior and seek to follow him as his disciple. To help young people in their faith, Pastor Ron teaches a Baptism class to prepare them.",
+    description: "Free program for K-5th grade with transportation provided",
     icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />`
   },
   {
     title: "Boy Scouts",
-    description: "Lake Ozark Christian Church is a proud sponsor of Boy Scout and Cub Scout Pack #21.",
+    time: "Regular meetings",
+    description: "Proud sponsor of Boy Scout and Cub Scout Pack #21",
     icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" />`
   }
 ];
 ---
 
 <Layout title="Children & Youth">
-  <!-- Hero Section -->
-  <div class="relative">
-    <div class="absolute inset-0">
-      <Slideshow images={heroImages} />
-      <div class="absolute inset-0 bg-black/50"></div>
-    </div>
+<!-- Hero Section - Clean and Minimalist -->
+<section class="relative overflow-hidden bg-white">
+  <div class="absolute inset-0">
+    <img 
+      src={heroImage.url} 
+      alt={heroImage.alt}
+      class="w-full h-full object-cover"
+    />
+    <div class="absolute inset-0 bg-black/40"></div>
+  </div>
 
-    <div class="relative min-h-[60vh] flex items-center">
-      <div class="container mx-auto px-4 py-16 text-center text-white">
-        <h1 class="text-5xl md:text-6xl font-bold mb-4">Children & Youth</h1>
-        <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-          A community of faith dedicated to nurturing young hearts and minds in Christ's love.
-        </p>
-        
-        <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-          {programs.map(program => (
-            <div class="bg-white/10 backdrop-blur-sm p-6 rounded-xl">
-              <h2 class="text-lg font-bold mb-2">{program.title}</h2>
-              <p class="text-sm mb-2">{program.time}</p>
-              <p class="text-sm">{program.description}</p>
-            </div>
-          ))}
-        </div>
+  <div class="relative container mx-auto px-6 py-32 md:py-40">
+    <div class="max-w-4xl">
+      <p class="text-xl md:text-2xl text-white/90 mb-4 font-light leading-relaxed">
+        Nurturing young hearts and minds
+      </p>
+      <h1 class="text-5xl md:text-7xl font-semibold text-white mb-8 leading-tight tracking-tight">
+        Children & Youth
+      </h1>
+      <p class="text-lg md:text-xl text-white/80 mb-12 max-w-2xl font-light leading-relaxed">
+        A community of faith dedicated to helping children grow in Christ's love through engaging programs and activities.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a 
+          href="https://docs.google.com/forms/d/e/1FAIpQLSdIri3EaabwsN84Al7Xd7zVnWI7Jzfaoyu6NVkENI6w9FRaeA/viewform?usp=sf_link"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300 text-lg"
+        >
+          Register Now
+        </a>
+        <a 
+          href="/connect" 
+          class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-medium rounded-lg transition-all duration-300 text-lg"
+        >
+          Get Involved
+        </a>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- After School Program -->
-  <div class="container mx-auto px-4 py-16">
-    <div class="bg-white p-8 rounded-2xl shadow-lg max-w-4xl mx-auto">
-      <div class="grid md:grid-cols-2 gap-8 items-center">
+<!-- Programs Overview - Clean Cards -->
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+      {programs.map(program => (
+        <div class="text-center p-8">
+          <div class="w-16 h-16 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <Fragment set:html={program.icon} />
+            </svg>
+          </div>
+          <h2 class="text-xl font-semibold mb-2 text-gray-900">{program.title}</h2>
+          <p class="text-sm font-medium text-brand mb-2">{program.time}</p>
+          <p class="text-sm text-gray-600 leading-relaxed">{program.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- After School Program -->
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
         <div>
-          <h2 class="text-3xl font-bold mb-4">After-School Program</h2>
-          <p class="text-gray-800 mb-4">
-            Join our free after-school program for K-5th grade students from Heritage and Upper Elementary Schools. 
-            We provide transportation, snacks, activities, and a nurturing environment every Wednesday.
+          <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
+            Community Program
+          </span>
+          <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
+            After-School Program
+          </h2>
+          <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+            Lake Ozark Christian Church is offering a free after-school program for children, 
+            grades Kindergarten through 5th grade (Heritage and Upper Elementary Schools), 
+            on Wednesdays from 3:30pm to 5:30pm. We provide transportation, snacks, activities, and a nurturing environment.
           </p>
-          <div class="flex flex-wrap gap-4">
+          <div class="flex flex-col sm:flex-row gap-4">
             <a 
               href="https://docs.google.com/forms/d/e/1FAIpQLSdIri3EaabwsN84Al7Xd7zVnWI7Jzfaoyu6NVkENI6w9FRaeA/viewform?usp=sf_link"
               target="_blank"
               rel="noopener noreferrer" 
-              class="inline-block bg-brand text-white px-6 py-2 rounded-full hover:bg-brand-dark transition"
+              class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
             >
               Register Now
             </a>
+            <a 
+              href="/connect" 
+              class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
+            >
+              Contact Us
+            </a>
           </div>
         </div>
-        <div class="rounded-xl overflow-hidden">
+        <div class="relative">
           <img 
             src="https://cdn.lakeozarkdisciples.org/images/IMG_2755.jpg"
             alt="Amos and Friends puppet show with children"
-            class="w-full h-full object-cover"
+            class="w-full h-[600px] object-cover rounded-2xl"
           />
         </div>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- Programs Grid -->
-  <div class="container mx-auto px-4 py-16">
-    <h2 class="text-3xl font-bold mb-12 text-center">Our Programs</h2>
-    <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-      {features.map(feature => (
-        <div class="bg-white p-8 rounded-2xl shadow-lg">
-          <div class="flex items-start gap-6">
-            <div class="p-3 bg-brand/10 rounded-xl text-brand">
-              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <Fragment set:html={feature.icon} />
-              </svg>
+<!-- Sunday Programs -->
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
+          Sunday Mornings
+        </span>
+        <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Amos and Friends & Children's Church</h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          Every Sunday morning at our 10:30 am Worship Service, our youngest are invited for special programming
+        </p>
+      </div>
+      
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div class="relative">
+          <img 
+            src="https://cdn-locc-org.vercel.app/media/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg"
+            alt="Children participating in church activities"
+            class="w-full h-[600px] object-cover rounded-2xl"
+          />
+        </div>
+        <div>
+          <h3 class="text-3xl font-light mb-6 text-gray-900">Interactive Learning & Fun</h3>
+          <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+            Children are invited to come forward for some time with Amos and Friends - an interactive puppet show 
+            featuring Amos the Mouse and Pastor Ron. After Amos, the children are invited to Children's Church 
+            where they learn about God's love through learning, craft, and play.
+          </p>
+          <div class="space-y-4">
+            <div class="flex items-start gap-4">
+              <div class="w-8 h-8 bg-brand/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+              </div>
+              <div>
+                <h4 class="font-semibold text-gray-900 mb-1">Interactive Puppet Show</h4>
+                <p class="text-gray-600">Engaging stories with Amos the Mouse and Pastor Ron</p>
+              </div>
             </div>
-            <div>
-              <h3 class="text-2xl font-bold mb-4">{feature.title}</h3>
-              <p class="text-gray-600">{feature.description}</p>
+            <div class="flex items-start gap-4">
+              <div class="w-8 h-8 bg-brand/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+              </div>
+              <div>
+                <h4 class="font-semibold text-gray-900 mb-1">Creative Learning</h4>
+                <p class="text-gray-600">Bible lessons through crafts, games, and activities</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="w-8 h-8 bg-brand/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+              </div>
+              <div>
+                <h4 class="font-semibold text-gray-900 mb-1">Safe Environment</h4>
+                <p class="text-gray-600">Caring volunteers and age-appropriate programming</p>
+              </div>
             </div>
           </div>
         </div>
-      ))}
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- Scripture Quote -->
-  <div class="container mx-auto px-4 py-16">
-    <div class="bg-gray-50 p-8 rounded-2xl text-center max-w-4xl mx-auto">
-      <blockquote class="text-xl italic text-gray-600 mb-4">
-        "Let the little children come to me, and do not stop them; for it is to such as these that the kingdom of heaven belongs."
-      </blockquote>
-      <p class="text-gray-500">- Matthew 19:14</p>
+<!-- Additional Programs -->
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
+          Additional Opportunities
+        </span>
+        <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Growing in Faith</h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          Additional programs to help children and youth develop their relationship with Christ
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        <div class="bg-white p-8 rounded-2xl border border-gray-200 hover:shadow-lg transition-all duration-300">
+          <div class="w-16 h-16 bg-brand/10 rounded-full flex items-center justify-center mb-6">
+            <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-semibold mb-4 text-gray-900">Pastor's Baptism Class</h3>
+          <p class="text-gray-600 leading-relaxed">
+            It is the practice of the Disciples of Christ to baptize folks when they are ready to accept Jesus 
+            as their Lord and Savior and seek to follow him as his disciple. To help young people in their faith, 
+            Pastor Ron teaches a Baptism class to prepare them.
+          </p>
+        </div>
+        
+        <div class="bg-white p-8 rounded-2xl border border-gray-200 hover:shadow-lg transition-all duration-300">
+          <div class="w-16 h-16 bg-brand/10 rounded-full flex items-center justify-center mb-6">
+            <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-semibold mb-4 text-gray-900">Boy Scouts Pack #21</h3>
+          <p class="text-gray-600 leading-relaxed">
+            Lake Ozark Christian Church is a proud sponsor of Boy Scout and Cub Scout Pack #21. 
+            These programs help young people develop leadership skills, outdoor knowledge, and character 
+            while building lasting friendships.
+          </p>
+        </div>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- Contact Section -->
-  <div class="container mx-auto px-4 py-16">
-    <div class="bg-white p-8 rounded-2xl shadow-lg max-w-4xl mx-auto text-center">
-      <h2 class="text-2xl font-bold mb-4">Get Involved</h2>
-      <p class="text-gray-600 mb-6">
-        Want to learn more about our children's programs or get involved? 
-        We'd love to hear from you!
+<!-- Scripture Quote -->
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="bg-gray-50 p-12 rounded-2xl">
+        <blockquote class="text-2xl lg:text-3xl font-light text-gray-900 mb-6 leading-relaxed">
+          "Let the little children come to me, and do not stop them; for it is to such as these that the kingdom of heaven belongs."
+        </blockquote>
+        <p class="text-lg text-gray-600 font-medium">Matthew 19:14</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Get Involved Section -->
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
+        Join Our Community
+      </span>
+      <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900">Get Involved</h2>
+      <p class="text-lg text-gray-600 mb-12 leading-relaxed">
+        Want to learn more about our children's programs or get involved? We'd love to hear from you!
       </p>
-      <div class="flex flex-wrap justify-center gap-4">
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
         <a 
           href="/connect" 
-          class="inline-flex items-center gap-2 bg-brand text-white px-8 py-3 rounded-full hover:bg-brand-dark transition"
+          class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
         >
           Contact Us
         </a>
@@ -162,11 +297,22 @@ const features = [
           href="https://docs.google.com/forms/d/e/1FAIpQLSdIri3EaabwsN84Al7Xd7zVnWI7Jzfaoyu6NVkENI6w9FRaeA/viewform?usp=sf_link"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 bg-gray-100 text-gray-800 px-8 py-3 rounded-full hover:bg-gray-200 transition"
+          class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
         >
           Register for After-School Program
         </a>
       </div>
     </div>
   </div>
+</section>
+
+<style>
+  * {
+    font-family: 'Albert Sans', system-ui, sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Albert Sans', system-ui, sans-serif;
+  }
+</style>
 </Layout>

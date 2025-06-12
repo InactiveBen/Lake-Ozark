@@ -371,6 +371,41 @@ const color = {
     };
   }
 
+  async function checkComplianceRequirements() {
+    try {
+      // Check if user is in a region that requires cookie consent
+      const response = await fetch('https://geo.locc.us/where');
+      if (!response.ok) {
+        // If geolocation fails, show banner as fallback (better safe than sorry)
+        console.log('[COOKIE_COMPLIANCE] Geolocation check failed, showing banner as fallback');
+        setTimeout(showBanner, 3000);
+        return;
+      }
+      
+      const geoData = await response.json();
+      console.log('[COOKIE_COMPLIANCE] Geolocation data:', geoData);
+      
+      // Check if any privacy laws apply to this user's location
+      const requiresConsent = geoData.gdpr || geoData.cpa || geoData.lgpd || geoData.pipeda || geoData.appa;
+      
+      if (requiresConsent) {
+        console.log('[COOKIE_COMPLIANCE] Privacy laws detected, showing cookie banner');
+        setTimeout(showBanner, 2000);
+             } else {
+         console.log('[COOKIE_COMPLIANCE] No privacy laws detected for this region, enabling analytics by default');
+         handleCookieConsent({
+           essential: true,
+           analytics: true,
+           personalization: true
+         });
+       }
+    } catch (error) {
+      console.error('[COOKIE_COMPLIANCE] Error checking compliance requirements:', error);
+      // If there's any error, show the banner as a fallback (better safe than sorry)
+      setTimeout(showBanner, 3000);
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     const banner = document.getElementById('cookie-banner');
     const acceptButton = document.getElementById('accept-cookies');
@@ -494,8 +529,8 @@ const color = {
         } 
       }));
     } else {
-      // For new visitors, show banner after a short delay
-      setTimeout(showBanner, 3000);
+      // For new visitors, check geolocation for compliance requirements
+      checkComplianceRequirements();
     }
 
     acceptButton?.addEventListener('click', () => {
