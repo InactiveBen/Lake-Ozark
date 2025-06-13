@@ -93,121 +93,153 @@ const impactAreas = [
   <!-- Online Donation Form -->
   <section id="donate" class="py-20 bg-white">
     <div class="container mx-auto px-6">
-      <div class="max-w-4xl mx-auto">
-        <div class="text-center mb-16">
-          <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
-            Secure Online Giving
-          </span>
-          <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Give Online</h2>
-          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-            Make a secure donation with flexible giving options
-          </p>
-        </div>
-        
-        <div class="bg-gray-50 rounded-2xl p-8 md:p-12">
-          <form id="donation-form" class="space-y-8">
-            <!-- Donation Type -->
-            <div>
-              <label class="block text-lg font-semibold text-gray-900 mb-4">
-                Donation Type
-              </label>
-              <div class="grid grid-cols-2 gap-4">
-                <label class="relative">
-                  <input 
-                    type="radio" 
-                    name="donationType" 
-                    value="one-time" 
-                    checked 
-                    class="peer sr-only"
-                  />
-                  <div class="p-4 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-brand peer-checked:bg-brand/5 transition-all duration-300 bg-white">
-                    <div class="text-center">
-                      <div class="text-lg font-medium text-gray-900">One-time</div>
-                      <div class="text-sm text-gray-600">Single donation</div>
-                    </div>
+      <div class="max-w-7xl mx-auto">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
+              Secure Online Giving
+            </span>
+            <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
+              Give Online
+            </h2>
+            <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+              Make a secure donation with flexible giving options. Your generosity helps us continue 
+              our ministry and outreach efforts in the community.
+            </p>
+            <div class="bg-gray-50 rounded-xl p-6 space-y-4">
+              <div class="flex items-start gap-3">
+                <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                </svg>
+                <div>
+                  <h3 class="font-medium text-gray-900">Secure & Encrypted</h3>
+                  <p class="text-gray-600">All donations processed through Stripe's secure payment system</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                </svg>
+                <div>
+                  <h3 class="font-medium text-gray-900">Tax Deductible</h3>
+                  <p class="text-gray-600">Receive an official receipt for your tax records</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="relative">
+            <div class="bg-gray-50 rounded-2xl p-8">
+              <form id="donation-form" class="space-y-6">
+                <!-- Donation Type -->
+                <div>
+                  <div class="grid grid-cols-2 gap-4">
+                    <label class="relative">
+                      <input 
+                        type="radio" 
+                        name="donationType" 
+                        value="one-time" 
+                        checked 
+                        class="peer sr-only"
+                      />
+                      <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-brand peer-checked:bg-brand/5 transition-all duration-300 bg-white">
+                        <div class="text-center">
+                          <div class="font-medium text-gray-900">One-time</div>
+                          <div class="text-sm text-gray-600">Single donation</div>
+                        </div>
+                      </div>
+                    </label>
+                    <label class="relative">
+                      <input 
+                        type="radio" 
+                        name="donationType" 
+                        value="monthly" 
+                        class="peer sr-only"
+                      />
+                      <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-brand peer-checked:bg-brand/5 transition-all duration-300 bg-white">
+                        <div class="text-center">
+                          <div class="font-medium text-gray-900">Monthly</div>
+                          <div class="text-sm text-gray-600">Recurring donation</div>
+                        </div>
+                      </div>
+                    </label>
                   </div>
-                </label>
-                <label class="relative">
-                  <input 
-                    type="radio" 
-                    name="donationType" 
-                    value="monthly" 
-                    class="peer sr-only"
-                  />
-                  <div class="p-4 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-brand peer-checked:bg-brand/5 transition-all duration-300 bg-white">
-                    <div class="text-center">
-                      <div class="text-lg font-medium text-gray-900">Monthly</div>
-                      <div class="text-sm text-gray-600">Recurring donation</div>
-                    </div>
+                </div>
+
+                <!-- Amount Selection -->
+                <div>
+                  <div class="grid grid-cols-3 gap-3 mb-4">
+                    <button type="button" class="amount-btn p-3 border-2 border-gray-200 rounded-lg hover:border-brand transition-all duration-300 bg-white" data-amount="25">
+                      <div class="font-medium">$25</div>
+                    </button>
+                    <button type="button" class="amount-btn p-3 border-2 border-gray-200 rounded-lg hover:border-brand transition-all duration-300 bg-white" data-amount="50">
+                      <div class="font-medium">$50</div>
+                    </button>
+                    <button type="button" class="amount-btn p-3 border-2 border-gray-200 rounded-lg hover:border-brand transition-all duration-300 bg-white" data-amount="100">
+                      <div class="font-medium">$100</div>
+                    </button>
                   </div>
-                </label>
-              </div>
-            </div>
+                  <div class="relative">
+                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+                    <input 
+                      type="number" 
+                      id="custom-amount" 
+                      name="amount"
+                      min="5" 
+                      max="999999"
+                      step="0.01"
+                      placeholder="Enter custom amount"
+                      class="w-full pl-7 pr-3 py-3 border-2 border-gray-200 rounded-lg focus:border-brand focus:outline-none bg-white"
+                    />
+                  </div>
+                </div>
 
-            <!-- Amount Selection -->
-            <div>
-              <label class="block text-lg font-semibold text-gray-900 mb-4">
-                Donation Amount
-              </label>
-              <div class="grid grid-cols-3 gap-4 mb-4">
-                <button type="button" class="amount-btn p-4 border-2 border-gray-200 rounded-lg hover:border-brand transition-all duration-300 bg-white" data-amount="25">
-                  <div class="text-lg font-medium">$25</div>
-                </button>
-                <button type="button" class="amount-btn p-4 border-2 border-gray-200 rounded-lg hover:border-brand transition-all duration-300 bg-white" data-amount="50">
-                  <div class="text-lg font-medium">$50</div>
-                </button>
-                <button type="button" class="amount-btn p-4 border-2 border-gray-200 rounded-lg hover:border-brand transition-all duration-300 bg-white" data-amount="100">
-                  <div class="text-lg font-medium">$100</div>
-                </button>
-              </div>
-              <div class="relative">
-                <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg">$</span>
-                <input 
-                  type="number" 
-                  id="custom-amount" 
-                  name="amount"
-                  min="5" 
-                  max="999999"
-                  step="0.01"
-                  placeholder="Enter custom amount"
-                  class="w-full pl-8 pr-4 py-4 border-2 border-gray-200 rounded-lg focus:border-brand focus:outline-none text-lg bg-white"
-                />
-              </div>
-            </div>
+                <!-- Email -->
+                <div>
+                  <input 
+                    type="email" 
+                    id="email" 
+                    name="email"
+                    required
+                    placeholder="your@email.com"
+                    class="w-full px-3 py-3 border-2 border-gray-200 rounded-lg focus:border-brand focus:outline-none bg-white"
+                  />
+                </div>
 
-            <!-- Email -->
-            <div>
-              <label for="email" class="block text-lg font-semibold text-gray-900 mb-4">
-                Email Address
-              </label>
-              <input 
-                type="email" 
-                id="email" 
-                name="email"
-                required
-                placeholder="your@email.com"
-                class="w-full px-4 py-4 border-2 border-gray-200 rounded-lg focus:border-brand focus:outline-none text-lg bg-white"
-              />
-            </div>
+                <!-- Submit Button -->
+                <div>
+                  <button 
+                    type="submit"
+                    id="donate-btn"
+                    class="w-full bg-brand hover:bg-brand-dark text-white font-medium py-3 px-6 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <span id="btn-text">Give Now</span>
+                    <span id="btn-loading" class="hidden">Processing...</span>
+                  </button>
+                </div>
 
-            <!-- Submit Button -->
-            <div class="pt-4">
-              <button 
-                type="submit"
-                id="donate-btn"
-                class="w-full bg-brand hover:bg-brand-dark text-white font-medium py-4 px-8 rounded-lg transition-all duration-300 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <span id="btn-text">Continue to Secure Payment</span>
-                <span id="btn-loading" class="hidden">Processing...</span>
-              </button>
-            </div>
+                <!-- Monthly Donation Warning -->
+                <div id="monthly-warning" class="text-center text-xs text-gray-600 bg-gray-50 rounded-lg p-3 hidden">
+                  <p class="text-gray-700">You will be charged <span id="warning-amount" class="font-medium">$50</span> monthly starting <span id="warning-date" class="font-medium"></span>. Cancel anytime.</p>
+                </div>
 
-            <!-- Security Note -->
-            <div class="text-center text-sm text-gray-600 pt-4">
-    
-              <p>Your tax-deductible donation will be processed securely through Stripe, with a receipt sent to your email. For monthly giving, you can manage, pause, or cancel your subscription anytime through the Stripe Payment Portal.</p>
+                <!-- Security Note -->
+                <div class="text-center text-xs text-gray-600 space-y-2">
+                  <p>Secure donation processed through Stripe. Tax-deductible receipt sent to your email.</p>
+                  <p>
+                    <a 
+                      href="https://billing.stripe.com/p/login/14k15102u3dA1H2144" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      class="text-brand hover:text-brand-dark underline"
+                    >
+                      Manage existing subscription →
+                    </a>
+                  </p>
+                </div>
+              </form>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>
@@ -298,6 +330,41 @@ const impactAreas = [
   </style>
 
   <script>
+    // Function to update monthly warning
+    function updateMonthlyWarning() {
+      const monthlyRadio = document.querySelector('input[name="donationType"][value="monthly"]') as HTMLInputElement;
+      const warningDiv = document.getElementById('monthly-warning');
+      const warningAmount = document.getElementById('warning-amount');
+      const warningDate = document.getElementById('warning-date');
+      const amountInput = document.getElementById('custom-amount') as HTMLInputElement;
+      
+      if (monthlyRadio && monthlyRadio.checked && warningDiv && warningAmount && warningDate) {
+        // Get current amount
+        const amount = amountInput.value || '50';
+        warningAmount.textContent = `$${amount}`;
+        
+        // Use today's date
+        const today = new Date();
+        const dateStr = today.toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        });
+        warningDate.textContent = dateStr;
+        
+        // Show warning
+        warningDiv.classList.remove('hidden');
+      } else if (warningDiv) {
+        // Hide warning for one-time donations
+        warningDiv.classList.add('hidden');
+      }
+    }
+
+    // Donation type radio buttons
+    document.querySelectorAll('input[name="donationType"]').forEach(radio => {
+      radio.addEventListener('change', updateMonthlyWarning);
+    });
+
     // Amount button selection
     document.querySelectorAll('.amount-btn').forEach(btn => {
       btn.addEventListener('click', function() {
@@ -310,6 +377,8 @@ const impactAreas = [
         if (customAmountInput && this instanceof HTMLElement && this.dataset.amount) {
           customAmountInput.value = this.dataset.amount;
         }
+        // Update warning if monthly is selected
+        updateMonthlyWarning();
       });
     });
 
@@ -319,6 +388,8 @@ const impactAreas = [
       customAmountInput.addEventListener('input', function() {
         // Remove selected class from preset buttons when typing custom amount
         document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
+        // Update warning if monthly is selected
+        updateMonthlyWarning();
       });
     }
 
