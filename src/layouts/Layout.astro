@@ -4,8 +4,41 @@ import Footer from '../components/Footer.astro';
 
 interface Props {
   title: string;
+  description?: string;
 }
-const { title } = Astro.props;
+const { 
+  title,
+  description = "Lake Ozark Christian Church - A welcoming Christian community in Lake Ozark, MO dedicated to sharing the Gospel of Jesus Christ through worship, fellowship, and service."
+} = Astro.props;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Church",
+  "name": "Lake Ozark Christian Church",
+  "url": Astro.url,
+  "description": description,
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Lake Ozark",
+    "addressRegion": "MO",
+    "addressCountry": "US"
+  },
+  "image": "https://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg",
+  "telephone": "+15733733333",
+  "openingHours": [
+    "Su 10:30-12:00",
+    "We 18:00-19:00"
+  ],
+  "sameAs": [
+    "https://www.facebook.com/LakeOzarkChristianChurch",
+    "https://www.youtube.com/@lakeozarkchristianchurch",
+    "https://www.linkedin.com/company/lake-ozark-christian-church"
+  ]
+};
+
+// Image dimensions for social media cards
+const OG_IMAGE_WIDTH = 1200;
+const OG_IMAGE_HEIGHT = 630;
 ---
 <!doctype html>
 <!-- ✨ Built by Ben Trimmer • https://ben.trimmer.dev/ -->
@@ -13,26 +46,57 @@ const { title } = Astro.props;
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="description" content="Lake Ozark Christian Church - A welcoming Christian community in Lake Ozark, MO dedicated to sharing the Gospel of Jesus Christ through worship, fellowship, and service." />
-    <meta name="keywords" content="Lake Ozark Christian Church, church, Christian, Lake Ozark, Missouri, worship, fellowship, Jesus Christ, Disciples of Christ" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta name="description" content={description} />
+    <meta name="keywords" content="Lake Ozark Christian Church, church, Christian, Lake Ozark, Missouri, worship, fellowship, Jesus Christ, Disciples of Christ, Sunday service, Bible study, community church, Lake Ozark MO, Christian community, worship service, religious organization, spiritual growth, faith community" />
     <meta name="author" content="Lake Ozark Christian Church" />
+    <meta name="geo.region" content="US-MO" />
+    <meta name="geo.placename" content="Lake Ozark" />
+    <meta name="geo.position" content="38.1986;-92.6388" />
+    <meta name="ICBM" content="38.1986, -92.6388" />
+    
+    <!-- Open Graph / Facebook -->
     <meta property="og:title" content={`${title} - Lake Ozark Christian Church`} />
-    <meta property="og:description" content="Lake Ozark Christian Church - A welcoming Christian community in Lake Ozark, MO dedicated to sharing the Gospel of Jesus Christ through worship, fellowship, and service." />
+    <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg" />
+    <meta property="og:image:width" content={OG_IMAGE_WIDTH} />
+    <meta property="og:image:height" content={OG_IMAGE_HEIGHT} />
     <meta property="og:url" content={Astro.url} />
+    <meta property="og:site_name" content="Lake Ozark Christian Church" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={`${title} - Lake Ozark Christian Church`} />
-    <meta name="twitter:description" content="Lake Ozark Christian Church - A welcoming Christian community in Lake Ozark, MO dedicated to sharing the Gospel of Jesus Christ through worship, fellowship, and service." />
+    <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content="https://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg" />
-    <meta name="robots" content="index, follow" />
+    <meta name="twitter:image:width" content={OG_IMAGE_WIDTH} />
+    <meta name="twitter:image:height" content={OG_IMAGE_HEIGHT} />
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="rating" content="general" />
+    <meta name="distribution" content="global" />
+    <meta name="coverage" content="Worldwide" />
+    <meta name="target" content="all" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="MobileOptimized" content="width" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    
     <link rel="canonical" href={Astro.url} />
     <link rel="icon" type="image/png" href="https://cdn.lakeozarkdisciples.org/media/cropped-LOCC-shortcut.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Inter:wght@400;500;600;700&family=Gochi+Hand&display=swap" rel="stylesheet" />
     <title>{title} - Lake Ozark Christian Church | Lake Ozark, MO</title>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    
     <style>
       .skip-to-main-content {
         position: absolute;
