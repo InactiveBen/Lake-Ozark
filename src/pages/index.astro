@@ -103,7 +103,18 @@ function formatDate(dateStr: string): string {
 <!-- Service Information - Clean Cards -->
 <section class="py-20 bg-white">
   <div class="container mx-auto px-6">
-    <div class="grid sm:grid-cols-3 gap-8 max-w-6xl mx-auto">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
+          Visit Us
+        </span>
+        <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Service Times & Location</h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          Join us for worship, fellowship, and community programs throughout the week
+        </p>
+      </div>
+      
+      <div class="grid sm:grid-cols-3 gap-8 max-w-6xl mx-auto">
       <div class="text-center p-8">
         <div class="w-16 h-16 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-6">
           <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -133,6 +144,61 @@ function formatDate(dateStr: string): string {
         </div>
         <h2 class="text-2xl font-semibold mb-2 text-gray-900">After-School Program</h2>
         <p class="text-lg font-light text-gray-700">Wed 3:30-5:30 PM</p>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Live Service Countdown -->
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <div id="countdown-container" class="hidden">
+        <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
+          Next Live Service
+        </span>
+        <h2 id="service-title" class="text-2xl lg:text-3xl font-light mb-6 text-gray-900">
+          Loading...
+        </h2>
+        <div class="grid grid-cols-4 gap-4 mb-8 max-w-2xl mx-auto">
+          <div class="bg-white rounded-xl p-4 shadow-sm">
+            <div id="days" class="text-3xl font-bold text-brand">00</div>
+            <div class="text-sm text-gray-600">Days</div>
+          </div>
+          <div class="bg-white rounded-xl p-4 shadow-sm">
+            <div id="hours" class="text-3xl font-bold text-brand">00</div>
+            <div class="text-sm text-gray-600">Hours</div>
+          </div>
+          <div class="bg-white rounded-xl p-4 shadow-sm">
+            <div id="minutes" class="text-3xl font-bold text-brand">00</div>
+            <div class="text-sm text-gray-600">Minutes</div>
+          </div>
+          <div class="bg-white rounded-xl p-4 shadow-sm">
+            <div id="seconds" class="text-3xl font-bold text-brand">00</div>
+            <div class="text-sm text-gray-600">Seconds</div>
+          </div>
+        </div>
+        <a 
+          id="live-stream-btn"
+          href="https://live.locc.us" 
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hidden inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300 text-lg"
+        >
+          Join Live Stream
+        </a>
+      </div>
+      
+      <div id="countdown-loading" class="py-8">
+        <div class="inline-flex items-center gap-3">
+          <div class="animate-spin rounded-full h-8 w-8 border-2 border-brand border-t-transparent"></div>
+          <p class="text-lg text-gray-600">Loading next service...</p>
+        </div>
+      </div>
+      
+      <div id="countdown-error" class="hidden py-8">
+        <p class="text-gray-600">Unable to load service information</p>
       </div>
     </div>
   </div>
@@ -454,7 +520,7 @@ function formatDate(dateStr: string): string {
           <div class="bg-gray-50 rounded-2xl p-8">
             <div class="w-full rounded-xl overflow-hidden" style="position: relative; padding-bottom: 75%;">
               <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1863.3528529656305!2d-92.64007140278689!3d38.19836395494695!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87c4c5de89ac8075%3A0xd6b3ef02b5ac85cf!2sLake%20Ozark%20Christian%20Church!5e0!3m2!1sen!2sus!4v1730580207869!5m2!1sen!2sus"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387.9011776781!2d-92.6386717!3d38.1981839!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87c4c5de89ac8075%3A0xd6b3ef02b5ac85cf!2sLake%20Ozark%20Christian%20Church!5e0!3m2!1sen!2sus!4v1730580207869!5m2!1sen!2sus"
                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
                 allowfullscreen=""
                 loading="lazy"
@@ -537,6 +603,156 @@ function formatDate(dateStr: string): string {
 <YouTubePopup />
 
 <script>
+  // Live Service Countdown functionality
+  let countdownInterval;
+  let nextServiceTime = null;
+  
+  async function fetchNextService() {
+    const loadingEl = document.getElementById('countdown-loading');
+    const errorEl = document.getElementById('countdown-error');
+    const containerEl = document.getElementById('countdown-container');
+    
+    try {
+      const response = await fetch('https://live.locc.us/graphql', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: `
+            query {
+              currentOrganization {
+                servicesConnection {
+                  services {
+                    scheduleTime
+                    content {
+                      title
+                    }
+                  }
+                }
+              }
+            }
+          `
+        })
+      });
+      
+      if (!response.ok) throw new Error('Failed to fetch service data');
+      
+      const data = await response.json();
+      const services = data.data?.currentOrganization?.servicesConnection?.services || [];
+      
+      // Find the next upcoming service
+      const now = new Date();
+             const upcomingServices = services
+         .filter(service => service.scheduleTime && new Date(service.scheduleTime) > now)
+         .sort((a, b) => new Date(a.scheduleTime).getTime() - new Date(b.scheduleTime).getTime());
+      
+      if (upcomingServices.length > 0) {
+        const nextService = upcomingServices[0];
+        nextServiceTime = new Date(nextService.scheduleTime);
+        
+                 // Update service title
+         const titleEl = document.getElementById('service-title');
+         if (titleEl && nextService.content?.title) {
+           titleEl.textContent = nextService.content.title;
+         } else if (titleEl) {
+           titleEl.textContent = 'Worship with Rev. Ron Trimmer';
+         }
+        
+        // Show countdown and start timer
+        if (loadingEl) loadingEl.style.display = 'none';
+        if (containerEl) containerEl.classList.remove('hidden');
+        
+        startCountdown();
+        
+      } else {
+        // No upcoming services
+        if (loadingEl) loadingEl.style.display = 'none';
+        if (errorEl) {
+          errorEl.classList.remove('hidden');
+          errorEl.querySelector('p').textContent = 'No upcoming services scheduled';
+        }
+      }
+      
+    } catch (error) {
+      console.error('Error fetching service data:', error);
+      if (loadingEl) loadingEl.style.display = 'none';
+      if (errorEl) errorEl.classList.remove('hidden');
+    }
+  }
+  
+  function startCountdown() {
+    if (!nextServiceTime) return;
+    
+    countdownInterval = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = nextServiceTime.getTime() - now;
+      
+      if (distance < 0) {
+        // Service has started or passed
+        clearInterval(countdownInterval);
+        
+        // Hide countdown and show "Live Now" or fetch next service
+        const containerEl = document.getElementById('countdown-container');
+        if (containerEl) {
+          containerEl.innerHTML = `
+            <span class="inline-block px-4 py-2 bg-red-100 text-red-600 text-sm font-medium mb-4">
+              Live Now
+            </span>
+            <h2 class="text-2xl lg:text-3xl font-light mb-6 text-gray-900">
+              Service is Live!
+            </h2>
+            <a 
+              href="https://live.locc.us" 
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-all duration-300 text-lg animate-pulse"
+            >
+              Join Live Stream Now
+            </a>
+          `;
+        }
+        
+        return;
+      }
+      
+      // Calculate time units
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      
+      // Update countdown display
+      const daysEl = document.getElementById('days');
+      const hoursEl = document.getElementById('hours');
+      const minutesEl = document.getElementById('minutes');
+      const secondsEl = document.getElementById('seconds');
+      const liveStreamBtn = document.getElementById('live-stream-btn');
+      
+      if (daysEl) daysEl.textContent = days.toString().padStart(2, '0');
+      if (hoursEl) hoursEl.textContent = hours.toString().padStart(2, '0');
+      if (minutesEl) minutesEl.textContent = minutes.toString().padStart(2, '0');
+      if (secondsEl) secondsEl.textContent = seconds.toString().padStart(2, '0');
+      
+      // Show/hide live stream button based on time remaining
+      // Show button only if less than 5 hours remain (5 * 60 * 60 * 1000 = 18,000,000 ms)
+      if (liveStreamBtn) {
+        if (distance < 18000000) { // Less than 5 hours
+          liveStreamBtn.classList.remove('hidden');
+        } else {
+          liveStreamBtn.classList.add('hidden');
+        }
+      }
+      
+    }, 1000);
+  }
+  
+  // Initialize countdown
+  fetchNextService();
+  
+  // Re-fetch service data every 30 minutes
+  setInterval(fetchNextService, 30 * 60 * 1000);
+  
   let currentVideoPage = 0;
   let allVideos: any[] = [];
   const videosPerPage = 3;
