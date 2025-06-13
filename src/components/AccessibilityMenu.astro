@@ -8,35 +8,32 @@ const color = {
 
 <button
   id="accessibility-toggle"
-  class="fixed top-1/2 right-0 transform -translate-y-1/2 z-50 p-3 bg-brand text-white rounded-l-full shadow-lg hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+  class="fixed top-1/2 right-0 transform -translate-y-1/2 z-50 p-3 bg-brand text-white rounded-l-full shadow-lg hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 transition-all duration-300"
   aria-label="Toggle accessibility menu"
   aria-expanded="false"
   aria-controls="accessibility-menu"
 >
-  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v2m0 8v2M6 12h2m8 0h2"/>
-    <circle cx="12" cy="12" r="3"/>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8ZM9.25 3.75C9.25 4.44036 8.69036 5 8 5C7.30964 5 6.75 4.44036 6.75 3.75C6.75 3.05964 7.30964 2.5 8 2.5C8.69036 2.5 9.25 3.05964 9.25 3.75ZM12 8H9.41901L11.2047 13H9.081L8 9.97321L6.91901 13H4.79528L6.581 8H4V6H12V8Z"/>
   </svg>
 </button>
 
-<div id="accessibility-notification" class="fixed top-4 right-4 z-50 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded hidden" role="alert">
+<div id="accessibility-notification" class="fixed top-4 right-4 z-50 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg hidden transition-all duration-300" role="alert">
   <span class="block sm:inline" id="notification-message"></span>
 </div>
 
 <div
   id="accessibility-menu"
-  class="fixed top-1/2 right-16 transform -translate-y-1/2 z-50 w-80 bg-white rounded-lg shadow-xl p-4 hidden transition-transform duration-200 ease-in-out"
+  class="fixed top-1/2 right-16 transform -translate-y-1/2 z-50 w-80 bg-white rounded-xl shadow-2xl border border-gray-200 p-6 hidden transition-all duration-300 ease-in-out"
   role="dialog"
   aria-labelledby="accessibility-title"
-  style="font-size: 16px"
+  style="font-family: 'Albert Sans', system-ui, sans-serif;"
 >
-  <!-- Rest of the menu HTML stays the same until the script tag -->
-  <div class="flex justify-between items-center mb-4">
-    <h2 id="accessibility-title" class="text-lg font-semibold text-gray-900">Accessibility Settings</h2>
+  <div class="flex justify-between items-center mb-6">
+    <h2 id="accessibility-title" class="text-xl font-semibold text-gray-900">Accessibility Settings</h2>
     <button
       id="close-accessibility"
-      class="text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 rounded"
+      class="text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 rounded-lg p-1 transition-colors duration-200"
       aria-label="Close accessibility menu"
     >
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -45,14 +42,14 @@ const color = {
     </button>
   </div>
 
-  <div class="space-y-4">
+  <div class="space-y-6">
     <!-- Font Size -->
     <div>
-      <label for="font-size" class="block text-sm font-medium text-gray-700 mb-1">Font Size</label>
-      <div class="flex items-center gap-2">
+      <label for="font-size" class="block text-sm font-medium text-gray-700 mb-2">Font Size</label>
+      <div class="flex items-center gap-3">
         <button
           id="decrease-font"
-          class="p-2 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+          class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 transition-colors duration-200 text-sm font-medium"
           aria-label="Decrease font size"
         >A-</button>
         <input
@@ -62,12 +59,12 @@ const color = {
           max="150"
           value="100"
           step="10"
-          class="flex-1"
+          class="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
           aria-label="Font size adjustment"
         />
         <button
           id="increase-font"
-          class="p-2 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+          class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 transition-colors duration-200 text-sm font-medium"
           aria-label="Increase font size"
         >A+</button>
       </div>
@@ -75,18 +72,18 @@ const color = {
 
     <!-- Contrast -->
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-2">Contrast</label>
+      <label class="block text-sm font-medium text-gray-700 mb-3">Contrast</label>
       <div class="flex gap-2">
         <button
           id="normal-contrast"
-          class="flex-1 py-2 px-3 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm"
+          class="flex-1 py-3 px-4 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm font-medium transition-all duration-200"
           aria-pressed="true"
         >
           Normal
         </button>
         <button
           id="high-contrast"
-          class="flex-1 py-2 px-3 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm"
+          class="flex-1 py-3 px-4 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm font-medium transition-all duration-200"
           aria-pressed="false"
         >
           High Contrast
@@ -96,18 +93,18 @@ const color = {
 
     <!-- Highlight Links -->
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-2">Highlight Links</label>
+      <label class="block text-sm font-medium text-gray-700 mb-3">Highlight Links</label>
       <div class="flex gap-2">
         <button
           id="normal-links"
-          class="flex-1 py-2 px-3 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm"
+          class="flex-1 py-3 px-4 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm font-medium transition-all duration-200"
           aria-pressed="true"
         >
           Normal
         </button>
         <button
           id="highlight-links"
-          class="flex-1 py-2 px-3 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm"
+          class="flex-1 py-3 px-4 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm font-medium transition-all duration-200"
           aria-pressed="false"
         >
           Highlight
@@ -117,18 +114,18 @@ const color = {
 
     <!-- Hide Images -->
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-2">Images</label>
+      <label class="block text-sm font-medium text-gray-700 mb-3">Images</label>
       <div class="flex gap-2">
         <button
           id="show-images"
-          class="flex-1 py-2 px-3 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm"
+          class="flex-1 py-3 px-4 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm font-medium transition-all duration-200"
           aria-pressed="true"
         >
           Show
         </button>
         <button
           id="hide-images"
-          class="flex-1 py-2 px-3 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm"
+          class="flex-1 py-3 px-4 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm font-medium transition-all duration-200"
           aria-pressed="false"
         >
           Hide
@@ -138,10 +135,10 @@ const color = {
 
     <!-- Font Family -->
     <div>
-      <label for="font-family" class="block text-sm font-medium text-gray-700 mb-1">Font Type</label>
+      <label for="font-family" class="block text-sm font-medium text-gray-700 mb-2">Font Type</label>
       <select
         id="font-family"
-        class="w-full rounded-md border-gray-300 shadow-sm focus:border-brand focus:ring-brand text-sm"
+        class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand focus:ring-brand text-sm py-3 px-4 bg-white"
       >
         <option value="default">Default</option>
         <option value="readable">More Readable</option>
@@ -152,10 +149,10 @@ const color = {
 
     <!-- Line Height -->
     <div>
-      <label for="line-height" class="block text-sm font-medium text-gray-700 mb-1">Line Spacing</label>
+      <label for="line-height" class="block text-sm font-medium text-gray-700 mb-2">Line Spacing</label>
       <select
         id="line-height"
-        class="w-full rounded-md border-gray-300 shadow-sm focus:border-brand focus:ring-brand text-sm"
+        class="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand focus:ring-brand text-sm py-3 px-4 bg-white"
       >
         <option value="normal">Normal</option>
         <option value="relaxed">Relaxed</option>
@@ -166,43 +163,40 @@ const color = {
     <!-- Reset Button -->
     <button
       id="reset-accessibility"
-      class="w-full mt-4 py-2 px-4 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm font-medium"
+      class="w-full mt-6 py-3 px-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm font-medium transition-all duration-200"
     >
       Reset to Default
     </button>
   </div>
 
+  <!-- Cookie Consent Modal -->
   <div 
     id="cookie-consent-modal" 
     class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[101] hidden"
     role="dialog"
     aria-labelledby="cookie-consent-title"
   >
-    <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-xl p-6 max-w-md w-[95%]">
-      <h3 id="cookie-consent-title" class="text-lg font-semibold mb-3">Save Your Settings?</h3>
-      <p class="text-gray-600 text-sm mb-4">
+    <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-xl p-6 max-w-md w-[95%]">
+      <h3 id="cookie-consent-title" class="text-lg font-semibold mb-3 text-gray-900">Save Your Settings?</h3>
+      <p class="text-gray-600 text-sm mb-4 leading-relaxed">
         To save your accessibility preferences, we need your permission to use cookies. Would you like to:
       </p>
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-3">
         <button
           id="enable-cookies"
-          class="w-full py-2 px-4 bg-brand text-white rounded hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm font-medium"
+          class="w-full py-3 px-4 bg-brand text-white rounded-lg hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm font-medium transition-all duration-200"
         >
-          Open Your Cookie Preferences
+          Open Cookie Preferences
         </button>
         <button
           id="continue-without-saving"
-          class="w-full py-2 px-4 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm font-medium"
+          class="w-full py-3 px-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-sm font-medium transition-all duration-200"
         >
           Continue Without Saving
         </button>
       </div>
     </div>
   </div>
-</div>
-
-<div id="accessibility-notification" class="fixed bottom-4 right-4 p-4 rounded-lg border hidden transition-opacity duration-300 z-50">
-  <p id="notification-message" class="text-sm"></p>
 </div>
 
 <script>
@@ -217,9 +211,9 @@ const color = {
   };
 
   // Debounce function
-  function debounce(func: Function, wait: number) {
+  function debounce<T extends (...args: any[]) => any>(func: T, wait: number): (...args: Parameters<T>) => void {
     let timeout: ReturnType<typeof setTimeout>;
-    return function executedFunction(...args: any[]) {
+    return function executedFunction(...args: Parameters<T>) {
       const later = () => {
         clearTimeout(timeout);
         func(...args);
@@ -230,7 +224,7 @@ const color = {
   }
 
   // Check if cookies are enabled
-  function areCookiesEnabled() {
+  function areCookiesEnabled(): boolean {
     const cookieEnabled = navigator.cookieEnabled;
     if (!cookieEnabled) {
       showNotification("Cookie access is required to save accessibility settings.", "warning");
@@ -258,7 +252,7 @@ const color = {
         notification.classList.add('hidden');
       }, 5000);
     }
-  }, 1000); // 1 second debounce
+  }, 1000);
 
   // Load saved settings from cookies
   function loadSettings() {
@@ -282,7 +276,7 @@ const color = {
     if (saved) {
       try {
         const settings = JSON.parse(decodeURIComponent(saved.split('=')[1]));
-        return settings;
+        return { ...defaultSettings, ...settings };
       } catch (e) {
         console.error('Error parsing accessibility settings:', e);
         return defaultSettings;
@@ -320,8 +314,14 @@ const color = {
 
   // Apply settings to the page
   function applySettings(settings: typeof defaultSettings) {
-    // Font size
-    document.documentElement.style.setProperty('--base-font-scale', `${settings.fontSize}%`);
+    // Font size - Apply to html element for global scaling
+    const fontScale = settings.fontSize / 100;
+    document.documentElement.style.setProperty('--accessibility-font-scale', settings.fontSize.toString());
+    document.documentElement.style.fontSize = `${fontScale * 16}px`; // Base font size of 16px
+    
+    // Also apply a class for CSS targeting
+    document.body.classList.remove('font-size-80', 'font-size-90', 'font-size-100', 'font-size-110', 'font-size-120', 'font-size-130', 'font-size-140', 'font-size-150');
+    document.body.classList.add(`font-size-${settings.fontSize}`);
     
     // Contrast
     if (settings.contrast === 'high') {
@@ -350,25 +350,25 @@ const color = {
       document.body.classList.remove('hide-images');
     }
 
-    // Font family
+    // Font family - Apply more broadly
+    document.body.classList.remove('readable-font', 'dyslexic-font', 'bionic-font');
+    disableBionicReading();
+    
     if (settings.fontFamily === 'readable') {
-      document.documentElement.style.setProperty('--font-family', '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif');
+      document.body.classList.add('readable-font');
     } else if (settings.fontFamily === 'dyslexic') {
-      document.documentElement.style.setProperty('--font-family', 'OpenDyslexic, "Comic Sans MS", cursive');
+      document.body.classList.add('dyslexic-font');
     } else if (settings.fontFamily === 'bionic') {
+      document.body.classList.add('bionic-font');
       enableBionicReading();
-    } else {
-      document.documentElement.style.removeProperty('--font-family');
-      disableBionicReading();
     }
 
-    // Line height
+    // Line height - Apply more comprehensively
+    document.body.classList.remove('relaxed-spacing', 'loose-spacing');
     if (settings.lineHeight === 'relaxed') {
-      document.documentElement.style.setProperty('--line-height', '1.75');
+      document.body.classList.add('relaxed-spacing');
     } else if (settings.lineHeight === 'loose') {
-      document.documentElement.style.setProperty('--line-height', '2');
-    } else {
-      document.documentElement.style.removeProperty('--line-height');
+      document.body.classList.add('loose-spacing');
     }
 
     showNotification("Accessibility settings updated successfully");
@@ -413,8 +413,8 @@ const color = {
     });
   }
 
-  // Update the showCookieWarning function with debounce
-  const showCookieWarning = debounce(() => {
+  // Check cookie warning and return boolean
+  function checkCookieWarning(): boolean {
     const cookieConsent = document.cookie.split('; ').find(row => row.startsWith('cookie-consent='));
     const consentValue = cookieConsent ? decodeURIComponent(cookieConsent.split('=')[1]) : null;
     
@@ -429,8 +429,10 @@ const color = {
         // Enable cookies button
         enableButton.onclick = () => {
           modal.classList.add('hidden');
-          document.getElementById('cookie-banner')?.classList.remove('hidden');
-          document.getElementById('cookie-banner-backdrop')?.classList.remove('hidden');
+          const cookieBanner = document.getElementById('cookie-banner');
+          const cookieBannerBackdrop = document.getElementById('cookie-banner-backdrop');
+          if (cookieBanner) cookieBanner.classList.remove('hidden');
+          if (cookieBannerBackdrop) cookieBannerBackdrop.classList.remove('hidden');
         };
         
         // Continue without saving button
@@ -440,28 +442,36 @@ const color = {
         };
         
         // Close modal on escape
-        modal.addEventListener('keydown', (e) => {
+        const handleEscape = (e: KeyboardEvent) => {
           if (e.key === 'Escape') {
             modal.classList.add('hidden');
+            modal.removeEventListener('keydown', handleEscape);
           }
-        });
+        };
+        modal.addEventListener('keydown', handleEscape);
         
         // Close on backdrop click
-        modal.addEventListener('click', (e) => {
+        const handleBackdropClick = (e: Event) => {
           if (e.target === modal) {
             modal.classList.add('hidden');
+            modal.removeEventListener('click', handleBackdropClick);
           }
-        });
+        };
+        modal.addEventListener('click', handleBackdropClick);
       }
       return true;
     }
     return false;
-  }, 10000); // 10 second debounce
+  }
+
+  // Debounced version of cookie warning check
+  const showCookieWarning = debounce(checkCookieWarning, 1000);
 
   document.addEventListener('DOMContentLoaded', () => {
     const settings = loadSettings();
     const menu = document.getElementById('accessibility-menu');
     const toggle = document.getElementById('accessibility-toggle');
+    const closeBtn = document.getElementById('close-accessibility');
     const fontSizeInput = document.getElementById('font-size') as HTMLInputElement;
     const fontFamily = document.getElementById('font-family') as HTMLSelectElement;
     const lineHeight = document.getElementById('line-height') as HTMLSelectElement;
@@ -475,11 +485,17 @@ const color = {
     const increaseFont = document.getElementById('increase-font');
     const resetButton = document.getElementById('reset-accessibility');
 
-    // Toggle menu - Moving this before any cookie checks
+    // Toggle menu
     toggle?.addEventListener('click', () => {
       const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
       toggle.setAttribute('aria-expanded', (!isExpanded).toString());
       menu?.classList.toggle('hidden');
+    });
+
+    // Close menu button
+    closeBtn?.addEventListener('click', () => {
+      toggle?.setAttribute('aria-expanded', 'false');
+      menu?.classList.add('hidden');
     });
 
     // Close menu when clicking outside
@@ -516,7 +532,7 @@ const color = {
 
     // Font size controls
     fontSizeInput?.addEventListener('input', (e) => {
-      if (showCookieWarning()) return;
+      if (checkCookieWarning()) return;
       const value = parseInt((e.target as HTMLInputElement).value);
       settings.fontSize = value;
       saveSettings(settings);
@@ -524,7 +540,7 @@ const color = {
     });
 
     decreaseFont?.addEventListener('click', () => {
-      if (showCookieWarning()) return;
+      if (checkCookieWarning()) return;
       const newValue = Math.max(80, parseInt(fontSizeInput.value) - 10);
       fontSizeInput.value = newValue.toString();
       settings.fontSize = newValue;
@@ -533,7 +549,7 @@ const color = {
     });
 
     increaseFont?.addEventListener('click', () => {
-      if (showCookieWarning()) return;
+      if (checkCookieWarning()) return;
       const newValue = Math.min(150, parseInt(fontSizeInput.value) + 10);
       fontSizeInput.value = newValue.toString();
       settings.fontSize = newValue;
@@ -543,64 +559,88 @@ const color = {
 
     // Contrast controls
     normalContrast?.addEventListener('click', () => {
-      if (showCookieWarning()) return;
+      if (checkCookieWarning()) return;
       settings.contrast = 'normal';
       normalContrast.setAttribute('aria-pressed', 'true');
       highContrast?.setAttribute('aria-pressed', 'false');
+      normalContrast.classList.add('bg-brand', 'text-white');
+      normalContrast.classList.remove('bg-gray-100');
+      highContrast?.classList.remove('bg-brand', 'text-white');
+      highContrast?.classList.add('bg-gray-100');
       saveSettings(settings);
       applySettings(settings);
     });
 
     highContrast?.addEventListener('click', () => {
-      if (showCookieWarning()) return;
+      if (checkCookieWarning()) return;
       settings.contrast = 'high';
       highContrast.setAttribute('aria-pressed', 'true');
       normalContrast?.setAttribute('aria-pressed', 'false');
+      highContrast.classList.add('bg-brand', 'text-white');
+      highContrast.classList.remove('bg-gray-100');
+      normalContrast?.classList.remove('bg-brand', 'text-white');
+      normalContrast?.classList.add('bg-gray-100');
       saveSettings(settings);
       applySettings(settings);
     });
 
     // Link highlight controls
     normalLinks?.addEventListener('click', () => {
-      if (showCookieWarning()) return;
+      if (checkCookieWarning()) return;
       settings.highlightLinks = 'normal';
       normalLinks.setAttribute('aria-pressed', 'true');
       highlightLinks?.setAttribute('aria-pressed', 'false');
+      normalLinks.classList.add('bg-brand', 'text-white');
+      normalLinks.classList.remove('bg-gray-100');
+      highlightLinks?.classList.remove('bg-brand', 'text-white');
+      highlightLinks?.classList.add('bg-gray-100');
       saveSettings(settings);
       applySettings(settings);
     });
 
     highlightLinks?.addEventListener('click', () => {
-      if (showCookieWarning()) return;
+      if (checkCookieWarning()) return;
       settings.highlightLinks = 'highlight';
       highlightLinks.setAttribute('aria-pressed', 'true');
       normalLinks?.setAttribute('aria-pressed', 'false');
+      highlightLinks.classList.add('bg-brand', 'text-white');
+      highlightLinks.classList.remove('bg-gray-100');
+      normalLinks?.classList.remove('bg-brand', 'text-white');
+      normalLinks?.classList.add('bg-gray-100');
       saveSettings(settings);
       applySettings(settings);
     });
 
     // Image visibility controls
     showImages?.addEventListener('click', () => {
-      if (showCookieWarning()) return;
+      if (checkCookieWarning()) return;
       settings.hideImages = false;
       showImages.setAttribute('aria-pressed', 'true');
       hideImages?.setAttribute('aria-pressed', 'false');
+      showImages.classList.add('bg-brand', 'text-white');
+      showImages.classList.remove('bg-gray-100');
+      hideImages?.classList.remove('bg-brand', 'text-white');
+      hideImages?.classList.add('bg-gray-100');
       saveSettings(settings);
       applySettings(settings);
     });
 
     hideImages?.addEventListener('click', () => {
-      if (showCookieWarning()) return;
+      if (checkCookieWarning()) return;
       settings.hideImages = true;
       hideImages.setAttribute('aria-pressed', 'true');
       showImages?.setAttribute('aria-pressed', 'false');
+      hideImages.classList.add('bg-brand', 'text-white');
+      hideImages.classList.remove('bg-gray-100');
+      showImages?.classList.remove('bg-brand', 'text-white');
+      showImages?.classList.add('bg-gray-100');
       saveSettings(settings);
       applySettings(settings);
     });
 
     // Font family control
     fontFamily?.addEventListener('change', (e) => {
-      if (showCookieWarning()) return;
+      if (checkCookieWarning()) return;
       settings.fontFamily = (e.target as HTMLSelectElement).value;
       saveSettings(settings);
       applySettings(settings);
@@ -608,7 +648,7 @@ const color = {
 
     // Line height control
     lineHeight?.addEventListener('change', (e) => {
-      if (showCookieWarning()) return;
+      if (checkCookieWarning()) return;
       settings.lineHeight = (e.target as HTMLSelectElement).value;
       saveSettings(settings);
       applySettings(settings);
@@ -616,61 +656,149 @@ const color = {
 
     // Reset button
     resetButton?.addEventListener('click', () => {
-      if (showCookieWarning()) return;
-      settings.fontSize = defaultSettings.fontSize;
-      settings.contrast = defaultSettings.contrast;
-      settings.fontFamily = defaultSettings.fontFamily;
-      settings.lineHeight = defaultSettings.lineHeight;
-      settings.highlightLinks = defaultSettings.highlightLinks;
-      settings.hideImages = defaultSettings.hideImages;
+      if (checkCookieWarning()) return;
+      Object.assign(settings, defaultSettings);
       
       if (fontSizeInput) fontSizeInput.value = defaultSettings.fontSize.toString();
       if (fontFamily) fontFamily.value = defaultSettings.fontFamily;
       if (lineHeight) lineHeight.value = defaultSettings.lineHeight;
-      if (normalContrast) normalContrast.setAttribute('aria-pressed', 'true');
-      if (highContrast) highContrast.setAttribute('aria-pressed', 'false');
-      if (normalLinks) normalLinks.setAttribute('aria-pressed', 'true');
-      if (highlightLinks) highlightLinks.setAttribute('aria-pressed', 'false');
-      if (showImages) showImages.setAttribute('aria-pressed', 'true');
-      if (hideImages) hideImages.setAttribute('aria-pressed', 'false');
+      
+      // Reset all accessibility classes
+      document.documentElement.style.fontSize = '';
+      document.body.classList.remove('font-size-80', 'font-size-90', 'font-size-100', 'font-size-110', 'font-size-120', 'font-size-130', 'font-size-140', 'font-size-150');
+      document.body.classList.remove('readable-font', 'dyslexic-font', 'bionic-font');
+      document.body.classList.remove('relaxed-spacing', 'loose-spacing');
+      document.body.classList.remove('high-contrast', 'highlight-links', 'hide-images');
+      disableBionicReading();
+      
+      // Reset button states
+      normalContrast?.setAttribute('aria-pressed', 'true');
+      highContrast?.setAttribute('aria-pressed', 'false');
+      normalLinks?.setAttribute('aria-pressed', 'true');
+      highlightLinks?.setAttribute('aria-pressed', 'false');
+      showImages?.setAttribute('aria-pressed', 'true');
+      hideImages?.setAttribute('aria-pressed', 'false');
+      
+      // Reset button styles
+      normalContrast?.classList.add('bg-brand', 'text-white');
+      normalContrast?.classList.remove('bg-gray-100');
+      highContrast?.classList.remove('bg-brand', 'text-white');
+      highContrast?.classList.add('bg-gray-100');
+      
+      normalLinks?.classList.add('bg-brand', 'text-white');
+      normalLinks?.classList.remove('bg-gray-100');
+      highlightLinks?.classList.remove('bg-brand', 'text-white');
+      highlightLinks?.classList.add('bg-gray-100');
+      
+      showImages?.classList.add('bg-brand', 'text-white');
+      showImages?.classList.remove('bg-gray-100');
+      hideImages?.classList.remove('bg-brand', 'text-white');
+      hideImages?.classList.add('bg-gray-100');
       
       saveSettings(settings);
       applySettings(settings);
       showNotification("Settings reset to default");
-      window.location.reload(); // Refresh the page after resetting settings
     });
 
-    // Make the notification clickable to open cookie settings
-    const notification = document.getElementById('accessibility-notification');
-    notification?.addEventListener('click', () => {
-      document.getElementById('cookie-banner')?.classList.remove('hidden');
-      document.getElementById('cookie-banner-backdrop')?.classList.remove('hidden');
-    });
+    // Initialize button states on load
+    const initializeButtonStates = () => {
+      if (settings.contrast === 'high') {
+        highContrast?.classList.add('bg-brand', 'text-white');
+        highContrast?.classList.remove('bg-gray-100');
+        normalContrast?.classList.remove('bg-brand', 'text-white');
+        normalContrast?.classList.add('bg-gray-100');
+      } else {
+        normalContrast?.classList.add('bg-brand', 'text-white');
+        normalContrast?.classList.remove('bg-gray-100');
+        highContrast?.classList.remove('bg-brand', 'text-white');
+        highContrast?.classList.add('bg-gray-100');
+      }
+      
+      if (settings.highlightLinks === 'highlight') {
+        highlightLinks?.classList.add('bg-brand', 'text-white');
+        highlightLinks?.classList.remove('bg-gray-100');
+        normalLinks?.classList.remove('bg-brand', 'text-white');
+        normalLinks?.classList.add('bg-gray-100');
+      } else {
+        normalLinks?.classList.add('bg-brand', 'text-white');
+        normalLinks?.classList.remove('bg-gray-100');
+        highlightLinks?.classList.remove('bg-brand', 'text-white');
+        highlightLinks?.classList.add('bg-gray-100');
+      }
+      
+      if (settings.hideImages) {
+        hideImages?.classList.add('bg-brand', 'text-white');
+        hideImages?.classList.remove('bg-gray-100');
+        showImages?.classList.remove('bg-brand', 'text-white');
+        showImages?.classList.add('bg-gray-100');
+      } else {
+        showImages?.classList.add('bg-brand', 'text-white');
+        showImages?.classList.remove('bg-gray-100');
+        hideImages?.classList.remove('bg-brand', 'text-white');
+        hideImages?.classList.add('bg-gray-100');
+      }
+    };
+    
+    initializeButtonStates();
   });
 </script>
 
 <style is:global>
   :root {
-    --base-font-scale: 100%;
+    --accessibility-font-scale: 100;
     --text-color: inherit;
     --background-color: inherit;
     --link-color: inherit;
-    --font-family: inherit;
-    --line-height: inherit;
   }
 
-  body {
-    font-size: var(--base-font-scale);
-    color: var(--text-color);
-    background-color: var(--background-color);
-    font-family: var(--font-family);
-    line-height: var(--line-height);
+  /* Font size classes */
+  .font-size-80 { font-size: 0.8rem !important; }
+  .font-size-90 { font-size: 0.9rem !important; }
+  .font-size-100 { font-size: 1rem !important; }
+  .font-size-110 { font-size: 1.1rem !important; }
+  .font-size-120 { font-size: 1.2rem !important; }
+  .font-size-130 { font-size: 1.3rem !important; }
+  .font-size-140 { font-size: 1.4rem !important; }
+  .font-size-150 { font-size: 1.5rem !important; }
+
+  /* Font family classes */
+  .readable-font,
+  .readable-font * {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
   }
 
+  .dyslexic-font,
+  .dyslexic-font * {
+    font-family: "OpenDyslexic", "Comic Sans MS", cursive !important;
+  }
+
+  /* Line spacing classes */
+  .relaxed-spacing,
+  .relaxed-spacing p,
+  .relaxed-spacing div,
+  .relaxed-spacing span,
+  .relaxed-spacing li {
+    line-height: 1.75 !important;
+  }
+
+  .loose-spacing,
+  .loose-spacing p,
+  .loose-spacing div,
+  .loose-spacing span,
+  .loose-spacing li {
+    line-height: 2 !important;
+  }
+
+  /* High contrast mode */
   .high-contrast {
-    --text-color: #000000;
-    --background-color: #FFFFFF;
-    --link-color: #0000EE;
+    --text-color: #000000 !important;
+    --background-color: #FFFFFF !important;
+    --link-color: #0000EE !important;
+  }
+
+  .high-contrast * {
+    color: var(--text-color) !important;
+    background-color: var(--background-color) !important;
   }
 
   .high-contrast a {
@@ -682,49 +810,85 @@ const color = {
     border: 2px solid currentColor !important;
   }
 
+  /* Link highlighting */
   .highlight-links a {
     background-color: #ffd900 !important;
     color: #000000 !important;
     font-weight: bold !important;
     font-size: calc(100% + 5%) !important;
-    padding: 0 2px;
-    border-radius: 2px;
+    padding: 2px 4px;
+    border-radius: 4px;
     text-decoration: underline;
+    box-shadow: 0 0 0 2px #ffd900;
   }
 
-  .hide-images img {
+  /* Hide images */
+  .hide-images img,
+  .hide-images [role="img"] {
     display: none !important;
   }
 
+  /* Bionic reading */
   .bionic-processed strong {
     font-weight: 700;
     color: inherit;
   }
 
-  /* Slider styling */
+  /* Enhanced slider styling to match design */
   input[type="range"] {
     -webkit-appearance: none;
+    appearance: none;
     width: 100%;
     height: 8px;
     border-radius: 4px;
     background: #E5E7EB;
     outline: none;
+    cursor: pointer;
   }
 
   input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 16px;
-    height: 16px;
+    appearance: none;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    background: var(--brand-color, #1D4ED8);
+    background: #8B5A2B;
     cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
 
   input[type="range"]::-moz-range-thumb {
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    background: var(--brand-color, #1D4ED8);
+    background: #8B5A2B;
     cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+  }
+
+  input[type="range"]::-moz-range-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Albert Sans font integration */
+  #accessibility-menu {
+    font-family: 'Albert Sans', system-ui, sans-serif;
+  }
+
+  #accessibility-menu h2,
+  #accessibility-menu label,
+  #accessibility-menu button,
+  #accessibility-menu select {
+    font-family: 'Albert Sans', system-ui, sans-serif;
   }
 </style>
