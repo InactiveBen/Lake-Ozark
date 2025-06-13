@@ -399,7 +399,7 @@ function formatDate(dateStr: string): string {
             <form id="homepage-donation-form" class="space-y-6">
               <!-- Donation Type -->
               <div>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-2 gap-4 mb-4">
                   <label class="relative">
                     <input 
                       type="radio" 
@@ -419,16 +419,32 @@ function formatDate(dateStr: string): string {
                     <input 
                       type="radio" 
                       name="donationType" 
-                      value="monthly" 
+                      value="recurring" 
                       class="peer sr-only"
                     />
                     <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-brand peer-checked:bg-brand/5 transition-all duration-300 bg-white">
                       <div class="text-center">
-                        <div class="font-medium text-gray-900">Monthly</div>
-                        <div class="text-sm text-gray-600">Recurring donation</div>
+                        <div class="font-medium text-gray-900">Recurring</div>
+                        <div class="text-sm text-gray-600">Ongoing giving</div>
                       </div>
                     </div>
                   </label>
+                </div>
+                
+                <!-- Recurring Frequency Selection -->
+                <div id="homepage-frequency-selection" class="hidden">
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Frequency</label>
+                  <select 
+                    name="frequency" 
+                    id="homepage-frequency-select"
+                    class="w-full px-3 py-3 border-2 border-gray-200 rounded-lg focus:border-brand focus:outline-none bg-white"
+                  >
+                    <option value="weekly">Weekly</option>
+                    <option value="biweekly">Every Two Weeks</option>
+                    <option value="monthly" selected>Monthly</option>
+                    <option value="every6months">Every Six Months</option>
+                    <option value="yearly">Every Year</option>
+                  </select>
                 </div>
               </div>
 
@@ -484,9 +500,9 @@ function formatDate(dateStr: string): string {
                 </button>
               </div>
 
-              <!-- Monthly Donation Warning -->
-              <div id="homepage-monthly-warning" class="text-center text-xs text-gray-600 bg-gray-50 rounded-lg p-3 hidden">
-                <p class="text-gray-700">You will be charged <span id="homepage-warning-amount" class="font-medium">$50</span> monthly starting <span id="homepage-warning-date" class="font-medium"></span>. Cancel anytime.</p>
+              <!-- Recurring Donation Warning -->
+              <div id="homepage-recurring-warning" class="text-center text-xs text-gray-600 bg-gray-50 rounded-lg p-3 hidden">
+                <p class="text-gray-700">You will be charged <span id="homepage-warning-amount" class="font-medium">$50</span> <span id="homepage-warning-frequency" class="font-medium">monthly</span> starting <span id="homepage-warning-date" class="font-medium"></span>. Cancel anytime.</p>
               </div>
 
               <!-- Security Note -->
@@ -856,26 +872,39 @@ function formatDate(dateStr: string): string {
   });
 
   // Homepage donation form functionality
-  // Function to update monthly warning
-  function updateMonthlyWarning() {
-    const monthlyRadio = document.querySelector('input[name="donationType"][value="monthly"]') as HTMLInputElement;
-    const warningDiv = document.getElementById('homepage-monthly-warning');
+  // Function to update recurring warning
+  function updateHomepageRecurringWarning() {
+    const recurringRadio = document.querySelector('input[name="donationType"][value="recurring"]') as HTMLInputElement;
+    const warningDiv = document.getElementById('homepage-recurring-warning');
     const warningAmount = document.getElementById('homepage-warning-amount');
+    const warningFrequency = document.getElementById('homepage-warning-frequency');
     const warningDate = document.getElementById('homepage-warning-date');
     const amountInput = document.getElementById('homepage-custom-amount') as HTMLInputElement;
+    const frequencySelect = document.getElementById('homepage-frequency-select') as HTMLSelectElement;
     
-    if (monthlyRadio && monthlyRadio.checked && warningDiv && warningAmount && warningDate) {
+    if (recurringRadio && recurringRadio.checked && warningDiv && warningAmount && warningFrequency && warningDate) {
       // Get current amount
       const amount = amountInput.value || '50';
       warningAmount.textContent = `$${amount}`;
       
-             // Use today's date
-       const today = new Date();
-       const dateStr = today.toLocaleDateString('en-US', { 
-         year: 'numeric', 
-         month: 'long', 
-         day: 'numeric' 
-       });
+      // Get frequency text
+      const frequency = frequencySelect.value;
+      const frequencyMap: Record<string, string> = {
+        'weekly': 'weekly',
+        'biweekly': 'every two weeks',
+        'monthly': 'monthly',
+        'every6months': 'every six months',
+        'yearly': 'yearly'
+      };
+      warningFrequency.textContent = frequencyMap[frequency] || 'monthly';
+      
+      // Use today's date
+      const today = new Date();
+      const dateStr = today.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
       warningDate.textContent = dateStr;
       
       // Show warning
@@ -886,10 +915,33 @@ function formatDate(dateStr: string): string {
     }
   }
 
+  // Function to toggle frequency selection
+  function toggleHomepageFrequencySelection() {
+    const recurringRadio = document.querySelector('input[name="donationType"][value="recurring"]') as HTMLInputElement;
+    const frequencyDiv = document.getElementById('homepage-frequency-selection');
+    
+    if (frequencyDiv) {
+      if (recurringRadio && recurringRadio.checked) {
+        frequencyDiv.classList.remove('hidden');
+      } else {
+        frequencyDiv.classList.add('hidden');
+      }
+    }
+  }
+
   // Donation type radio buttons
   document.querySelectorAll('input[name="donationType"]').forEach(radio => {
-    radio.addEventListener('change', updateMonthlyWarning);
+    radio.addEventListener('change', () => {
+      toggleHomepageFrequencySelection();
+      updateHomepageRecurringWarning();
+    });
   });
+
+  // Frequency selection change
+  const homepageFrequencySelect = document.getElementById('homepage-frequency-select');
+  if (homepageFrequencySelect) {
+    homepageFrequencySelect.addEventListener('change', updateHomepageRecurringWarning);
+  }
 
   // Amount button selection
   document.querySelectorAll('.homepage-amount-btn').forEach(btn => {
@@ -903,8 +955,8 @@ function formatDate(dateStr: string): string {
       if (customAmountInput && this instanceof HTMLElement && this.dataset.amount) {
         customAmountInput.value = this.dataset.amount;
       }
-      // Update warning if monthly is selected
-      updateMonthlyWarning();
+      // Update warning if recurring is selected
+      updateHomepageRecurringWarning();
     });
   });
 
@@ -914,8 +966,8 @@ function formatDate(dateStr: string): string {
     homepageCustomAmountInput.addEventListener('input', function() {
       // Remove selected class from preset buttons when typing custom amount
       document.querySelectorAll('.homepage-amount-btn').forEach(b => b.classList.remove('selected'));
-      // Update warning if monthly is selected
-      updateMonthlyWarning();
+      // Update warning if recurring is selected
+      updateHomepageRecurringWarning();
     });
   }
 
@@ -936,11 +988,13 @@ function formatDate(dateStr: string): string {
       const amountValue = formData.get('amount');
       const emailValue = formData.get('email');
       const donationTypeValue = formData.get('donationType');
+      const frequencyValue = formData.get('frequency');
       
       // Type-safe conversions
       const amount = parseFloat(amountValue?.toString() || '0');
       const email = emailValue?.toString() || '';
       const donationType = donationTypeValue?.toString() || '';
+      const frequency = frequencyValue?.toString() || 'monthly';
       
       // Validate amount
       if (!amount || amount < 5) {
@@ -974,7 +1028,8 @@ function formatDate(dateStr: string): string {
           body: JSON.stringify({
             amount: amount,
             email: email,
-            donationType: donationType
+            donationType: donationType,
+            frequency: frequency
           })
         });
         
