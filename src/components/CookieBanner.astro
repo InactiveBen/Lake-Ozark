@@ -1,10 +1,13 @@
 ---
 const color = {
   bg: 'bg-white',
-  text: 'text-brand-dark', 
+  text: 'text-gray-900', 
+  textSecondary: 'text-gray-600',
   icon: 'text-brand',
   iconBg: 'bg-brand/10',
-  button: 'bg-brand hover:bg-brand-dark'
+  button: 'bg-brand hover:bg-brand-dark',
+  buttonSecondary: 'bg-gray-900 hover:bg-gray-800',
+  buttonTertiary: 'bg-transparent hover:bg-gray-50 border-2 border-gray-200 hover:border-gray-300'
 };
 ---
 
@@ -17,7 +20,7 @@ const color = {
 
 <div 
   id="cookie-banner" 
-  class={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100] ${color.bg} shadow-xl rounded-xl p-4 sm:p-6 w-[95%] sm:w-[90%] md:w-[500px] max-h-[90vh] overflow-y-auto animate-slideUp hidden`}
+  class={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100] ${color.bg} shadow-2xl rounded-xl p-4 sm:p-6 w-[95%] sm:w-[90%] md:w-[480px] lg:w-[520px] max-h-[90vh] overflow-y-auto animate-slideUp hidden border border-gray-200`}
   role="dialog"
   aria-labelledby="cookie-title"
   aria-describedby="cookie-description"
@@ -25,39 +28,45 @@ const color = {
 >
   <button
     id="close-cookie-banner"
-    class={`${color.text} hover:opacity-75 focus:ring-2 focus:ring-brand focus:outline-none transition absolute top-4 right-4`}
+    class={`${color.textSecondary} hover:${color.text} focus:ring-2 focus:ring-brand focus:outline-none transition absolute top-4 right-4 p-1.5 rounded-full hover:bg-gray-100`}
     aria-label="Close cookie settings"
   >
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
     </svg>
   </button>
 
-  <div class="flex flex-col items-center text-center gap-3 sm:gap-4 mt-2">
-    <div class={`${color.iconBg} rounded-full p-2 sm:p-3`}>
-      <svg 
-        xmlns="http://www.w3.org/2000/svg" 
-        class={`h-5 w-5 sm:h-6 sm:w-6 ${color.icon}`}
-        fill="none" 
-        viewBox="0 0 24 24" 
-        stroke="currentColor"
-        aria-hidden="true"
-      >
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-      </svg>
-    </div>
-    
-    <div class="space-y-3 sm:space-y-4">
-      <div>
-        <h3 id="cookie-title" class={`font-semibold ${color.text} text-base sm:text-lg mb-1 sm:mb-2`}>Cookie Preferences</h3>
-        <p id="cookie-description" class={`${color.text} text-xs sm:text-sm`}>
-          Please choose which cookies you allow us to use. Essential cookies are always enabled as they are necessary for the website to function properly.
-        </p>
+  <div class="space-y-5">
+    <!-- Header Section -->
+    <div class="text-center">
+      <div class={`${color.iconBg} rounded-full p-3 w-12 h-12 mx-auto mb-4 flex items-center justify-center`}>
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          class={`h-6 w-6 ${color.icon}`}
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
       </div>
+      
+      <span class="inline-block px-3 py-1.5 bg-brand/10 text-brand text-xs font-medium mb-3 rounded-full">
+        Privacy Settings
+      </span>
+      <h3 id="cookie-title" class={`text-xl lg:text-2xl font-light ${color.text} mb-3 leading-tight`}>Cookie Preferences</h3>
+      <p id="cookie-description" class={`text-sm ${color.textSecondary} leading-relaxed`}>
+        We respect your privacy. Please choose which cookies you'd like to allow.
+      </p>
+    </div>
 
-      <div class="space-y-3 sm:space-y-4 bg-gray-50 p-3 sm:p-4 rounded-lg text-left">
+    <!-- Cookie Options -->
+    <div class="space-y-3">
+      <!-- Essential Cookies -->
+      <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
         <div class="flex items-start gap-3">
-          <div class="flex items-center h-5">
+          <div class="flex items-center h-5 mt-0.5">
             <input
               id="essential-cookies"
               type="checkbox"
@@ -68,16 +77,24 @@ const color = {
             />
             <span class="sr-only-focusable">Essential cookies are always enabled and cannot be disabled</span>
           </div>
-          <div class="space-y-1 flex-1">
-            <label for="essential-cookies" class="text-sm font-medium text-gray-900">Essential Cookies</label>
-            <p id="essential-cookies-description" class="text-xs text-gray-600">
-              Required for core website functionality. These cannot be disabled.
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <label for="essential-cookies" class="text-sm font-semibold text-gray-900">Essential Cookies</label>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                Required
+              </span>
+            </div>
+            <p id="essential-cookies-description" class="text-xs text-gray-600 leading-relaxed">
+              Necessary for the website to function properly. Enable core functionality like security and accessibility.
             </p>
           </div>
         </div>
+      </div>
 
+      <!-- Analytics Cookies -->
+      <div class="bg-white rounded-lg p-4 border-2 border-gray-200 hover:border-brand/30 transition-colors">
         <div class="flex items-start gap-3">
-          <div class="flex items-center h-5">
+          <div class="flex items-center h-5 mt-0.5">
             <input
               id="analytics-cookies"
               type="checkbox"
@@ -87,16 +104,24 @@ const color = {
             />
             <span id="analytics-tooltip" class="sr-only-focusable"></span>
           </div>
-          <div class="space-y-1 flex-1">
-            <label for="analytics-cookies" class="text-sm font-medium text-gray-900">Analytics Cookies</label>
-            <p id="analytics-cookies-description" class="text-xs text-gray-600">
-              Help us understand how visitors interact with our website by collecting anonymous usage data.
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <label for="analytics-cookies" class="text-sm font-semibold text-gray-900">Analytics Cookies</label>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                Optional
+              </span>
+            </div>
+            <p id="analytics-cookies-description" class="text-xs text-gray-600 leading-relaxed">
+              Help us understand how visitors use our website with anonymous usage data.
             </p>
           </div>
         </div>
+      </div>
 
+      <!-- Personalization Cookies -->
+      <div class="bg-white rounded-lg p-4 border-2 border-gray-200 hover:border-brand/30 transition-colors">
         <div class="flex items-start gap-3">
-          <div class="flex items-center h-5">
+          <div class="flex items-center h-5 mt-0.5">
             <input
               id="personalization-cookies"
               type="checkbox"
@@ -106,63 +131,92 @@ const color = {
             />
             <span id="personalization-tooltip" class="sr-only-focusable"></span>
           </div>
-          <div class="space-y-1 flex-1">
-            <label for="personalization-cookies" class="text-sm font-medium text-gray-900">Personalization Cookies</label>
-            <p id="personalization-cookies-description" class="text-xs text-gray-600">
-              Enable personalized content and remember your preferences.
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <label for="personalization-cookies" class="text-sm font-semibold text-gray-900">Personalization Cookies</label>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                Optional
+              </span>
+            </div>
+            <p id="personalization-cookies-description" class="text-xs text-gray-600 leading-relaxed">
+              Remember your preferences for a more tailored experience.
             </p>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="bg-gray-50 p-3 sm:p-4 rounded-lg text-left">
-        <div class="flex items-start gap-3">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+    <!-- Data Processing Information -->
+    <div class="bg-brand/5 rounded-lg p-4 border border-brand/20">
+      <div class="flex items-start gap-3">
+        <div class={`${color.iconBg} rounded-full p-1.5 flex-shrink-0`}>
+          <svg xmlns="http://www.w3.org/2000/svg" class={`h-4 w-4 ${color.icon}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
-          <div class="space-y-1 flex-1">
-            <p class="text-sm font-medium text-gray-900">Data Processing Information</p>
-            <p class="text-xs text-gray-600">
-              When enabled, we share limited data (device type, approximate location, usage patterns) with our analytics providers to improve our services. Your personal information is never sold. <br> We suggest you review our <a href="/privacy" class="text-brand hover:text-brand-dark underline focus:ring-2 focus:ring-brand focus:outline-none">Privacy Policy</a> for more information.
-            </p>
-          </div>
+        </div>
+        <div class="flex-1">
+          <h4 class="text-sm font-semibold text-gray-900 mb-1">Data Processing</h4>
+          <p class="text-xs text-gray-600 leading-relaxed">
+            We share limited data with analytics providers to improve our services. Your personal information is never sold. 
+            Review our <a href="/privacy" class="text-brand hover:text-brand-dark underline font-medium focus:ring-2 focus:ring-brand focus:outline-none rounded">Privacy Policy</a> for details.
+          </p>
         </div>
       </div>
+    </div>
 
-      <div class="flex flex-col gap-2">
-        <button
-          id="accept-cookies"
-          class={`${color.button} text-white font-medium text-xs sm:text-sm py-2 sm:py-2.5 px-4 rounded-full transition transform hover:scale-105 hover:shadow-lg focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:outline-none w-full text-center`}
-        >
-          Accept All Cookies
-        </button>
+    <!-- Action Buttons -->
+    <div class="space-y-3">
+      <button
+        id="accept-cookies"
+        class={`w-full ${color.button} text-white font-medium py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:outline-none`}
+      >
+        Accept All Cookies
+      </button>
+      
+      <div class="grid sm:grid-cols-2 gap-3">
         <button
           id="save-preferences"
-          class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium text-xs sm:text-sm py-2 sm:py-2.5 px-4 rounded-full transition transform hover:scale-105 hover:shadow-lg focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:outline-none w-full text-center"
+          class={`${color.buttonSecondary} text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-300 hover:shadow-lg focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:outline-none text-sm`}
         >
-          Save Current Preferences
+          Save Preferences
         </button>
         <button
           id="reject-cookies"
-          class="bg-transparent hover:bg-gray-100 text-gray-600 font-medium text-xs sm:text-sm py-2 sm:py-2.5 px-4 rounded-full transition transform hover:scale-105 focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:outline-none w-full text-center"
+          class={`${color.buttonTertiary} text-gray-700 font-medium py-2.5 px-4 rounded-lg transition-all duration-300 hover:shadow-lg focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:outline-none text-sm`}
         >
-          Reject All (Essential Only)
+          Essential Only
         </button>
       </div>
+    </div>
 
-      <p class="text-gray-500 text-[10px] sm:text-xs">
-        Manage your preferences anytime via the <b class="flex items-center justify-center gap-2 inline-flex">Your Privacy Choices <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 14" class="w-8 h-4 inline" aria-hidden="true">
-          <path fill="#FFFFFF" d="M7.4,12.8h6.8l3.1-11.6H7.4C4.2,1.2,1.6,3.8,1.6,7S4.2,12.8,7.4,12.8z"/>
-          <path fill="#0066FF" d="M22.6,0H7.4c-3.9,0-7,3.1-7,7s3.1,7,7,7h15.2c3.9,0,7-3.1,7-7S26.4,0,22.6,0z M1.6,7c0-3.2,2.6-5.8,5.8-5.8h9.9l-3.1,11.6H7.4C4.2,12.8,1.6,10.2,1.6,7z"/>
-          <path fill="#FFFFFF" d="M24.6,4c0.2,0.2,0.2,0.6,0,0.8l0,0L22.5,7l2.2,2.2c0.2,0.2,0.2,0.6,0,0.8c-0.2,0.2-0.6,0.2-0.8,0l0,0l-2.2-2.2L19.5,10c-0.2,0.2-0.6,0.2-0.8,0c-0.2-0.2-0.2-0.6,0-0.8l0,0L20.8,7l-2.2-2.2c-0.2-0.2-0.2-0.6,0-0.8c0.2-0.2,0.6-0.2,0.8,0l0,0l2.2,2.2L23.8,4C24,3.8,24.4,3.8,24.6,4z"/>
-          <path fill="#0066FF" d="M12.7,4.1c0.2,0.2,0.3,0.6,0.1,0.8l0,0L8.6,9.8C8.5,9.9,8.4,10,8.3,10c-0.2,0.1-0.5,0.1-0.7-0.1l0,0L5.4,7.7c-0.2-0.2-0.2-0.6,0-0.8c0.2-0.2,0.6-0.2,0.8,0l0,0L8,8.6l3.8-4.5C12,3.9,12.4,3.9,12.7,4.1z"/>
-        </svg></b> link in the footer.
+    <!-- Footer Note -->
+    <div class="text-center pt-3 border-t border-gray-200">
+      <p class="text-gray-500 text-xs leading-relaxed">
+        Change preferences anytime via 
+        <span class="inline-flex items-center gap-1 font-medium">
+          Your Privacy Choices 
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 14" class="w-5 h-2.5 inline" aria-hidden="true">
+            <path fill="#FFFFFF" d="M7.4,12.8h6.8l3.1-11.6H7.4C4.2,1.2,1.6,3.8,1.6,7S4.2,12.8,7.4,12.8z"/>
+            <path fill="#0066FF" d="M22.6,0H7.4c-3.9,0-7,3.1-7,7s3.1,7,7,7h15.2c3.9,0,7-3.1,7-7S26.4,0,22.6,0z M1.6,7c0-3.2,2.6-5.8,5.8-5.8h9.9l-3.1,11.6H7.4C4.2,12.8,1.6,10.2,1.6,7z"/>
+            <path fill="#FFFFFF" d="M24.6,4c0.2,0.2,0.2,0.6,0,0.8l0,0L22.5,7l2.2,2.2c0.2,0.2,0.2,0.6,0,0.8c-0.2,0.2-0.6,0.2-0.8,0l0,0l-2.2-2.2L19.5,10c-0.2,0.2-0.6,0.2-0.8,0c-0.2-0.2-0.2-0.6,0-0.8l0,0L20.8,7l-2.2-2.2c-0.2-0.2-0.2-0.6,0-0.8c0.2-0.2,0.6-0.2,0.8,0l0,0l2.2,2.2L23.8,4C24,3.8,24.4,3.8,24.6,4z"/>
+            <path fill="#0066FF" d="M12.7,4.1c0.2,0.2,0.3,0.6,0.1,0.8l0,0L8.6,9.8C8.5,9.9,8.4,10,8.3,10c-0.2,0.1-0.5,0.1-0.7-0.1l0,0L5.4,7.7c-0.2-0.2-0.2-0.6,0-0.8c0.2-0.2,0.6-0.2,0.8,0l0,0L8,8.6l3.8-4.5C12,3.9,12.4,3.9,12.7,4.1z"/>
+          </svg>
+        </span>
+        in the footer.
       </p>
     </div>
   </div>
 </div>
 
 <style>
+  * {
+    font-family: 'Albert Sans', system-ui, sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Albert Sans', system-ui, sans-serif;
+  }
+
   @keyframes slideUp {
     from {
       transform: translate(-50%, -40%);
@@ -214,7 +268,7 @@ const color = {
     overflow: visible;
     clip: auto;
     white-space: normal;
-    background-color: #1a56db;
+    background-color: #8B5A2B;
     color: white;
     border-radius: 0.375rem;
     z-index: 101;
@@ -386,19 +440,39 @@ const color = {
       console.log('[COOKIE_COMPLIANCE] Geolocation data:', geoData);
       
       // Check if any privacy laws apply to this user's location
-      const requiresConsent = geoData.gdpr || geoData.cpa || geoData.lgpd || geoData.pipeda || geoData.appa;
+      // GDPR: General Data Protection Regulation (EU)
+      // CCPA: California Consumer Privacy Act (California, US) 
+      // LGPD: Lei Geral de Proteção de Dados (Brazil)
+      // PIPEDA: Personal Information Protection and Electronic Documents Act (Canada)
+      // APPA: Australian Privacy Principles Act (Australia)
+      const privacyLaws = {
+        gdpr: geoData.gdpr || false,
+        ccpa: geoData.ccpa || geoData.cpa || false, // Check both ccpa and cpa for compatibility
+        lgpd: geoData.lgpd || false,
+        pipeda: geoData.pipeda || false,
+        appa: geoData.appa || false
+      };
+      
+      const requiresConsent = privacyLaws.gdpr || privacyLaws.ccpa || privacyLaws.lgpd || privacyLaws.pipeda || privacyLaws.appa;
+      
+      console.log('[COOKIE_COMPLIANCE] Privacy law status:', privacyLaws);
+      console.log('[COOKIE_COMPLIANCE] Requires consent:', requiresConsent);
       
       if (requiresConsent) {
-        console.log('[COOKIE_COMPLIANCE] Privacy laws detected, showing cookie banner');
+        const applicableLaws = Object.entries(privacyLaws)
+          .filter(([_, applies]) => applies)
+          .map(([law, _]) => law.toUpperCase())
+          .join(', ');
+        console.log(`[COOKIE_COMPLIANCE] Privacy laws detected (${applicableLaws}), showing cookie banner`);
         setTimeout(showBanner, 2000);
-             } else {
-         console.log('[COOKIE_COMPLIANCE] No privacy laws detected for this region, enabling analytics by default');
-         handleCookieConsent({
-           essential: true,
-           analytics: true,
-           personalization: true
-         });
-       }
+      } else {
+        console.log('[COOKIE_COMPLIANCE] No privacy laws detected for this region, enabling analytics by default');
+        handleCookieConsent({
+          essential: true,
+          analytics: true,
+          personalization: true
+        });
+      }
     } catch (error) {
       console.error('[COOKIE_COMPLIANCE] Error checking compliance requirements:', error);
       // If there's any error, show the banner as a fallback (better safe than sorry)

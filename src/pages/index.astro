@@ -757,8 +757,8 @@ function formatDate(dateStr: string): string {
     if (minutesEl) minutesEl.textContent = minutes.toString().padStart(2, '0');
     if (secondsEl) secondsEl.textContent = seconds.toString().padStart(2, '0');
     
-    // Show/hide live stream button based on time remaining
     // Show button only if less than 5 hours remain (5 * 60 * 60 * 1000 = 18,000,000 ms)
+    // (18,000,000 ms = 5 hours? I think??? am I dumb? perhaps)
     if (liveStreamBtn) {
       if (distance < 18000000) { // Less than 5 hours
         liveStreamBtn.classList.remove('hidden');
