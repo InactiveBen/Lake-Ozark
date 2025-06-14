@@ -347,30 +347,40 @@ const color = {
   }
 
   function loadSentry() {
-    // Check if Sentry is available and hasn't been initialized yet
-    if (window.Sentry && !window.Sentry.isInitialized()) {
+    // Check if Sentry is available
+    if (window.Sentry) {
       try {
-        window.Sentry.init({
-          dsn: "https://d4be77c82b4c10fc61de7d57705ddc7b@o4509496802738176.ingest.us.sentry.io/4509496803786752",
-          integrations: [
-            window.Sentry.browserTracingIntegration(),
-            window.Sentry.replayIntegration({
-              maskAllText: false,
-              blockAllMedia: false,
-            }),
-          ],
-          // Performance Monitoring
-          tracesSampleRate: 1.0,
-          // Session Replay
-          replaysSessionSampleRate: 0.1,
-          replaysOnErrorSampleRate: 1.0,
-        });
-        console.log('[SENTRY_CONSENT] You have consented to analytics cookies. Sentry error monitoring is now enabled.');
+        // Initialize Sentry if not already initialized
+        if (!window.Sentry.getCurrentHub || !window.Sentry.getCurrentHub().getClient()) {
+          window.Sentry.init({
+            dsn: "https://d4be77c82b4c10fc61de7d57705ddc7b@o4509496802738176.ingest.us.sentry.io/4509496803786752",
+            integrations: [
+              window.Sentry.browserTracingIntegration(),
+              window.Sentry.replayIntegration({
+                maskAllText: false,
+                blockAllMedia: false,
+              }),
+            ],
+            // Performance Monitoring
+            tracesSampleRate: 1.0,
+            // Session Replay
+            replaysSessionSampleRate: 0.1,
+            replaysOnErrorSampleRate: 1.0,
+            environment: "production",
+          });
+          console.log('[SENTRY_CONSENT] You have consented to Sentry Analytics and Logging by accepting the cookie banner, enabling analytics cookies, or clicking "Accept All Cookies.');
+        } else {
+          // Re-enable Sentry if it was disabled
+          const hub = window.Sentry.getCurrentHub();
+          const client = hub.getClient();
+          if (client) {
+            client.getOptions().enabled = true;
+            console.log('[SENTRY_CONSENT] Sentry error monitoring has been re-enabled.');
+          }
+        }
       } catch (error) {
-        console.error('[SENTRY_ERROR] Failed to initialize Sentry:', error);
+        console.error('[SENTRY_ERROR] Failed to enable Sentry:', error);
       }
-    } else if (window.Sentry && window.Sentry.isInitialized()) {
-      console.log('[SENTRY_LOADED] Sentry was already initialized, we have nothing to do here.');
     } else {
       console.log('[SENTRY_UNAVAILABLE] Sentry is not available on this page.');
     }
@@ -417,15 +427,16 @@ const color = {
     
     if (window.Sentry) {
       try {
-        // Close any active Sentry session
+        // Disable Sentry instead of unloading it completely
         if (window.Sentry.getCurrentHub) {
           const hub = window.Sentry.getCurrentHub();
-          if (hub && hub.getClient()) {
-            hub.getClient().close();
+          const client = hub.getClient();
+          if (client) {
+            client.getOptions().enabled = false;
           }
         }
         
-        // Clear Sentry data
+        // Clear any existing scope data
         if (window.Sentry.configureScope) {
           window.Sentry.configureScope((scope) => {
             scope.clear();
@@ -434,10 +445,10 @@ const color = {
         
         console.log('[SENTRY_UNLOAD] Sentry has been successfully disabled and all tracking data cleared');
       } catch (error) {
-        console.error('[SENTRY_UNLOAD_ERROR] Failed to properly unload Sentry:', error);
+        console.error('[SENTRY_UNLOAD_ERROR] Failed to properly disable Sentry:', error);
       }
     } else {
-      console.log('[SENTRY_UNLOAD] Sentry was not loaded, nothing to unload.');
+      console.log('[SENTRY_UNLOAD] Sentry was not loaded, nothing to disable.');
     }
   }
 
