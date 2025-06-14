@@ -281,6 +281,7 @@ const color = {
       showCookieSettings: () => void;
       dataLayer: any[];
       gtag: (...args: any[]) => void;
+      Sentry: any;
     }
   }
 
@@ -345,6 +346,36 @@ const color = {
     }
   }
 
+  function loadSentry() {
+    // Check if Sentry is available and hasn't been initialized yet
+    if (window.Sentry && !window.Sentry.isInitialized()) {
+      try {
+        window.Sentry.init({
+          dsn: "https://d4be77c82b4c10fc61de7d57705ddc7b@o4509496802738176.ingest.us.sentry.io/4509496803786752",
+          integrations: [
+            window.Sentry.browserTracingIntegration(),
+            window.Sentry.replayIntegration({
+              maskAllText: false,
+              blockAllMedia: false,
+            }),
+          ],
+          // Performance Monitoring
+          tracesSampleRate: 1.0,
+          // Session Replay
+          replaysSessionSampleRate: 0.1,
+          replaysOnErrorSampleRate: 1.0,
+        });
+        console.log('[SENTRY_CONSENT] You have consented to analytics cookies. Sentry error monitoring is now enabled.');
+      } catch (error) {
+        console.error('[SENTRY_ERROR] Failed to initialize Sentry:', error);
+      }
+    } else if (window.Sentry && window.Sentry.isInitialized()) {
+      console.log('[SENTRY_LOADED] Sentry was already initialized, we have nothing to do here.');
+    } else {
+      console.log('[SENTRY_UNAVAILABLE] Sentry is not available on this page.');
+    }
+  }
+
   function unloadGoogleAnalytics() {
     console.log('[G_UNLOAD] User has rejected Google Analytics, we are unloading it.');
     
@@ -381,6 +412,35 @@ const color = {
     console.log('[G_UNLOAD] Google Analytics has been successfully unloaded and all tracking data cleared');
   }
 
+  function unloadSentry() {
+    console.log('[SENTRY_UNLOAD] User has rejected analytics cookies, disabling Sentry error monitoring.');
+    
+    if (window.Sentry) {
+      try {
+        // Close any active Sentry session
+        if (window.Sentry.getCurrentHub) {
+          const hub = window.Sentry.getCurrentHub();
+          if (hub && hub.getClient()) {
+            hub.getClient().close();
+          }
+        }
+        
+        // Clear Sentry data
+        if (window.Sentry.configureScope) {
+          window.Sentry.configureScope((scope) => {
+            scope.clear();
+          });
+        }
+        
+        console.log('[SENTRY_UNLOAD] Sentry has been successfully disabled and all tracking data cleared');
+      } catch (error) {
+        console.error('[SENTRY_UNLOAD_ERROR] Failed to properly unload Sentry:', error);
+      }
+    } else {
+      console.log('[SENTRY_UNLOAD] Sentry was not loaded, nothing to unload.');
+    }
+  }
+
   function handleCookieConsent(preferences: CookiePreferences) {
     const date = new Date();
     date.setTime(date.getTime() + (365 * 24 * 60 * 60 * 1000));
@@ -402,8 +462,10 @@ const color = {
     // Load or unload Google Analytics based on analytics preference
     if (preferences.analytics) {
       loadGoogleAnalytics();
+      loadSentry();
     } else {
       unloadGoogleAnalytics();
+      unloadSentry();
     }
     
     // Dispatch event for other components to react to cookie changes
@@ -590,9 +652,10 @@ const color = {
       if (analytics) analytics.checked = preferences.analytics === true;
       if (personalization) personalization.checked = preferences.personalization === true;
       
-      // Load Google Analytics if previously consented
+      // Load Google Analytics and Sentry if previously consented
       if (preferences.analytics === true) {
         loadGoogleAnalytics();
+        loadSentry();
       }
       
       // Trigger the event with existing preferences
