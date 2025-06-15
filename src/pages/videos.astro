@@ -75,6 +75,22 @@ import Layout from '../layouts/Layout.astro';
           <div id="video-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Videos will be loaded here -->
           </div>
+          
+          <!-- View More Button -->
+          <div class="text-center mt-16">
+            <p class="text-gray-600 mb-6">Looking for older content?</p>
+            <a 
+              href="https://www.youtube.com/channel/UCUcLKfZo5Su6-ypmt1dkPKA"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300 text-lg"
+            >
+              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+              View Older Videos on YouTube
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -115,6 +131,43 @@ import Layout from '../layouts/Layout.astro';
   // Parse date from video title and return both formatted date and day of week
   function parseDateFromVideoTitle(title: string): string {
     const cleanTitle = title.replace(/^(Service|LOCC|Church Service)\s*[-|]\s*/i, '').replace(/\s*[-|]\s*(Service)$/i, '');
+    
+    // Check for MMDDYY or MDDYY format first (like "103022" for 10/30/22)
+    const compactDateMatch = cleanTitle.match(/\b(\d{5,6})\b/);
+    if (compactDateMatch) {
+      const dateStr = compactDateMatch[1];
+      let month, day, year;
+      
+      if (dateStr.length === 6) {
+        // MMDDYY format
+        month = parseInt(dateStr.substring(0, 2));
+        day = parseInt(dateStr.substring(2, 4));
+        year = parseInt(dateStr.substring(4, 6));
+      } else if (dateStr.length === 5) {
+        // MDDYY format
+        month = parseInt(dateStr.substring(0, 1));
+        day = parseInt(dateStr.substring(1, 3));
+        year = parseInt(dateStr.substring(3, 5));
+      }
+      
+      // Convert 2-digit year to 4-digit year
+      if (year !== undefined) {
+        year = year + 2000;
+        
+        // Validate the parsed date
+        if (month >= 1 && month <= 12 && day >= 1 && day <= 31 && year >= 2000) {
+          const date = new Date(year, month - 1, day);
+          // Double-check that the date is valid (e.g., not Feb 30th)
+          if (date.getMonth() === month - 1 && date.getDate() === day) {
+            return date.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            });
+          }
+        }
+      }
+    }
     
     const patterns = [
       /(\d{1,2})\/(\d{1,2})\/(\d{2,4})/,
@@ -180,6 +233,39 @@ import Layout from '../layouts/Layout.astro';
   // Get day of week from video title
   function getDayOfWeekFromTitle(title: string): string {
     const cleanTitle = title.replace(/^(Service|LOCC|Church Service)\s*[-|]\s*/i, '').replace(/\s*[-|]\s*(Service)$/i, '');
+    
+    // Check for MMDDYY or MDDYY format first (like "103022" for 10/30/22)
+    const compactDateMatch = cleanTitle.match(/\b(\d{5,6})\b/);
+    if (compactDateMatch) {
+      const dateStr = compactDateMatch[1];
+      let month, day, year;
+      
+      if (dateStr.length === 6) {
+        // MMDDYY format
+        month = parseInt(dateStr.substring(0, 2));
+        day = parseInt(dateStr.substring(2, 4));
+        year = parseInt(dateStr.substring(4, 6));
+      } else if (dateStr.length === 5) {
+        // MDDYY format
+        month = parseInt(dateStr.substring(0, 1));
+        day = parseInt(dateStr.substring(1, 3));
+        year = parseInt(dateStr.substring(3, 5));
+      }
+      
+      // Convert 2-digit year to 4-digit year
+      if (year !== undefined) {
+        year = year + 2000;
+        
+        // Validate the parsed date
+        if (month >= 1 && month <= 12 && day >= 1 && day <= 31 && year >= 2000) {
+          const date = new Date(year, month - 1, day);
+          // Double-check that the date is valid (e.g., not Feb 30th)
+          if (date.getMonth() === month - 1 && date.getDate() === day) {
+            return date.toLocaleDateString('en-US', { weekday: 'long' });
+          }
+        }
+      }
+    }
     
     const patterns = [
       /(\d{1,2})\/(\d{1,2})\/(\d{2,4})/,

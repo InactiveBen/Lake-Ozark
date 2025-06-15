@@ -2,7 +2,7 @@
  * @Author: BensonByte
  * @Date:   06/12/25 07:21:35 C5T
  * @Last Modified by:   BensonByte
- * @Last Modified time: 06/15/25 17:34:08 C7T
+ * @Last Modified time: 06/15/25 18:02:01 C2T
  */
 import { YouTube } from 'youtube-sr';
 
@@ -32,6 +32,39 @@ const customThumbnailMap = {
 
 function parseDateFromTitle(title) {
   const cleanTitle = title.replace(/^(Service|LOCC|Church Service)\s*[-|]\s*/i, '').replace(/\s*[-|]\s*(Service)$/i, '');
+  
+  // Check for MMDDYY or MDDYY format first (like "103022" for 10/30/22)
+  const compactDateMatch = cleanTitle.match(/\b(\d{5,6})\b/);
+  if (compactDateMatch) {
+    const dateStr = compactDateMatch[1];
+    let month, day, year;
+    
+    if (dateStr.length === 6) {
+      // MMDDYY format
+      month = parseInt(dateStr.substring(0, 2));
+      day = parseInt(dateStr.substring(2, 4));
+      year = parseInt(dateStr.substring(4, 6));
+    } else if (dateStr.length === 5) {
+      // MDDYY format
+      month = parseInt(dateStr.substring(0, 1));
+      day = parseInt(dateStr.substring(1, 3));
+      year = parseInt(dateStr.substring(3, 5));
+    }
+    
+    // Convert 2-digit year to 4-digit year
+    if (year !== undefined) {
+      year = year + 2000;
+      
+      // Validate the parsed date
+      if (month >= 1 && month <= 12 && day >= 1 && day <= 31 && year >= 2000) {
+        const date = new Date(year, month - 1, day);
+        // Double-check that the date is valid (e.g., not Feb 30th)
+        if (date.getMonth() === month - 1 && date.getDate() === day) {
+          return date;
+        }
+      }
+    }
+  }
   
   const patterns = [
     // Standard formats
