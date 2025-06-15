@@ -136,68 +136,65 @@
       </div>
     </div>
   </div>
-  <div class="bg-brand/5 py-12">
-    <div class="container mx-auto px-6">
-      <div class="max-w-7xl mx-auto text-center">
-        <h2 class="text-4xl md:text-5xl font-light text-gray-900 mb-8">
-          There's a place for you here <span class="text-brand">♥</span>
-        </h2>
-    </div>
-  </div>
-
-
+  <!-- Bottom Footer -->
   <div class="border-t border-gray-200 bg-white">
-    <div class="container mx-auto px-6 py-8">
+    <div class="container mx-auto px-6 py-12">
       <div class="max-w-7xl mx-auto">
-        <div class="flex flex-col items-center text-center gap-6">
-          <div class="max-w-3xl">
-            <p class="text-gray-600 text-sm">
-              &copy; {new Date().getFullYear()} Lake Ozark Christian Church. All rights reserved.
-            </p>
-  
-            <p class="text-gray-500 text-xs mt-1">
-              Lake Ozark Christian Church, Inc. is a registered 501(c)(3) nonprofit organization (EIN 43-1193150).
-            </p>
-  
-            <p class="text-gray-500 text-xs mt-3">
-              <b>External Links Disclaimer:</b> Links to external websites are provided for convenience only. Lake Ozark Christian Church is not responsible for the content, accuracy, or privacy practices of any external sites. Your use of external links is at your own risk.
-            </p>
-  
-            <p class="text-gray-500 text-xs mt-3">
-              <b>Privacy & Cookies:</b> We are committed to your privacy. Please review our <a href="/privacy" class="text-gray-600 hover:text-brand transition-colors underline decoration-1 underline-offset-2 hover:decoration-2">Privacy Policy</a> for details on data collection and usage. You can manage your privacy preferences and cookie settings anytime by clicking
-              <button
-                onclick="window.showCookieSettings()"
-                class="text-gray-600 hover:text-brand transition-colors underline decoration-1 underline-offset-2 hover:decoration-2 bg-transparent border-none p-0 cursor-pointer"
-              >
-                Cookie Settings
-              </button>
-              or via the "Your Privacy Choices" link where available.
-            </p>
-  
-            <p class="text-gray-500 text-xs mt-3">
-              <b>Official Communications:</b> Our official communications may originate from the following domains:
-              <a href="https://lakeozark.cc" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-brand underline decoration-1 underline-offset-2 hover:decoration-2">lakeozark.cc</a>,
-              <a href="https://locc.us" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-brand underline decoration-1 underline-offset-2 hover:decoration-2">locc.us</a>,
-              <a href="https://lakeozarkdisciples.org" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-brand underline decoration-1 underline-offset-2 hover:decoration-2">lakeozarkdisciples.org</a>, and
-              <a href="https://lakeozarkchristian.org" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-brand underline decoration-1 underline-offset-2 hover:decoration-2">lakeozarkchristian.org</a>.
-            </p>
-            <p class="text-gray-500 text-xs mt-3">
-              <b>Billing Emails:</b> You may receive email communications from our payment processor <a href="https://stripe.com" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-brand underline decoration-1 underline-offset-2 hover:decoration-2">stripe.com</a> regarding billing and payment confirmations. These emails will come from official Stripe email addresses ending in <a href="https://stripe.com" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-brand underline decoration-1 underline-offset-2 hover:decoration-2">stripe.com</a>.
-            </p>
-          </div>
-  
+        <!-- Copyright & Nonprofit Status -->
+        <div class="text-center mb-8">
+          <p class="text-gray-600 text-sm font-medium">
+            &copy; {new Date().getFullYear()} Lake Ozark Christian Church. All rights reserved.
+          </p>
+          <p class="text-gray-500 text-xs mt-2">
+            Lake Ozark Christian Church, Inc. is a registered 501(c)(3) nonprofit organization (EIN 43-1193150).
+          </p>
+        </div>
+
+        <!-- Legal & Policy Information -->
+        <div class="text-center space-y-8 mb-8">
+          <!-- Privacy & Data -->
           <div>
-            <p class="text-gray-500 text-xs">
-              Made with <span class="text-red-500">❤️</span> by
-              <a href="https://ben.trimmer.dev/?ref=LOCC" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-brand transition-colors underline decoration-1 underline-offset-2 hover:decoration-2">
-                Ben Trimmer
-              </a>
-            </p>
-            <p class="text-gray-500 text-xs mt-1">
-              Contact Webmaster:
-              <a href="mailto:ben@locc.us" class="text-gray-600 hover:text-brand transition-colors underline decoration-1 underline-offset-2 hover:decoration-2">ben@locc.us</a>
-            </p>
+            <h4 class="font-semibold text-gray-700 text-sm mb-3">Privacy & Data</h4>
+            <div class="space-y-2 text-xs text-gray-500">
+              <p>
+                We are committed to your privacy. Review our 
+                <a href="/privacy" class="text-gray-600 hover:text-brand transition-colors underline decoration-1 underline-offset-2">Privacy Policy</a> 
+                for details on data collection and usage.
+              </p>
+              <p>
+                Manage your preferences: 
+                <button
+                  onclick="window.showCookieSettings()"
+                  class="text-gray-600 hover:text-brand transition-colors underline decoration-1 underline-offset-2 bg-transparent border-none p-0 cursor-pointer"
+                >
+                  Cookie Settings
+                </button>
+              </p>
+            </div>
           </div>
+
+
+        <!-- External Links & Communications -->
+        <div class="border-t border-gray-100 pt-4 mt-4">
+          <div class="space-y-4">
+            <div class="text-xs text-gray-400 text-center">
+              <strong>Disclaimer:</strong> External links are provided for convenience only. 
+              We are not responsible for the content, accuracy, or privacy practices of external sites.
+            </div>
+            <div class="text-xs text-gray-500">
+              <p class="mb-2">Our official communications may originate from:</p>
+              <div class="flex flex-wrap justify-center gap-2">
+                <a href="https://lakeozark.cc" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-brand underline decoration-1 underline-offset-2">lakeozark.cc</a>
+                <span class="text-gray-400">•</span>
+                <a href="https://locc.us" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-brand underline decoration-1 underline-offset-2">locc.us</a>
+                <span class="text-gray-400">•</span>
+                <a href="https://lakeozarkdisciples.org" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-brand underline decoration-1 underline-offset-2">lakeozarkdisciples.org</a>
+                <span class="text-gray-400">•</span>
+                <a href="https://lakeozarkchristian.org" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-brand underline decoration-1 underline-offset-2">lakeozarkchristian.org</a>
+              </div>
+            </div>
+          </div>
+        </div>
         </div>
       </div>
     </div>
