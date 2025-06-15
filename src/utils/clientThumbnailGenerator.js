@@ -151,6 +151,9 @@ export function generateThumbnail(video, options = {}) {
     day: 'numeric'
   });
 
+  // Get the day of the week
+  const dayOfWeek = parsedDate.toLocaleDateString('en-US', { weekday: 'long' });
+
   return new Promise((resolve) => {
     // Create canvas
     const canvas = document.createElement('canvas');
@@ -196,7 +199,7 @@ export function generateThumbnail(video, options = {}) {
       // Text positioning on the left side - moved to a better position
       const textX = width * 0.08;
       
-      // "Sunday Service" text with shadow - moved up slightly
+      // Day of week service text with shadow - moved up slightly
       ctx.fillStyle = BRAND_COLORS.white;
       ctx.font = `bold ${height * 0.12}px Arial, sans-serif`;
       ctx.textAlign = 'left';
@@ -205,7 +208,7 @@ export function generateThumbnail(video, options = {}) {
       ctx.shadowBlur = 8;
       ctx.shadowOffsetX = 2;
       ctx.shadowOffsetY = 2;
-      ctx.fillText('Sunday Service', textX, height * 0.16);
+      ctx.fillText(`${dayOfWeek} Service`, textX, height * 0.16);
       
       // Date text - moved up slightly
       ctx.font = `bold ${height * 0.09}px Arial, sans-serif`;
@@ -272,12 +275,12 @@ export function generateThumbnail(video, options = {}) {
       // Text positioning - moved to a better position
       const textX = width * 0.08;
       
-      // "Sunday Service" text - moved up slightly
+      // Day of week service text - moved up slightly
       ctx.fillStyle = BRAND_COLORS.darkGray;
       ctx.font = `bold ${height * 0.12}px Arial, sans-serif`;
       ctx.textAlign = 'left';
       ctx.textBaseline = 'middle';
-      ctx.fillText('Sunday Service', textX, height * 0.23);
+      ctx.fillText(`${dayOfWeek} Service`, textX, height * 0.23);
       
       // Date text - moved up slightly
       ctx.font = `bold ${height * 0.09}px Arial, sans-serif`;
