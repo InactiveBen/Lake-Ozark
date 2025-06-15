@@ -71,18 +71,18 @@ const { videos } = Astro.props;
       if (!expanded) {
         // Show all videos with a fade-in effect
         videos.slice(3).forEach(video => {
-          video.style.display = 'block';
-          video.style.opacity = '0';
+          (video as HTMLElement).style.display = 'block';
+          (video as HTMLElement).style.opacity = '0';
           requestAnimationFrame(() => {
-            video.style.transition = 'opacity 0.3s ease-in-out';
-            video.style.opacity = '1';
+            (video as HTMLElement).style.transition = 'opacity 0.3s ease-in-out';
+            (video as HTMLElement).style.opacity = '1';
           });
         });
         viewMoreBtn.textContent = 'Show Less';
       } else {
         // Hide videos beyond the first 3
         videos.slice(3).forEach(video => {
-          video.style.display = 'none';
+          (video as HTMLElement).style.display = 'none';
         });
         viewMoreBtn.textContent = 'View More Services';
       }
