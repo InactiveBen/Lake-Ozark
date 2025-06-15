@@ -16,8 +16,8 @@
       <span>Watch our Sunday Services Live!</span>
     </a>
     <button 
+      id="youtube-popup-close"
       class="text-white/80 hover:text-white transition p-1"
-      onclick="closeYouTubePopup()"
       aria-label="Close popup"
     >
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -28,6 +28,12 @@
 </div>
 
 <script>
+  declare global {
+    interface Window {
+      closeYouTubePopup: () => void;
+    }
+  }
+
   function checkServiceTime() {
     const now = new Date();
     const day = now.getDay();
@@ -35,8 +41,8 @@
     const minutes = now.getMinutes();
     const currentTime = hours * 60 + minutes;
 
-    // Check if it's Sunday (5) and between 3:00 PM (900 minutes) and 5:00 PM (1020 minutes)
-const isSundayService = day === 0 && currentTime >= 600 && currentTime <= 705;
+    // Check if it's Sunday (0) and between 10:00 AM (600 minutes) and 11:45 AM (705 minutes)
+    const isSundayService = day === 0 && currentTime >= 600 && currentTime <= 705;
 
     const popup = document.getElementById('youtube-popup');
     if (popup) {
@@ -56,7 +62,7 @@ const isSundayService = day === 0 && currentTime >= 600 && currentTime <= 705;
       // Store the closed state until the next session
       localStorage.setItem('youtubePopupClosed', 'true');
       
-      // Clear the stored state after session ends (11:45  Sunday)
+      // Clear the stored state after session ends (5:00 PM Sunday)
       const now = new Date();
       const sessionEnd = new Date();
       sessionEnd.setHours(17, 0, 0, 0); // 5:00 PM
@@ -66,6 +72,17 @@ const isSundayService = day === 0 && currentTime >= 600 && currentTime <= 705;
       }, sessionEnd.getTime() - now.getTime());
     }
   }
+
+  // Make function globally accessible
+  window.closeYouTubePopup = closeYouTubePopup;
+
+  // Add event listener to close button
+  document.addEventListener('DOMContentLoaded', () => {
+    const closeButton = document.getElementById('youtube-popup-close');
+    if (closeButton) {
+      closeButton.addEventListener('click', closeYouTubePopup);
+    }
+  });
 
   // Check every minute
   setInterval(checkServiceTime, 60000);
