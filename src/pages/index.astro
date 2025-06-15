@@ -998,6 +998,7 @@ function formatDate(dateStr: string): string {
     }
   }
 
+  // Clear cache on initial load to force regeneration with new church background
   loadVideos();
   
   document.addEventListener('astro:page-load', () => {

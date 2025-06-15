@@ -1,0 +1,445 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Service Videos | Lake Ozark Christian Church">
+  <main>
+    <!-- Hero Section - Clean and Minimalist -->
+    <section class="relative overflow-hidden bg-white">
+      <div class="absolute inset-0">
+        <img 
+          src="http://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg" 
+          alt="Church Sanctuary"
+          class="w-full h-full object-cover"
+        />
+        <div class="absolute inset-0 bg-black/40"></div>
+      </div>
+
+      <div class="relative container mx-auto px-6 py-32 md:py-40">
+        <div class="max-w-4xl">
+          <p class="text-xl md:text-2xl text-white/90 mb-4 font-light leading-relaxed">
+            Worship from anywhere
+          </p>
+          <h1 class="text-5xl md:text-7xl font-semibold text-white mb-8 leading-tight tracking-tight">
+            Service Videos
+          </h1>
+          <p class="text-lg md:text-xl text-white/80 mb-12 max-w-2xl font-light leading-relaxed">
+            Watch our recent services and special events. Join us online for worship and community.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a 
+              href="https://live.locc.us?utm_source=lakeozarkdisciples&utm_medium=videos_page&utm_campaign=hero_button"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300 text-lg"
+            >
+              Watch Live
+            </a>
+            <a 
+              href="#videos" 
+              class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-medium rounded-lg transition-all duration-300 text-lg"
+            >
+              Browse Videos
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Videos Section -->
+    <section id="videos" class="py-20 bg-white">
+      <div class="container mx-auto px-6">
+        <div class="max-w-7xl mx-auto">
+          <div class="text-center mb-16">
+            <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
+              Watch & Listen
+            </span>
+            <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Catch Up on Past Services</h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+              Browse our complete collection of worship services, sermons, and special events. 
+              Never miss a message that speaks to your heart.
+            </p>
+          </div>
+          
+          <!-- Loading State -->
+          <div id="video-loading" class="text-center py-16">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-brand mx-auto mb-4"></div>
+            <p class="text-gray-600">Loading videos...</p>
+          </div>
+
+          <!-- Error State -->
+          <div id="video-error" style="display: none;" class="text-center py-16"></div>
+
+          <!-- Videos Grid -->
+          <div id="video-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Videos will be loaded here -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Video Modal -->
+    <div id="video-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+      <div class="bg-white rounded-lg max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden">
+        <div class="flex justify-between items-center p-6 border-b">
+          <h3 id="video-modal-title" class="text-xl font-semibold text-gray-900"></h3>
+          <button 
+            id="close-video-modal"
+            class="text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="aspect-video">
+          <iframe 
+            id="video-iframe"
+            class="w-full h-full"
+            src=""
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  let allVideos: any[] = [];
+  let thumbnailGenerator: any = null;
+
+  // Parse date from video title and return both formatted date and day of week
+  function parseDateFromVideoTitle(title: string): string {
+    const cleanTitle = title.replace(/^(Service|LOCC|Church Service)\s*[-|]\s*/i, '').replace(/\s*[-|]\s*(Service)$/i, '');
+    
+    const patterns = [
+      /(\d{1,2})\/(\d{1,2})\/(\d{2,4})/,
+      /(\d{1,2})-(\d{1,2})-(\d{2,4})/,
+      /(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),?\s+(\d{4})/i,
+      /(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})(st|nd|rd|th),?\s+(\d{4})/i,
+      /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),?\s+(\d{4})/i,
+      /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})(st|nd|rd|th),?\s+(\d{4})/i
+    ];
+    
+    for (const pattern of patterns) {
+      const match = cleanTitle.match(pattern);
+      if (match) {
+        let month, day, year;
+        
+        if (pattern.source.includes('January|February')) {
+          const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                             'July', 'August', 'September', 'October', 'November', 'December'];
+          month = monthNames.indexOf(match[1]) + 1;
+          
+          if (pattern.source.includes('st|nd|rd|th')) {
+            day = parseInt(match[2]);
+            year = parseInt(match[4]);
+          } else {
+            day = parseInt(match[2]);
+            year = parseInt(match[3]);
+          }
+        } else if (pattern.source.includes('Jan|Feb')) {
+          const monthAbbr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+          month = monthAbbr.indexOf(match[1]) + 1;
+          
+          if (pattern.source.includes('st|nd|rd|th')) {
+            day = parseInt(match[2]);
+            year = parseInt(match[4]);
+          } else {
+            day = parseInt(match[2]);
+            year = parseInt(match[3]);
+          }
+        } else {
+          month = parseInt(match[1]);
+          day = parseInt(match[2]);
+          year = parseInt(match[3]);
+        }
+        
+        if (year < 50) year += 2000;
+        else if (year < 100) year += 1900;
+        
+        if (month >= 1 && month <= 12 && day >= 1 && day <= 31 && year >= 1900) {
+          const date = new Date(year, month - 1, day);
+          return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          });
+        }
+      }
+    }
+    
+    return 'Date not available';
+  }
+
+  // Get day of week from video title
+  function getDayOfWeekFromTitle(title: string): string {
+    const cleanTitle = title.replace(/^(Service|LOCC|Church Service)\s*[-|]\s*/i, '').replace(/\s*[-|]\s*(Service)$/i, '');
+    
+    const patterns = [
+      /(\d{1,2})\/(\d{1,2})\/(\d{2,4})/,
+      /(\d{1,2})-(\d{1,2})-(\d{2,4})/,
+      /(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),?\s+(\d{4})/i,
+      /(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})(st|nd|rd|th),?\s+(\d{4})/i,
+      /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),?\s+(\d{4})/i,
+      /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})(st|nd|rd|th),?\s+(\d{4})/i
+    ];
+    
+    for (const pattern of patterns) {
+      const match = cleanTitle.match(pattern);
+      if (match) {
+        let month, day, year;
+        
+        if (pattern.source.includes('January|February')) {
+          const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                             'July', 'August', 'September', 'October', 'November', 'December'];
+          month = monthNames.indexOf(match[1]) + 1;
+          
+          if (pattern.source.includes('st|nd|rd|th')) {
+            day = parseInt(match[2]);
+            year = parseInt(match[4]);
+          } else {
+            day = parseInt(match[2]);
+            year = parseInt(match[3]);
+          }
+        } else if (pattern.source.includes('Jan|Feb')) {
+          const monthAbbr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+          month = monthAbbr.indexOf(match[1]) + 1;
+          
+          if (pattern.source.includes('st|nd|rd|th')) {
+            day = parseInt(match[2]);
+            year = parseInt(match[4]);
+          } else {
+            day = parseInt(match[2]);
+            year = parseInt(match[3]);
+          }
+        } else {
+          month = parseInt(match[1]);
+          day = parseInt(match[2]);
+          year = parseInt(match[3]);
+        }
+        
+        if (year < 50) year += 2000;
+        else if (year < 100) year += 1900;
+        
+        if (month >= 1 && month <= 12 && day >= 1 && day <= 31 && year >= 1900) {
+          const date = new Date(year, month - 1, day);
+          return date.toLocaleDateString('en-US', { weekday: 'long' });
+        }
+      }
+    }
+    
+    return 'Sunday'; // Default fallback
+  }
+
+  // Create clean display title
+  function createDisplayTitle(originalTitle: string): string {
+    const dayOfWeek = getDayOfWeekFromTitle(originalTitle);
+    
+    // Check if title starts with LOCC
+    if (originalTitle.toLowerCase().startsWith('locc')) {
+      return `LOCC | ${dayOfWeek} Worship Service`;
+    }
+    
+    // Check if it's a generic service title
+    if (originalTitle.toLowerCase().includes('service') || originalTitle.toLowerCase().includes('worship')) {
+      return `${dayOfWeek} Worship Service`;
+    }
+    
+    // For other titles, try to preserve the beginning and add day of week
+    const baseName = originalTitle.split(/[-|]/)[0].trim() || 'Worship Service';
+    return `${baseName} | ${dayOfWeek} Service`;
+  }
+
+  async function initThumbnailGenerator() {
+    try {
+      thumbnailGenerator = await import('../utils/clientThumbnailGenerator.js');
+    } catch (error) {
+      console.warn('Failed to load thumbnail generator:', error);
+    }
+  }
+
+  async function loadAllVideos() {
+    const loadingEl = document.getElementById('video-loading');
+    const errorEl = document.getElementById('video-error');
+    
+    try {
+      const response = await fetch('/api/videos.json?' + new Date().getTime());
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch videos: ${response.status}`);
+      }
+      
+      const responseData = await response.json();
+      allVideos = Array.isArray(responseData) ? responseData : [];
+      
+      if (loadingEl) loadingEl.style.display = 'none';
+      
+      if (allVideos.length > 0) {
+        await initThumbnailGenerator();
+        displayVideos();
+        
+        // Preload thumbnails for better performance
+        if (thumbnailGenerator) {
+          thumbnailGenerator.preloadThumbnails(allVideos);
+        }
+      } else {
+        if (errorEl) {
+          errorEl.style.display = 'block';
+          errorEl.innerHTML = '<div class="bg-yellow-50 border border-yellow-200 p-8 max-w-md mx-auto rounded-lg"><p class="text-yellow-700 font-medium">No videos available</p><p class="text-yellow-600 text-sm mt-1">Check back later for new content</p></div>';
+        }
+      }
+      
+    } catch (error) {
+      console.error('Error loading videos:', error);
+      if (loadingEl) loadingEl.style.display = 'none';
+      if (errorEl) {
+        errorEl.style.display = 'block';
+        errorEl.innerHTML = `<div class="bg-red-50 border border-red-200 p-8 max-w-md mx-auto rounded-lg"><p class="text-red-700 font-medium">Failed to load videos</p><p class="text-red-600 text-sm mt-1">${error.message}</p></div>`;
+      }
+    }
+  }
+
+  function displayVideos() {
+    const containerEl = document.getElementById('video-container');
+    
+    if (!containerEl) return;
+    
+    // Clear container first
+    containerEl.innerHTML = '';
+    
+    // Show all videos at once
+    allVideos.forEach(video => {
+      const videoEl = document.createElement('div');
+      videoEl.className = 'bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300 cursor-pointer';
+      videoEl.onclick = () => openVideoModal(video.id, video.title);
+      
+      videoEl.innerHTML = `
+        <div class="aspect-video relative overflow-hidden">
+          <img 
+            id="thumbnail-${video.id}"
+            class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+            src="https://img.youtube.com/vi/${video.id}/maxresdefault.jpg"
+            alt="${video.title}"
+            loading="lazy"
+          />
+          <div class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+            <div class="bg-white bg-opacity-90 rounded-full p-3 transform scale-0 hover:scale-100 transition-transform duration-300">
+              <svg class="w-6 h-6 text-brand" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">${createDisplayTitle(video.title)}</h3>
+          <p class="text-sm text-gray-600">${parseDateFromVideoTitle(video.title)}</p>
+        </div>
+      `;
+      
+      containerEl.appendChild(videoEl);
+    });
+    
+    // Generate dynamic thumbnails for all videos
+    if (thumbnailGenerator) {
+      generateDynamicThumbnails(allVideos);
+    }
+  }
+
+  async function generateDynamicThumbnails(videos: any[]) {
+    if (!thumbnailGenerator) return;
+
+    for (const video of videos) {
+      const thumbnailEl = document.getElementById(`thumbnail-${video.id}`);
+      if (!thumbnailEl || !(thumbnailEl instanceof HTMLImageElement)) continue;
+
+      try {
+        const dynamicThumbnail = await thumbnailGenerator.getVideoThumbnail({
+          id: video.id,
+          title: video.title
+        });
+
+        if (dynamicThumbnail && typeof dynamicThumbnail === 'string') {
+          thumbnailEl.src = dynamicThumbnail;
+        }
+      } catch (error) {
+        console.warn(`Failed to generate thumbnail for ${video.id}:`, error);
+      }
+    }
+  }
+
+  function openVideoModal(videoId: string, videoTitle: string) {
+    const modal = document.getElementById('video-modal');
+    const iframe = document.getElementById('video-iframe') as HTMLIFrameElement;
+    const title = document.getElementById('video-modal-title');
+    
+    if (modal && iframe && title) {
+      title.textContent = videoTitle;
+      iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeVideoModal() {
+    const modal = document.getElementById('video-modal');
+    const iframe = document.getElementById('video-iframe') as HTMLIFrameElement;
+    
+    if (modal && iframe) {
+      modal.classList.add('hidden');
+      iframe.src = '';
+      document.body.style.overflow = '';
+    }
+  }
+
+  // Event listeners
+  document.addEventListener('DOMContentLoaded', () => {
+    const closeModalBtn = document.getElementById('close-video-modal');
+    const modal = document.getElementById('video-modal');
+    
+    if (closeModalBtn) {
+      closeModalBtn.addEventListener('click', closeVideoModal);
+    }
+    
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeVideoModal();
+        }
+      });
+    }
+    
+    // Escape key to close modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeVideoModal();
+      }
+    });
+  });
+
+  // Initialize
+  loadAllVideos();
+</script>
+
+<style>
+  * {
+    font-family: 'Albert Sans', system-ui, sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Albert Sans', system-ui, sans-serif;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style> 

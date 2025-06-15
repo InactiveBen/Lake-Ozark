@@ -2,7 +2,7 @@
  * @Author: BensonByte
  * @Date:   06/12/25 07:21:35 C5T
  * @Last Modified by:   BensonByte
- * @Last Modified time: 06/15/25 16:10:28 C3T
+ * @Last Modified time: 06/15/25 17:29:36 C5T
  */
 import type { APIRoute } from 'astro';
 import { fetchLatestVideos } from '../../utils/fetchYouTubeVideos.js';
