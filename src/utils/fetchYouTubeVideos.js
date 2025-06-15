@@ -1,3 +1,9 @@
+/**
+ * @Author: BensonByte
+ * @Date:   06/12/25 07:21:35 C5T
+ * @Last Modified by:   BensonByte
+ * @Last Modified time: 06/15/25 16:11:48 C1T
+ */
 import { YouTube } from 'youtube-sr';
 
 const customThumbnailMap = {
@@ -25,15 +31,24 @@ const customThumbnailMap = {
 };
 
 function parseDateFromTitle(title) {
-  const cleanTitle = title.replace(/^(Service|LOCC)\s*[-|]\s*/i, '').replace(/\s*[-|]\s*(Service)$/i, '');
+  const cleanTitle = title.replace(/^(Service|LOCC|Church Service)\s*[-|]\s*/i, '').replace(/\s*[-|]\s*(Service)$/i, '');
   
   const patterns = [
+    // Standard formats
     /(\d{1,2})\/(\d{1,2})\/(\d{2,4})/,
     /(\d{1,2})-(\d{1,2})-(\d{2,4})/,
+    
+    // Full month names with optional comma
     /(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),?\s+(\d{4})/i,
-    /(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})\s+(\d{4})/i,
+    
+    // Full month names with ordinal suffixes (st, nd, rd, th) and optional comma
+    /(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})(st|nd|rd|th),?\s+(\d{4})/i,
+    
+    // Abbreviated month names with optional comma
     /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),?\s+(\d{4})/i,
-    /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})(st|nd|rd|th)\s+(\d{4})/i
+    
+    // Abbreviated month names with ordinal suffixes
+    /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})(st|nd|rd|th),?\s+(\d{4})/i
   ];
   
   for (const pattern of patterns) {
@@ -45,15 +60,32 @@ function parseDateFromTitle(title) {
         const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
                            'July', 'August', 'September', 'October', 'November', 'December'];
         month = monthNames.indexOf(match[1]) + 1;
-        day = parseInt(match[2]);
-        year = parseInt(match[3]);
+        
+        if (pattern.source.includes('st|nd|rd|th')) {
+          // Format: "Month DDst/nd/rd/th, YYYY" or "Month DDst/nd/rd/th YYYY"
+          day = parseInt(match[2]);
+          year = parseInt(match[4]);
+        } else {
+          // Format: "Month DD, YYYY" or "Month DD YYYY"
+          day = parseInt(match[2]);
+          year = parseInt(match[3]);
+        }
       } else if (pattern.source.includes('Jan|Feb')) {
         const monthAbbr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                           'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         month = monthAbbr.indexOf(match[1]) + 1;
-        day = parseInt(match[2]);
-        year = parseInt(match[4] || match[3]);
+        
+        if (pattern.source.includes('st|nd|rd|th')) {
+          // Format: "Mon DDst/nd/rd/th, YYYY" or "Mon DDst/nd/rd/th YYYY" 
+          day = parseInt(match[2]);
+          year = parseInt(match[4]);
+        } else {
+          // Format: "Mon DD, YYYY" or "Mon DD YYYY"
+          day = parseInt(match[2]);
+          year = parseInt(match[3]);
+        }
       } else {
+        // Numeric formats: MM/DD/YYYY or MM-DD-YYYY
         month = parseInt(match[1]);
         day = parseInt(match[2]);
         year = parseInt(match[3]);
@@ -76,11 +108,26 @@ export async function fetchLatestVideos() {
     const uploadsPlaylistId = 'UUUcLKfZo5Su6-ypmt1dkPKA';
     const playlistUrl = `https://www.youtube.com/playlist?list=${uploadsPlaylistId}`;
     
-    const playlist = await YouTube.getPlaylist(playlistUrl);
+    let playlist;
+    
+    try {
+      // First attempt: Fetch the playlist with fetchAll: true to get all videos
+      playlist = await YouTube.getPlaylist(playlistUrl, { fetchAll: true });
+    } catch (fetchAllError) {
+      console.log('fetchAll failed, trying manual fetch:', fetchAllError.message);
+      
+      // Fallback: Manual pagination using .fetch() method
+      playlist = await YouTube.getPlaylist(playlistUrl);
+      if (playlist && playlist.fetch) {
+        await playlist.fetch(); // Fetch remaining videos manually
+      }
+    }
     
     if (!playlist || !playlist.videos) {
       throw new Error('No videos found in playlist');
     }
+    
+    console.log(`Fetched ${playlist.videos.length} total videos from playlist`);
     
     const excludedVideoIds = ['-29vYs8MAhc'];
     
@@ -90,6 +137,8 @@ export async function fetchLatestVideos() {
       const isNotExcluded = !excludedVideoIds.includes(video.id);
       return isServiceVideo && isNotExcluded;
     });
+    
+    console.log(`Found ${filteredVideos.length} service videos after filtering`);
     
     const videosWithDates = filteredVideos.map(video => {
       const videoData = {
@@ -125,15 +174,5 @@ export async function fetchLatestVideos() {
 
 function getFallbackVideos() {
   return [
-    { id: "KBx8zE_vLiY", title: "Service - 6/1/25" },
-    { id: "MxqJCnCSmmY", title: "Service - 5/25/25" },
-    { id: "0Ipo36Ea6HA", title: "Donald Paul Langley, Jr. Service" },
-    { id: "JN_WDjuyWgg", title: "3-2-25 | Service" },
-    { id: "5CM12KLa50g", title: "Service | 2-23-25" },
-    { id: "rltClKVqN4g", title: "Service - 2/16/25" },
-    { id: "VWZPFWoJhWs", title: "Service - 2/9/25" },
-    { id: "8D5tujxaRlg", title: "Service - 2/2/25" },
-    { id: "dmQk2bTSfR0", title: "1/26/25 - Service" },
-    { id: "W2vo1E1v7xs", title: "1/19/25 - Service" }
   ];
 }

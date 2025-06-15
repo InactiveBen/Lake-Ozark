@@ -2,7 +2,7 @@
  * @Author: BensonByte
  * @Date:   06/12/25 07:21:35 C5T
  * @Last Modified by:   BensonByte
- * @Last Modified time: 06/12/25 15:59:40 C7T
+ * @Last Modified time: 06/15/25 16:10:28 C3T
  */
 import type { APIRoute } from 'astro';
 import { fetchLatestVideos } from '../../utils/fetchYouTubeVideos.js';
@@ -15,6 +15,9 @@ export const GET: APIRoute = async ({ params, request }) => {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
       },
     });
   } catch (error) {
@@ -24,6 +27,9 @@ export const GET: APIRoute = async ({ params, request }) => {
       status: 500,
       headers: {
         'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
       },
     });
   }
