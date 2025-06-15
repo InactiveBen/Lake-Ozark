@@ -2,28 +2,11 @@
 import Layout from '../../layouts/Layout.astro';
 import Slideshow from '../../components/Slideshow.astro';
 
-interface BlogPost {
-  frontmatter: {
-    id: number;
-    title: string;
-    date: string;
-    image?: string;
-    excerpt: string;
-    readingTime?: number;
-    author?: string;
-    authorRole?: string;
-    authorImage?: string;
-    location?: string;
-  };
-  rawContent: () => string;
-  Content: any;
-}
-
 const mailchimpSignupUrl = "https://lakeozarkdisciples.us7.list-manage.com/subscribe?u=9816d09f0ebdd5f8ce1af28b4&id=b26607b7c1";
 const mailchimpArchiveUrl = "https://us7.campaign-archive.com/home/?u=9816d09f0ebdd5f8ce1af28b4&id=b26607b7c1";
 
 // Get all blog posts
-const posts = await Astro.glob<BlogPost>('../../blogs/*.md');
+const posts = await Astro.glob('../../blogs/*.md');
 
 // Format date helper function
 function formatDate(dateStr: string): string {
@@ -40,24 +23,18 @@ function formatDate(dateStr: string): string {
 
 // Sort posts by ID (highest first) and calculate reading time
 const sortedPosts = posts
+  .filter(post => post.frontmatter && post.frontmatter.id)
   .map(post => {
     const wordCount = post.rawContent().split(/\s+/).length;
     const readingTime = Math.ceil(wordCount / 200);
     return {
       ...post,
-      frontmatter: {
-        ...post.frontmatter,
-        readingTime,
-        authorImage: post.frontmatter.authorImage || 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'
-      }
+      calculatedReadingTime: readingTime,
+      calculatedAuthorImage: post.frontmatter?.authorImage || 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'
     };
   })
   .sort((a, b) => {
-    try {
-      return b.frontmatter.id - a.frontmatter.id;
-    } catch (e) {
-      return 0;
-    }
+    return (b.frontmatter?.id || 0) - (a.frontmatter?.id || 0);
   });
 
 // Navigation breadcrumbs
@@ -68,146 +45,172 @@ const breadcrumbs = [
 ---
 
 <Layout title="Church Blog">
-  <!-- Navigation -->
-  <nav class="bg-gray-50 py-4">
-    <div class="container mx-auto px-4">
-      <div class="flex items-center space-x-4">
-        {
-          breadcrumbs.map((item, index) => (
-            <div class="flex items-center">
-              {index > 0 && (
-                <svg
-                  class="h-5 w-5 flex-shrink-0 text-gray-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
-                </svg>
-              )}
-              <a
-                href={item.href}
-                class:list={[
-                  'ml-4 text-sm font-medium',
-                  item.current
-                    ? 'text-brand cursor-default'
-                    : 'text-gray-500 hover:text-gray-700',
-                ]}
-                aria-current={item.current ? 'page' : undefined}
-              >
-                {item.name}
-              </a>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  </nav>
-
-  <!-- Page Header -->
-  <div class="relative min-h-[60vh] flex items-center">
+  <!-- Hero Section - Clean and Minimalist -->
+  <section class="relative overflow-hidden bg-white">
     <div class="absolute inset-0">
-      <img
+      <img 
         src="http://cdn.lakeozarkdisciples.org/media/6408A096-4585-4540-806B-66A6EB4027D7.jpeg"
         alt="Church interior"
         class="w-full h-full object-cover"
       />
-      <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+      <div class="absolute inset-0 bg-black/40"></div>
     </div>
-    <div class="relative container mx-auto px-4 py-24">
-      <div class="max-w-4xl mx-auto text-center text-white">
-        <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+
+    <div class="relative container mx-auto px-6 py-32 md:py-40">
+      <div class="max-w-4xl">
+        <nav class="mb-8">
+          <div class="flex items-center space-x-2 text-white/80">
+            {
+              breadcrumbs.map((item, index) => (
+                <div class="flex items-center">
+                  {index > 0 && (
+                    <svg
+                      class="h-4 w-4 mx-2 text-white/60"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
+                    </svg>
+                  )}
+                  <a
+                    href={item.href}
+                    class:list={[
+                      'text-sm font-medium hover:text-white transition-colors',
+                      item.current
+                        ? 'text-white cursor-default'
+                        : 'text-white/80',
+                    ]}
+                    aria-current={item.current ? 'page' : undefined}
+                  >
+                    {item.name}
+                  </a>
+                </div>
+              ))
+            }
+          </div>
+        </nav>
+        <p class="text-xl md:text-2xl text-white/90 mb-4 font-light leading-relaxed">
+          Stay connected with our community.
+        </p>
+        <h1 class="text-5xl md:text-7xl font-semibold text-white mb-8 leading-tight tracking-tight">
           Church News
         </h1>
-        <p class="text-xl md:text-2xl text-gray-100 max-w-2xl mx-auto leading-relaxed">
-          Stay connected with our community through stories, updates, and inspirational messages that bring us closer together in faith and fellowship.
+        <p class="text-lg md:text-xl text-white/80 mb-12 max-w-2xl font-light leading-relaxed">
+          Stories, updates, and inspirational messages that bring us closer together in faith and fellowship.
         </p>
-        <div class="mt-8 flex justify-center gap-4">
-          <a href="#posts" class="bg-white text-brand px-8 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors">
+        
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a 
+            href="#posts" 
+            class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300 text-lg"
+          >
             Read Latest Posts
           </a>
-          <a href={mailchimpSignupUrl} target="_blank" class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-medium hover:bg-white/10 transition-colors">
+          <a 
+            href={mailchimpSignupUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-medium rounded-lg transition-all duration-300 text-lg"
+          >
             Subscribe to Updates
           </a>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="container mx-auto px-4 py-16">
-    <!-- Section Title -->
-    <div class="max-w-7xl mx-auto mb-12">
-      <h2 class="text-3xl font-bold text-gray-900">Latest Posts</h2>
-      <p class="mt-2 text-gray-600">Discover our most recent articles and updates</p>
-    </div>
-
-    <!-- Blog Posts Grid -->
-    <div id="posts" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-16">
-      {sortedPosts.map((post, index) => (
-        <div class="post-item" style={index >= 3 ? "display: none;" : ""}>
-          <a 
-            href={`/blog/${post.frontmatter.id}`}
-            class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition group block relative"
-          >
-            {index === 0 && (
-              <div class="absolute top-4 right-4 bg-brand text-white px-3 py-1 rounded-full text-sm font-medium z-10">
-                LATEST
-              </div>
-            )}
-            <div class="aspect-video overflow-hidden">
-              <img 
-                src={post.frontmatter.image || 'http://cdn.lakeozarkdisciples.org/media/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg'} 
-                alt={post.frontmatter.title}
-                class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-                loading="lazy"
-                onerror="this.src='http://cdn.lakeozarkdisciples.org/media/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg'"
-              />
-            </div>
-            <div class="p-6">
-              <h2 class="text-2xl font-bold mb-2 group-hover:text-brand">
-                {post.frontmatter.title}
-              </h2>
-              <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
-                <time datetime={new Date(post.frontmatter.date).toISOString()}>
-                  {formatDate(post.frontmatter.date)}
-                </time>
-                <span>·</span>
-                <span>{post.frontmatter.readingTime} min read</span>
-              </div>
-              <p class="text-gray-600 line-clamp-3">
-                {post.frontmatter.excerpt}
-              </p>
-            </div>
-          </a>
+  <!-- Blog Posts Section -->
+  <section id="posts" class="py-20 bg-white">
+    <div class="container mx-auto px-6">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+          <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
+            Latest Updates
+          </span>
+          <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">From Our Community</h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Discover our most recent articles and updates from our church family
+          </p>
         </div>
-      ))}
-    </div>
 
-    {sortedPosts.length > 3 && (
-      <div class="text-center mb-16">
-        <button
-          id="view-more-btn"
-          class="bg-brand hover:bg-brand-dark text-white px-8 py-3 rounded-full transition transform hover:scale-105"
-        >
-          View More Posts
-        </button>
+        <!-- Blog Posts Grid -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {sortedPosts.map((post, index) => (
+            <div class="post-item" style={index >= 6 ? "display: none;" : ""}>
+              <article class="group">
+                <a href={`/blog/${post.frontmatter?.id || ''}`} class="block">
+                  <div class="mb-6 overflow-hidden rounded-xl relative">
+                    {index === 0 && (
+                      <div class="absolute top-4 right-4 bg-brand text-white px-3 py-1 rounded-full text-sm font-medium z-10">
+                        LATEST
+                      </div>
+                    )}
+                    <img 
+                      src={post.frontmatter?.image || 'http://cdn.lakeozarkdisciples.org/media/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg'} 
+                      alt={post.frontmatter?.title || 'Blog post'}
+                      class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                      onerror="this.src='http://cdn.lakeozarkdisciples.org/media/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg'"
+                    />
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-4 text-sm text-gray-500 mb-2">
+                      <time class="block" datetime={post.frontmatter?.date ? new Date(post.frontmatter.date).toISOString() : ''}>
+                        {formatDate(post.frontmatter?.date || '')}
+                      </time>
+                      <span>·</span>
+                      <span>{post.calculatedReadingTime} min read</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-900 group-hover:text-brand transition-colors duration-300">
+                      {post.frontmatter?.title || 'Untitled'}
+                    </h3>
+                    <p class="text-gray-600 leading-relaxed">
+                      {post.frontmatter?.excerpt || ''}
+                    </p>
+                  </div>
+                </a>
+              </article>
+            </div>
+          ))}
+        </div>
+        
+        {sortedPosts.length > 6 && (
+          <div class="text-center mt-12">
+            <button
+              id="view-more-btn"
+              class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
+            >
+              View More Posts
+            </button>
+          </div>
+        )}
+
       </div>
-    )}
+    </div>
+  </section>
 
-    <!-- Newsletter Subscribe Section -->
-    <div class="max-w-4xl mx-auto">
-      <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition">
-        <div class="p-8">
-          <div class="grid md:grid-cols-2 gap-8 items-center">
-            <div>
-              <h2 class="text-3xl font-bold text-gray-900 mb-4">Subscribe to Lake Chimes</h2>
-              <p class="text-gray-600 mb-6">
-                Get Lake Chimes delivered directly to your inbox each month. Stay up-to-date with church news, 
-                events, and inspiring stories from our community.
-              </p>
+  <!-- Newsletter Subscribe Section -->
+  <section class="py-20 bg-white">
+    <div class="container mx-auto px-6">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
+              Stay Connected
+            </span>
+            <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
+              Subscribe to Lake Chimes
+            </h2>
+            <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+              Get Lake Chimes delivered directly to your inbox each month. Stay up-to-date with church news, 
+              events, and inspiring stories from our community.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
               <a 
                 href={mailchimpSignupUrl}
                 target="_blank"
-                class="inline-flex items-center gap-2 bg-brand text-white px-8 py-3 rounded-full font-medium hover:bg-brand-dark transition transform hover:scale-105"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
               >
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
@@ -215,9 +218,19 @@ const breadcrumbs = [
                 </svg>
                 Subscribe Now
               </a>
+              <a 
+                href={mailchimpArchiveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
+              >
+                View Archive
+              </a>
             </div>
-            <div class="bg-gray-50 rounded-xl p-6">
-              <h3 class="text-xl font-bold text-gray-900 mb-4">What you'll receive:</h3>
+          </div>
+          <div class="relative">
+            <div class="bg-gray-50 rounded-2xl p-8">
+              <h3 class="text-xl font-semibold text-gray-900 mb-6">What you'll receive:</h3>
               <ul class="space-y-4">
                 <li class="flex items-center gap-3">
                   <svg class="w-5 h-5 text-brand flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -249,22 +262,21 @@ const breadcrumbs = [
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </Layout>
 
 <script>
   function setupPostGrid() {
-    const grid = document.getElementById('posts');
     const viewMoreBtn = document.getElementById('view-more-btn');
-    const posts = Array.from(grid?.querySelectorAll('.post-item') || []);
+    const posts = Array.from(document.querySelectorAll('.post-item') || []);
     let expanded = false;
 
-    if (!grid || !viewMoreBtn || posts.length <= 3) return;
+    if (!viewMoreBtn || posts.length <= 6) return;
 
     viewMoreBtn.addEventListener('click', () => {
       if (!expanded) {
         // Show all posts with a fade-in effect
-        posts.slice(3).forEach(post => {
+        posts.slice(6).forEach(post => {
           (post as HTMLElement).style.display = 'block';
           (post as HTMLElement).style.opacity = '0';
           requestAnimationFrame(() => {
@@ -274,8 +286,8 @@ const breadcrumbs = [
         });
         viewMoreBtn.textContent = 'Show Less';
       } else {
-        // Hide posts beyond the first 3
-        posts.slice(3).forEach(post => {
+        // Hide posts beyond the first 6
+        posts.slice(6).forEach(post => {
           (post as HTMLElement).style.display = 'none';
         });
         viewMoreBtn.textContent = 'View More Posts';
@@ -289,3 +301,30 @@ const breadcrumbs = [
   // Setup on client-side navigation
   document.addEventListener('astro:page-load', setupPostGrid);
 </script>
+
+<style>
+  * {
+    font-family: 'Albert Sans', system-ui, sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Albert Sans', system-ui, sans-serif;
+  }
+
+  /* Smooth scrolling for the entire page */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Ensure sections are properly centered when navigated to */
+  section[id] {
+    scroll-margin-top: 2rem;
+  }
+
+  /* For mobile devices, add more top margin */
+  @media (max-width: 768px) {
+    section[id] {
+      scroll-margin-top: 1rem;
+    }
+  }
+</style>
