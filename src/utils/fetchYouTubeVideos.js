@@ -2,7 +2,7 @@
  * @Author: BensonByte
  * @Date:   06/12/25 07:21:35 C5T
  * @Last Modified by:   BensonByte
- * @Last Modified time: 06/15/25 16:11:48 C1T
+ * @Last Modified time: 06/15/25 16:39:36 C1T
  */
 import { YouTube } from 'youtube-sr';
 
@@ -141,12 +141,15 @@ export async function fetchLatestVideos() {
     console.log(`Found ${filteredVideos.length} service videos after filtering`);
     
     const videosWithDates = filteredVideos.map(video => {
+      const parsedDate = parseDateFromTitle(video.title);
+      
       const videoData = {
         id: video.id,
         title: video.title,
-        parsedDate: parseDateFromTitle(video.title)
+        parsedDate: parsedDate
       };
       
+      // Use custom thumbnail if available
       if (customThumbnailMap[video.id]) {
         videoData.customThumbnail = customThumbnailMap[video.id];
       }

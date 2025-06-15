@@ -633,6 +633,33 @@ function formatDate(dateStr: string): string {
 
 <YouTubePopup />
 
+<!-- Video Modal -->
+<div id="video-modal" class="hidden fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4" onclick="closeVideoModal()">
+  <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden" onclick="event.stopPropagation()">
+    <div class="flex justify-between items-center p-4 border-b">
+      <h3 id="video-modal-title" class="text-lg font-semibold text-gray-900"></h3>
+      <button 
+        onclick="closeVideoModal()" 
+        class="text-gray-400 hover:text-gray-600 transition-colors"
+        aria-label="Close video"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="aspect-video">
+      <iframe 
+        id="video-iframe"
+        class="w-full h-full"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+  </div>
+</div>
+
 <script>
   // Live Service Countdown functionality
   let countdownInterval;
@@ -863,20 +890,21 @@ function formatDate(dateStr: string): string {
     const videoGridHTML = `
       <div class="space-y-12">
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="video-grid">
-                     ${videosToShow.map((video) => `
+          ${videosToShow.map((video) => `
              <div class="video-item bg-white border border-gray-200 overflow-hidden group hover:shadow-lg transition-all duration-300 rounded-xl">
-               <a 
-                 href="https://www.youtube.com/watch?v=${video.id}"
-                 target="_blank"
-                 rel="noopener noreferrer"
-                 class="block"
-                 aria-label="Watch ${video.title} on YouTube (opens in new tab)"
+               <button 
+                 onclick="openVideoModal('${video.id}', '${video.title.replace(/"/g, '&quot;')}')"
+                 class="block w-full text-left"
+                 aria-label="Watch ${video.title}"
                >
                  <div class="relative aspect-video overflow-hidden">
                    <img 
-                     src="${video.customThumbnail || `https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}"
+                     id="thumbnail-${video.id}"
+                     src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='270' viewBox='0 0 480 270'%3E%3Crect width='480' height='270' fill='%23f3f4f6'/%3E%3Ctext x='240' y='135' text-anchor='middle' dy='0.35em' font-family='Arial, sans-serif' font-size='16' fill='%23666'%3ELoading...%3C/text%3E%3C/svg%3E"
                      alt="Thumbnail for ${video.title}"
                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                     data-video-id="${video.id}"
+                     data-video-title="${video.title.replace(/"/g, '&quot;')}"
                    />
                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
                      <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/20 backdrop-blur-sm rounded-full p-4">
@@ -889,7 +917,7 @@ function formatDate(dateStr: string): string {
                  <div class="p-6">
                    <h3 class="font-semibold text-lg text-gray-900 group-hover:text-brand transition-colors duration-300 leading-tight">${video.title}</h3>
                  </div>
-               </a>
+               </button>
              </div>
            `).join('')}
         </div>
@@ -908,6 +936,9 @@ function formatDate(dateStr: string): string {
     
     containerEl.innerHTML = videoGridHTML;
     setupVideoGrid();
+    
+    // Generate dynamic thumbnails for videos that need them
+    generateDynamicThumbnails(videosToShow);
   }
 
   function setupVideoGrid() {
@@ -921,12 +952,95 @@ function formatDate(dateStr: string): string {
     }
   }
 
+  // Dynamic thumbnail generation variables
+  let thumbnailGenerator;
+
+  // Initialize thumbnail generator
+  async function initThumbnailGenerator() {
+    thumbnailGenerator = await import('../utils/clientThumbnailGenerator.js');
+  }
+
+  // Function to generate dynamic thumbnails for videos
+  async function generateDynamicThumbnails(videos) {
+    if (!thumbnailGenerator) {
+      await initThumbnailGenerator();
+    }
+
+    for (const video of videos) {
+      const thumbnailEl = document.getElementById(`thumbnail-${video.id}`);
+      if (!thumbnailEl || !(thumbnailEl instanceof HTMLImageElement)) continue;
+
+      try {
+        // Generate dynamic thumbnail for ALL videos with church background
+        const dynamicThumbnail = await thumbnailGenerator.getVideoThumbnail({
+          id: video.id,
+          title: video.title
+        });
+
+        // Make sure we got a valid data URL string, not a Promise
+        if (dynamicThumbnail && typeof dynamicThumbnail === 'string' && dynamicThumbnail !== thumbnailEl.src) {
+          // Replace placeholder with generated thumbnail immediately
+          thumbnailEl.src = dynamicThumbnail;
+        }
+      } catch (error) {
+        console.warn(`Failed to generate thumbnail for ${video.id}:`, error);
+      }
+    }
+  }
+
+  // Preload thumbnails for better performance
+  async function preloadAllThumbnails() {
+    if (!thumbnailGenerator) {
+      await initThumbnailGenerator();
+    }
+    if (allVideos.length > 0) {
+      thumbnailGenerator.preloadThumbnails(allVideos);
+    }
+  }
+
   loadVideos();
+  
   document.addEventListener('astro:page-load', () => {
     currentVideoPage = 0;
     allVideos = [];
     loadVideos();
   });
+
+  // Video Modal Functions
+  function openVideoModal(videoId: string, videoTitle: string) {
+    const modal = document.getElementById('video-modal');
+    const iframe = document.getElementById('video-iframe') as HTMLIFrameElement;
+    const title = document.getElementById('video-modal-title');
+    
+    if (modal && iframe && title) {
+      title.textContent = videoTitle;
+      iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+  }
+
+  function closeVideoModal() {
+    const modal = document.getElementById('video-modal');
+    const iframe = document.getElementById('video-iframe') as HTMLIFrameElement;
+    
+    if (modal && iframe) {
+      modal.classList.add('hidden');
+      iframe.src = ''; // Stop video playback
+      document.body.style.overflow = ''; // Restore scrolling
+    }
+  }
+
+  // Close modal when clicking outside or pressing Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeVideoModal();
+    }
+  });
+
+  // Make functions globally available
+  (window as any).openVideoModal = openVideoModal;
+  (window as any).closeVideoModal = closeVideoModal;
 
   // Homepage donation form functionality
   // Function to calculate processing fee
@@ -1162,6 +1276,17 @@ function formatDate(dateStr: string): string {
   
   // Initialize recurring warning since recurring is default
   updateHomepageRecurringWarning();
+
+  // Clear thumbnail cache to force regeneration with new church background
+  function clearThumbnailCache() {
+    const keys = Object.keys(sessionStorage);
+    keys.forEach(key => {
+      if (key.startsWith('thumbnail_')) {
+        sessionStorage.removeItem(key);
+      }
+    });
+    console.log('Cleared thumbnail cache for regeneration');
+  }
 </script>
 
 <style>
