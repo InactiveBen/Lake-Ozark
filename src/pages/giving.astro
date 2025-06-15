@@ -133,54 +133,54 @@ const impactAreas = [
               <form id="donation-form" class="space-y-6">
                 <!-- Donation Type -->
                 <div>
-                  <div class="grid grid-cols-2 gap-4 mb-4">
-                    <label class="relative">
-                      <input 
-                        type="radio" 
-                        name="donationType" 
-                        value="one-time" 
-                        checked 
-                        class="peer sr-only"
-                      />
-                      <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-brand peer-checked:bg-brand/5 transition-all duration-300 bg-white">
-                        <div class="text-center">
-                          <div class="font-medium text-gray-900">One-time</div>
-                          <div class="text-sm text-gray-600">Single donation</div>
-                        </div>
+                                  <div class="grid grid-cols-2 gap-4 mb-4">
+                  <label class="relative">
+                    <input 
+                      type="radio" 
+                      name="donationType" 
+                      value="one-time" 
+                      class="peer sr-only"
+                    />
+                    <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-brand peer-checked:bg-brand/5 transition-all duration-300 bg-white">
+                      <div class="text-center">
+                        <div class="font-medium text-gray-900">One-time</div>
+                        <div class="text-sm text-gray-600">Single donation</div>
                       </div>
-                    </label>
-                    <label class="relative">
-                      <input 
-                        type="radio" 
-                        name="donationType" 
-                        value="recurring" 
-                        class="peer sr-only"
-                      />
-                      <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-brand peer-checked:bg-brand/5 transition-all duration-300 bg-white">
-                        <div class="text-center">
-                          <div class="font-medium text-gray-900">Recurring</div>
-                          <div class="text-sm text-gray-600">Ongoing giving</div>
-                        </div>
+                    </div>
+                  </label>
+                  <label class="relative">
+                    <input 
+                      type="radio" 
+                      name="donationType" 
+                      value="recurring" 
+                      checked 
+                      class="peer sr-only"
+                    />
+                    <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-brand peer-checked:bg-brand/5 transition-all duration-300 bg-white">
+                      <div class="text-center">
+                        <div class="font-medium text-gray-900">Recurring</div>
+                        <div class="text-sm text-gray-600">Ongoing giving</div>
                       </div>
-                    </label>
-                  </div>
-                  
-                  <!-- Recurring Frequency Selection -->
-                  <div id="frequency-selection" class="hidden">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Frequency</label>
-                    <select 
-                      name="frequency" 
-                      id="frequency-select"
-                      class="w-full px-3 py-3 border-2 border-gray-200 rounded-lg focus:border-brand focus:outline-none bg-white"
-                    >
-                      <option value="weekly">Weekly</option>
-                      <option value="biweekly">Every Two Weeks</option>
-                      <option value="monthly" selected>Monthly</option>
-                      <option value="every6months">Every Six Months</option>
-                      <option value="yearly">Every Year</option>
-                    </select>
-                  </div>
+                    </div>
+                  </label>
                 </div>
+                                  
+                <!-- Recurring Frequency Selection -->
+                <div id="frequency-selection">
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Frequency</label>
+                  <select 
+                    name="frequency" 
+                    id="frequency-select"
+                    class="w-full px-3 py-3 border-2 border-gray-200 rounded-lg focus:border-brand focus:outline-none bg-white"
+                  >
+                    <option value="weekly">Weekly</option>
+                    <option value="biweekly">Every Two Weeks</option>
+                    <option value="monthly" selected>Monthly</option>
+                    <option value="every6months">Every Six Months</option>
+                    <option value="yearly">Every Year</option>
+                  </select>
+                </div>
+              </div>
 
                 <!-- Amount Selection -->
                 <div>
@@ -208,6 +208,22 @@ const impactAreas = [
                       class="w-full pl-7 pr-3 py-3 border-2 border-gray-200 rounded-lg focus:border-brand focus:outline-none bg-white"
                     />
                   </div>
+                </div>
+
+                <!-- Cover Processing Fees -->
+                <div>
+                  <label class="flex items-center gap-3 p-3 border-2 border-gray-200 rounded-lg bg-white hover:border-brand transition-all duration-300">
+                    <input 
+                      type="checkbox" 
+                      id="cover-fees" 
+                      name="coverFees"
+                      class="w-4 h-4 text-brand focus:ring-brand border-gray-300 rounded"
+                    />
+                    <div class="flex-1">
+                      <div class="font-medium text-gray-900">Cover Processing Fees</div>
+                      <div class="text-sm text-gray-600">Add <span id="fee-amount">$1.75</span> to cover payment processing costs (2.9% + $0.30)</div>
+                    </div>
+                  </label>
                 </div>
 
                 <!-- Email -->
@@ -346,6 +362,23 @@ const impactAreas = [
   </style>
 
   <script>
+    // Function to calculate processing fee
+    function calculateProcessingFee(amount: number): number {
+      return Math.round((amount * 0.029 + 0.30) * 100) / 100;
+    }
+
+    // Function to update fee display
+    function updateFeeDisplay() {
+      const amountInput = document.getElementById('custom-amount') as HTMLInputElement;
+      const feeAmountSpan = document.getElementById('fee-amount');
+      
+      if (amountInput && feeAmountSpan) {
+        const amount = parseFloat(amountInput.value) || 50;
+        const fee = calculateProcessingFee(amount);
+        feeAmountSpan.textContent = `$${fee.toFixed(2)}`;
+      }
+    }
+
     // Function to update recurring warning
     function updateRecurringWarning() {
       const recurringRadio = document.querySelector('input[name="donationType"][value="recurring"]') as HTMLInputElement;
@@ -355,11 +388,18 @@ const impactAreas = [
       const warningDate = document.getElementById('warning-date');
       const amountInput = document.getElementById('custom-amount') as HTMLInputElement;
       const frequencySelect = document.getElementById('frequency-select') as HTMLSelectElement;
+      const coverFeesCheckbox = document.getElementById('cover-fees') as HTMLInputElement;
       
       if (recurringRadio && recurringRadio.checked && warningDiv && warningAmount && warningFrequency && warningDate) {
         // Get current amount
-        const amount = amountInput.value || '50';
-        warningAmount.textContent = `$${amount}`;
+        let amount = parseFloat(amountInput.value) || 50;
+        
+        // Add processing fee if checked
+        if (coverFeesCheckbox && coverFeesCheckbox.checked) {
+          amount += calculateProcessingFee(amount);
+        }
+        
+        warningAmount.textContent = `$${amount.toFixed(2)}`;
         
         // Get frequency text
         const frequency = frequencySelect.value;
@@ -429,7 +469,8 @@ const impactAreas = [
         if (customAmountInput && this instanceof HTMLElement && this.dataset.amount) {
           customAmountInput.value = this.dataset.amount;
         }
-        // Update warning if recurring is selected
+        // Update fee display and warning
+        updateFeeDisplay();
         updateRecurringWarning();
       });
     });
@@ -440,9 +481,16 @@ const impactAreas = [
       customAmountInput.addEventListener('input', function() {
         // Remove selected class from preset buttons when typing custom amount
         document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
-        // Update warning if recurring is selected
+        // Update fee display and warning
+        updateFeeDisplay();
         updateRecurringWarning();
       });
+    }
+
+    // Cover fees checkbox
+    const coverFeesCheckbox = document.getElementById('cover-fees');
+    if (coverFeesCheckbox) {
+      coverFeesCheckbox.addEventListener('change', updateRecurringWarning);
     }
 
     // Form submission
@@ -463,12 +511,19 @@ const impactAreas = [
         const emailValue = formData.get('email');
         const donationTypeValue = formData.get('donationType');
         const frequencyValue = formData.get('frequency');
+        const coverFeesValue = formData.get('coverFees');
         
         // Type-safe conversions
-        const amount = parseFloat(amountValue?.toString() || '0');
+        let amount = parseFloat(amountValue?.toString() || '0');
         const email = emailValue?.toString() || '';
         const donationType = donationTypeValue?.toString() || '';
         const frequency = frequencyValue?.toString() || 'monthly';
+        const coverFees = coverFeesValue === 'on';
+        
+        // Add processing fee if selected
+        if (coverFees) {
+          amount += calculateProcessingFee(amount);
+        }
         
         // Validate amount
         if (!amount || amount < 5) {
@@ -503,7 +558,8 @@ const impactAreas = [
               amount: amount,
               email: email,
               donationType: donationType,
-              frequency: frequency
+              frequency: frequency,
+              coverFees: coverFees
             })
           });
           
@@ -528,10 +584,16 @@ const impactAreas = [
       });
     }
 
-    // Set default amount
+    // Set default amount and initialize displays
     const defaultBtn = document.querySelector('[data-amount="50"]') as HTMLElement;
     if (defaultBtn) {
       defaultBtn.click();
     }
+    
+    // Initialize fee display
+    updateFeeDisplay();
+    
+    // Initialize recurring warning since recurring is default
+    updateRecurringWarning();
   </script>
 </Layout>

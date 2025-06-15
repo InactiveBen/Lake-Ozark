@@ -404,7 +404,6 @@ function formatDate(dateStr: string): string {
                       type="radio" 
                       name="donationType" 
                       value="one-time" 
-                      checked 
                       class="peer sr-only"
                     />
                     <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-brand peer-checked:bg-brand/5 transition-all duration-300 bg-white">
@@ -419,6 +418,7 @@ function formatDate(dateStr: string): string {
                       type="radio" 
                       name="donationType" 
                       value="recurring" 
+                      checked 
                       class="peer sr-only"
                     />
                     <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-brand peer-checked:bg-brand/5 transition-all duration-300 bg-white">
@@ -431,7 +431,7 @@ function formatDate(dateStr: string): string {
                 </div>
                 
                 <!-- Recurring Frequency Selection -->
-                <div id="homepage-frequency-selection" class="hidden">
+                <div id="homepage-frequency-selection">
                   <label class="block text-sm font-medium text-gray-700 mb-2">Frequency</label>
                   <select 
                     name="frequency" 
@@ -473,6 +473,22 @@ function formatDate(dateStr: string): string {
                     class="w-full pl-7 pr-3 py-3 border-2 border-gray-200 rounded-lg focus:border-brand focus:outline-none bg-white"
                   />
                 </div>
+              </div>
+
+              <!-- Cover Processing Fees -->
+              <div>
+                <label class="flex items-center gap-3 p-3 border-2 border-gray-200 rounded-lg bg-white hover:border-brand transition-all duration-300">
+                  <input 
+                    type="checkbox" 
+                    id="homepage-cover-fees" 
+                    name="coverFees"
+                    class="w-4 h-4 text-brand focus:ring-brand border-gray-300 rounded"
+                  />
+                  <div class="flex-1">
+                    <div class="font-medium text-gray-900">Cover Processing Fees</div>
+                    <div class="text-sm text-gray-600">Add <span id="homepage-fee-amount">$1.75</span> to cover payment processing costs (2.9% + $0.30)</div>
+                  </div>
+                </label>
               </div>
 
               <!-- Email -->
@@ -890,6 +906,23 @@ function formatDate(dateStr: string): string {
   });
 
   // Homepage donation form functionality
+  // Function to calculate processing fee
+  function calculateHomepageProcessingFee(amount: number): number {
+    return Math.round((amount * 0.029 + 0.30) * 100) / 100;
+  }
+
+  // Function to update fee display
+  function updateHomepageFeeDisplay() {
+    const amountInput = document.getElementById('homepage-custom-amount') as HTMLInputElement;
+    const feeAmountSpan = document.getElementById('homepage-fee-amount');
+    
+    if (amountInput && feeAmountSpan) {
+      const amount = parseFloat(amountInput.value) || 50;
+      const fee = calculateHomepageProcessingFee(amount);
+      feeAmountSpan.textContent = `$${fee.toFixed(2)}`;
+    }
+  }
+
   // Function to update recurring warning
   function updateHomepageRecurringWarning() {
     const recurringRadio = document.querySelector('input[name="donationType"][value="recurring"]') as HTMLInputElement;
@@ -899,11 +932,18 @@ function formatDate(dateStr: string): string {
     const warningDate = document.getElementById('homepage-warning-date');
     const amountInput = document.getElementById('homepage-custom-amount') as HTMLInputElement;
     const frequencySelect = document.getElementById('homepage-frequency-select') as HTMLSelectElement;
+    const coverFeesCheckbox = document.getElementById('homepage-cover-fees') as HTMLInputElement;
     
     if (recurringRadio && recurringRadio.checked && warningDiv && warningAmount && warningFrequency && warningDate) {
       // Get current amount
-      const amount = amountInput.value || '50';
-      warningAmount.textContent = `$${amount}`;
+      let amount = parseFloat(amountInput.value) || 50;
+      
+      // Add processing fee if checked
+      if (coverFeesCheckbox && coverFeesCheckbox.checked) {
+        amount += calculateHomepageProcessingFee(amount);
+      }
+      
+      warningAmount.textContent = `$${amount.toFixed(2)}`;
       
       // Get frequency text
       const frequency = frequencySelect.value;
@@ -973,7 +1013,8 @@ function formatDate(dateStr: string): string {
       if (customAmountInput && this instanceof HTMLElement && this.dataset.amount) {
         customAmountInput.value = this.dataset.amount;
       }
-      // Update warning if recurring is selected
+      // Update fee display and warning
+      updateHomepageFeeDisplay();
       updateHomepageRecurringWarning();
     });
   });
@@ -984,9 +1025,16 @@ function formatDate(dateStr: string): string {
     homepageCustomAmountInput.addEventListener('input', function() {
       // Remove selected class from preset buttons when typing custom amount
       document.querySelectorAll('.homepage-amount-btn').forEach(b => b.classList.remove('selected'));
-      // Update warning if recurring is selected
+      // Update fee display and warning
+      updateHomepageFeeDisplay();
       updateHomepageRecurringWarning();
     });
+  }
+
+  // Cover fees checkbox
+  const homepageCoverFeesCheckbox = document.getElementById('homepage-cover-fees');
+  if (homepageCoverFeesCheckbox) {
+    homepageCoverFeesCheckbox.addEventListener('change', updateHomepageRecurringWarning);
   }
 
   // Form submission
@@ -1007,12 +1055,19 @@ function formatDate(dateStr: string): string {
       const emailValue = formData.get('email');
       const donationTypeValue = formData.get('donationType');
       const frequencyValue = formData.get('frequency');
+      const coverFeesValue = formData.get('coverFees');
       
       // Type-safe conversions
-      const amount = parseFloat(amountValue?.toString() || '0');
+      let amount = parseFloat(amountValue?.toString() || '0');
       const email = emailValue?.toString() || '';
       const donationType = donationTypeValue?.toString() || '';
       const frequency = frequencyValue?.toString() || 'monthly';
+      const coverFees = coverFeesValue === 'on';
+      
+      // Add processing fee if selected
+      if (coverFees) {
+        amount += calculateHomepageProcessingFee(amount);
+      }
       
       // Validate amount
       if (!amount || amount < 5) {
@@ -1047,7 +1102,8 @@ function formatDate(dateStr: string): string {
             amount: amount,
             email: email,
             donationType: donationType,
-            frequency: frequency
+            frequency: frequency,
+            coverFees: coverFees
           })
         });
         
@@ -1072,11 +1128,17 @@ function formatDate(dateStr: string): string {
     });
   }
 
-  // Set default amount for homepage form
+  // Set default amount for homepage form and initialize displays
   const homepageDefaultBtn = document.querySelector('.homepage-amount-btn[data-amount="50"]') as HTMLElement;
   if (homepageDefaultBtn) {
     homepageDefaultBtn.click();
   }
+  
+  // Initialize fee display
+  updateHomepageFeeDisplay();
+  
+  // Initialize recurring warning since recurring is default
+  updateHomepageRecurringWarning();
 </script>
 
 <style>
