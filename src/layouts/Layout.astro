@@ -74,7 +74,7 @@ const OG_IMAGE_HEIGHT = 630;
     <meta name="twitter:image:width" content={OG_IMAGE_WIDTH.toString()} />
     <meta name="twitter:image:height" content={OG_IMAGE_HEIGHT.toString()} />
     
-    <!-- Additional SEO Meta Tags -->
+    <!-- SEO Tags -->
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="googlebot" content="index, follow" />
     <meta name="revisit-after" content="7 days" />
@@ -94,11 +94,8 @@ const OG_IMAGE_HEIGHT = 630;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Inter:wght@400;500;600;700&family=Gochi+Hand&display=swap" rel="stylesheet" />
     <title>{title} - Lake Ozark Christian Church | Lake Ozark, MO</title>
-    
-    <!-- Structured Data -->
+
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-    
-    <!-- Sentry Browser SDK - Load but don't initialize until cookie consent -->
     <script src="https://browser.sentry-cdn.com/8.42.0/bundle.tracing.replay.min.js" crossorigin="anonymous"></script>
     
     <style>
