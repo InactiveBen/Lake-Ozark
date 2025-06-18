@@ -1,0 +1,121 @@
+---
+// Simple privacy banner component
+---
+
+<div 
+  role="dialog"
+  id="privacy-banner" 
+  class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg px-4 py-3 z-50"
+  aria-label="Cookie Consent Banner"
+  aria-describedby="privacy-banner-message"
+>
+  <button
+    id="close-privacy-banner"
+    class="absolute top-3 right-4 text-gray-500 hover:text-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400 rounded p-1"
+    aria-label="Close this dialog"
+  >
+    <svg width="20px" height="20px" viewBox="0 0 20 20" role="img" aria-labelledby="close-icon-title">
+      <title id="close-icon-title">Close this dialog</title>
+      <line role="presentation" x1="2" y1="2" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line>
+      <line role="presentation" x1="2" y1="18" x2="18" y2="2" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line>
+    </svg>
+  </button>
+
+  <div class="pr-12">
+    <span id="privacy-banner-message" class="text-sm text-gray-700 leading-relaxed">
+      This website utilizes technologies such as cookies to enable essential site functionality, as well as for analytics, personalization, and targeted advertising. To learn more, view the following link: 
+      <a 
+        href="https://lakeozark.cc/privacy" 
+        target="_blank"
+        rel="noopener"
+        class="text-blue-600 hover:text-blue-800 underline focus:outline-none focus:ring-2 focus:ring-blue-400 rounded"
+        aria-describedby="new-window-notice"
+      >
+        Privacy Policy
+      </a>
+    </span>
+    <span id="new-window-notice" class="sr-only">Opens in a new window</span>
+  </div>
+</div>
+
+<script>
+  // Cookie helper functions
+  function setCookie(name, value, days) {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+    document.cookie = `${name}=${value}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
+  }
+
+  function getCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  }
+
+  // Check if user has already dismissed the banner
+  function checkBannerStatus() {
+    const banner = document.getElementById('privacy-banner');
+    if (!banner) return;
+    
+    const dismissed = getCookie('privacy-banner-dismissed');
+    if (dismissed === 'true') {
+      banner.style.display = 'none';
+    }
+  }
+
+  // Dismiss banner function
+  function dismissBanner() {
+    const banner = document.getElementById('privacy-banner');
+    if (banner) {
+      banner.style.display = 'none';
+      setCookie('privacy-banner-dismissed', 'true', 365); // Remember for 1 year
+    }
+  }
+
+  // Initialize banner on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    checkBannerStatus();
+    
+    // Add event listener for close button
+    const closeButton = document.getElementById('close-privacy-banner');
+    
+    if (closeButton) {
+      closeButton.addEventListener('click', dismissBanner);
+    }
+  });
+</script>
+
+<style>
+  /* Hide banner on desktop, show only on mobile */
+  #privacy-banner {
+    display: none;
+  }
+  
+  @media (max-width: 768px) {
+    #privacy-banner {
+      display: block;
+      animation: slideUp 0.3s ease-out;
+    }
+    
+    /* Add bottom padding to body when banner is visible on mobile */
+    body:has(#privacy-banner:not([style*="display: none"])) {
+      padding-bottom: 100px;
+    }
+  }
+  
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+</style> 
