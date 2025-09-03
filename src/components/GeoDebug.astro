@@ -1,0 +1,50 @@
+---
+import { getVisitorInfo } from '../utils/locationCheck';
+
+const info = await getVisitorInfo();
+
+// Only show in development
+const isDev = import.meta.env.DEV;
+---
+
+{isDev && (
+  <div id="geo-debug" class="fixed bottom-4 left-4 bg-gray-900/90 text-white p-4 rounded-lg shadow-lg z-50 text-sm font-mono">
+    <div class="flex items-center justify-between mb-2">
+      <h3 class="font-semibold">Geo Debug</h3>
+      <button 
+        onclick="document.getElementById('geo-debug').remove()" 
+        class="text-gray-400 hover:text-white"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <div class="space-y-1">
+      <p>
+        <span class="text-gray-400">Status:</span>
+        <span class={info.isLocal ? "text-green-400" : "text-yellow-400"}>
+          {info.isLocal ? "Local" : "Visitor"}
+        </span>
+      </p>
+      {info.distance && (
+        <p>
+          <span class="text-gray-400">Distance:</span>
+          <span class="text-blue-400">{Math.round(info.distance)} miles</span>
+        </p>
+      )}
+      <p>
+        <span class="text-gray-400">Reason:</span>
+        <span class="text-gray-300">{info.reason}</span>
+      </p>
+    </div>
+  </div>
+)}
+
+<style>
+  #geo-debug {
+    font-size: 12px;
+    max-width: 300px;
+    word-wrap: break-word;
+  }
+</style>

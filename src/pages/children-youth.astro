@@ -1,6 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
+import { isLocalVisitor } from '../utils/locationCheck';
+
+const isLocal = await isLocalVisitor();
+
 const heroImage = {
   url: "http://cdn.lakeozarkdisciples.org/media/E88583FB-D8A2-4D0E-8391-7D97D11B710F.jpeg",
   alt: "Children's Time"
@@ -48,32 +52,64 @@ const programs = [
 
   <div class="relative container mx-auto px-6 py-32 md:py-40">
     <div class="max-w-4xl">
-      <p class="text-xl md:text-2xl text-white/90 mb-4 font-light leading-relaxed">
-        Nurturing young hearts and minds
-      </p>
-      <h1 class="text-5xl md:text-7xl font-semibold text-white mb-8 leading-tight tracking-tight">
-        Children & Youth
-      </h1>
-      <p class="text-lg md:text-xl text-white/80 mb-12 max-w-2xl font-light leading-relaxed">
-        A community of faith dedicated to helping children grow in Christ's love through engaging programs and activities.
-      </p>
-      
-      <div class="flex flex-col sm:flex-row gap-4">
-        <a 
-          href="https://docs.google.com/forms/d/e/1FAIpQLSdIri3EaabwsN84Al7Xd7zVnWI7Jzfaoyu6NVkENI6w9FRaeA/viewform?usp=sf_link"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300 text-lg"
-        >
-          Register Now
-        </a>
-        <a 
-          href="/connect" 
-          class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-medium rounded-lg transition-all duration-300 text-lg"
-        >
-          Get Involved
-        </a>
-      </div>
+      {isLocal ? (
+        <>
+          <p class="text-xl md:text-2xl text-white/90 mb-4 font-light leading-relaxed">
+            Nurturing young hearts and minds
+          </p>
+          <h1 class="text-5xl md:text-7xl font-semibold text-white mb-8 leading-tight tracking-tight">
+            Children & Youth
+          </h1>
+          <p class="text-lg md:text-xl text-white/80 mb-12 max-w-2xl font-light leading-relaxed">
+            A community of faith dedicated to helping children grow in Christ's love through engaging programs and activities.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a 
+              href="https://docs.google.com/forms/d/e/1FAIpQLSdIri3EaabwsN84Al7Xd7zVnWI7Jzfaoyu6NVkENI6w9FRaeA/viewform?usp=sf_link"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300 text-lg"
+            >
+              Register Now
+            </a>
+            <a 
+              href="/connect" 
+              class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-medium rounded-lg transition-all duration-300 text-lg"
+            >
+              Get Involved
+            </a>
+          </div>
+        </>
+      ) : (
+        <>
+          <p class="text-xl md:text-2xl text-white/90 mb-4 font-light leading-relaxed">
+            Visiting with Family?
+          </p>
+          <h1 class="text-5xl md:text-7xl font-semibold text-white mb-8 leading-tight tracking-tight">
+            Family-Friendly Worship
+          </h1>
+          <p class="text-lg md:text-xl text-white/80 mb-12 max-w-2xl font-light leading-relaxed">
+            Your children are welcome here! We offer engaging programs during services, including Children's Church 
+            and nursery care, so you can focus on worship knowing your kids are having fun and learning about God's love.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a 
+              href="#sunday-programs"
+              class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300 text-lg"
+            >
+              Children's Programs
+            </a>
+            <a 
+              href="#visitor-info" 
+              class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-medium rounded-lg transition-all duration-300 text-lg"
+            >
+              Visitor Information
+            </a>
+          </div>
+        </>
+      )}
     </div>
   </div>
 </section>
@@ -81,56 +117,152 @@ const programs = [
 <!-- Programs Overview - Clean Cards -->
 <section class="py-20 bg-white">
   <div class="container mx-auto px-6">
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
-      {programs.map(program => (
-        <div class="text-center p-8">
-          <div class="w-16 h-16 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <Fragment set:html={program.icon} />
-            </svg>
+    {isLocal ? (
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+        {programs.map(program => (
+          <div class="text-center p-8">
+            <div class="w-16 h-16 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <Fragment set:html={program.icon} />
+              </svg>
+            </div>
+            <h2 class="text-xl font-semibold mb-2 text-gray-900">{program.title}</h2>
+            <p class="text-sm font-medium text-brand mb-2">{program.time}</p>
+            <p class="text-sm text-gray-600 leading-relaxed">{program.description}</p>
           </div>
-          <h2 class="text-xl font-semibold mb-2 text-gray-900">{program.title}</h2>
-          <p class="text-sm font-medium text-brand mb-2">{program.time}</p>
-          <p class="text-sm text-gray-600 leading-relaxed">{program.description}</p>
+        ))}
+      </div>
+    ) : (
+      <div id="visitor-info" class="max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+          <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
+            Visiting Families
+          </span>
+          <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">What to Expect</h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            We want your family's visit to be comfortable and enriching. Here's what we offer for children during services.
+          </p>
         </div>
-      ))}
-    </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="text-center p-8">
+            <div class="w-16 h-16 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            </div>
+            <h2 class="text-xl font-semibold mb-2 text-gray-900">Children's Church</h2>
+            <p class="text-sm font-medium text-brand mb-2">Ages 4-13 • 10:30 AM Service</p>
+            <p class="text-sm text-gray-600 leading-relaxed">Interactive Bible lessons, music, and activities designed for young minds. Children join parents for the first part of service.</p>
+          </div>
+
+          <div class="text-center p-8">
+            <div class="w-16 h-16 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            </div>
+            <h2 class="text-xl font-semibold mb-2 text-gray-900">Nursery Care</h2>
+            <p class="text-sm font-medium text-brand mb-2">Ages 0-3 • Both Services</p>
+            <p class="text-sm text-gray-600 leading-relaxed">Safe, nurturing environment with trained caregivers. Available during both 8:30 AM and 10:30 AM services.</p>
+          </div>
+
+          <div class="text-center p-8">
+            <div class="w-16 h-16 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            </div>
+            <h2 class="text-xl font-semibold mb-2 text-gray-900">Amos and Friends</h2>
+            <p class="text-sm font-medium text-brand mb-2">All Ages • 10:30 AM Service</p>
+            <p class="text-sm text-gray-600 leading-relaxed">Special children's moment featuring Amos the Mouse and Pastor Ron. A fun way to learn about God's love!</p>
+          </div>
+        </div>
+      </div>
+    )}
   </div>
 </section>
 
-<!-- After School Program -->
-<section class="py-20 bg-white">
+<!-- After School Program / Family Welcome Section -->
+<section id="sunday-programs" class="py-20 bg-white">
   <div class="container mx-auto px-6">
     <div class="max-w-7xl mx-auto">
       <div class="grid lg:grid-cols-2 gap-16 items-center">
         <div>
-          <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
-            Community Program
-          </span>
-          <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
-            After-School Program
-          </h2>
-          <p class="text-lg text-gray-600 mb-8 leading-relaxed">
-            Lake Ozark Christian Church is offering a free after-school program for children, 
-            grades Kindergarten through 5th grade (Heritage and Upper Elementary Schools), 
-            on Wednesdays from 3:30pm to 5:30pm. We provide transportation, snacks, activities, and a nurturing environment.
-          </p>
-          <div class="flex flex-col sm:flex-row gap-4">
-            <a 
-              href="https://docs.google.com/forms/d/e/1FAIpQLSdIri3EaabwsN84Al7Xd7zVnWI7Jzfaoyu6NVkENI6w9FRaeA/viewform?usp=sf_link"
-              target="_blank"
-              rel="noopener noreferrer" 
-              class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
-            >
-              Register Now
-            </a>
-            <a 
-              href="/connect" 
-              class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
-            >
-              Contact Us
-            </a>
-          </div>
+          {isLocal ? (
+            <>
+              <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
+                Community Program
+              </span>
+              <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
+                After-School Program
+              </h2>
+              <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+                Lake Ozark Christian Church is offering a free after-school program for children, 
+                grades Kindergarten through 5th grade (Heritage and Upper Elementary Schools), 
+                on Wednesdays from 3:30pm to 5:30pm. We provide transportation, snacks, activities, and a nurturing environment.
+              </p>
+              <div class="flex flex-col sm:flex-row gap-4">
+                <a 
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSdIri3EaabwsN84Al7Xd7zVnWI7Jzfaoyu6NVkENI6w9FRaeA/viewform?usp=sf_link"
+                  target="_blank"
+                  rel="noopener noreferrer" 
+                  class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
+                >
+                  Register Now
+                </a>
+                <a 
+                  href="/connect" 
+                  class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
+                >
+                  Contact Us
+                </a>
+              </div>
+            </>
+          ) : (
+            <>
+              <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
+                Sunday Experience
+              </span>
+              <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
+                A Typical Sunday Morning
+              </h2>
+              <div class="space-y-6">
+                <p class="text-lg text-gray-600 leading-relaxed">
+                  We want your family's visit to be smooth and enjoyable. Here's what to expect when you arrive:
+                </p>
+                <div class="bg-gray-50 rounded-xl p-6 space-y-4">
+                  <div class="flex items-start gap-3">
+                    <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                    <div>
+                      <h3 class="font-medium text-gray-900">Check-In Process</h3>
+                      <p class="text-gray-600">Our friendly greeters will help you check in your children and show you to their appropriate areas</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div>
+                      <h3 class="font-medium text-gray-900">Service Flow</h3>
+                      <p class="text-gray-600">Children start in the main service for worship, then move to their programs after Amos and Friends</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <div>
+                      <h3 class="font-medium text-gray-900">Safety First</h3>
+                      <p class="text-gray-600">Secure check-in/out process and background-checked volunteers ensure your children's safety</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
         <div class="relative">
           <img 

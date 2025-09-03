@@ -1,4 +1,8 @@
 ---
+import { getVisitorInfo } from '../utils/locationCheck';
+
+const info = await getVisitorInfo();
+const isLocal = info.isLocal;
 ---
 <footer class="bg-gray-50 border-t border-gray-200" role="contentinfo">
   <!-- Main Footer Content -->
@@ -152,7 +156,7 @@
         <!-- Copyright & Nonprofit Status -->
         <div class="text-center mb-8">
           <p class="text-gray-600 text-sm font-medium">
-            &copy; {new Date().getFullYear()} Lake Ozark Christian Church. All rights reserved.
+            &copy; {new Date().getFullYear()} <a href="https://trackly.works" class="text-gray-600 hover:text-brand transition-colors">PixelPulse Creations, LLC</a> under exclusive license to Lake Ozark Christian Church, Inc. All rights reserved.
           </p>
           <p class="text-gray-500 text-xs mt-2">
             Lake Ozark Christian Church, Inc. is a registered 501(c)(3) nonprofit organization (EIN 43-1193150).
@@ -202,6 +206,61 @@
                 <a href="https://lakeozarkchristian.org" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-brand underline decoration-1 underline-offset-2">lakeozarkchristian.org</a>
               </div>
             </div>
+          </div>
+
+          <!-- Additional Information -->
+          <div class="border-t border-gray-100 pt-8 mt-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <!-- Church Values -->
+              <div class="text-center">
+                <h4 class="font-semibold text-gray-700 text-sm mb-3">Our Values</h4>
+                <p class="text-xs text-gray-500">
+                  We are committed to fostering an inclusive, welcoming community rooted in Christ's love.
+                  Our mission is to serve God by serving others through worship, education, and outreach.
+                </p>
+              </div>
+
+              <!-- Accessibility Statement -->
+              <div class="text-center">
+                <h4 class="font-semibold text-gray-700 text-sm mb-3">Accessibility</h4>
+                <p class="text-xs text-gray-500">
+                  We strive to make our services and digital content accessible to everyone.
+                  If you experience any accessibility issues, please <a href="/report" class="text-gray-600 hover:text-brand underline decoration-1 underline-offset-2">let us know</a>.
+                </p>
+              </div>
+
+              <!-- Community Impact -->
+              <div class="text-center">
+                <h4 class="font-semibold text-gray-700 text-sm mb-3">Community Impact</h4>
+                <p class="text-xs text-gray-500">
+                  Through your support, we continue to serve the Lake of the Ozarks community with various
+                  outreach programs, youth initiatives, and community services.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Social Media Links -->
+          <div class="border-t border-gray-100 pt-8 mt-8">
+            <p class="text-gray-500 text-xs mt-2">
+              <b>You are viewing the {isLocal ? 'local' : 'visitor'} version of the site because you are {info.distance ? `${Math.round(info.distance)} miles from` : 'visiting'} Lake of the Ozarks. Content may be customized based on your location.</b>
+             </p>
+             <br>
+            <div class="flex justify-center space-x-6">
+              <a href="https://facebook.com/LakeOzarkChristianChurch" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-brand">
+                <span class="sr-only">Facebook</span>
+                <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
+                </svg>
+              </a>
+              <a href="https://youtube.com/@lakeozarkchristianchurch" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-brand">
+                <span class="sr-only">YouTube</span>
+                <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.417-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 11.998 5 11.998 5s6.255 0 7.814.418ZM15.194 12 10 15V9l5.194 3Z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </div>
+        
           </div>
         </div>
         </div>
