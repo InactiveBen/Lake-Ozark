@@ -1,0 +1,49 @@
+/* YouTube Video Section Component Styles */
+.youtube-video-section {
+  font-family: 'Albert Sans', system-ui, sans-serif;
+}
+
+.youtube-video-section h1,
+.youtube-video-section h2,
+.youtube-video-section h3,
+.youtube-video-section h4,
+.youtube-video-section h5,
+.youtube-video-section h6 {
+  font-family: 'Albert Sans', system-ui, sans-serif;
+}
+
+/* Video thumbnail hover effects */
+.youtube-video-section .video-thumbnail {
+  transition: transform 0.5s ease;
+}
+
+.youtube-video-section .video-thumbnail:hover {
+  transform: scale(1.05);
+}
+
+/* Play button overlay */
+.youtube-video-section .play-overlay {
+  transition: all 0.3s ease;
+}
+
+.youtube-video-section .play-button {
+  transition: opacity 0.3s ease;
+}
+
+/* Button hover effects */
+.youtube-video-section .btn-primary {
+  transition: all 0.3s ease;
+}
+
+.youtube-video-section .btn-primary:hover {
+  background-color: #7a4a2a; /* brand-dark equivalent */
+}
+
+.youtube-video-section .btn-secondary {
+  transition: all 0.3s ease;
+}
+
+.youtube-video-section .btn-secondary:hover {
+  background-color: white;
+  color: #374151;
+}

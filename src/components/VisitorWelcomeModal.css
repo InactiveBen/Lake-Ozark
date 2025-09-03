@@ -1,0 +1,183 @@
+/* Visitor Welcome Modal Styles */
+
+/* Modal animations */
+#visitor-welcome-modal {
+  animation: fadeIn 0.4s ease-out;
+}
+
+#visitor-welcome-modal .bg-white {
+  animation: slideInUp 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Custom checkbox styling */
+#visitor-welcome-modal input[type="checkbox"] {
+  accent-color: #8B5A2B; /* brand color */
+}
+
+/* Enhanced hover effects for interactive elements */
+#visitor-welcome-modal label:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 90, 43, 0.15);
+}
+
+#visitor-welcome-modal button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 90, 43, 0.2);
+}
+
+/* Loading spinner enhancement */
+#visitor-welcome-modal .animate-spin {
+  border-width: 3px;
+  border-color: #8B5A2B;
+  border-top-color: transparent;
+}
+
+/* Info card hover effects */
+#visitor-welcome-modal .bg-brand\/5:hover {
+  background-color: rgba(139, 90, 43, 0.08);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+/* Enhanced backdrop blur */
+#visitor-welcome-modal {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Custom scrollbar for modal content */
+#visitor-welcome-modal .max-h-\[95vh\] {
+  scrollbar-width: thin;
+  scrollbar-color: #8B5A2B #f3f4f6;
+}
+
+#visitor-welcome-modal .max-h-\[95vh\]::-webkit-scrollbar {
+  width: 6px;
+}
+
+#visitor-welcome-modal .max-h-\[95vh\]::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 3px;
+}
+
+#visitor-welcome-modal .max-h-\[95vh\]::-webkit-scrollbar-thumb {
+  background: #8B5A2B;
+  border-radius: 3px;
+}
+
+#visitor-welcome-modal .max-h-\[95vh\]::-webkit-scrollbar-thumb:hover {
+  background: #6d4422;
+}
+
+/* Enhanced focus states for accessibility */
+#visitor-welcome-modal input[type="checkbox"]:focus {
+  outline: 2px solid #8B5A2B;
+  outline-offset: 2px;
+}
+
+#visitor-welcome-modal button:focus {
+  outline: 2px solid #8B5A2B;
+  outline-offset: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  #visitor-welcome-modal .max-w-4xl {
+    margin: 1rem;
+    max-width: calc(100vw - 2rem);
+  }
+  
+  #visitor-welcome-modal .p-8 {
+    padding: 1.5rem;
+  }
+  
+  #visitor-welcome-modal .px-8 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* Enhanced gradient for header */
+#visitor-welcome-modal .bg-gradient-to-br {
+  background: linear-gradient(135deg, #8B5A2B 0%, #6d4422 50%, #8B5A2B 100%);
+}
+
+/* Pulse animation for loading state */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+#visitor-welcome-modal .animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Enhanced button styles */
+#visitor-welcome-modal .bg-brand {
+  background: linear-gradient(135deg, #8B5A2B 0%, #6d4422 100%);
+  box-shadow: 0 2px 4px rgba(139, 90, 43, 0.2);
+}
+
+#visitor-welcome-modal .bg-brand:hover {
+  background: linear-gradient(135deg, #6d4422 0%, #5a3a1e 100%);
+  box-shadow: 0 4px 8px rgba(139, 90, 43, 0.3);
+}
+
+/* Ensure proper font family */
+#visitor-welcome-modal {
+  font-family: 'Albert Sans', system-ui, sans-serif;
+}
+
+#visitor-welcome-modal h1,
+#visitor-welcome-modal h2,
+#visitor-welcome-modal h3,
+#visitor-welcome-modal h4,
+#visitor-welcome-modal h5,
+#visitor-welcome-modal h6 {
+  font-family: 'Albert Sans', system-ui, sans-serif;
+}
+
+/* Enhanced close button */
+#visitor-welcome-modal #close-visitor-modal {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+#visitor-welcome-modal #close-visitor-modal:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+/* Smooth transitions for all interactive elements */
+#visitor-welcome-modal * {
+  transition: all 0.3s ease;
+}
+
+/* Enhanced shadow for modal */
+#visitor-welcome-modal .shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05);
+}

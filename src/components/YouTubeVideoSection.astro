@@ -1,0 +1,102 @@
+---
+export interface Props {
+  videoId: string;
+  title: string;
+  description: string;
+  thumbnailUrl?: string;
+  badge?: string;
+  badgeText?: string;
+  reverse?: boolean;
+}
+
+const { 
+  videoId, 
+  title, 
+  description, 
+  thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+  badge = "Welcome Video",
+  badgeText = "Get to Know Us",
+  reverse = false
+} = Astro.props;
+
+const gridClass = reverse ? "lg:grid-cols-2" : "lg:grid-cols-2";
+const orderClass = reverse ? "lg:order-2" : "lg:order-1";
+const contentOrderClass = reverse ? "lg:order-1" : "lg:order-2";
+---
+
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class={`grid ${gridClass} gap-16 items-center`}>
+        <div class={orderClass}>
+          <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
+            {badge}
+          </span>
+          <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
+            {title}
+          </h2>
+          <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+            {description}
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <button 
+              onclick={`openVideoModal('${videoId}', '${title.replace(/'/g, "\\'")}')`}
+              class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
+            >
+              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+              Watch Video
+            </button>
+            <a 
+              href="/worship" 
+              class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
+            >
+              Plan Your Visit
+            </a>
+          </div>
+        </div>
+        <div class={`relative ${contentOrderClass}`}>
+          <button 
+            onclick={`openVideoModal('${videoId}', '${title.replace(/'/g, "\\'")}')`}
+            class="group block w-full"
+            aria-label={`Watch ${title}`}
+          >
+            <div class="relative overflow-hidden rounded-2xl">
+              <img 
+                src={thumbnailUrl}
+                alt={`Thumbnail for ${title}`}
+                class="w-full h-[600px] object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
+                <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/20 backdrop-blur-sm rounded-full p-6">
+                  <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Make sure the openVideoModal function is available globally
+  if (typeof window !== 'undefined') {
+    window.openVideoModal = window.openVideoModal || function(videoId: string, videoTitle: string) {
+      const modal = document.getElementById('video-modal');
+      const iframe = document.getElementById('video-iframe') as HTMLIFrameElement;
+      const title = document.getElementById('video-modal-title');
+      
+      if (modal && iframe && title) {
+        title.textContent = videoTitle;
+        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+    };
+  }
+</script>
