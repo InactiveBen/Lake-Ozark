@@ -326,7 +326,7 @@ const color = {
       // Create and append the first script (gtag.js)
       const gtagScript = document.createElement('script');
       gtagScript.async = true;
-      gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-T4PD8XC0SC';
+      gtagScript.src = 'https://analytics.locc.us/ga/gtag/js?id=G-T4PD8XC0SC';
       document.head.appendChild(gtagScript);
 
       // Create and append the configuration script
@@ -335,14 +335,28 @@ const color = {
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-T4PD8XC0SC');
+        // Configure GA with measurement protocol
+        gtag('config', 'G-T4PD8XC0SC', {
+          'transport_url': 'https://analytics.locc.us/ga/g/collect',
+          'transport_method': 'xhr',
+          'send_page_view': true,
+          'debug_mode': true
+        });
+
+        // Force an immediate event to test collection
+        setTimeout(() => {
+          gtag('event', 'page_view', {
+            'debug_mode': true,
+            'page_location': window.location.href,
+            'page_title': document.title,
+            'send_to': 'G-T4PD8XC0SC'
+          });
+        }, 1000);
       `;
       document.head.appendChild(configScript);
-      console.log(
-  '[G_CONSENT] You have consented to Google Analytics by accepting the cookie banner, enabling analytics cookies, or clicking "Accept All Cookies." Google Analytics is now being loaded.'
-);
+
     } else {
-      console.log('[G_LOADED] Google Analytics was already loaded, we have nothing to do here.');
+
     }
   }
 
@@ -353,7 +367,7 @@ const color = {
         // Initialize Sentry if not already initialized
         if (!window.Sentry.getCurrentHub || !window.Sentry.getCurrentHub().getClient()) {
           window.Sentry.init({
-            dsn: "https://d4be77c82b4c10fc61de7d57705ddc7b@o4509496802738176.ingest.us.sentry.io/4509496803786752",
+            dsn: 'https://d4be77c82b4c10fc61de7d57705ddc7b@analytics.locc.us/sentry/envelope/',
             integrations: [
               window.Sentry.browserTracingIntegration(),
               window.Sentry.replayIntegration({
@@ -368,32 +382,26 @@ const color = {
             replaysOnErrorSampleRate: 1.0,
             environment: "production",
           });
-          console.log('[SENTRY_CONSENT] You have consented to Sentry Analytics and Logging by accepting the cookie banner, enabling analytics cookies, or clicking "Accept All Cookies.');
-        } else {
+          } else {
           // Re-enable Sentry if it was disabled
           const hub = window.Sentry.getCurrentHub();
           const client = hub.getClient();
           if (client) {
             client.getOptions().enabled = true;
-            console.log('[SENTRY_CONSENT] Sentry error monitoring has been re-enabled.');
           }
         }
       } catch (error) {
-        console.error('[SENTRY_ERROR] Failed to enable Sentry:', error);
+        // Silently fail
       }
-    } else {
-      console.log('[SENTRY_UNAVAILABLE] Sentry is not available on this page.');
     }
-  }
+    }
+  
 
   function unloadGoogleAnalytics() {
-    console.log('[G_UNLOAD] User has rejected Google Analytics, we are unloading it.');
-    
     // Remove the gtag.js script
     const gtagScript = document.querySelector('script[src*="googletagmanager"]');
     if (gtagScript) {
       gtagScript.remove();
-      console.log('[G_UNLOAD] User has rejected Google Analytics. It has been successfully unloaded.');
     }
 
     // Remove the configuration script by finding all inline scripts and checking their content
@@ -402,7 +410,6 @@ const color = {
       const script = scripts[i];
       if (!script.src && script.textContent?.includes('gtag')) {
         script.remove();
-        console.log('[G_UNLOAD] Removed gtag configuration script');
         break;
       }
     }
@@ -410,21 +417,15 @@ const color = {
     // Clear any existing dataLayer
     if (window.dataLayer) {
       window.dataLayer = [];
-      console.log('[G_UNLOAD] Successfully cleared dataLayer and removed all analytics data');
     }
 
     // Set gtag to undefined instead of trying to delete it
     if (window.gtag) {
       window.gtag = undefined as any;
-      console.log('[G_UNLOAD] Successfully removed gtag function from window object');
     }
-    
-    console.log('[G_UNLOAD] Google Analytics has been successfully unloaded and all tracking data cleared');
   }
 
   function unloadSentry() {
-    console.log('[SENTRY_UNLOAD] User has rejected analytics cookies, disabling Sentry error monitoring.');
-    
     if (window.Sentry) {
       try {
         // Disable Sentry instead of unloading it completely
@@ -442,13 +443,9 @@ const color = {
             scope.clear();
           });
         }
-        
-        console.log('[SENTRY_UNLOAD] Sentry has been successfully disabled and all tracking data cleared');
       } catch (error) {
-        console.error('[SENTRY_UNLOAD_ERROR] Failed to properly disable Sentry:', error);
+        // Silently fail
       }
-    } else {
-      console.log('[SENTRY_UNLOAD] Sentry was not loaded, nothing to disable.');
     }
   }
 
@@ -504,42 +501,26 @@ const color = {
       const response = await fetch('https://geo.locc.us/where');
       if (!response.ok) {
         // If geolocation fails, show banner as fallback (better safe than sorry)
-        console.log('[COOKIE_COMPLIANCE] Geolocation check failed, showing banner as fallback');
-        setTimeout(showBanner, 3000);
-        return;
-      }
-      
-      const geoData = await response.json();
-      console.log('[COOKIE_COMPLIANCE] Geolocation data:', geoData);
-      
-      // Check if any privacy laws apply to this user's location
-      // GDPR: General Data Protection Regulation (EU)
-      // CCPA: California Consumer Privacy Act (California, US) 
-      // LGPD: Lei Geral de Proteção de Dados (Brazil)
-      // PIPEDA: Personal Information Protection and Electronic Documents Act (Canada)
-      // APPA: Australian Privacy Principles Act (Australia)
-      const privacyLaws = {
-        gdpr: geoData.gdpr || false,
-        ccpa: geoData.ccpa || geoData.cpa || false, // Check both ccpa and cpa for compatibility
-        lgpd: geoData.lgpd || false,
-        pipeda: geoData.pipeda || false,
-        appa: geoData.appa || false
-      };
-      
-      const requiresConsent = privacyLaws.gdpr || privacyLaws.ccpa || privacyLaws.lgpd || privacyLaws.pipeda || privacyLaws.appa;
-      
-      console.log('[COOKIE_COMPLIANCE] Privacy law status:', privacyLaws);
-      console.log('[COOKIE_COMPLIANCE] Requires consent:', requiresConsent);
-      
-      if (requiresConsent) {
-        const applicableLaws = Object.entries(privacyLaws)
-          .filter(([_, applies]) => applies)
-          .map(([law, _]) => law.toUpperCase())
-          .join(', ');
-        console.log(`[COOKIE_COMPLIANCE] Privacy laws detected (${applicableLaws}), showing cookie banner`);
-        setTimeout(showBanner, 2000);
-      } else {
-        console.log('[COOKIE_COMPLIANCE] No privacy laws detected for this region, enabling analytics by default');
+              setTimeout(showBanner, 3000);
+      return;
+    }
+    
+    const geoData = await response.json();
+    
+    // Check if any privacy laws apply to this user's location
+    const privacyLaws = {
+      gdpr: geoData.gdpr || false,
+      ccpa: geoData.ccpa || geoData.cpa || false,
+      lgpd: geoData.lgpd || false,
+      pipeda: geoData.pipeda || false,
+      appa: geoData.appa || false
+    };
+    
+    const requiresConsent = privacyLaws.gdpr || privacyLaws.ccpa || privacyLaws.lgpd || privacyLaws.pipeda || privacyLaws.appa;
+    
+    if (requiresConsent) {
+      setTimeout(showBanner, 2000);
+    } else {
         handleCookieConsent({
           essential: true,
           analytics: true,
@@ -547,7 +528,6 @@ const color = {
         });
       }
     } catch (error) {
-      console.error('[COOKIE_COMPLIANCE] Error checking compliance requirements:', error);
       // If there's any error, show the banner as a fallback (better safe than sorry)
       setTimeout(showBanner, 3000);
     }

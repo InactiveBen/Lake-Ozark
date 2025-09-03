@@ -1,0 +1,245 @@
+---
+// SundayCalendar.astro - Reusable component for displaying Sunday worship services
+export interface Props {
+  title?: string;
+  subtitle?: string;
+  maxEvents?: number;
+  hideWhenNoData?: boolean;
+}
+
+const {
+  title = "Upcoming Sunday Services",
+  subtitle = "Join us for worship every Sunday at 8:30 AM and 10:30 AM",
+  maxEvents = 6,
+  hideWhenNoData = true
+} = Astro.props;
+---
+
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
+          Stay Connected
+        </span>
+        <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">{title}</h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          {subtitle}
+        </p>
+      </div>
+      
+      <!-- Loading State -->
+      <div id="calendar-loading" class="text-center py-16">
+        <div class="inline-flex items-center gap-3">
+          <div class="animate-spin rounded-full h-8 w-8 border-2 border-brand border-t-transparent"></div>
+          <p class="text-lg text-gray-600">Loading upcoming services...</p>
+        </div>
+      </div>
+      
+      <!-- Error State -->
+      <div id="calendar-error" class="text-center py-16 hidden">
+        <div class="bg-red-50 border border-red-200 p-8 max-w-md mx-auto rounded-xl">
+          <p class="text-red-700 font-medium">Unable to load calendar</p>
+          <p class="text-red-600 text-sm mt-1">Please try again later</p>
+        </div>
+      </div>
+      
+      <!-- Custom Calendar Display -->
+      <div id="custom-calendar" class="hidden">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="calendar-events">
+          <!-- Events will be populated here -->
+        </div>
+      </div>
+      
+      <!-- Fallback: Simple Sunday List -->
+      <div id="fallback-sundays" class="hidden">
+        <div class="bg-gray-50 rounded-2xl p-8">
+          <h3 class="text-2xl font-semibold mb-6 text-gray-900 text-center">Upcoming Sundays</h3>
+          <div class="grid md:grid-cols-2 gap-4" id="sunday-list">
+            <!-- Sundays will be populated here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script define:vars={{ maxEvents, hideWhenNoData }}>
+  // Custom Calendar functionality using the working API endpoint
+  async function loadCustomCalendar() {
+    const loadingEl = document.getElementById('calendar-loading');
+    const errorEl = document.getElementById('calendar-error');
+    const customCalendarEl = document.getElementById('custom-calendar');
+    const fallbackEl = document.getElementById('fallback-sundays');
+    
+    try {
+      // Use the Cloudflare Worker proxy at /events
+      const apiUrl = 'https://calander.locc.us/events';
+      
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      
+      if (data.success && data.events && data.events.length > 0) {
+        displayCustomEvents(data.events);
+        if (loadingEl) loadingEl.style.display = 'none';
+        if (customCalendarEl) customCalendarEl.classList.remove('hidden');
+        return;
+      }
+      
+      // If no Sunday events found, handle based on hideWhenNoData setting
+      if (hideWhenNoData) {
+        // Hide the entire component
+        const section = document.querySelector('section');
+        if (section) {
+          section.style.display = 'none';
+        }
+      } else {
+        // Show fallback
+        showFallbackSundays();
+      }
+      
+    } catch (error) {
+      console.error('Error loading calendar:', error);
+      if (hideWhenNoData) {
+        // Hide the entire component on error
+        const section = document.querySelector('section');
+        if (section) {
+          section.style.display = 'none';
+        }
+      } else {
+        showFallbackSundays();
+      }
+    }
+  }
+  
+  function displayCustomEvents(events) {
+    const eventsContainer = document.getElementById('calendar-events');
+    if (!eventsContainer) return;
+    
+    // Group events by date
+    const eventsByDate = {};
+    events.forEach(event => {
+      const eventDate = new Date(event.start.dateTime || event.start.date);
+      const dateKey = eventDate.toDateString(); // e.g., "Sun Aug 31 2025"
+      
+      if (!eventsByDate[dateKey]) {
+        eventsByDate[dateKey] = {
+          date: eventDate,
+          events: []
+        };
+      }
+      eventsByDate[dateKey].events.push(event);
+    });
+    
+    // Convert to array and sort by date
+    const sortedDates = Object.values(eventsByDate).sort((a, b) => a.date - b.date);
+    
+    const eventsHTML = sortedDates.slice(0, maxEvents).map(dateGroup => {
+      const formattedDate = dateGroup.date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      
+      // Sort events within the day by time
+      dateGroup.events.sort((a, b) => {
+        const timeA = new Date(a.start.dateTime || a.start.date);
+        const timeB = new Date(b.start.dateTime || b.start.date);
+        return timeA - timeB;
+      });
+      
+      // Create time strings for each service
+      const timeStrings = dateGroup.events.map(event => {
+        const eventDate = new Date(event.start.dateTime || event.start.date);
+        return eventDate.toLocaleTimeString('en-US', { 
+          hour: 'numeric', 
+          minute: '2-digit',
+          hour12: true 
+        });
+      });
+      
+      const timesDisplay = timeStrings.join(' & ');
+      
+      return `
+        <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all duration-300">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-brand/10 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <div class="flex-1">
+              <h3 class="font-semibold text-lg text-gray-900 mb-2">Sunday Service</h3>
+              <p class="text-gray-600 text-sm mb-1">${formattedDate}</p>
+              <p class="text-gray-500 text-sm">${timesDisplay}</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+    
+    eventsContainer.innerHTML = eventsHTML;
+  }
+  
+  function showFallbackSundays() {
+    const loadingEl = document.getElementById('calendar-loading');
+    const fallbackEl = document.getElementById('fallback-sundays');
+    const sundayListEl = document.getElementById('sunday-list');
+    
+    if (!sundayListEl) return;
+    
+    // Generate next 8 Sundays
+    const sundays = [];
+    const today = new Date();
+    let currentDate = new Date(today);
+    
+    // Find next Sunday
+    const daysUntilSunday = (7 - currentDate.getDay()) % 7;
+    if (daysUntilSunday === 0 && currentDate.getDay() !== 0) {
+      currentDate.setDate(currentDate.getDate() + 7);
+    } else {
+      currentDate.setDate(currentDate.getDate() + daysUntilSunday);
+    }
+    
+    // Generate 8 Sundays
+    for (let i = 0; i < 8; i++) {
+      const sundayDate = new Date(currentDate);
+      sundayDate.setDate(currentDate.getDate() + (i * 7));
+      
+      sundays.push({
+        date: sundayDate,
+        formatted: sundayDate.toLocaleDateString('en-US', {
+          weekday: 'long',
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric'
+        })
+      });
+    }
+    
+    const sundaysHTML = sundays.map(sunday => `
+      <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
+        <div class="w-10 h-10 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-3">
+          <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <h4 class="font-semibold text-gray-900 mb-1">Sunday Service</h4>
+        <p class="text-sm text-gray-600">${sunday.formatted}</p>
+        <p class="text-xs text-gray-500 mt-1">8:30 AM & 10:30 AM</p>
+      </div>
+    `).join('');
+    
+    sundayListEl.innerHTML = sundaysHTML;
+    
+    if (loadingEl) loadingEl.style.display = 'none';
+    if (fallbackEl) fallbackEl.classList.remove('hidden');
+  }
+  
+  // Initialize calendar when page loads
+  document.addEventListener('DOMContentLoaded', loadCustomCalendar);
+  
+  // Also initialize on Astro page load
+  document.addEventListener('astro:page-load', loadCustomCalendar);
+</script>
