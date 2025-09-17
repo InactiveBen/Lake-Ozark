@@ -18,7 +18,7 @@ import AccessibilityMenu from '../components/AccessibilityMenu.astro';
   <nav class="container mx-auto px-6" aria-label="Main navigation">
     <div class="flex justify-between items-center h-20">
       <!-- Logo -->
-      <a href="/" class="flex items-center gap-4" aria-label="Lake Ozark Christian Church - Home">
+      <a href="/?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=navigation&utm_content=logo" class="flex items-center gap-4" aria-label="Lake Ozark Christian Church - Home">
         <img src="http://cdn.lakeozarkdisciples.org/media/LOCC-header.png" alt="Lake Ozark Christian Church Logo" class="h-12 rounded-lg" width="auto" height="48" />
       </a>
       
@@ -35,11 +35,11 @@ import AccessibilityMenu from '../components/AccessibilityMenu.astro';
           Attend Online
         </a>
         <!-- Direct Links -->
-        <a href="/worship" class="text-gray-700 hover:text-brand focus:text-brand focus:outline-none font-medium py-2 px-3 rounded-lg hover:bg-gray-50 transition-all duration-200">Sunday Services</a>
+        <a href="/worship?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=navigation&utm_content=sunday_services" class="text-gray-700 hover:text-brand focus:text-brand focus:outline-none font-medium py-2 px-3 rounded-lg hover:bg-gray-50 transition-all duration-200">Sunday Services</a>
 
-        <a href="/children-youth" class="text-gray-700 hover:text-brand focus:text-brand focus:outline-none font-medium py-2 px-3 rounded-lg hover:bg-gray-50 transition-all duration-200">Children & Youth</a>
+        <a href="/children-youth?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=navigation&utm_content=children_youth" class="text-gray-700 hover:text-brand focus:text-brand focus:outline-none font-medium py-2 px-3 rounded-lg hover:bg-gray-50 transition-all duration-200">Children & Youth</a>
                 
-        <a href="/about" class="text-gray-700 hover:text-brand focus:text-brand focus:outline-none font-medium py-2 px-3 rounded-lg hover:bg-gray-50 transition-all duration-200">About Us</a>
+        <a href="/about?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=navigation&utm_content=about_us" class="text-gray-700 hover:text-brand focus:text-brand focus:outline-none font-medium py-2 px-3 rounded-lg hover:bg-gray-50 transition-all duration-200">About Us</a>
         
         
         <!-- About Dropdown -->
@@ -58,18 +58,18 @@ import AccessibilityMenu from '../components/AccessibilityMenu.astro';
             </svg>
           </button>
           <div id="about-menu" class="absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-2 hidden" role="menu">
-            <a href="/chimes" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none rounded-lg mx-2" role="menuitem" tabindex="0">Newsletter</a>
-            <a href="/staff" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none rounded-lg mx-2" role="menuitem" tabindex="0">Staff</a>
-            <a href="/weddings" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none rounded-lg mx-2" role="menuitem" tabindex="0">Weddings</a>
-            <a href="/blog" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none rounded-lg mx-2" role="menuitem" tabindex="0">Blog</a>
-            <a href="/videos" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none rounded-lg mx-2" role="menuitem" tabindex="0">Service Videos</a>
-            <a href="/calendar" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none rounded-lg mx-2" role="menuitem" tabindex="0">Calendar</a>
-            <a href="https://shelterinastorm.org/" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none rounded-lg mx-2" role="menuitem" tabindex="0">Shelter in a Storm</a>
+            <a href="/chimes?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=dropdown&utm_content=newsletter" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none rounded-lg mx-2" role="menuitem" tabindex="0">Newsletter</a>
+            <a href="/staff?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=dropdown&utm_content=staff" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none rounded-lg mx-2" role="menuitem" tabindex="0">Staff</a>
+            <a href="/weddings?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=dropdown&utm_content=weddings" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none rounded-lg mx-2" role="menuitem" tabindex="0">Weddings</a>
+            <a href="/blog?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=dropdown&utm_content=blog" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none rounded-lg mx-2" role="menuitem" tabindex="0">Blog</a>
+            <a href="/videos?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=dropdown&utm_content=service_videos" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none rounded-lg mx-2" role="menuitem" tabindex="0">Service Videos</a>
+            <a href="/calendar?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=dropdown&utm_content=calendar" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none rounded-lg mx-2" role="menuitem" tabindex="0">Calendar</a>
+            <a href="https://shelterinastorm.org/?utm_source=lakeozarkdisciples&ref=lakeozarkdisciples.org&utm_medium=header&utm_campaign=external&utm_content=shelter_storm" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none rounded-lg mx-2" role="menuitem" tabindex="0">Shelter in a Storm</a>
           </div>
         </div>        
         <!-- Donate Button -->
         <a 
-          href="/giving"
+          href="/giving?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=cta&utm_content=donate"
           class="bg-brand hover:bg-brand-dark focus:bg-brand-dark focus:outline-none text-white px-6 py-2.5 rounded-xl font-semibold transition-all duration-200 shadow-sm hover:shadow-md"
         >
           Donate
@@ -93,9 +93,9 @@ import AccessibilityMenu from '../components/AccessibilityMenu.astro';
     <!-- Mobile Menu -->
     <div class="md:hidden hidden bg-white rounded-xl mt-2 mb-4 shadow-lg border border-gray-100" id="mobile-menu" role="navigation" aria-label="Mobile navigation">
       <div class="px-4 pt-2 pb-3 space-y-1">
-        <a href="/worship" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Sunday Services</a>
-        <a href="/children-youth" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Children & Youth</a>
-        <a href="/about" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">About Us</a>
+        <a href="/worship?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=mobile&utm_content=sunday_services" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Sunday Services</a>
+        <a href="/children-youth?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=mobile&utm_content=children_youth" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Children & Youth</a>
+        <a href="/about?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=mobile&utm_content=about_us" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">About Us</a>
         
         <a 
           href="https://live.locc.us?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=navigation/"
@@ -108,16 +108,16 @@ import AccessibilityMenu from '../components/AccessibilityMenu.astro';
         
         <div class="border-b border-gray-100 pb-3 mb-3">
           <h2 class="font-semibold px-3 py-2 text-gray-800">More</h2>
-          <a href="/chimes" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Newsletter</a>
-          <a href="/staff" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Staff</a>
-          <a href="/blog" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Blog</a>
-          <a href="/videos" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Service Videos</a>
-          <a href="/weddings" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Weddings</a>
-          <a href="/calendar" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Calendar</a>
-          <a href="https://shelterinastorm.org/" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Shelter in a Storm</a>
+          <a href="/chimes?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=mobile&utm_content=newsletter" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Newsletter</a>
+          <a href="/staff?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=mobile&utm_content=staff" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Staff</a>
+          <a href="/blog?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=mobile&utm_content=blog" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Blog</a>
+          <a href="/videos?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=mobile&utm_content=service_videos" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Service Videos</a>
+          <a href="/weddings?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=mobile&utm_content=weddings" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Weddings</a>
+          <a href="/calendar?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=mobile&utm_content=calendar" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Calendar</a>
+          <a href="https://shelterinastorm.org/?utm_source=lakeozarkdisciples&ref=lakeozarkdisciples.org&utm_medium=header&utm_campaign=external&utm_content=shelter_storm" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Shelter in a Storm</a>
         </div>
 
-        <a href="/giving" class="block px-3 py-2 text-brand font-semibold hover:text-brand-dark focus:text-brand-dark focus:outline-none rounded-lg hover:bg-brand/5">Donate</a>
+        <a href="/giving?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=mobile&utm_content=donate" class="block px-3 py-2 text-brand font-semibold hover:text-brand-dark focus:text-brand-dark focus:outline-none rounded-lg hover:bg-brand/5">Donate</a>
       </div>
     </div>
   </nav>
