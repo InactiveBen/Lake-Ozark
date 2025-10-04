@@ -9,7 +9,7 @@ export interface Props {
 
 const {
   title = "Upcoming Sunday Services",
-  subtitle = "Join us for worship every Sunday at 8:30 AM and 10:30 AM",
+  subtitle = "Join us for worship every Sunday at 10:30 AM",
   maxEvents = 6,
   hideWhenNoData = true
 } = Astro.props;
@@ -225,7 +225,7 @@ const {
         </div>
         <h4 class="font-semibold text-gray-900 mb-1">Sunday Service</h4>
         <p class="text-sm text-gray-600">${sunday.formatted}</p>
-        <p class="text-xs text-gray-500 mt-1">8:30 AM & 10:30 AM</p>
+        <p class="text-xs text-gray-500 mt-1">10:30 AM</p>
       </div>
     `).join('');
     
