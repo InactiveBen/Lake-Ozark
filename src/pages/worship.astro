@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import LocationMap from '../components/LocationMap.astro';
 import SundayCalendar from '../components/SundayCalendar.astro';
 
 import { isLocalVisitor } from '../utils/locationCheck';
@@ -8,35 +9,12 @@ const isLocal = await isLocalVisitor();
 
 const heroImage = {
   url: "http://cdn.lakeozarkdisciples.org/media/69CA977C-2462-4E2A-B067-A2FCD5D87A3F.jpeg",
-  alt: "Interior view of Lake Ozark Christian Church sanctuary with people in the image"
+  alt: "Interior view of Lake Ozark Christian Church sanctuary"
 };
-
-const whatToExpect = [
-  {
-    title: "Welcoming Atmosphere",
-    description: "Experience a warm, inclusive environment where everyone is welcome.",
-    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />`
-  },
-  {
-    title: "Music Ministry",
-    description: "Enjoy contemporary and traditional music that lifts our spirits in worship.",
-    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />`
-  },
-  {
-    title: "Engaging Message",
-    description: "Listen to inspiring messages that connect scripture with daily life.",
-    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />`
-  },
-  {
-    title: "Family-Friendly",
-    description: "Children's programs and nursery care available during service.",
-    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />`
-  }
-];
 ---
 
 <Layout title="Worship With Us">
-  <!-- Hero Section - Clean and Minimalist -->
+  <!-- Hero Section -->
   <section class="relative overflow-hidden bg-white">
     <div class="absolute inset-0">
       <img 
@@ -49,114 +27,104 @@ const whatToExpect = [
 
     <div class="relative container mx-auto px-6 py-32 md:py-40">
       <div class="max-w-4xl">
-        {isLocal ? (
-          <>
-            <p class="text-xl md:text-2xl text-white/90 mb-4 font-light leading-relaxed">
-              There's a place for you here.
-            </p>
-            <h1 class="text-5xl md:text-7xl font-semibold text-white mb-8 leading-tight tracking-tight">
-              Worship With Us
-            </h1>
-            <p class="text-lg md:text-xl text-white/80 mb-12 max-w-2xl font-light leading-relaxed">
-              Join us in worship as we celebrate God's love and grace together. All are welcome at Christ's table.
-            </p>
-            
-            <div class="flex flex-col sm:flex-row gap-4">
-              <a 
-                href="#service-info"
-                class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300 text-lg"
-              >
-                Service Times
-              </a>
-              <a 
-                href="https://www.youtube.com/channel/UCUcLKfZo5Su6-ypmt1dkPKA" 
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-medium rounded-lg transition-all duration-300 text-lg"
-              >
-                Watch Online
-              </a>
-            </div>
-          </>
-        ) : (
-          <>
-            <p class="text-xl md:text-2xl text-white/90 mb-4 font-light leading-relaxed">
-              Visiting the Lake of the Ozarks?
-            </p>
-            <h1 class="text-5xl md:text-7xl font-semibold text-white mb-8 leading-tight tracking-tight">
-              Join Us for Worship
-            </h1>
-            <p class="text-lg md:text-xl text-white/80 mb-12 max-w-2xl font-light leading-relaxed">
-              Whether you're here for a weekend or an extended stay, we invite you to experience our welcoming community. 
-              Casual dress, contemporary worship, and a message that connects with daily life.
-            </p>
-            
-            <div class="flex flex-col sm:flex-row gap-4">
-              <a 
-                href="#what-to-expect"
-                class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300 text-lg"
-              >
-                What to Expect
-              </a>
-              <a 
-                href="https://www.google.com/maps/dir//Lake+Ozark+Christian+Church,+1560+Bagnell+Dam+Blvd,+Lake+Ozark,+MO+65049/@38.1981839,-92.6386717,19z/"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-medium rounded-lg transition-all duration-300 text-lg"
-              >
-                Get Directions
-              </a>
-            </div>
-          </>
-        )}
+        <p class="text-xl md:text-2xl text-white/90 mb-4 font-light leading-relaxed">
+          {isLocal ? "There's a place for you here." : "Visiting the Lake of the Ozarks?"}
+        </p>
+        <h1 class="text-5xl md:text-7xl font-semibold text-white mb-8 leading-tight tracking-tight">
+          {isLocal ? "Worship With Us" : "Join Us for Worship"}
+        </h1>
+        <p class="text-lg md:text-xl text-white/80 mb-12 max-w-2xl font-light leading-relaxed">
+          {isLocal 
+            ? "Join us in worship as we celebrate God's love and grace together. All are welcome at Christ's table."
+            : "Whether you're here for a weekend or an extended stay, we invite you to experience our welcoming community."}
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a 
+            href="#visit"
+            class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300 text-lg"
+          >
+            Service Times
+          </a>
+          <a 
+            href="https://live.locc.us" 
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-medium rounded-lg transition-all duration-300 text-lg"
+          >
+            Watch Online
+          </a>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Service Information - Matching homepage style -->
-  <section id="service-info" class="py-20 bg-white">
+  <!-- Visit Us Section with Map -->
+  <section id="visit" class="py-20 bg-white">
     <div class="container mx-auto px-6">
       <div class="max-w-7xl mx-auto">
-        <div class="text-center mb-16">
-          <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
-            Visit Us
-          </span>
-          <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Service Times & Location</h2>
-          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-            Join us for worship, fellowship, and community programs throughout the week
-          </p>
-        </div>
-        
-        <div class="grid sm:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          <div class="text-center p-8">
-            <div class="w-16 h-16 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
+              Join Us
+            </span>
+            <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
+              Sunday Worship
+            </h2>
+            <div class="space-y-6">
+              <p class="text-lg text-gray-600 leading-relaxed">
+                Every Sunday we gather to worship, learn, and grow together. Come as you are — no dress code, no judgment, just a community seeking to follow Jesus.
+              </p>
+              <div class="bg-gray-50 rounded-xl p-6 space-y-4">
+                <div class="flex items-start gap-3">
+                  <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <div>
+                    <h3 class="font-medium text-gray-900">Sundays at 10:30 AM</h3>
+                    <p class="text-gray-600">About an hour — worship, message, and fellowship</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  </svg>
+                  <div>
+                    <h3 class="font-medium text-gray-900">1560 Bagnell Dam Blvd</h3>
+                    <p class="text-gray-600">Lake Ozark, MO 65049 · Free parking available</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  </svg>
+                  <div>
+                    <h3 class="font-medium text-gray-900">Children's Programs</h3>
+                    <p class="text-gray-600">Nursery and children's church available during service</p>
+                  </div>
+                </div>
+              </div>
+              <div class="flex flex-col sm:flex-row gap-4">
+                <a 
+                  href="https://www.google.com/maps/dir//Lake+Ozark+Christian+Church,+1560+Bagnell+Dam+Blvd,+Lake+Ozark,+MO+65049"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
+                >
+                  Get Directions
+                </a>
+                <a 
+                  href="tel:573-365-3366"
+                  class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
+                >
+                  Call Us
+                </a>
+              </div>
             </div>
-            <h2 class="text-2xl font-semibold mb-2 text-gray-900">Sunday Service</h2>
-            <p class="text-lg font-light text-gray-700">Sun 10:30 AM</p>
           </div>
-          
-          <div class="text-center p-8">
-            <div class="w-16 h-16 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-              </svg>
-            </div>
-            <h2 class="text-2xl font-semibold mb-2 text-gray-900">Location</h2>
-            <p class="text-lg font-light text-gray-700">1560 Bagnell Dam Blvd.</p>
-          </div>
-          
-          <div class="text-center p-8">
-            <div class="w-16 h-16 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-              </svg>
-            </div>
-            <h2 class="text-2xl font-semibold mb-2 text-gray-900">After-School Program</h2>
-            <p class="text-lg font-light text-gray-700">Wed 3:30-5:30 PM</p>
+          <div class="relative hidden lg:block">
+            <LocationMap height="600px" showRoute={true} containerId="worship-map" />
           </div>
         </div>
       </div>
@@ -164,75 +132,69 @@ const whatToExpect = [
   </section>
 
   <!-- What to Expect Section -->
-  <section class="py-20 bg-white">
+  <section id="what-to-expect" class="py-20 bg-white">
     <div class="container mx-auto px-6">
       <div class="max-w-7xl mx-auto">
-        <div class="text-center mb-16">
-          <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
-            First Time Visiting?
-          </span>
-          <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">What to Expect</h2>
-          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-            We want your first visit to be comfortable and welcoming. Here's what you can expect when you join us.
-          </p>
-        </div>
-        
-        <div class="grid md:grid-cols-2 gap-8">
-          {whatToExpect.map(item => (
-            <div class="bg-white border border-gray-200 rounded-2xl p-8">
-              <div class="flex items-start gap-6">
-                <div class="w-16 h-16 bg-brand/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <Fragment set:html={item.icon} />
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+          <!-- Image on LEFT -->
+          <div class="relative hidden lg:block">
+            <img 
+              src="http://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg"
+              alt="Church sanctuary during worship"
+              class="w-full h-[500px] object-cover rounded-2xl"
+            />
+          </div>
+          <!-- Text on RIGHT -->
+          <div>
+            <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
+              First Time?
+            </span>
+            <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
+              What to Expect
+            </h2>
+            <div class="space-y-6">
+              <p class="text-lg text-gray-600 leading-relaxed">
+                We want your first visit to be comfortable. Here's what a typical Sunday looks like.
+              </p>
+              <div class="bg-gray-50 rounded-xl p-6 space-y-4">
+                <div class="flex items-start gap-3">
+                  <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                   </svg>
+                  <div>
+                    <h3 class="font-medium text-gray-900">Warm Welcome</h3>
+                    <p class="text-gray-600">Greeters will help you find your way and answer any questions</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 class="text-2xl font-semibold mb-4 text-gray-900">{item.title}</h3>
-                  <p class="text-gray-600 leading-relaxed">{item.description}</p>
+                <div class="flex items-start gap-3">
+                  <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                  </svg>
+                  <div>
+                    <h3 class="font-medium text-gray-900">Uplifting Music</h3>
+                    <p class="text-gray-600">A blend of contemporary and traditional hymns</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                  <div>
+                    <h3 class="font-medium text-gray-900">Relevant Message</h3>
+                    <p class="text-gray-600">Bible-based teaching that connects with everyday life</p>
+                  </div>
                 </div>
               </div>
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Online Worship Section -->
-  <section class="py-20 bg-white">
-    <div class="container mx-auto px-6">
-      <div class="max-w-7xl mx-auto text-center">
-        <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
-          Can't Join Us In Person?
-        </span>
-        <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Watch Online</h2>
-        <p class="text-lg text-gray-600 mb-12 max-w-2xl mx-auto">
-          Join us for live worship every Sunday at 10:30 AM on our YouTube channel. 
-          You can also catch up on previous services and special events.
-        </p>
-        
-        <div class="flex justify-center">
-          <a 
-            href="https://live.locc.us?utm_source=lakeozarkdisciples&utm_medium=worship&utm_campaign=button"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
-          >
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
-            </svg>
-            Watch Live
-          </a>
-        </div>
-      </div>
-          </div>
-    </section>
-
   <!-- Calendar Section -->
   <SundayCalendar />
-  </Layout>
-
-
+</Layout>
 
 <style>
   * {

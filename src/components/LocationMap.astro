@@ -1,0 +1,173 @@
+---
+interface Props {
+  height?: string;
+  showRoute?: boolean;
+  containerId?: string;
+}
+
+const { 
+  height = "600px", 
+  showRoute = true,
+  containerId = "mapbox-map"
+} = Astro.props;
+---
+
+<div class="location-map-wrapper">
+  <div id={containerId} class="w-full rounded-2xl" style={`height: ${height};`}></div>
+</div>
+
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet" />
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+
+<script define:vars={{ showRoute, containerId }}>
+  // Store config for the inline script to use
+  window.__mapConfig = window.__mapConfig || {};
+  window.__mapConfig[containerId] = { showRoute, containerId };
+</script>
+
+<script>
+  async function initLocationMap(config: { showRoute: boolean; containerId: string }) {
+    const { showRoute, containerId } = config;
+    const accessToken = 'pk.eyJ1IjoiZG9ub3JraXQiLCJhIjoiY21paDBqZjJwMGM3ZjNjcHNnaWt2Z2l3aiJ9.fXOKheOAlOOIIh2mB6t-mA';
+    const churchAddress = '1560 Bagnell Dam Blvd, Lake Ozark, MO 65049';
+    let churchCoords: [number, number] = [-92.6426, 38.1147]; // fallback
+    
+    // Geocode the church address for accurate coordinates
+    try {
+      const geocodeUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(churchAddress)}.json?access_token=${accessToken}`;
+      const response = await fetch(geocodeUrl);
+      const data = await response.json();
+      if (data.features && data.features.length > 0) {
+        churchCoords = data.features[0].center;
+      }
+    } catch (e) {
+      console.warn('Geocoding failed, using fallback coordinates');
+    }
+    
+    const mapContainer = document.getElementById(containerId);
+    if (!mapContainer || !(window as any).mapboxgl) return null;
+    
+    (window as any).mapboxgl.accessToken = accessToken;
+    
+    const map = new (window as any).mapboxgl.Map({
+      container: containerId,
+      style: 'mapbox://styles/mapbox/outdoors-v12',
+      center: churchCoords,
+      zoom: 15
+    });
+    
+    // Add controls
+    map.addControl(new (window as any).mapboxgl.NavigationControl(), 'top-right');
+    map.addControl(new (window as any).mapboxgl.FullscreenControl(), 'top-right');
+    map.addControl(new (window as any).mapboxgl.GeolocateControl({
+      positionOptions: { enableHighAccuracy: true },
+      trackUserLocation: true,
+      showUserHeading: true
+    }), 'top-right');
+    map.addControl(new (window as any).mapboxgl.ScaleControl({ maxWidth: 100 }), 'bottom-left');
+    
+    // Add church marker on load
+    map.on('load', () => {
+      new (window as any).mapboxgl.Marker({ color: '#8B5A2B' })
+        .setLngLat(churchCoords)
+        .setPopup(new (window as any).mapboxgl.Popup().setHTML('<strong>Lake Ozark Christian Church</strong><br>1560 Bagnell Dam Blvd'))
+        .addTo(map);
+    });
+    
+    if (showRoute) {
+      // Function to show route
+      async function showRouteOnMap(visitorLng: number, visitorLat: number) {
+        try {
+          const directionsUrl = `https://api.mapbox.com/directions/v5/mapbox/driving/${visitorLng},${visitorLat};${churchCoords[0]},${churchCoords[1]}?geometries=geojson&overview=full&access_token=${accessToken}`;
+          const response = await fetch(directionsUrl);
+          const data = await response.json();
+          
+          if (data.routes?.[0]) {
+            const route = data.routes[0];
+            const geometry = route.geometry;
+            
+            if (map.getSource('route')) {
+              map.removeLayer('route');
+              map.removeSource('route');
+            }
+            
+            map.addSource('route', {
+              type: 'geojson',
+              data: { type: 'Feature', properties: {}, geometry }
+            });
+            
+            map.addLayer({
+              id: 'route',
+              type: 'line',
+              source: 'route',
+              layout: { 'line-join': 'round', 'line-cap': 'round' },
+              paint: { 'line-color': '#8B5A2B', 'line-width': 4, 'line-opacity': 0.8 }
+            });
+            
+            new (window as any).mapboxgl.Marker({ color: '#3B82F6' })
+              .setLngLat([visitorLng, visitorLat])
+              .setPopup(new (window as any).mapboxgl.Popup().setHTML('<strong>Your Location</strong>'))
+              .addTo(map);
+            
+            const bounds = new (window as any).mapboxgl.LngLatBounds();
+            geometry.coordinates.forEach((coord: number[]) => bounds.extend(coord));
+            map.fitBounds(bounds, { padding: 50 });
+            
+            // Dispatch event with route info
+            const durationMins = Math.round(route.duration / 60);
+            const distanceMiles = (route.distance / 1609.34).toFixed(1);
+            window.dispatchEvent(new CustomEvent('mapRouteLoaded', {
+              detail: { durationMins, distanceMiles, visitorLat, visitorLng }
+            }));
+          }
+        } catch (e) {
+          console.warn('Could not fetch directions:', e);
+        }
+      }
+      
+      // Try browser geolocation
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { longitude, latitude } = position.coords;
+            if (map.loaded()) {
+              showRouteOnMap(longitude, latitude);
+            } else {
+              map.on('load', () => showRouteOnMap(longitude, latitude));
+            }
+          },
+          async () => {
+            // Fallback to IP location
+            try {
+              const response = await fetch('https://geo.locc.us/where');
+              const data = await response.json();
+              if (data.latitude && data.longitude) {
+                const lng = parseFloat(data.longitude);
+                const lat = parseFloat(data.latitude);
+                if (map.loaded()) {
+                  showRouteOnMap(lng, lat);
+                } else {
+                  map.on('load', () => showRouteOnMap(lng, lat));
+                }
+              }
+            } catch (e) {
+              console.warn('Could not get IP location');
+            }
+          },
+          { enableHighAccuracy: true, timeout: 5000, maximumAge: 300000 }
+        );
+      }
+    }
+    
+    return map;
+  }
+  
+  // Initialize all maps on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    const configs = (window as any).__mapConfig || {};
+    Object.values(configs).forEach((config: any) => {
+      initLocationMap(config);
+    });
+  });
+</script>
+

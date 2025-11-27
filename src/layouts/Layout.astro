@@ -2,6 +2,9 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PrivacyBanner from '../components/PrivacyBanner.astro';
+import AlertSmall from '../components/AlertSmall.astro';
+import AlertBanner from '../components/AlertBanner.astro';
+import LocationPermission from '../components/LocationPermission.astro';
 
 interface Props {
   title: string;
@@ -126,5 +129,16 @@ const OG_IMAGE_HEIGHT = 630;
     </main>
     <Footer />
     <PrivacyBanner />
+    
+    <!-- Demo: Large Weather Alert - Remove after testing -->
+    <AlertBanner
+      title="Development Testing Alert" 
+      message="This is a test message and should not show in production. Please dismiss."
+      messageId="test-alert"
+      expiresAt="2025-11-27 1:50:00"
+      dismissText="Dismiss"
+    />
   </body>
+  <LocationPermission />
+
 </html>

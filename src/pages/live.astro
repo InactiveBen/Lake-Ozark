@@ -1,0 +1,195 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const heroImage = {
+  url: "http://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg",
+  alt: "Church Sanctuary"
+};
+---
+
+<Layout title="Watch Live">
+<!-- Hero Section -->
+<section class="relative overflow-hidden bg-white">
+  <div class="absolute inset-0">
+    <img 
+      src={heroImage.url} 
+      alt={heroImage.alt}
+      class="w-full h-full object-cover"
+    />
+    <div class="absolute inset-0 bg-black/40"></div>
+  </div>
+
+  <div class="relative container mx-auto px-6 py-32 md:py-40">
+    <div class="max-w-4xl">
+      <div id="live-badge" class="hidden mb-4">
+        <span class="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-full animate-pulse">
+          <span class="w-2 h-2 bg-white rounded-full"></span>
+          LIVE NOW
+        </span>
+      </div>
+      <p class="text-xl md:text-2xl text-white/90 mb-4 font-light leading-relaxed">
+        Sunday Worship
+      </p>
+      <h1 class="text-5xl md:text-7xl font-semibold text-white mb-8 leading-tight tracking-tight">
+        Watch Live
+      </h1>
+      <p id="status-text" class="text-lg md:text-xl text-white/80 mb-12 max-w-2xl font-light leading-relaxed">
+        Join us every Sunday at 10:30 AM Central Time
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a 
+          href="#stream" 
+          class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300 text-lg"
+        >
+          Watch Now
+        </a>
+        <a 
+          href="/worship" 
+          class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-medium rounded-lg transition-all duration-300 text-lg"
+        >
+          Visit In Person
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Video Player Section -->
+<section id="stream" class="py-20 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <!-- Video Player on LEFT -->
+        <div class="relative">
+          <div id="video-container" class="bg-black rounded-2xl overflow-hidden shadow-xl">
+            <div style="position: relative; padding-top: 56.25%;">
+              <iframe
+                id="live-player"
+                src="https://customer-w9xtramr9fjat2m3.cloudflarestream.com/b49456d6a25da93af131a919453dc5ad/iframe"
+                style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
+                allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen"
+                allowfullscreen="true"
+              ></iframe>
+            </div>
+          </div>
+          <button 
+            id="fullscreen-btn"
+            class="absolute top-4 right-4 p-2 bg-black/50 hover:bg-black/70 text-white rounded-lg transition-colors"
+            title="Toggle Fullscreen"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+            </svg>
+          </button>
+        </div>
+        
+        <!-- Info on RIGHT -->
+        <div>
+          <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
+            Live Stream
+          </span>
+          <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
+            Worship From Anywhere
+          </h2>
+          <div class="space-y-6">
+            <p class="text-lg text-gray-600 leading-relaxed">
+              Can't make it in person? We stream our Sunday worship service live so you can join us from wherever you are.
+            </p>
+            <div class="bg-gray-50 rounded-xl p-6 space-y-4">
+              <div class="flex items-start gap-3">
+                <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div>
+                  <h3 class="font-medium text-gray-900">Sundays at 10:30 AM</h3>
+                  <p class="text-gray-600">Central Time · Stream starts a few minutes early</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                </svg>
+                <div>
+                  <h3 class="font-medium text-gray-900">Past Services</h3>
+                  <p class="text-gray-600">Catch up on messages you missed on YouTube</p>
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-4">
+              <a 
+                href="https://www.youtube.com/channel/UCUcLKfZo5Su6-ypmt1dkPKA"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
+              >
+                Watch Past Services
+              </a>
+              <a 
+                href="/worship" 
+                class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
+              >
+                Plan Your Visit
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Fullscreen toggle
+  document.getElementById('fullscreen-btn')?.addEventListener('click', () => {
+    const container = document.getElementById('video-container');
+    if (!container) return;
+    
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      container.requestFullscreen();
+    }
+  });
+
+  function checkIfLive() {
+    const now = new Date();
+    const day = now.getDay();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const currentTime = hours * 60 + minutes;
+    
+    // Live window: Sunday 10:15 AM - 12:00 PM
+    const liveStart = 10 * 60 + 15;
+    const liveEnd = 12 * 60;
+    
+    const isLive = day === 0 && currentTime >= liveStart && currentTime <= liveEnd;
+    
+    const badge = document.getElementById('live-badge');
+    const statusText = document.getElementById('status-text');
+    
+    if (badge && statusText) {
+      if (isLive) {
+        badge.classList.remove('hidden');
+        statusText.textContent = "We're live right now — welcome!";
+      } else {
+        badge.classList.add('hidden');
+        statusText.textContent = "Join us every Sunday at 10:30 AM Central Time";
+      }
+    }
+  }
+  
+  checkIfLive();
+  setInterval(checkIfLive, 60000);
+</script>
+
+<style>
+  * {
+    font-family: 'Albert Sans', system-ui, sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Albert Sans', system-ui, sans-serif;
+  }
+</style>
+</Layout>

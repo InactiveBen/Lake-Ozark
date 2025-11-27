@@ -136,104 +136,69 @@ function formatDate(dateStr: string): string {
   </div>
 </section>
 
-<!-- Service Information - Clean Cards -->
+<!-- Visit Us Section -->
 <section id="visit" class="py-20 bg-white">
   <div class="container mx-auto px-6">
     <div class="max-w-7xl mx-auto">
-      {isLocal ? (
-        <>
-          <div class="text-center mb-16">
-            <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
-              Visit Us
-            </span>
-            <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Service Times & Location</h2>
-            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-              Join us for worship, fellowship, and community programs throughout the week
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <span id="location-greeting" class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
+            You're Invited
+          </span>
+          <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
+            Join Us This Sunday
+          </h2>
+          <div class="space-y-6">
+            <p id="distance-message" class="text-lg text-gray-600 leading-relaxed">
+              Whether you're new to faith or have been walking with God for years, you'll find a warm welcome here. No perfect people allowed — just Christ followers doing life together.
             </p>
-          </div>
-          
-          <div class="grid sm:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <div class="text-center p-8">
-              <div class="w-16 h-16 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-gray-50 rounded-xl p-6 space-y-4">
+              <div class="flex items-start gap-3">
+                <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
+                <div>
+                  <h3 class="font-medium text-gray-900">Sundays at 10:30 AM</h3>
+                  <p class="text-gray-600">About an hour — come as you are, casual dress welcome</p>
+                </div>
               </div>
-              <h2 class="text-2xl font-semibold mb-2 text-gray-900">Sunday Service</h2>
-              <p class="text-lg font-light text-gray-700">Sun 10:30 AM</p>
-            </div>
-            
-            <div class="text-center p-8">
-              <div class="w-16 h-16 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="flex items-start gap-3">
+                <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                 </svg>
+                <div>
+                  <h3 class="font-medium text-gray-900">1560 Bagnell Dam Blvd</h3>
+                  <p class="text-gray-600">Lake Ozark, MO 65049 · Free parking available</p>
+                </div>
               </div>
-              <h2 class="text-2xl font-semibold mb-2 text-gray-900">Location</h2>
-              <p class="text-lg font-light text-gray-700">1560 Bagnell Dam Blvd.</p>
+             
             </div>
-            
-            <div class="text-center p-8">
-              <div class="w-16 h-16 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                </svg>
-              </div>
-              <h2 class="text-2xl font-semibold mb-2 text-gray-900">After-School Program</h2>
-              <p class="text-lg font-light text-gray-700">Wed 3:30-5:30 PM</p>
-            </div>
-          </div>
-        </>
-      ) : (
-        <>
-          <div class="text-center mb-16">
-            <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
-              Visitor Information
-            </span>
-            <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Plan Your Visit</h2>
-            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-              We're excited to welcome you to Lake Ozark Christian Church. Here's everything you need to know for your visit.
-            </p>
-          </div>
-          
-          <div class="grid sm:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <div class="text-center p-8">
-              <div class="w-16 h-16 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-              </div>
-              <h2 class="text-2xl font-semibold mb-2 text-gray-900">Service Times</h2>
-              <p class="text-lg font-light text-gray-700 mb-4">Sun 10:30 AM</p>
-              <p class="text-sm text-gray-600">Both services feature the same message and worship style. Arrive 10-15 minutes early to get settled.</p>
-            </div>
-            
-            <div class="text-center p-8">
-              <div class="w-16 h-16 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                </svg>
-              </div>
-              <h2 class="text-2xl font-semibold mb-2 text-gray-900">Getting Here</h2>
-              <p class="text-lg font-light text-gray-700 mb-4">1560 Bagnell Dam Blvd.</p>
-              <p class="text-sm text-gray-600">Located on the Strip, just past the Dam. Free parking available in our lot.</p>
-            </div>
-            
-            <div class="text-center p-8">
-              <div class="w-16 h-16 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-                </svg>
-              </div>
-              <h2 class="text-2xl font-semibold mb-2 text-gray-900">What to Expect</h2>
-              <p class="text-lg font-light text-gray-700 mb-4">Casual & Welcoming</p>
-              <p class="text-sm text-gray-600">Come as you are! Our service lasts about an hour, with contemporary worship and practical teaching.</p>
+            <div class="flex flex-col sm:flex-row gap-4">
+              <a 
+                id="directions-link"
+                href="https://www.google.com/maps/dir//Lake+Ozark+Christian+Church,+1560+Bagnell+Dam+Blvd,+Lake+Ozark,+MO+65049"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
+              >
+                Get Directions
+              </a>
+              <a 
+                href="https://www.youtube.com/channel/UCUcLKfZo5Su6-ypmt1dkPKA"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
+              >
+                Watch Online
+              </a>
             </div>
           </div>
-        </>
-      )}
+        </div>
+        <div class="relative hidden lg:block">
+          <div id="mapbox-map" class="w-full h-[600px] rounded-2xl"></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -241,51 +206,99 @@ function formatDate(dateStr: string): string {
 <!-- Live Service Countdown -->
 <section id="live-service" class="py-20 bg-white">
   <div class="container mx-auto px-6">
-    <div class="max-w-4xl mx-auto text-center">
+    <div class="max-w-7xl mx-auto">
       <div id="countdown-container" class="hidden">
-        <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
-          Next Live Service
-        </span>
-        <h2 id="service-title" class="text-2xl lg:text-3xl font-light mb-6 text-gray-900">
-          Loading...
-        </h2>
-        <div class="grid grid-cols-4 gap-4 mb-8 max-w-2xl mx-auto">
-          <div class="bg-white rounded-xl p-4 shadow-sm">
-            <div id="days" class="text-3xl font-bold text-brand">00</div>
-            <div class="text-sm text-gray-600">Days</div>
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+          <!-- Countdown on LEFT -->
+          <div class="relative hidden lg:block">
+            <div class="bg-gray-50 rounded-2xl p-8">
+              <div class="text-center mb-6">
+                <p class="text-sm text-gray-500 uppercase tracking-wide">Countdown to Service</p>
+              </div>
+              <div class="grid grid-cols-4 gap-4">
+                <div class="text-center">
+                  <div id="days" class="text-4xl lg:text-5xl font-bold text-brand mb-1">00</div>
+                  <div class="text-sm text-gray-600">Days</div>
+                </div>
+                <div class="text-center">
+                  <div id="hours" class="text-4xl lg:text-5xl font-bold text-brand mb-1">00</div>
+                  <div class="text-sm text-gray-600">Hours</div>
+                </div>
+                <div class="text-center">
+                  <div id="minutes" class="text-4xl lg:text-5xl font-bold text-brand mb-1">00</div>
+                  <div class="text-sm text-gray-600">Minutes</div>
+                </div>
+                <div class="text-center">
+                  <div id="seconds" class="text-4xl lg:text-5xl font-bold text-brand mb-1">00</div>
+                  <div class="text-sm text-gray-600">Seconds</div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="bg-white rounded-xl p-4 shadow-sm">
-            <div id="hours" class="text-3xl font-bold text-brand">00</div>
-            <div class="text-sm text-gray-600">Hours</div>
-          </div>
-          <div class="bg-white rounded-xl p-4 shadow-sm">
-            <div id="minutes" class="text-3xl font-bold text-brand">00</div>
-            <div class="text-sm text-gray-600">Minutes</div>
-          </div>
-          <div class="bg-white rounded-xl p-4 shadow-sm">
-            <div id="seconds" class="text-3xl font-bold text-brand">00</div>
-            <div class="text-sm text-gray-600">Seconds</div>
+          <!-- Text on RIGHT -->
+          <div>
+            <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
+              Next Live Service
+            </span>
+            <h2 id="service-title" class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
+              Loading...
+            </h2>
+            <div class="space-y-6">
+              <p class="text-lg text-gray-600 leading-relaxed">
+                Join us online for worship, prayer, and an inspiring message. Our live stream begins every Sunday at 10:30 AM.
+              </p>
+              <div class="bg-gray-50 rounded-xl p-6 space-y-4">
+                <div class="flex items-start gap-3">
+                  <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                  </svg>
+                  <div>
+                    <h3 class="font-medium text-gray-900">Watch from Anywhere</h3>
+                    <p class="text-gray-600">Stream live on YouTube or through our website</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                  </svg>
+                  <div>
+                    <h3 class="font-medium text-gray-900">Join the Conversation</h3>
+                    <p class="text-gray-600">Chat with our community during the live stream</p>
+                  </div>
+                </div>
+              </div>
+              <div class="flex flex-col sm:flex-row gap-4">
+                <a 
+                  id="live-stream-btn"
+                  href="https://live.locc.us?utm_source=lakeozarkdisciples&utm_medium=countdown&utm_campaign=button" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
+                >
+                  Join Live Stream
+                </a>
+                <a 
+                  href="https://www.youtube.com/channel/UCUcLKfZo5Su6-ypmt1dkPKA"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
+                >
+                  Watch Past Services
+                </a>
+              </div>
+            </div>
           </div>
         </div>
-        <a 
-          id="live-stream-btn"
-          href="https://live.locc.us?utm_source=lakeozarkdisciples&utm_medium=countdown&utm_campaign=button" 
-          target="_blank"
-          rel="noopener noreferrer"
-          class="hidden inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300 text-lg"
-        >
-          Join Live Stream
-        </a>
       </div>
       
-      <div id="countdown-loading" class="py-8">
+      <div id="countdown-loading" class="py-8 text-center">
         <div class="inline-flex items-center gap-3">
           <div class="animate-spin rounded-full h-8 w-8 border-2 border-brand border-t-transparent"></div>
           <p class="text-lg text-gray-600">Loading next service...</p>
         </div>
       </div>
       
-      <div id="countdown-error" class="hidden py-8">
+      <div id="countdown-error" class="hidden py-8 text-center">
         <p class="text-gray-600">Unable to load service information</p>
       </div>
     </div>
@@ -297,6 +310,15 @@ function formatDate(dateStr: string): string {
   <div class="container mx-auto px-6">
     <div class="max-w-7xl mx-auto">
       <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <!-- Image on LEFT -->
+        <div class="relative hidden lg:block">
+          <img 
+            src="http://cdn.lakeozarkdisciples.org/media/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg"
+            alt="Children participating in after-school activities"
+            class="w-full h-[600px] object-cover rounded-2xl"
+          />
+        </div>
+        <!-- Text on RIGHT -->
         <div>
 {isLocal ? (
             <>
@@ -403,102 +425,7 @@ function formatDate(dateStr: string): string {
             </>
           )}
         </div>
-        <div class="relative hidden lg:block">
-          <img 
-            src="http://cdn.lakeozarkdisciples.org/media/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg"
-            alt="Children participating in after-school activities"
-            class="w-full h-[600px] object-cover rounded-2xl"
-          />
-        </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- Featured Blog Posts -->
-{recentPosts.length > 0 && (
-<section id="blog" class="py-20 bg-white">
-  <div class="container mx-auto px-6">
-    <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-16">
-        <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
-          Latest Updates
-        </span>
-        <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">From Our Community</h2>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-          Stay connected with the latest news, events, and stories from our church family
-        </p>
-      </div>
-      
-      <div class="grid md:grid-cols-3 gap-8">
-        {recentPosts.map((post, index) => (
-          <article class="group">
-            <a href={`/blog/${post.frontmatter?.id || ''}`} class="block">
-              <div class="mb-6 overflow-hidden rounded-xl">
-                <img 
-                  src={post.frontmatter?.image || 'http://cdn.lakeozarkdisciples.org/media/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg'} 
-                  alt={post.frontmatter?.title || 'Blog post'}
-                  class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div>
-                <time class="text-sm text-gray-500 mb-2 block">
-                  {formatDate(post.frontmatter?.date || '')}
-                </time>
-                <h3 class="text-xl font-semibold mb-3 text-gray-900 group-hover:text-brand transition-colors duration-300">
-                  {post.frontmatter?.title || 'Untitled'}
-                </h3>
-                <p class="text-gray-600 leading-relaxed">
-                  {post.frontmatter?.excerpt || ''}
-                </p>
-              </div>
-            </a>
-          </article>
-        ))}
-      </div>
-      
-      <div class="text-center mt-12">
-        <a 
-          href="/blog" 
-          class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
-        >
-          View All Posts
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
-)}
-
-<!-- Recent Services -->
-<section id="services" class="py-20 bg-white">
-  <div class="container mx-auto px-6">
-    <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-16">
-        <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
-          Watch & Listen
-        </span>
-        <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Recent Services</h2>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-          Catch up on our latest worship services and messages
-        </p>
-      </div>
-      
-      <div id="video-loading" class="text-center py-16">
-        <div class="inline-flex items-center gap-3">
-          <div class="animate-spin rounded-full h-8 w-8 border-2 border-brand border-t-transparent"></div>
-          <p class="text-lg text-gray-600">Loading recent services...</p>
-        </div>
-      </div>
-      
-      <div id="video-error" class="text-center py-16 hidden">
-        <div class="bg-red-50 border border-red-200 p-8 max-w-md mx-auto">
-          <p class="text-red-700 font-medium">Failed to load recent services</p>
-          <p class="text-red-600 text-sm mt-1">Please try again later</p>
-        </div>
-      </div>
-      
-      <div id="video-container"></div>
     </div>
   </div>
 </section>
@@ -663,10 +590,11 @@ function formatDate(dateStr: string): string {
 
               <!-- Security Note -->
               <div class="text-center text-xs text-gray-600 space-y-2">
-                <p>Secure donation processed through Stripe. Tax-deductible receipt sent to your email.</p>
+                <p>Secure donation processed through Stripe by DonorKit, Inc.</p>
+                <p>By making a donation you agree to the DonorKit <a href="http://donork.it/privacy" target="_blank" rel="noopener noreferrer" class="text-brand hover:text-brand-dark underline">Privacy Policy</a>, <a href="http://donork.it/terms" target="_blank" rel="noopener noreferrer" class="text-brand hover:text-brand-dark underline">Terms of Service</a>, and <a href="http://donork.it/refund" target="_blank" rel="noopener noreferrer" class="text-brand hover:text-brand-dark underline">Refund Policy</a>.</p>
                 <p>
                   <a 
-                    href="https://lakeozark.cc/stripe_dash" 
+                    href="http://donork.it/lakeozarkchristianchurch" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     class="text-brand hover:text-brand-dark underline"
@@ -683,65 +611,94 @@ function formatDate(dateStr: string): string {
   </div>
 </section>
 
-<!-- Find Us Section -->
-<section id="location" class="py-20 bg-white">
+<!-- Recent Services -->
+<section id="services" class="py-20 bg-white">
   <div class="container mx-auto px-6">
     <div class="max-w-7xl mx-auto">
-      <div class="grid lg:grid-cols-2 gap-16 items-center">
-        <div class="relative">
-          <div class="bg-gray-50 rounded-2xl p-8">
-            <div class="w-full rounded-xl overflow-hidden" style="position: relative; padding-bottom: 75%;">
-              <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387.9011776781!2d-92.6386717!3d38.1981839!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87c4c5de89ac8075%3A0xd6b3ef02b5ac85cf!2sLake%20Ozark%20Christian%20Church!5e0!3m2!1sen!2sus!4v1730580207869!5m2!1sen!2sus"
-                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
-                allowfullscreen=""
-                loading="lazy"
-                title="Lake Ozark Christian Church Location"
-                aria-label="Google Maps showing Lake Ozark Christian Church location at 1560 Bagnell Dam Blvd, Lake Ozark, MO"
-              ></iframe>
-            </div>
-          </div>
-        </div>
-        <div>
-          <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
-            Visit Us
-          </span>
-          <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
-            Find Us
-          </h2>
-          <p class="text-lg text-gray-600 mb-8 leading-relaxed">
-            Located in the heart of Lake Ozark, we're easy to find and always welcoming. 
-            Join us for worship, fellowship, and community events.
-          </p>
-          <div class="space-y-6">
-            <div class="bg-gray-50 rounded-xl p-6">
-              <h3 class="font-medium text-gray-900 mb-3">Our Address</h3>
-              <address class="not-italic text-gray-600 leading-relaxed">
-                1560 Bagnell Dam Blvd <br>
-                Lake Ozark, MO 65049
-              </address>
-            </div>
-            <div class="flex flex-col sm:flex-row gap-4">
-              <a 
-                href="tel:573-365-3366" 
-                class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
-              >
-                Call Us: 573-365-3366
-              </a>
-              <a 
-                href="/connect" 
-                class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
-              >
-                Get Directions
-              </a>
-            </div>
-          </div>
+      <div class="text-center mb-16">
+        <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
+          Watch & Listen
+        </span>
+        <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Recent Services</h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          Catch up on our latest worship services and messages
+        </p>
+      </div>
+      
+      <div id="video-loading" class="text-center py-16">
+        <div class="inline-flex items-center gap-3">
+          <div class="animate-spin rounded-full h-8 w-8 border-2 border-brand border-t-transparent"></div>
+          <p class="text-lg text-gray-600">Loading recent services...</p>
         </div>
       </div>
+      
+      <div id="video-error" class="text-center py-16 hidden">
+        <div class="bg-red-50 border border-red-200 p-8 max-w-md mx-auto">
+          <p class="text-red-700 font-medium">Failed to load recent services</p>
+          <p class="text-red-600 text-sm mt-1">Please try again later</p>
+        </div>
+      </div>
+      
+      <div id="video-container"></div>
     </div>
   </div>
 </section>
 
+<!-- Featured Blog Posts -->
+{recentPosts.length > 0 && (
+  <section id="blog" class="py-20 bg-white">
+    <div class="container mx-auto px-6">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+          <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
+            Latest Updates
+          </span>
+          <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">From Our Community</h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Stay connected with the latest news, events, and stories from our church family
+          </p>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-8">
+          {recentPosts.map((post, index) => (
+            <article class="group">
+              <a href={`/blog/${post.frontmatter?.id || ''}`} class="block">
+                <div class="mb-6 overflow-hidden rounded-xl">
+                  <img 
+                    src={post.frontmatter?.image || 'http://cdn.lakeozarkdisciples.org/media/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg'} 
+                    alt={post.frontmatter?.title || 'Blog post'}
+                    class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <div>
+                  <time class="text-sm text-gray-500 mb-2 block">
+                    {formatDate(post.frontmatter?.date || '')}
+                  </time>
+                  <h3 class="text-xl font-semibold mb-3 text-gray-900 group-hover:text-brand transition-colors duration-300">
+                    {post.frontmatter?.title || 'Untitled'}
+                  </h3>
+                  <p class="text-gray-600 leading-relaxed">
+                    {post.frontmatter?.excerpt || ''}
+                  </p>
+                </div>
+              </a>
+            </article>
+          ))}
+        </div>
+        
+        <div class="text-center mt-12">
+          <a 
+            href="/blog" 
+            class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
+          >
+            View All Posts
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  )}
+  
 <!-- Calendar Section -->
 <section id="calendar" class="py-20 bg-white">
   <div class="container mx-auto px-6">
@@ -804,7 +761,214 @@ function formatDate(dateStr: string): string {
   </div>
 </div>
 
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet" />
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+
 <script>
+  // Initialize Mapbox map and personalized location experience
+  document.addEventListener('DOMContentLoaded', async () => {
+    const accessToken = 'pk.eyJ1IjoiZG9ub3JraXQiLCJhIjoiY21paDBqZjJwMGM3ZjNjcHNnaWt2Z2l3aiJ9.fXOKheOAlOOIIh2mB6t-mA';
+    const churchAddress = '1560 Bagnell Dam Blvd, Lake Ozark, MO 65049';
+    const churchCoords: [number, number] = [-92.6426, 38.1147];
+    
+    const greetingEl = document.getElementById('location-greeting');
+    const distanceEl = document.getElementById('distance-message');
+    const directionsLink = document.getElementById('directions-link') as HTMLAnchorElement;
+    
+    // Get church coordinates via geocoding
+    let coords = churchCoords;
+    try {
+      const geocodeUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(churchAddress)}.json?access_token=${accessToken}`;
+      const response = await fetch(geocodeUrl);
+      const data = await response.json();
+      if (data.features && data.features.length > 0) {
+        coords = data.features[0].center;
+      }
+    } catch (e) {
+      console.warn('Geocoding failed, using fallback coordinates');
+    }
+    
+    // Initialize map first (shows church only)
+    const mapContainer = document.getElementById('mapbox-map');
+    let map: any = null;
+    
+    if (mapContainer && (window as any).mapboxgl) {
+      (window as any).mapboxgl.accessToken = accessToken;
+      
+      map = new (window as any).mapboxgl.Map({
+        container: 'mapbox-map',
+        style: 'mapbox://styles/mapbox/outdoors-v12',
+        center: coords,
+        zoom: 15
+      });
+      
+      // Navigation controls (zoom, compass)
+      map.addControl(new (window as any).mapboxgl.NavigationControl(), 'top-right');
+      
+      // Fullscreen control
+      map.addControl(new (window as any).mapboxgl.FullscreenControl(), 'top-right');
+      
+      // Geolocate control (find my location button)
+      const geolocateControl = new (window as any).mapboxgl.GeolocateControl({
+        positionOptions: { enableHighAccuracy: true },
+        trackUserLocation: true,
+        showUserHeading: true,
+        showAccuracyCircle: true
+      });
+      map.addControl(geolocateControl, 'top-right');
+      
+      // Scale bar
+      map.addControl(new (window as any).mapboxgl.ScaleControl({ maxWidth: 100 }), 'bottom-left');
+      
+      // Add church marker immediately
+      map.on('load', () => {
+        new (window as any).mapboxgl.Marker({ color: '#8B5A2B' })
+          .setLngLat(coords)
+          .setPopup(new (window as any).mapboxgl.Popup().setHTML('<strong>Lake Ozark Christian Church</strong><br>1560 Bagnell Dam Blvd'))
+          .addTo(map);
+      });
+    }
+    
+    // Function to show route on map
+    async function showRouteOnMap(visitorLng: number, visitorLat: number) {
+      if (!map) return;
+      
+      try {
+        const directionsUrl = `https://api.mapbox.com/directions/v5/mapbox/driving/${visitorLng},${visitorLat};${coords[0]},${coords[1]}?geometries=geojson&overview=full&access_token=${accessToken}`;
+        const directionsResponse = await fetch(directionsUrl);
+        const directionsData = await directionsResponse.json();
+        
+        if (directionsData.routes && directionsData.routes.length > 0) {
+          const route = directionsData.routes[0];
+          const routeGeometry = route.geometry;
+          
+          // Remove existing route if any
+          if (map.getSource('route')) {
+            map.removeLayer('route');
+            map.removeSource('route');
+          }
+          
+          // Add route line
+          map.addSource('route', {
+            type: 'geojson',
+            data: {
+              type: 'Feature',
+              properties: {},
+              geometry: routeGeometry
+            }
+          });
+          
+          map.addLayer({
+            id: 'route',
+            type: 'line',
+            source: 'route',
+            layout: { 'line-join': 'round', 'line-cap': 'round' },
+            paint: { 'line-color': '#8B5A2B', 'line-width': 4, 'line-opacity': 0.8 }
+          });
+          
+          // Add visitor marker
+          new (window as any).mapboxgl.Marker({ color: '#3B82F6' })
+            .setLngLat([visitorLng, visitorLat])
+            .setPopup(new (window as any).mapboxgl.Popup().setHTML('<strong>Your Location</strong>'))
+            .addTo(map);
+          
+          // Fit map to route
+          const bounds = new (window as any).mapboxgl.LngLatBounds();
+          routeGeometry.coordinates.forEach((coord: number[]) => bounds.extend(coord));
+          map.fitBounds(bounds, { padding: 50 });
+          
+          // Update distance message
+          const durationMins = Math.round(route.duration / 60);
+          const distanceMiles = (route.distance / 1609.34).toFixed(1);
+          if (distanceEl) {
+            distanceEl.textContent = `You're about ${distanceMiles} miles away — roughly ${durationMins} minutes by car.`;
+          }
+          
+          // Update directions link
+          if (directionsLink) {
+            directionsLink.href = `https://www.google.com/maps/dir/${visitorLat},${visitorLng}/Lake+Ozark+Christian+Church,+1560+Bagnell+Dam+Blvd,+Lake+Ozark,+MO+65049`;
+          }
+        }
+      } catch (e) {
+        console.warn('Could not fetch directions:', e);
+      }
+    }
+    
+    // Try browser geolocation first (more accurate)
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        // Success - user granted permission
+        async (position) => {
+          const { longitude, latitude } = position.coords;
+          
+          if (greetingEl) {
+            greetingEl.textContent = `👋 Hello, neighbor!`;
+            greetingEl.className = `inline-block px-4 py-2 bg-blue-100 text-blue-700 text-sm font-medium mb-6`;
+          }
+          
+          // Wait for map to load then show route
+          if (map) {
+            if (map.loaded()) {
+              await showRouteOnMap(longitude, latitude);
+            } else {
+              map.on('load', () => showRouteOnMap(longitude, latitude));
+            }
+          }
+        },
+        // Error or denied - fall back to IP geolocation
+        async () => {
+          console.log('Geolocation denied, falling back to IP location');
+          await fallbackToIPLocation();
+        },
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 300000 }
+      );
+    } else {
+      await fallbackToIPLocation();
+    }
+    
+    // Fallback to IP-based geolocation
+    async function fallbackToIPLocation() {
+      try {
+        const geoResponse = await fetch('https://geo.locc.us/where');
+        const visitorData = await geoResponse.json();
+        
+        if (visitorData && greetingEl && distanceEl) {
+          const city = visitorData.city;
+          const localCities = ['lake ozark', 'osage beach', 'camdenton', 'eldon', 'versailles', 'laurie', 'sunrise beach', 'gravois mills'];
+          const isLocal = city && localCities.some((c: string) => city.toLowerCase().includes(c));
+          
+          if (isLocal) {
+            greetingEl.textContent = `👋 Hello, neighbor!`;
+            greetingEl.className = `inline-block px-4 py-2 bg-green-100 text-green-700 text-sm font-medium mb-6`;
+            distanceEl.textContent = `We're right here in your community. Stop by this Sunday!`;
+          } else if (city) {
+            const cityName = city.split(' ').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+            greetingEl.textContent = `Welcome from ${cityName}!`;
+            distanceEl.textContent = `Visiting the Lake? We'd love to have you join us for worship.`;
+          }
+          
+          // Show route if we have coordinates
+          if (visitorData.latitude && visitorData.longitude && map) {
+            const lng = parseFloat(visitorData.longitude);
+            const lat = parseFloat(visitorData.latitude);
+            
+            if (directionsLink) {
+              directionsLink.href = `https://www.google.com/maps/dir/${lat},${lng}/Lake+Ozark+Christian+Church,+1560+Bagnell+Dam+Blvd,+Lake+Ozark,+MO+65049`;
+            }
+            
+            if (map.loaded()) {
+              await showRouteOnMap(lng, lat);
+            } else {
+              map.on('load', () => showRouteOnMap(lng, lat));
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Could not fetch IP location');
+      }
+    }
+  });
+
   // Toast notification functions
   function showToast(message: string, type: 'success' | 'error' | 'info' | 'warning' = 'info', duration: number = 5000) {
     const container = document.getElementById('toast-container');
@@ -1003,15 +1167,7 @@ function formatDate(dateStr: string): string {
     if (minutesEl) minutesEl.textContent = minutes.toString().padStart(2, '0');
     if (secondsEl) secondsEl.textContent = seconds.toString().padStart(2, '0');
     
-    // Show button only if less than 5 hours remain (5 * 60 * 60 * 1000 = 18,000,000 ms)
-    // (18,000,000 ms = 5 hours? I think??? am I dumb? perhaps)
-    if (liveStreamBtn) {
-      if (distance < 18000000) { // Less than 5 hours
-        liveStreamBtn.classList.remove('hidden');
-      } else {
-        liveStreamBtn.classList.add('hidden');
-      }
-    }
+    // Button is now always visible in the new layout
     
     return true; // Indicate countdown is active
   }

@@ -5,33 +5,10 @@ const heroImage = {
   url: "http://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg",
   alt: "Church Sanctuary"
 };
-
-const beliefs = [
-  {
-    title: "Scripture",
-    description: "We look to the Word of God for inspiration, guidance, comfort, and challenge.",
-    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />`
-  },
-  {
-    title: "Active Faith",
-    description: "We believe in a God who is still saving lives, still working for peace and justice, still surprising us with miraculous wonder.",
-    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />`
-  },
-  {
-    title: "Service",
-    description: "We believe in a God who invites us to share in the ministry of Jesus Christ, through service to our neighbor.",
-    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11" />`
-  },
-  {
-    title: "Growth",
-    description: "We believe in a God who invites us to grow as disciples, following in the footsteps of Jesus Christ.",
-    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />`
-  }
-];
 ---
 
 <Layout title="Who We Are">
-<!-- Hero Section - Clean and Minimalist -->
+<!-- Hero Section -->
 <section class="relative overflow-hidden bg-white">
   <div class="absolute inset-0">
     <img 
@@ -59,95 +36,67 @@ const beliefs = [
           href="/worship" 
           class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300 text-lg"
         >
-          Join Us
+          Join Us Sunday
         </a>
         <a 
-          href="/connect" 
+          href="/staff" 
           class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-medium rounded-lg transition-all duration-300 text-lg"
         >
-          Connect With Us
+          Meet Our Team
         </a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Introduction -->
-<section class="py-20 bg-white">
-  <div class="container mx-auto px-6">
-    <div class="max-w-4xl mx-auto text-center">
-      <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
-        Our Foundation
-      </span>
-      <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900">Faith in Action</h2>
-      <p class="text-lg text-gray-600 leading-relaxed">
-        Lake Ozark Christian Church is a community of faith that is dedicated to sharing the Gospel of Jesus Christ. 
-        Our faith is not simply a set of beliefs, but a way of life as we share the light of our Savior with the world.
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- Our Beliefs -->
-<section class="py-20 bg-white">
-  <div class="container mx-auto px-6">
-    <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-16">
-        <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
-          Core Values
-        </span>
-        <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Our Beliefs</h2>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-          The foundation of our faith journey and what guides us as a community
-        </p>
-      </div>
-      
-      <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-        {beliefs.map(belief => (
-          <div class="bg-white p-8 rounded-2xl border border-gray-200 hover:shadow-lg transition-all duration-300">
-            <div class="flex items-start gap-6">
-              <div class="w-16 h-16 bg-brand/10 rounded-full flex items-center justify-center flex-shrink-0">
-                <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <Fragment set:html={belief.icon} />
-                </svg>
-              </div>
-              <div>
-                <h3 class="text-2xl font-semibold mb-4 text-gray-900">{belief.title}</h3>
-                <p class="text-gray-600 leading-relaxed">{belief.description}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Our Mission -->
+<!-- Our Story Section -->
 <section class="py-20 bg-white">
   <div class="container mx-auto px-6">
     <div class="max-w-7xl mx-auto">
       <div class="grid lg:grid-cols-2 gap-16 items-center">
         <div>
           <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
-            Our Purpose
+            Our Story
           </span>
           <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
-            Our Mission
+            Faith in Action
           </h2>
-          <p class="text-lg text-gray-600 mb-8 leading-relaxed">
-            Our Lord calls us out to care for others—to love God and neighbor, and to work for a better world through service, 
-            mission, and prophetic witness.
-          </p>
-          <div class="bg-gray-50 p-6 rounded-xl border-l-4 border-brand">
-            <blockquote class="text-lg italic text-gray-700 mb-3">
-              "To bring Good News to the poor … proclaim release to the captives and recovery of sight to the blind, 
-              to let the oppressed go free, to proclaim the year of the Lord's favor."
-            </blockquote>
-            <p class="text-sm text-gray-600 font-medium">Luke 4:18-19</p>
+          <div class="space-y-6">
+            <p class="text-lg text-gray-600 leading-relaxed">
+              Lake Ozark Christian Church is a community of faith dedicated to sharing the Gospel of Jesus Christ. Our faith is not simply a set of beliefs, but a way of life as we share the light of our Savior with the world.
+            </p>
+            <div class="bg-gray-50 rounded-xl p-6 space-y-4">
+              <div class="flex items-start gap-3">
+                <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                <div>
+                  <h3 class="font-medium text-gray-900">Rooted in Scripture</h3>
+                  <p class="text-gray-600">We look to the Word of God for inspiration, guidance, comfort, and challenge</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                <div>
+                  <h3 class="font-medium text-gray-900">Living Faith</h3>
+                  <p class="text-gray-600">We believe in a God who is still saving lives, still working for peace and justice</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11" />
+                </svg>
+                <div>
+                  <h3 class="font-medium text-gray-900">Called to Serve</h3>
+                  <p class="text-gray-600">We share in the ministry of Jesus Christ through service to our neighbor</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="relative">
+        <div class="relative hidden lg:block">
           <img 
             src="http://cdn.lakeozarkdisciples.org/media/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg"
             alt="Church community gathering"
@@ -159,58 +108,114 @@ const beliefs = [
   </div>
 </section>
 
-<!-- Our Journey -->
+<!-- Our Mission Section -->
 <section class="py-20 bg-white">
   <div class="container mx-auto px-6">
     <div class="max-w-7xl mx-auto">
       <div class="grid lg:grid-cols-2 gap-16 items-center">
-        <div class="relative">
+        <!-- Image on LEFT -->
+        <div class="relative hidden lg:block">
           <img 
             src="http://cdn.lakeozarkdisciples.org/media/69CA977C-2462-4E2A-B067-A2FCD5D87A3F.jpeg"
             alt="Church worship service"
             class="w-full h-[600px] object-cover rounded-2xl"
           />
         </div>
+        <!-- Text on RIGHT -->
         <div>
           <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
-            Growing Together
+            Our Mission
           </span>
           <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
-            Our Journey Together
+            Love God, Love Neighbor
           </h2>
-          <p class="text-lg text-gray-600 mb-8 leading-relaxed">
-            We believe in a God who invites us to grow as disciples. We are all on a journey, but God is always calling us 
-            out to be more than we are, to follow in the footsteps of Jesus Christ, to grow in faith and service and love.
-          </p>
+          <div class="space-y-6">
+            <p class="text-lg text-gray-600 leading-relaxed">
+              Our Lord calls us out to care for others—to love God and neighbor, and to work for a better world through service, mission, and prophetic witness.
+            </p>
+            <div class="bg-gray-50 rounded-xl p-6 border-l-4 border-brand">
+              <blockquote class="text-lg italic text-gray-700 mb-3">
+                "To bring Good News to the poor … proclaim release to the captives and recovery of sight to the blind, to let the oppressed go free, to proclaim the year of the Lord's favor."
+              </blockquote>
+              <p class="text-sm text-gray-600 font-medium">— Luke 4:18-19</p>
+            </div>
           <p class="text-lg text-gray-600 leading-relaxed">
-            Our Lord walks with us that we might find meaning in our lives and make a difference in the lives of others. 
-            We offer safe space where people of all ages can explore, grow, and learn about God and the Christian faith.
+              We believe in a God who invites us to grow as disciples. We are all on a journey, and God is always calling us to follow in the footsteps of Jesus Christ.
           </p>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Affiliation -->
+<!-- Disciples of Christ Section -->
 <section class="py-20 bg-white">
   <div class="container mx-auto px-6">
-    <div class="max-w-4xl mx-auto text-center">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div>
       <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
-        Our Community
+            Our Heritage
       </span>
-      <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900">Part of Something Greater</h2>
-      <div class="bg-gray-50 p-12 rounded-2xl">
-        <p class="text-xl lg:text-2xl font-light text-gray-900 mb-8 leading-relaxed">
-          We are affiliated with the Christian Church (Disciples of Christ),<br class="hidden md:block">
-          "A movement for wholeness in a fragmented world."
-        </p>
-        <a 
-          href="/connect" 
+          <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
+            Disciples of Christ
+          </h2>
+          <div class="space-y-6">
+            <p class="text-lg text-gray-600 leading-relaxed">
+              We are affiliated with the Christian Church (Disciples of Christ) — "A movement for wholeness in a fragmented world."
+            </p>
+            <div class="bg-gray-50 rounded-xl p-6 space-y-4">
+              <div class="flex items-start gap-3">
+                <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <div>
+                  <h3 class="font-medium text-gray-900">Open Communion</h3>
+                  <p class="text-gray-600">All are welcome at Christ's table — no exceptions</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                </svg>
+                <div>
+                  <h3 class="font-medium text-gray-900">Unity in Diversity</h3>
+                  <p class="text-gray-600">Embracing different perspectives while united in Christ</p>
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-4">
+              <a 
+                href="https://disciples.org"
+                target="_blank"
+                rel="noopener noreferrer"
           class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
         >
-          Connect With Us
-        </a>
+                Learn About Disciples
+              </a>
+              <a 
+                href="/staff" 
+                class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
+              >
+                Meet Our Pastor
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="relative hidden lg:block">
+          <div class="bg-gray-50 rounded-2xl p-12 h-[500px] flex items-center justify-center">
+            <div class="text-center">
+              <img 
+                src="https://cdn.disciples.org/wp-content/uploads/2018/02/06162100/DOCCHALICE-Solid-Red-752x1024.png"
+                alt="Disciples of Christ Logo"
+                class="h-32 mx-auto mb-8"
+              />
+              <p class="text-2xl font-light text-gray-900 mb-2">Christian Church</p>
+              <p class="text-xl text-gray-600">(Disciples of Christ)</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

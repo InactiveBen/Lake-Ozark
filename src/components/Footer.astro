@@ -3,37 +3,15 @@ import { getVisitorInfo } from '../utils/locationCheck';
 
 const info = await getVisitorInfo();
 const isLocal = info.isLocal;
-
-// Fetch footer configuration
-let footerConfig;
-try {
-  const response = await fetch('https://fetch.trimmer.dev/');
-  footerConfig = await response.json();
-} catch (error) {
-  // Fallback configuration if the worker is unavailable
-  footerConfig = {
-    companyLogo: {
-      url: "https://i.imgur.com/raqoCf9.png",
-      alt: "KiteHouse Labs Logo",
-      height: "24"
-    },
-    company: {
-      name: "Benjamin Trimmer",
-      url: "https://ben.trimmer.dev"
-    }
-  };
-  console.error('Failed to fetch footer config:', error);
-}
 ---
 <footer class="bg-gray-50 border-t border-gray-200" role="contentinfo">
   <!-- Main Footer Content -->
-  <div class="container mx-auto px-6 py-20">
+  <div class="container mx-auto px-6 py-16">
     <div class="max-w-7xl mx-auto">
       <!-- Links Section with Contact Info -->
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 mb-16">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 mb-12">
         <!-- Logo and Contact Info -->
         <div class="col-span-2 md:col-span-1">
-          <!-- Logo -->
           <div class="mb-6">
             <img 
               src="http://cdn.lakeozarkdisciples.org/media/LOCC-header.png" 
@@ -44,320 +22,143 @@ try {
             />
           </div>
           
-          <!-- Contact Info -->
-          <div class="space-y-4 text-gray-600">
-            <!-- Address -->
+          <div class="space-y-3 text-gray-600 text-sm">
             <div class="flex items-start gap-3">
-              <svg class="w-4 h-4 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-4 h-4 text-brand mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
               </svg>
-              <div class="text-sm">
+              <div>
                 <p>1560 Bagnell Dam Blvd.</p>
-                <p>P.O. Box 194</p>
                 <p>Lake Ozark, MO 65049</p>
               </div>
             </div>
             
-            <!-- Phone -->
-            <div class="flex items-center gap-3">
+            <a href="tel:573-365-3366" class="flex items-center gap-3 hover:text-brand transition-colors">
               <svg class="w-4 h-4 text-brand flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
               </svg>
-              <a href="tel:573-365-3366?utm_source=lakeozarkdisciples&utm_medium=footer&utm_campaign=contact&utm_content=phone" class="text-gray-600 hover:text-brand transition-colors text-sm">
-                573-365-3366
-              </a>
-            </div>
+              573-365-3366
+            </a>
             
-            <!-- Email -->
-            <div class="flex items-center gap-3">
+            <a href="mailto:office@lakeozarkdisciples.org" class="flex items-center gap-3 hover:text-brand transition-colors">
               <svg class="w-4 h-4 text-brand flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
               </svg>
-              <a href="mailto:office@lakeozarkdisciples.org?utm_source=lakeozarkdisciples&utm_medium=footer&utm_campaign=contact&utm_content=email" class="text-gray-600 hover:text-brand transition-colors text-sm">
-                office@lakeozarkdisciples.org
-              </a>
-            </div>
+              office@lakeozarkdisciples.org
+            </a>
           </div>
         </div>
+
         <!-- Worship & Services -->
         <div>
-          <h3 class="font-semibold text-gray-900 mb-4">Worship & Services</h3>
-          <ul class="space-y-3">
-            <li>
-              <a href="/worship?utm_source=lakeozarkdisciples&utm_medium=footer&utm_campaign=worship&utm_content=sunday_services" class="text-gray-600 hover:text-brand transition-colors">Sunday Services</a>
-            </li>
-            <li>
-              <a href="https://live.locc.us/?utm_source=lakeozarkdisciples&utm_medium=footer&utm_campaign=navigation&utm_content=attend_online" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-brand transition-colors">Attend Online</a>
-            </li>
-            <li>
-              <a href="/calendar?utm_source=lakeozarkdisciples&utm_medium=footer&utm_campaign=navigation&utm_content=calendar" class="text-gray-600 hover:text-brand transition-colors">Calendar</a>
-            </li>
-            <li>
-              <a href="https://shelterinastorm.org/?utm_source=lakeozarkdisciples&ref=lakeozarkdisciples.org&utm_medium=footer&utm_campaign=external&utm_content=shelter_storm" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-brand transition-colors">Shelter in a Storm</a>
-            </li>
+          <h3 class="font-semibold text-gray-900 mb-4">Worship</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/worship" class="text-gray-600 hover:text-brand transition-colors">Sunday Services</a></li>
+            <li><a href="https://live.locc.us/" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-brand transition-colors">Watch Online</a></li>
+            <li><a href="/calendar" class="text-gray-600 hover:text-brand transition-colors">Calendar</a></li>
+            <li><a href="/giving" class="text-gray-600 hover:text-brand transition-colors">Giving</a></li>
           </ul>
         </div>
 
         <!-- Community -->
         <div>
           <h3 class="font-semibold text-gray-900 mb-4">Community</h3>
-          <ul class="space-y-3">
-            <li>
-              <a href="/children-youth?utm_source=lakeozarkdisciples&utm_medium=footer&utm_campaign=community&utm_content=children_youth" class="text-gray-600 hover:text-brand transition-colors">Children & Youth</a>
-            </li>
-            <li>
-              <a href="/about?utm_source=lakeozarkdisciples&utm_medium=footer&utm_campaign=community&utm_content=about_us" class="text-gray-600 hover:text-brand transition-colors">About Us</a>
-            </li>
-            <li>
-              <a href="/staff?utm_source=lakeozarkdisciples&utm_medium=footer&utm_campaign=community&utm_content=staff" class="text-gray-600 hover:text-brand transition-colors">Staff</a>
-            </li>
-            <li>
-              <a href="/weddings?utm_source=lakeozarkdisciples&utm_medium=footer&utm_campaign=community&utm_content=weddings" class="text-gray-600 hover:text-brand transition-colors">Weddings</a>
-            </li>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/children-youth" class="text-gray-600 hover:text-brand transition-colors">Children & Youth</a></li>
+            <li><a href="/about" class="text-gray-600 hover:text-brand transition-colors">About Us</a></li>
+            <li><a href="/staff" class="text-gray-600 hover:text-brand transition-colors">Staff</a></li>
+            <li><a href="/weddings" class="text-gray-600 hover:text-brand transition-colors">Weddings</a></li>
           </ul>
         </div>
 
         <!-- Resources -->
         <div>
           <h3 class="font-semibold text-gray-900 mb-4">Resources</h3>
-          <ul class="space-y-3">
-            <li>
-              <a href="/blog?utm_source=lakeozarkdisciples&utm_medium=footer&utm_campaign=resources&utm_content=blog" class="text-gray-600 hover:text-brand transition-colors">Blog</a>
-            </li>
-            <li>
-              <a href="/chimes?utm_source=lakeozarkdisciples&utm_medium=footer&utm_campaign=resources&utm_content=newsletter" class="text-gray-600 hover:text-brand transition-colors">Newsletter</a>
-            </li>
-            <li>
-              <a href="/videos?utm_source=lakeozarkdisciples&utm_medium=footer&utm_campaign=resources&utm_content=service_videos" class="text-gray-600 hover:text-brand transition-colors">Service Videos</a>
-            </li>
-            <li>
-              <a href="/giving?utm_source=lakeozarkdisciples&utm_medium=footer&utm_campaign=resources&utm_content=giving" class="text-gray-600 hover:text-brand transition-colors">Giving</a>
-            </li>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/blog" class="text-gray-600 hover:text-brand transition-colors">Blog</a></li>
+            <li><a href="/chimes" class="text-gray-600 hover:text-brand transition-colors">Newsletter</a></li>
+            <li><a href="/videos" class="text-gray-600 hover:text-brand transition-colors">Service Videos</a></li>
+            <li><a href="https://shelterinastorm.org/" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-brand transition-colors">Shelter in a Storm</a></li>
           </ul>
         </div>
 
         <!-- Support -->
         <div>
           <h3 class="font-semibold text-gray-900 mb-4">Support</h3>
-          <ul class="space-y-3">
-            <li>
-              <a href="/report?utm_source=lakeozarkdisciples&utm_medium=footer&utm_campaign=support&utm_content=report_issue" class="text-gray-600 hover:text-brand transition-colors">Report an Issue</a>
-            </li>
-            <li>
-              <a href="https://lakeozark.cc/terms?utm_source=lakeozarkdisciples&utm_medium=footer&utm_campaign=legal&utm_content=terms" class="text-gray-600 hover:text-brand transition-colors">Terms of Service</a>
-            </li>
-            <li>
-              <a href="https://lakeozark.cc/privacy?utm_source=lakeozarkdisciples&utm_medium=footer&utm_campaign=legal&utm_content=privacy" class="text-gray-600 hover:text-brand transition-colors">Privacy Policy</a>
-            </li>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/report" class="text-gray-600 hover:text-brand transition-colors">Report an Issue</a></li>
+            <li><a href="/terms" class="text-gray-600 hover:text-brand transition-colors">Terms of Service</a></li>
+            <li><a href="/privacy" class="text-gray-600 hover:text-brand transition-colors">Privacy Policy</a></li>
             <li>
               <button
                 id="privacy-choices-link"
-                onclick="window.showCookieSettings()"
-                class="text-gray-600 hover:text-brand transition-colors flex items-center gap-2 text-left hidden"
+                onclick="window.showCookieSettings && window.showCookieSettings()"
+                class="text-gray-600 hover:text-brand transition-colors hidden"
               >
-                <span>Your Privacy Choices</span>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 14" class="w-6 h-3 inline" aria-hidden="true">
-                  <path fill="#FFFFFF" d="M7.4,12.8h6.8l3.1-11.6H7.4C4.2,1.2,1.6,3.8,1.6,7S4.2,12.8,7.4,12.8z"/>
-                  <path fill="#0066FF" d="M22.6,0H7.4c-3.9,0-7,3.1-7,7s3.1,7,7,7h15.2c3.9,0,7-3.1,7-7S26.4,0,22.6,0z M1.6,7c0-3.2,2.6-5.8,5.8-5.8h9.9l-3.1,11.6H7.4C4.2,12.8,1.6,10.2,1.6,7z"/>
-                  <path fill="#FFFFFF" d="M24.6,4c0.2,0.2,0.2,0.6,0,0.8l0,0L22.5,7l2.2,2.2c0.2,0.2,0.2,0.6,0,0.8c-0.2,0.2-0.6,0.2-0.8,0l0,0l-2.2-2.2L19.5,10c-0.2,0.2-0.6,0.2-0.8,0c-0.2-0.2-0.2-0.6,0-0.8l0,0L20.8,7l-2.2-2.2c-0.2-0.2-0.2-0.6,0-0.8c0.2-0.2,0.6-0.2,0.8,0l0,0l2.2,2.2L23.8,4C24,3.8,24.4,3.8,24.6,4z"/>
-                  <path fill="#0066FF" d="M12.7,4.1c0.2,0.2,0.3,0.6,0.1,0.8l0,0L8.6,9.8C8.5,9.9,8.4,10,8.3,10c-0.2,0.1-0.5,0.1-0.7-0.1l0,0L5.4,7.7c-0.2-0.2-0.2-0.6,0-0.8c0.2-0.2,0.6-0.2,0.8,0l0,0L8,8.6l3.8-4.5C12,3.9,12.4,3.9,12.7,4.1z"/>
-                </svg>
+                Cookie Settings
               </button>
             </li>
           </ul>
         </div>
       </div>
-    </div>
-  </div>
-  <!-- Bottom Footer -->
-  <div class="border-t border-gray-200 bg-white">
-    <div class="container mx-auto px-6 py-12">
-      <div class="max-w-7xl mx-auto">
-        <!-- Copyright & Nonprofit Status -->
-        <div class="text-center mb-8">
-          <div class="mb-3">
-            <img 
-              src={footerConfig.companyLogo.url}
-              alt={footerConfig.companyLogo.alt}
-              class="h-6 rounded mx-auto"
-              width="auto" 
-              height={footerConfig.companyLogo.height}
-            />
-          </div>
-          <div class="mb-3">
-            <p class="text-gray-500 text-sm">
-              &copy; {new Date().getFullYear()} 
-              <a href={footerConfig.company.url} class="text-gray-700 hover:text-brand transition-colors font-medium">{footerConfig.company.name}</a> under exclusive license to Lake Ozark Christian Church, Inc.
-              <span class="text-gray-500">All rights reserved</span>
-            </p>
-          </div>
-          <p class="text-gray-500 text-xs mt-2">
-            Lake Ozark Christian Church, Inc. is a registered 501(c)(3) nonprofit organization (EIN 43-1193150).
-          </p>
-        </div>
 
-        <!-- Legal & Policy Information -->
-        <div class="text-center space-y-8 mb-8">
-          <!-- Privacy & Data -->
-          <div>
-            <h4 class="font-semibold text-gray-700 text-sm mb-3">Privacy & Data</h4>
-            <div class="space-y-2 text-xs text-gray-500">
-              <p>
-                We are committed to your privacy. Review our 
-                <a href="https://lakeozark.cc/privacy" class="text-gray-600 hover:text-brand transition-colors underline decoration-1 underline-offset-2">Privacy Policy</a> 
-                for details on data collection and usage.
-              </p>
-              <p>
-                Manage your preferences: 
-                <button
-                  onclick="window.showCookieSettings()"
-                  class="text-gray-600 hover:text-brand transition-colors underline decoration-1 underline-offset-2 bg-transparent border-none p-0 cursor-pointer"
-                >
-                  Cookie Settings
-                </button>
-              </p>
-            </div>
-          </div>
-
-
-        <!-- External Links & Communications -->
-        <div class="border-t border-gray-100 pt-4 mt-4">
-          <div class="space-y-4">
-            <div class="text-xs text-gray-400 text-center">
-              <strong>Disclaimer:</strong> External links are provided for convenience only. 
-              We are not responsible for the content, accuracy, or privacy practices of external sites.
-            </div>
-            <div class="text-xs text-gray-500">
-              <p class="mb-2">Our official communications may originate from:</p>
-              <div class="flex flex-wrap justify-center gap-2">
-                <a href="https://lakeozark.cc" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-brand underline decoration-1 underline-offset-2">lakeozark.cc</a>
-                <span class="text-gray-400">•</span>
-                <a href="https://locc.us" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-brand underline decoration-1 underline-offset-2">locc.us</a>
-                <span class="text-gray-400">•</span>
-                <a href="https://lakeozarkdisciples.org" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-brand underline decoration-1 underline-offset-2">lakeozarkdisciples.org</a>
-                <span class="text-gray-400">•</span>
-                <a href="https://lakeozarkchristian.org" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-brand underline decoration-1 underline-offset-2">lakeozarkchristian.org</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Additional Information -->
-          <div class="border-t border-gray-100 pt-8 mt-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <!-- Church Values -->
-              <div class="text-center">
-                <h4 class="font-semibold text-gray-700 text-sm mb-3">Our Values</h4>
-                <p class="text-xs text-gray-500">
-                  We are committed to fostering an inclusive, welcoming community rooted in Christ's love.
-                  Our mission is to serve God by serving others through worship, education, and outreach.
-                </p>
-              </div>
-
-              <!-- Accessibility Statement -->
-              <div class="text-center">
-                <h4 class="font-semibold text-gray-700 text-sm mb-3">Accessibility</h4>
-                <p class="text-xs text-gray-500">
-                  We strive to make our services and digital content accessible to everyone.
-                  If you experience any accessibility issues, please <a href="/report" class="text-gray-600 hover:text-brand underline decoration-1 underline-offset-2">let us know</a>.
-                </p>
-              </div>
-
-              <!-- Community Impact -->
-              <div class="text-center">
-                <h4 class="font-semibold text-gray-700 text-sm mb-3">Community Impact</h4>
-                <p class="text-xs text-gray-500">
-                  Through your support, we continue to serve the Lake of the Ozarks community with various
-                  outreach programs, youth initiatives, and community services.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Social Media Links -->
-          <div class="border-t border-gray-100 pt-8 mt-8">
-            <p class="text-gray-500 text-xs mt-2">
-              <b>You are viewing the {isLocal ? 'local' : 'visitor'} version of the site because you are {info.distance ? `${Math.round(info.distance)} miles from` : 'near'} Lake of the Ozarks. Content may be customized based on your location.</b>
-             </p>
-             <br>
-            <div class="flex justify-center space-x-6">
-            <a href="https://facebook.com/LakeOzarkChristianChurch?utm_source=lakeozarkdisciples&utm_medium=footer&utm_campaign=social&utm_content=facebook" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-brand">
-              <span class="sr-only">Facebook</span>
-              <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
-              </svg>
-            </a>
-            <a href="https://youtube.com/@lakeozarkchristianchurch?utm_source=lakeozarkdisciples&utm_medium=footer&utm_campaign=social&utm_content=youtube" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-brand">
-              <span class="sr-only">YouTube</span>
-              <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path fill-rule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.417-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 11.998 5 11.998 5s6.255 0 7.814.418ZM15.194 12 10 15V9l5.194 3Z" clip-rule="evenodd" />
-              </svg>
-            </a>
-            </div>
-        
-          </div>
-        </div>
-        </div>
+      <!-- Social Links -->
+      <div class="flex justify-center gap-6 mb-8">
+        <a href="https://facebook.com/LakeOzarkChristianChurch" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-brand transition-colors">
+          <span class="sr-only">Facebook</span>
+          <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+            <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
+          </svg>
+        </a>
+        <a href="https://youtube.com/@lakeozarkchristianchurch" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-brand transition-colors">
+          <span class="sr-only">YouTube</span>
+          <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+            <path fill-rule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.417-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 11.998 5 11.998 5s6.255 0 7.814.418ZM15.194 12 10 15V9l5.194 3Z" clip-rule="evenodd" />
+          </svg>
+        </a>
       </div>
     </div>
   </div>
-  </footer>
+
+  <!-- Bottom Footer -->
+  <div class="border-t border-gray-200 bg-white py-6">
+    <div class="container mx-auto px-6">
+      <div class="max-w-7xl mx-auto text-center">
+        <p class="text-gray-500 text-sm mb-2">
+          &copy; {new Date().getFullYear()} Lake Ozark Christian Church, Inc. All rights reserved.
+        </p>
+        <p class="text-gray-400 text-xs mb-2">
+          A registered 501(c)(3) nonprofit organization (EIN 43-1193150)
+        </p>
+        <p class="text-gray-400 text-xs">
+          Site by <a href="https://donork.it/home" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-brand transition-colors">DonorKit</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
 
 <script>
-  // Show privacy choices button only for users in GDPR/CCPA regions
+  // Show privacy choices button for users in privacy law regions
   async function checkPrivacyRegion() {
     try {
-      // Add timeout to prevent hanging
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+      setTimeout(() => controller.abort(), 5000);
       
-      const response = await fetch('https://geo.locc.us/where', {
-        signal: controller.signal,
-        headers: {
-          'Accept': 'application/json',
-        }
-      });
-      
-      clearTimeout(timeoutId);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-      
+      const response = await fetch('https://geo.locc.us/where', { signal: controller.signal });
       const data = await response.json();
       
-      // Show privacy button if user is in a region with privacy laws
-      const requiresConsent = data.gdpr || data.ccpa || data.cpa || data.lgpd || data.pipeda || data.appa;
-      
-      if (requiresConsent) {
-        console.log('[FOOTER_PRIVACY] Privacy laws detected, showing privacy choices link');
+      if (data.gdpr || data.ccpa || data.cpa || data.lgpd || data.pipeda || data.appa) {
         const privacyLink = document.getElementById('privacy-choices-link');
-        if (privacyLink) {
-          privacyLink.classList.remove('hidden');
-        }
-      } else {
+        if (privacyLink) privacyLink.classList.remove('hidden');
       }
-    } catch (error) {
-      if (error.name === 'AbortError') {
-        console.warn('[FOOTER_PRIVACY] Geo API request timed out, showing privacy choices link by default');
-      } else {
-        console.warn('[FOOTER_PRIVACY] Geo API failed, showing privacy choices link by default:', error.message);
-      }
-      
-      // Default to showing privacy button if we can't determine location
+    } catch {
+      // Show by default if check fails
       const privacyLink = document.getElementById('privacy-choices-link');
-      if (privacyLink) {
-        privacyLink.classList.remove('hidden');
-      }
+      if (privacyLink) privacyLink.classList.remove('hidden');
     }
   }
 
-  // Check privacy region on page load
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', checkPrivacyRegion);
-  } else {
-    checkPrivacyRegion();
-  }
+  document.addEventListener('DOMContentLoaded', checkPrivacyRegion);
 </script>
-
-

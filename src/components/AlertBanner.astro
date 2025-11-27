@@ -2,290 +2,86 @@
 interface Props {
   message: string;
   title?: string;
-  type?: 'warning' | 'info' | 'error' | 'brand';
-  icon?: 'cloud' | 'warning' | 'note' | 'info' | 'error' | 'mail';
   dismissText?: string;
-  showMailingList?: boolean;
   messageId?: string;
-  expiresAt?: string; // ISO date string for expiration
-  externalLink?: string; // New prop for external links
+  expiresAt?: string;
+  externalLink?: string;
 }
 
 const { 
   message, 
   title = 'Important Notice', 
-  type = 'warning', 
-  icon = 'warning', 
   dismissText = 'Dismiss', 
-  showMailingList = false, 
   messageId, 
   expiresAt,
   externalLink
 } = Astro.props;
 
-// Map type to colors
-const colors = {
-  warning: {
-    bg: 'bg-amber-50',
-    text: 'text-amber-800',
-    icon: 'text-amber-600',
-    iconBg: 'bg-amber-100',
-    button: 'bg-amber-600 hover:bg-amber-700'
-  },
-  info: {
-    bg: 'bg-blue-50',
-    text: 'text-blue-800', 
-    icon: 'text-blue-600',
-    iconBg: 'bg-blue-100',
-    button: 'bg-blue-600 hover:bg-blue-700'
-  },
-  error: {
-    bg: 'bg-red-50',
-    text: 'text-red-800',
-    icon: 'text-red-600',
-    iconBg: 'bg-red-100',
-    button: 'bg-red-600 hover:bg-red-700'
-  },
-  brand: {
-    bg: 'bg-white',
-    text: 'text-brand-dark',
-    icon: 'text-brand',
-    iconBg: 'bg-brand/10',
-    button: 'bg-brand hover:bg-brand-dark'
-  }
-};
-
-// Map icons to SVG paths
-const icons = {
-  cloud: "M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z",
-  warning: "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z",
-  note: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z",
-  info: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
-  error: "M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z",
-  mail: "M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-};
-
-// Ensure type is a valid key before accessing colors
-const color = colors[type as keyof typeof colors];
-if (!color) {
-  throw new Error(`Invalid alert type: ${type}`);
-}
-
-// Split message by newlines and add indentation
-const messageLines = message.split('\n').map(line => line.trim());
-
-// Generate unique ID for this banner instance
 const uniqueId = messageId || Math.random().toString(36).substring(2, 15);
-
-// Check if alert has expired
 const isExpired = expiresAt ? new Date() > new Date(expiresAt) : false;
 ---
 
 {!isExpired && (
   <div 
-    class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center animate-fadeIn" 
-    id={`alertModal-${uniqueId}`} 
+    id={`alertModal-${uniqueId}`}
+    class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-6" 
     role="alertdialog" 
     aria-modal="true"
-    aria-labelledby={`alertTitle-${uniqueId}`}
+    style="font-family: 'Albert Sans', system-ui, sans-serif;"
   >
-    <div class={`${color.bg} rounded-xl shadow-2xl max-w-md w-full mx-4 p-8 transform transition-all animate-slideIn relative`}>
-      {messageId && (
-        <>
-          <!-- Close All Button -->
-          <button
-            id={`closeAllAlerts-${uniqueId}`}
-            class={`absolute top-4 right-4 ${color.text} hover:opacity-75 transition transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-opacity-50`}
-            aria-label="Close all alerts"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </>
+    <div class="bg-white rounded-lg max-w-sm w-full p-6 animate-in">
+      <h2 class="text-lg font-semibold text-gray-900 mb-3">{title}</h2>
+      <p class="text-sm text-gray-600 leading-relaxed mb-6">{message}</p>
+      
+      {externalLink ? (
+        <a
+          href={externalLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          id={`externalLink-${uniqueId}`}
+          class="block w-full bg-black hover:bg-gray-800 text-white text-sm font-medium py-2.5 rounded-lg transition-colors text-center"
+        >
+          {dismissText}
+        </a>
+      ) : (
+        <button
+          id={`closeAlert-${uniqueId}`}
+          class="w-full bg-black hover:bg-gray-800 text-white text-sm font-medium py-2.5 rounded-lg transition-colors"
+        >
+          {dismissText}
+        </button>
       )}
-
-      <div class="flex flex-col items-center gap-5">
-        <div class={`${color.iconBg} rounded-full p-4`}>
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            class={`h-14 w-14 ${color.icon}`} 
-            fill="none" 
-            viewBox="0 0 24 24" 
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <path 
-              stroke-linecap="round" 
-              stroke-linejoin="round" 
-              stroke-width="2" 
-              d={icons[icon]}
-            />
-          </svg>
-        </div>
-        <div class="text-center">
-          <h2 id={`alertTitle-${uniqueId}`} class={`text-2xl font-bold mb-2 ${color.text}`}>{title}</h2>
-          <div class={`${color.text} text-lg whitespace-pre-line`}>
-            {messageLines.join('\n')}
-          </div>
-        </div>
-        <div class="flex flex-col sm:flex-row gap-3 items-center">
-          {messageId && (
-            externalLink ? (
-              <a
-                href={externalLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                id={`externalLink-${uniqueId}`}
-                class={`${color.button} text-white font-bold py-3 px-10 rounded-full transition transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-opacity-50 text-center`}
-                aria-label={`${dismissText} (opens in new tab)`}
-                onclick={`sessionStorage.setItem('alert-${messageId}', 'dismissed'); document.getElementById('alertModal-${uniqueId}').remove();`}
-              >
-                {dismissText}
-              </a>
-            ) : (
-              <button
-                id={`closeAlert-${uniqueId}`}
-                class={`${color.button} text-white font-bold py-3 px-10 rounded-full transition transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-opacity-50`}
-                aria-label="Close alert"
-              >
-                {dismissText}
-              </button>
-            )
-          )}
-          {showMailingList && (
-            <a
-              href="https://lakeozarkdisciples.us7.list-manage.com/subscribe?u=9816d09f0ebdd5f8ce1af28b4&id=b26607b7c1"
-              target="_blank"
-              class={`${color.text} border-2 border-current hover:bg-gray-100 px-6 py-3 rounded-full font-medium transition transform hover:scale-105 hover:shadow-lg`}
-            >
-              Join Mailing List
-            </a>
-          )}
-        </div>
-      </div>
-    </div>
-  </div>
-)}
-
-{messageId && (
-  <div id={`confirmModal-${uniqueId}`} class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] flex items-center justify-center">
-    <div class={`${color.bg} rounded-xl shadow-2xl max-w-sm w-full mx-4 p-6`}>
-      <h3 class={`text-xl font-bold mb-4 ${color.text}`}>Close All Alerts?</h3>
-      <p class={`${color.text} mb-6`}>Are you sure you want to close all alerts? They won't appear again.</p>
-      <div class="flex justify-end gap-4">
-        <button id={`cancelCloseAll-${uniqueId}`} class={`px-4 py-2 ${color.text} hover:opacity-75`}>Cancel</button>
-        <button id={`confirmCloseAll-${uniqueId}`} class={`px-4 py-2 ${color.button} text-white rounded-lg`}>Close All</button>
-      </div>
     </div>
   </div>
 )}
 
 <style>
+  .animate-in {
+    animation: fadeIn 0.2s ease-out;
+  }
+  
   @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
-  }
-
-  @keyframes slideIn {
-    from { 
-      opacity: 0;
-      transform: translateY(-10%);
-    }
-    to { 
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .animate-fadeIn {
-    animation: fadeIn 0.3s ease-out;
-  }
-
-  .animate-slideIn {
-    animation: slideIn 0.4s ease-out;
   }
 </style>
 
 <script define:vars={{ uniqueId, messageId, expiresAt }}>
   const modal = document.getElementById(`alertModal-${uniqueId}`);
-  const closeButton = document.getElementById(`closeAlert-${uniqueId}`);
-  const closeAllButton = document.getElementById(`closeAllAlerts-${uniqueId}`);
-  const confirmModal = document.getElementById(`confirmModal-${uniqueId}`);
-  const confirmCloseAllButton = document.getElementById(`confirmCloseAll-${uniqueId}`);
-  const cancelCloseAllButton = document.getElementById(`cancelCloseAll-${uniqueId}`);
-
-  function setDismissed(messageId) {
-    sessionStorage.setItem(`alert-${messageId}`, 'dismissed');
+  const closeBtn = document.getElementById(`closeAlert-${uniqueId}`);
+  const extLink = document.getElementById(`externalLink-${uniqueId}`);
+  
+  function close() {
+    if (messageId) sessionStorage.setItem(`alert-${messageId}`, 'dismissed');
+    modal?.remove();
   }
 
-  function closeModal() {
-    if (modal && messageId) {
-      modal.classList.add('opacity-0');
-      modal.style.transition = 'opacity 0.2s ease-out';
-      setTimeout(() => modal.remove(), 200);
-      setDismissed(messageId);
-    }
+  if (messageId && (sessionStorage.getItem(`alert-${messageId}`) === 'dismissed' || (expiresAt && new Date() > new Date(expiresAt)))) {
+    modal?.remove();
   }
 
-  function closeAllModals() {
-    const allAlerts = document.querySelectorAll('[id^="alertModal-"]');
-    allAlerts.forEach(alert => {
-      const alertId = alert.id.split('-')[1];
-      if (alertId) {
-        const messageId = alert.getAttribute('data-message-id');
-        if (messageId) {
-          setDismissed(messageId);
-        }
-        alert.classList.add('opacity-0');
-        alert.style.transition = 'opacity 0.2s ease-out';
-        setTimeout(() => alert.remove(), 200);
-      }
-    });
-  }
-
-  if (messageId) {
-    // Check if alert has expired
-    const isExpired = expiresAt ? new Date() > new Date(expiresAt) : false;
-    
-    // Check if alert should be shown based on session storage and expiration
-    if (sessionStorage.getItem(`alert-${messageId}`) === 'dismissed' || isExpired) {
-      modal?.remove();
-    } else {
-      // Add messageId as data attribute
-      modal?.setAttribute('data-message-id', messageId);
-
-      // Show confirmation modal
-      closeAllButton?.addEventListener('click', () => {
-        confirmModal?.classList.remove('hidden');
-      });
-
-      // Handle confirmation modal buttons
-      confirmCloseAllButton?.addEventListener('click', () => {
-        closeAllModals();
-        confirmModal?.classList.add('hidden');
-      });
-
-      cancelCloseAllButton?.addEventListener('click', () => {
-        confirmModal?.classList.add('hidden');
-      });
-
-      // Close on button click
-      closeButton?.addEventListener('click', closeModal);
-
-      // Close on escape key
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          closeModal();
-        }
-      });
-
-      // Close on backdrop click
-      modal?.addEventListener('click', (e) => {
-        if (e.target === modal) {
-          closeModal();
-        }
-      });
-    }
-  }
+  closeBtn?.addEventListener('click', close);
+  extLink?.addEventListener('click', close);
+  modal?.addEventListener('click', (e) => { if (e.target === modal) close(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
 </script>

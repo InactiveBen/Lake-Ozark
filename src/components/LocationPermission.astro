@@ -1,0 +1,97 @@
+---
+// Shows once per session to ask for location permission
+---
+
+<div 
+  id="location-permission-modal"
+  class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-6 hidden" 
+  role="dialog" 
+  aria-modal="true"
+  style="font-family: 'Albert Sans', system-ui, sans-serif;"
+>
+  <div class="bg-white rounded-lg max-w-sm w-full p-6 animate-in">
+    <h2 class="text-lg font-semibold text-gray-900 mb-2">Share your location?</h2>
+    <p class="text-sm text-gray-600 leading-relaxed mb-6">
+      We'd like to show you directions to our church and personalize your experience. Your location is never stored or shared.
+    </p>
+    
+    <div class="flex gap-3">
+      <button
+        id="location-deny"
+        class="flex-1 text-gray-600 hover:text-gray-900 text-sm font-medium py-2.5 rounded-lg transition-colors"
+      >
+        Not now
+      </button>
+      <button
+        id="location-allow"
+        class="flex-1 bg-black hover:bg-gray-800 text-white text-sm font-medium py-2.5 rounded-lg transition-colors"
+      >
+        Allow
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .animate-in {
+    animation: fadeIn 0.2s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+</style>
+
+<script>
+  const modal = document.getElementById('location-permission-modal');
+  const allowBtn = document.getElementById('location-allow');
+  const denyBtn = document.getElementById('location-deny');
+  
+  // Check if we should show the prompt
+  const hasAsked = sessionStorage.getItem('location-permission-asked');
+  const hasPermission = sessionStorage.getItem('location-permission-granted');
+  
+  if (!hasAsked && !hasPermission && 'geolocation' in navigator) {
+    // Small delay so page loads first
+    setTimeout(() => {
+      modal?.classList.remove('hidden');
+    }, 1000);
+  }
+  
+  allowBtn?.addEventListener('click', () => {
+    // Trigger browser's native location prompt
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        modal?.classList.add('hidden');
+        sessionStorage.setItem('location-permission-asked', 'true');
+        sessionStorage.setItem('location-permission-granted', 'true');
+        sessionStorage.setItem('user-lat', position.coords.latitude.toString());
+        sessionStorage.setItem('user-lng', position.coords.longitude.toString());
+        // Reload to apply location features
+        window.location.reload();
+      },
+      () => {
+        // User denied in browser prompt
+        modal?.classList.add('hidden');
+        sessionStorage.setItem('location-permission-asked', 'true');
+        sessionStorage.setItem('location-permission-granted', 'false');
+      }
+    );
+  });
+  
+  denyBtn?.addEventListener('click', () => {
+    modal?.classList.add('hidden');
+    sessionStorage.setItem('location-permission-asked', 'true');
+    sessionStorage.setItem('location-permission-granted', 'false');
+  });
+  
+  // Close on backdrop click
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.classList.add('hidden');
+      sessionStorage.setItem('location-permission-asked', 'true');
+    }
+  });
+</script>
+
