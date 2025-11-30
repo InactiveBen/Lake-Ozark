@@ -29,20 +29,8 @@ const {
   async function initLocationMap(config: { showRoute: boolean; containerId: string }) {
     const { showRoute, containerId } = config;
     const accessToken = 'pk.eyJ1IjoiZG9ub3JraXQiLCJhIjoiY21paDBqZjJwMGM3ZjNjcHNnaWt2Z2l3aiJ9.fXOKheOAlOOIIh2mB6t-mA';
-    const churchAddress = '1560 Bagnell Dam Blvd, Lake Ozark, MO 65049';
-    let churchCoords: [number, number] = [-92.6426, 38.1147]; // fallback
-    
-    // Geocode the church address for accurate coordinates
-    try {
-      const geocodeUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(churchAddress)}.json?access_token=${accessToken}`;
-      const response = await fetch(geocodeUrl);
-      const data = await response.json();
-      if (data.features && data.features.length > 0) {
-        churchCoords = data.features[0].center;
-      }
-    } catch (e) {
-      console.warn('Geocoding failed, using fallback coordinates');
-    }
+    // Hardcoded coordinates for church (verified via API - no API call needed)
+    const churchCoords: [number, number] = [-92.64159, 38.19839];
     
     const mapContainer = document.getElementById(containerId);
     if (!mapContainer || !(window as any).mapboxgl) return null;

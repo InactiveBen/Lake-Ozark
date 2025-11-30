@@ -49,9 +49,11 @@
   const denyBtn = document.getElementById('location-deny');
   
   // Check if we should show the prompt
-  const hasAsked = sessionStorage.getItem('location-permission-asked');
-  const hasPermission = sessionStorage.getItem('location-permission-granted');
-  const hasLocation = sessionStorage.getItem('user-lat') && sessionStorage.getItem('user-lng');
+  // Check localStorage for stored location (persists across sessions)
+  const storedLocation = localStorage.getItem('user-location');
+  const hasLocation = storedLocation || (localStorage.getItem('user-lat') && localStorage.getItem('user-lng'));
+  const hasAsked = localStorage.getItem('location-permission-asked');
+  const hasPermission = localStorage.getItem('location-permission-granted');
   
   // Don't prompt if location is already stored or permission was already asked
   if (!hasAsked && !hasPermission && !hasLocation && 'geolocation' in navigator) {
@@ -66,33 +68,48 @@
     navigator.geolocation.getCurrentPosition(
       (position) => {
         modal?.classList.add('hidden');
-        sessionStorage.setItem('location-permission-asked', 'true');
-        sessionStorage.setItem('location-permission-granted', 'true');
-        sessionStorage.setItem('user-lat', position.coords.latitude.toString());
-        sessionStorage.setItem('user-lng', position.coords.longitude.toString());
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        
+        // Store in localStorage (persists across sessions)
+        localStorage.setItem('location-permission-asked', 'true');
+        localStorage.setItem('location-permission-granted', 'true');
+        localStorage.setItem('user-lat', lat.toString());
+        localStorage.setItem('user-lng', lng.toString());
+        
+        // Also store in the format used by index.astro
+        const locationData = {
+          lng: lng,
+          lat: lat,
+          source: 'browser',
+          timestamp: Date.now()
+        };
+        localStorage.setItem('user-location', JSON.stringify(locationData));
+        localStorage.setItem('user-location-time', Date.now().toString());
+        
         // Reload to apply location features
         window.location.reload();
       },
       () => {
         // User denied in browser prompt
         modal?.classList.add('hidden');
-        sessionStorage.setItem('location-permission-asked', 'true');
-        sessionStorage.setItem('location-permission-granted', 'false');
+        localStorage.setItem('location-permission-asked', 'true');
+        localStorage.setItem('location-permission-granted', 'false');
       }
     );
   });
   
   denyBtn?.addEventListener('click', () => {
     modal?.classList.add('hidden');
-    sessionStorage.setItem('location-permission-asked', 'true');
-    sessionStorage.setItem('location-permission-granted', 'false');
+    localStorage.setItem('location-permission-asked', 'true');
+    localStorage.setItem('location-permission-granted', 'false');
   });
   
   // Close on backdrop click
   modal?.addEventListener('click', (e) => {
     if (e.target === modal) {
       modal.classList.add('hidden');
-      sessionStorage.setItem('location-permission-asked', 'true');
+      localStorage.setItem('location-permission-asked', 'true');
     }
   });
 </script>

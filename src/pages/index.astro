@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import YouTubePopup from '../components/YouTubePopup.astro';
+import PrayerRequestForm from '../components/PrayerRequestForm.astro';
+import SalvationMarquee from '../components/SalvationMarquee';
 
 import { isLocalVisitor } from '../utils/locationCheck';
 
@@ -699,6 +701,20 @@ function formatDate(dateStr: string): string {
   </section>
   )}
   
+<!-- Prayer Request Section -->
+<section id="prayer" class="py-20 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="max-w-7xl mx-auto">
+      <PrayerRequestForm />
+    </div>
+  </div>
+</section>
+
+<!-- Salvation Stories Marquee -->
+<section id="salvation-stories" class="py-20 bg-white">
+  <SalvationMarquee client:load />
+</section>
+
 <!-- Calendar Section -->
 <section id="calendar" class="py-20 bg-white">
   <div class="container mx-auto px-6">
@@ -769,24 +785,15 @@ function formatDate(dateStr: string): string {
   document.addEventListener('DOMContentLoaded', async () => {
     const accessToken = 'pk.eyJ1IjoiZG9ub3JraXQiLCJhIjoiY21paDBqZjJwMGM3ZjNjcHNnaWt2Z2l3aiJ9.fXOKheOAlOOIIh2mB6t-mA';
     const churchAddress = '1560 Bagnell Dam Blvd, Lake Ozark, MO 65049';
-    const churchCoords: [number, number] = [-92.6426, 38.1147];
+    // Hardcoded coordinates for church (verified via API - no API call needed)
+    const churchCoords: [number, number] = [-92.64159, 38.19839];
     
     const greetingEl = document.getElementById('location-greeting');
     const distanceEl = document.getElementById('distance-message');
     const directionsLink = document.getElementById('directions-link') as HTMLAnchorElement;
     
-    // Get church coordinates via geocoding
-    let coords = churchCoords;
-    try {
-      const geocodeUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(churchAddress)}.json?access_token=${accessToken}`;
-      const response = await fetch(geocodeUrl);
-      const data = await response.json();
-      if (data.features && data.features.length > 0) {
-        coords = data.features[0].center;
-      }
-    } catch (e) {
-      console.warn('Geocoding failed, using fallback coordinates');
-    }
+    // Use hardcoded coordinates (no geocoding API call to save money)
+    const coords = churchCoords;
     
     // Initialize map first (shows church only)
     const mapContainer = document.getElementById('mapbox-map');
@@ -894,36 +901,140 @@ function formatDate(dateStr: string): string {
       }
     }
     
-    // Try browser geolocation first (more accurate)
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        // Success - user granted permission
-        async (position) => {
-          const { longitude, latitude } = position.coords;
+    // Check localStorage first for stored user location
+    // Check both formats: the new JSON format and the old separate lat/lng format
+    let userLocation: { lng: number; lat: number; city?: string; source: string } | null = null;
+    
+    const storedLocation = localStorage.getItem('user-location');
+    const storedLat = localStorage.getItem('user-lat');
+    const storedLng = localStorage.getItem('user-lng');
+    
+    // First try the JSON format
+    if (storedLocation) {
+      try {
+        userLocation = JSON.parse(storedLocation);
+        // Check if stored location is less than 30 days old (location doesn't change often)
+        const storedTime = localStorage.getItem('user-location-time');
+        if (storedTime) {
+          const age = Date.now() - parseInt(storedTime);
+          const thirtyDays = 30 * 24 * 60 * 60 * 1000;
+          if (age > thirtyDays) {
+            // Location is stale, clear it
+            localStorage.removeItem('user-location');
+            localStorage.removeItem('user-location-time');
+            userLocation = null;
+          }
+        }
+      } catch (e) {
+        console.warn('Failed to parse stored location');
+        localStorage.removeItem('user-location');
+        localStorage.removeItem('user-location-time');
+      }
+    }
+    
+    // Fallback to separate lat/lng format (from LocationPermission component)
+    if (!userLocation && storedLat && storedLng) {
+      userLocation = {
+        lng: parseFloat(storedLng),
+        lat: parseFloat(storedLat),
+        source: 'browser'
+      };
+    }
+    
+    // Function to save location to localStorage (persists across sessions)
+    function saveLocationToStorage(lng: number, lat: number, city?: string, source: string = 'browser') {
+      const locationData = { lng, lat, city, source, timestamp: Date.now() };
+      localStorage.setItem('user-location', JSON.stringify(locationData));
+      localStorage.setItem('user-location-time', Date.now().toString());
+      // Also store in separate format for LocationPermission component compatibility
+      localStorage.setItem('user-lat', lat.toString());
+      localStorage.setItem('user-lng', lng.toString());
+    }
+    
+    // Function to use stored or new location
+    async function useLocation(lng: number, lat: number, city?: string, source: string = 'browser') {
+      // Save to localStorage
+      saveLocationToStorage(lng, lat, city, source);
+      
+      // Update greeting based on source and city
+      if (greetingEl && distanceEl) {
+        if (source === 'browser') {
+          greetingEl.textContent = `👋 Hello, neighbor!`;
+          greetingEl.className = `inline-block px-4 py-2 bg-blue-100 text-blue-700 text-sm font-medium mb-6`;
+        } else if (source === 'ip' && city) {
+          const localCities = ['lake ozark', 'osage beach', 'camdenton', 'eldon', 'versailles', 'laurie', 'sunrise beach', 'gravois mills'];
+          const isLocal = localCities.some((c: string) => city.toLowerCase().includes(c));
           
-          if (greetingEl) {
+          if (isLocal) {
             greetingEl.textContent = `👋 Hello, neighbor!`;
-            greetingEl.className = `inline-block px-4 py-2 bg-blue-100 text-blue-700 text-sm font-medium mb-6`;
+            greetingEl.className = `inline-block px-4 py-2 bg-green-100 text-green-700 text-sm font-medium mb-6`;
+            distanceEl.textContent = `We're right here in your community. Stop by this Sunday!`;
+          } else {
+            const cityName = city.split(' ').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+            greetingEl.textContent = `Welcome from ${cityName}!`;
+            greetingEl.className = `inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6`;
+            distanceEl.textContent = `Visiting the Lake? We'd love to have you join us for worship.`;
           }
+        } else if (source === 'stored' && city) {
+          // Use stored city info for greeting
+          const localCities = ['lake ozark', 'osage beach', 'camdenton', 'eldon', 'versailles', 'laurie', 'sunrise beach', 'gravois mills'];
+          const isLocal = localCities.some((c: string) => city.toLowerCase().includes(c));
           
-          // Wait for map to load then show route
-          if (map) {
-            if (map.loaded()) {
-              await showRouteOnMap(longitude, latitude);
-            } else {
-              map.on('load', () => showRouteOnMap(longitude, latitude));
-            }
+          if (isLocal) {
+            greetingEl.textContent = `👋 Hello, neighbor!`;
+            greetingEl.className = `inline-block px-4 py-2 bg-green-100 text-green-700 text-sm font-medium mb-6`;
+          } else {
+            const cityName = city.split(' ').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+            greetingEl.textContent = `Welcome from ${cityName}!`;
+            greetingEl.className = `inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6`;
           }
-        },
-        // Error or denied - fall back to IP geolocation
-        async () => {
-          console.log('Geolocation denied, falling back to IP location');
-          await fallbackToIPLocation();
-        },
-        { enableHighAccuracy: true, timeout: 5000, maximumAge: 300000 }
-      );
+        }
+      }
+      
+      // Wait for map to load then show route
+      if (map) {
+        if (map.loaded()) {
+          await showRouteOnMap(lng, lat);
+        } else {
+          map.on('load', () => showRouteOnMap(lng, lat));
+        }
+      }
+    }
+    
+    // If we have stored location with actual coordinates, use it (no permission needed!)
+    if (userLocation && userLocation.lng && userLocation.lat && userLocation.source === 'browser') {
+      console.log('Using stored browser location:', userLocation);
+      await useLocation(userLocation.lng, userLocation.lat, userLocation.city, 'stored');
     } else {
-      await fallbackToIPLocation();
+      // Only request location if we don't have stored browser location
+      // Check if user has already denied permission
+      const permissionDenied = localStorage.getItem('location-permission-granted') === 'false';
+      
+      if (permissionDenied) {
+        // User previously denied, fall back to IP location (less accurate but no permission needed)
+        console.log('Location permission previously denied, using IP location');
+        await fallbackToIPLocation();
+      } else if ('geolocation' in navigator) {
+        // Try browser geolocation (most accurate - actual coordinates)
+        navigator.geolocation.getCurrentPosition(
+          // Success - user granted permission
+          async (position) => {
+            const { longitude, latitude } = position.coords;
+            console.log('Got browser location:', { longitude, latitude });
+            await useLocation(longitude, latitude, undefined, 'browser');
+          },
+          // Error or denied - fall back to IP geolocation
+          async (error) => {
+            console.log('Geolocation denied or failed:', error);
+            localStorage.setItem('location-permission-granted', 'false');
+            await fallbackToIPLocation();
+          },
+          { enableHighAccuracy: true, timeout: 5000, maximumAge: 300000 }
+        );
+      } else {
+        // Browser doesn't support geolocation, use IP
+        await fallbackToIPLocation();
+      }
     }
     
     // Fallback to IP-based geolocation
@@ -932,36 +1043,14 @@ function formatDate(dateStr: string): string {
         const geoResponse = await fetch('https://geo.locc.us/where');
         const visitorData = await geoResponse.json();
         
-        if (visitorData && greetingEl && distanceEl) {
+        // Show route if we have coordinates
+        if (visitorData && visitorData.latitude && visitorData.longitude) {
+          const lng = parseFloat(visitorData.longitude);
+          const lat = parseFloat(visitorData.latitude);
           const city = visitorData.city;
-          const localCities = ['lake ozark', 'osage beach', 'camdenton', 'eldon', 'versailles', 'laurie', 'sunrise beach', 'gravois mills'];
-          const isLocal = city && localCities.some((c: string) => city.toLowerCase().includes(c));
           
-          if (isLocal) {
-            greetingEl.textContent = `👋 Hello, neighbor!`;
-            greetingEl.className = `inline-block px-4 py-2 bg-green-100 text-green-700 text-sm font-medium mb-6`;
-            distanceEl.textContent = `We're right here in your community. Stop by this Sunday!`;
-          } else if (city) {
-            const cityName = city.split(' ').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-            greetingEl.textContent = `Welcome from ${cityName}!`;
-            distanceEl.textContent = `Visiting the Lake? We'd love to have you join us for worship.`;
-          }
-          
-          // Show route if we have coordinates
-          if (visitorData.latitude && visitorData.longitude && map) {
-            const lng = parseFloat(visitorData.longitude);
-            const lat = parseFloat(visitorData.latitude);
-            
-            if (directionsLink) {
-              directionsLink.href = `https://www.google.com/maps/dir/${lat},${lng}/Lake+Ozark+Christian+Church,+1560+Bagnell+Dam+Blvd,+Lake+Ozark,+MO+65049`;
-            }
-            
-            if (map.loaded()) {
-              await showRouteOnMap(lng, lat);
-            } else {
-              map.on('load', () => showRouteOnMap(lng, lat));
-            }
-          }
+          // Save to localStorage and use location (greeting will be handled in useLocation)
+          await useLocation(lng, lat, city, 'ip');
         }
       } catch (e) {
         console.warn('Could not fetch IP location');

@@ -14,6 +14,7 @@
     "@astrojs/node": "^8.3.4",
     "@astrojs/react": "^3.6.3",
     "@astrojs/tailwind": "^5.1.5",
+    "@joycostudio/marquee": "^0.0.13",
     "@sentry/astro": "^9.46.0",
     "astro": "^4.16.19",
     "react": "^18.3.1",
