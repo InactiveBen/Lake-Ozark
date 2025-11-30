@@ -1086,14 +1086,14 @@ function formatDate(dateStr: string): string {
         const nextService = upcomingServices[0];
         nextServiceTime = nextService.parsedTime; // Use pre-parsed date
         
-                 // Update service title
+                 // Service title: If available, use service title. Otherwise, fallback.
          const titleEl = document.getElementById('service-title');
-         if (titleEl && nextService.content?.title) {
-           titleEl.textContent = nextService.content.title;
-         } else if (titleEl) {
-           titleEl.textContent = 'Worship with Rev. Ron Trimmer';
+         if (titleEl) {
+           // Use the service's title if available, else fallback string
+           titleEl.textContent = nextService?.content?.title?.trim()
+             ? nextService.content.title
+             : 'Late Worship Service';
          }
-        
         // Calculate and display initial countdown values immediately
         updateCountdownDisplay();
         

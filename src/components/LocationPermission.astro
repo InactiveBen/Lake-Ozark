@@ -51,8 +51,10 @@
   // Check if we should show the prompt
   const hasAsked = sessionStorage.getItem('location-permission-asked');
   const hasPermission = sessionStorage.getItem('location-permission-granted');
+  const hasLocation = sessionStorage.getItem('user-lat') && sessionStorage.getItem('user-lng');
   
-  if (!hasAsked && !hasPermission && 'geolocation' in navigator) {
+  // Don't prompt if location is already stored or permission was already asked
+  if (!hasAsked && !hasPermission && !hasLocation && 'geolocation' in navigator) {
     // Small delay so page loads first
     setTimeout(() => {
       modal?.classList.remove('hidden');

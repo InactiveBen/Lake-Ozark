@@ -1,0 +1,63 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+const { 
+  title,
+  description = "Watch live Sunday worship services from Lake Ozark Christian Church"
+} = Astro.props;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": title,
+  "description": description,
+  "uploadDate": new Date().toISOString(),
+  "contentUrl": "https://customer-w9xtramr9fjat2m3.cloudflarestream.com/b49456d6a25da93af131a919453dc5ad/iframe",
+  "embedUrl": "https://customer-w9xtramr9fjat2m3.cloudflarestream.com/b49456d6a25da93af131a919453dc5ad/iframe"
+};
+---
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta name="description" content={description} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content={`${title} - Lake Ozark Christian Church`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg" />
+    <meta property="og:url" content={Astro.url} />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="player" />
+    <meta name="twitter:title" content={`${title} - Lake Ozark Christian Church`} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg" />
+    
+    <link rel="canonical" href={Astro.url} />
+    <link rel="icon" type="image/png" href="https://cdn.lakeozarkdisciples.org/media/cropped-LOCC-shortcut.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+    <title>{title} - Lake Ozark Christian Church</title>
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body class="h-full bg-black overflow-hidden" style="font-family: 'Albert Sans', system-ui, sans-serif;">
+    <slot />
+  </body>
+</html>
+
