@@ -21,7 +21,7 @@ const BRAND_COLORS = {
 /**
  * Parse date from video title (client-side version)
  */
-function parseDateFromTitle(title) {
+export function parseDateFromTitle(title) {
   const cleanTitle = title.replace(/^(Service|LOCC|Church Service)\s*[-|]\s*/i, '').replace(/\s*[-|]\s*(Service)$/i, '');
   
   const patterns = [
@@ -78,6 +78,129 @@ function parseDateFromTitle(title) {
   }
   
   return null;
+}
+
+/**
+ * Determine liturgical season and color for a given date
+ */
+export function getLiturgicalSeason(date) {
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1; // 1-12
+  const day = date.getDate();
+  const dateKey = `${year}-${month}-${day}`;
+  
+  // Specific dates (same every year)
+  // Disciples of Christ liturgical calendar
+  if (dateKey === `${year}-12-25`) return { season: 'Christmas', color: '#ffffff' }; // White (Disciples use White, not Gold)
+  if (dateKey === `${year}-1-6`) return { season: 'Epiphany', color: '#ffffff' }; // White (Disciples use White)
+  if (dateKey === `${year}-11-1`) return { season: 'All Saints', color: '#ffffff' }; // White or Gold (using White for consistency)
+  
+  // 2022 dates
+  if (year === 2022) {
+    // Advent 2022: Nov 27 - Dec 24
+    if (month === 11 && day >= 27) return { season: 'Advent', color: '#2563eb' }; // Blue
+    if (month === 12 && day <= 24) return { season: 'Advent', color: '#2563eb' }; // Blue
+  }
+  
+  // 2023 dates (note: Lent and Easter are in 2023 but span into 2024)
+  if (year === 2023) {
+    // Easter 2023: April 9, 2023
+    if (dateKey === '2023-4-2') return { season: 'Palm Sunday', color: '#dc2626' }; // Red (April 2, 2023)
+    if (dateKey === '2023-4-7') return { season: 'Good Friday', color: '#dc2626' }; // Red (Disciples use Red, not Black)
+    if (dateKey === '2023-4-9') return { season: 'Easter', color: '#ffffff' }; // White (Disciples use White, not Gold)
+    if (dateKey === '2023-5-28') return { season: 'Pentecost', color: '#dc2626' }; // Red (May 28, 2023)
+    
+    // Advent 2023: Dec 3 - Dec 24
+    if (month === 12 && day >= 3 && day <= 24) return { season: 'Advent', color: '#2563eb' }; // Blue
+    
+    // Lent 2023: Feb 22 (Ash Wednesday) - Apr 6 (Holy Thursday)
+    if (month === 2 && day >= 22) return { season: 'Lent', color: '#7c3aed' }; // Purple
+    if (month === 3) return { season: 'Lent', color: '#7c3aed' }; // Purple
+    if (month === 4 && day <= 6) return { season: 'Lent', color: '#7c3aed' }; // Purple
+    
+    // Ordinary Time 2023: Jan 9 - Feb 21, then May 29 - Dec 2
+    if (month === 1 && day >= 9) return { season: 'Ordinary Time', color: '#16a34a' }; // Green
+    if (month === 2 && day <= 21) return { season: 'Ordinary Time', color: '#16a34a' }; // Green
+    if (month === 5 && day >= 29) return { season: 'Ordinary Time', color: '#16a34a' }; // Green
+    if (month >= 6 && month <= 11) return { season: 'Ordinary Time', color: '#16a34a' }; // Green
+    if (month === 12 && day <= 2) return { season: 'Ordinary Time', color: '#16a34a' }; // Green
+  }
+  
+  // 2024 dates (note: Lent and Easter are in 2024 but span into 2025)
+  if (year === 2024) {
+    // Easter 2024: March 31, 2024
+    if (dateKey === '2024-3-24') return { season: 'Palm Sunday', color: '#dc2626' }; // Red (March 24, 2024)
+    if (dateKey === '2024-3-29') return { season: 'Good Friday', color: '#dc2626' }; // Red (Disciples use Red, not Black)
+    if (dateKey === '2024-3-31') return { season: 'Easter', color: '#ffffff' }; // White (Disciples use White, not Gold)
+    if (dateKey === '2024-5-19') return { season: 'Pentecost', color: '#dc2626' }; // Red (May 19, 2024)
+    
+    // Advent 2024: Dec 1 - Dec 24
+    if (month === 12 && day >= 1 && day <= 24) return { season: 'Advent', color: '#2563eb' }; // Blue
+    
+    // Lent 2024: Feb 14 (Ash Wednesday) - Mar 28 (Holy Thursday)
+    if (month === 2 && day >= 14) return { season: 'Lent', color: '#7c3aed' }; // Purple
+    if (month === 3 && day <= 28) return { season: 'Lent', color: '#7c3aed' }; // Purple
+    
+    // Ordinary Time 2024: Jan 8 - Feb 13, then May 20 - Nov 30
+    if (month === 1 && day >= 8) return { season: 'Ordinary Time', color: '#16a34a' }; // Green
+    if (month === 2 && day <= 13) return { season: 'Ordinary Time', color: '#16a34a' }; // Green
+    if (month === 5 && day >= 20) return { season: 'Ordinary Time', color: '#16a34a' }; // Green
+    if (month >= 6 && month <= 10) return { season: 'Ordinary Time', color: '#16a34a' }; // Green
+    if (month === 11 && day <= 30) return { season: 'Ordinary Time', color: '#16a34a' }; // Green
+  }
+  
+  // 2025 dates
+  if (year === 2025) {
+    // Easter 2025: April 20, 2025
+    if (dateKey === '2025-4-13') return { season: 'Palm Sunday', color: '#dc2626' }; // Red (April 13, 2025)
+    if (dateKey === '2025-4-18') return { season: 'Good Friday', color: '#dc2626' }; // Red (Disciples use Red, not Black)
+    if (dateKey === '2025-4-20') return { season: 'Easter', color: '#ffffff' }; // White (Disciples use White, not Gold)
+    if (dateKey === '2025-6-8') return { season: 'Pentecost', color: '#dc2626' }; // Red (June 8, 2025)
+    
+    // Advent 2025: Nov 30 - Dec 24
+    if (month === 11 && day >= 30) return { season: 'Advent', color: '#2563eb' }; // Blue
+    if (month === 12 && day <= 24) return { season: 'Advent', color: '#2563eb' }; // Blue
+    
+    // Lent 2025: March 5 (Ash Wednesday) - April 19 (Holy Saturday)
+    if (month === 3 && day >= 5) return { season: 'Lent', color: '#7c3aed' }; // Purple
+    if (month === 4 && day <= 19) return { season: 'Lent', color: '#7c3aed' }; // Purple
+    
+    // Ordinary Time 2025: Jan 13 - March 4, then June 9 - Nov 29
+    if (month === 1 && day >= 13) return { season: 'Ordinary Time', color: '#16a34a' }; // Green
+    if (month === 2) return { season: 'Ordinary Time', color: '#16a34a' }; // Green
+    if (month === 3 && day <= 4) return { season: 'Ordinary Time', color: '#16a34a' }; // Green
+    if (month === 6 && day >= 9) return { season: 'Ordinary Time', color: '#16a34a' }; // Green
+    if (month >= 7 && month <= 10) return { season: 'Ordinary Time', color: '#16a34a' }; // Green
+    if (month === 11 && day <= 29) return { season: 'Ordinary Time', color: '#16a34a' }; // Green
+  }
+  
+  // 2026 dates
+  if (year === 2026) {
+    // Easter 2026: April 5, 2026
+    if (dateKey === '2026-3-29') return { season: 'Palm Sunday', color: '#dc2626' }; // Red (March 29, 2026)
+    if (dateKey === '2026-4-3') return { season: 'Good Friday', color: '#dc2626' }; // Red (Disciples use Red, not Black)
+    if (dateKey === '2026-4-5') return { season: 'Easter', color: '#ffffff' }; // White (Disciples use White, not Gold)
+    if (dateKey === '2026-5-24') return { season: 'Pentecost', color: '#dc2626' }; // Red (May 24, 2026)
+    
+    // Advent 2026: Nov 29 - Dec 24
+    if (month === 11 && day >= 29) return { season: 'Advent', color: '#2563eb' }; // Blue
+    if (month === 12 && day <= 24) return { season: 'Advent', color: '#2563eb' }; // Blue
+    
+    // Lent 2026: Feb 18 (Ash Wednesday) - April 2 (Holy Thursday)
+    if (month === 2 && day >= 18) return { season: 'Lent', color: '#7c3aed' }; // Purple
+    if (month === 3) return { season: 'Lent', color: '#7c3aed' }; // Purple
+    if (month === 4 && day <= 2) return { season: 'Lent', color: '#7c3aed' }; // Purple
+    
+    // Ordinary Time 2026: Jan 12 - Feb 17, then May 25 - Nov 28
+    if (month === 1 && day >= 12) return { season: 'Ordinary Time', color: '#16a34a' }; // Green
+    if (month === 2 && day <= 17) return { season: 'Ordinary Time', color: '#16a34a' }; // Green
+    if (month === 5 && day >= 25) return { season: 'Ordinary Time', color: '#16a34a' }; // Green
+    if (month >= 6 && month <= 10) return { season: 'Ordinary Time', color: '#16a34a' }; // Green
+    if (month === 11 && day <= 28) return { season: 'Ordinary Time', color: '#16a34a' }; // Green
+  }
+  
+  // Default to red (brand color) if no season matches
+  return { season: 'Default', color: BRAND_COLORS.red };
 }
 
 /**
@@ -144,6 +267,9 @@ export function generateThumbnail(video, options = {}) {
     return null;
   }
 
+  const normalizedDate = new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate(), 0, 0, 0, 0);
+  const liturgical = getLiturgicalSeason(normalizedDate);
+
   // Format date
   const formattedDate = parsedDate.toLocaleDateString('en-US', {
     year: 'numeric',
@@ -160,6 +286,23 @@ export function generateThumbnail(video, options = {}) {
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext('2d');
+    
+    // Add roundRect polyfill if not available (for older browsers)
+    if (!ctx.roundRect) {
+      ctx.roundRect = function(x, y, width, height, radius) {
+        this.beginPath();
+        this.moveTo(x + radius, y);
+        this.lineTo(x + width - radius, y);
+        this.quadraticCurveTo(x + width, y, x + width, y + radius);
+        this.lineTo(x + width, y + height - radius);
+        this.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+        this.lineTo(x + radius, y + height);
+        this.quadraticCurveTo(x, y + height, x, y + height - radius);
+        this.lineTo(x, y + radius);
+        this.quadraticCurveTo(x, y, x + radius, y);
+        this.closePath();
+      };
+    }
 
     // Load the church background image
     const backgroundImg = new Image();
@@ -196,6 +339,33 @@ export function generateThumbnail(video, options = {}) {
       ctx.fillStyle = shadowGradient;
       ctx.fillRect(0, 0, width, height);
       
+      // Add liturgical season tag in top right corner (if not default)
+      if (liturgical.season !== 'Default') {
+        const tagPadding = 8;
+        const tagFontSize = Math.max(12, height * 0.04);
+        ctx.font = `bold ${tagFontSize}px Arial, sans-serif`;
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'top';
+        
+        // Measure text width
+        const tagText = liturgical.season;
+        const textMetrics = ctx.measureText(tagText);
+        const tagWidth = textMetrics.width + tagPadding * 2;
+        const tagHeight = tagFontSize + tagPadding * 2;
+        const tagX = width - 10; // 10px from right edge
+        const tagY = 10; // 10px from top
+        
+        // Draw tag background with liturgical color
+        ctx.fillStyle = liturgical.color;
+        ctx.beginPath();
+        ctx.roundRect(tagX - tagWidth, tagY, tagWidth, tagHeight, 4);
+        ctx.fill();
+        
+        // Draw white text
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText(tagText, tagX - tagPadding, tagY + tagPadding);
+      }
+      
       // Text positioning on the left side - moved to a better position
       const textX = width * 0.08;
       
@@ -225,7 +395,7 @@ export function generateThumbnail(video, options = {}) {
       ctx.fillStyle = BRAND_COLORS.red;
       ctx.fillRect(0, height - barHeight, width, barHeight);
       
-      // Video title on red bar (without date) - smaller text
+      // Video title on bar (without date) - smaller text
       let displayTitle = video.title;
       
       // Remove date patterns from title for cleaner display
@@ -291,7 +461,7 @@ export function generateThumbnail(video, options = {}) {
       ctx.fillStyle = BRAND_COLORS.red;
       ctx.fillRect(0, height - barHeight, width, barHeight);
       
-      // Video title on red bar (without date) - smaller text
+      // Video title on bar (without date) - smaller text
       let displayTitle = video.title;
       
       // Remove date patterns from title for cleaner display
@@ -336,8 +506,17 @@ export function generateThumbnail(video, options = {}) {
  * Get or generate thumbnail for a video
  */
 export async function getVideoThumbnail(video) {
-  // Check sessionStorage for cached thumbnail first
-  const cacheKey = `thumbnail_${video.id}`;
+  // Parse date to determine liturgical season (for cache key)
+  const parsedDate = parseDateFromTitle(video.title);
+  let seasonKey = 'default';
+  if (parsedDate) {
+    const normalizedDate = new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate(), 0, 0, 0, 0);
+    const liturgical = getLiturgicalSeason(normalizedDate);
+    seasonKey = liturgical.season.toLowerCase().replace(/\s+/g, '-');
+  }
+  
+  // Check sessionStorage for cached thumbnail first (include season in cache key)
+  const cacheKey = `thumbnail_${video.id}_${seasonKey}`;
   const cached = sessionStorage.getItem(cacheKey);
   if (cached) {
     return cached;
@@ -347,9 +526,17 @@ export async function getVideoThumbnail(video) {
   try {
     const generatedThumbnail = await generateThumbnail(video);
     if (generatedThumbnail) {
-      // Cache in sessionStorage
+      // Cache in sessionStorage (with season in key)
       try {
-        sessionStorage.setItem(cacheKey, generatedThumbnail);
+        const parsedDate = parseDateFromTitle(video.title);
+        let seasonKey = 'default';
+        if (parsedDate) {
+          const normalizedDate = new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate(), 0, 0, 0, 0);
+          const liturgical = getLiturgicalSeason(normalizedDate);
+          seasonKey = liturgical.season.toLowerCase().replace(/\s+/g, '-');
+        }
+        const cacheKeyWithSeason = `thumbnail_${video.id}_${seasonKey}`;
+        sessionStorage.setItem(cacheKeyWithSeason, generatedThumbnail);
       } catch (e) {
         console.warn('Failed to cache thumbnail in sessionStorage:', e);
       }

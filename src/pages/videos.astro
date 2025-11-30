@@ -97,7 +97,10 @@ import Layout from '../layouts/Layout.astro';
     <div id="video-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
       <div class="bg-white rounded-lg max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden">
         <div class="flex justify-between items-center p-6 border-b">
-          <h3 id="video-modal-title" class="text-xl font-semibold text-gray-900"></h3>
+          <div class="flex items-center gap-3">
+            <h3 id="video-modal-title" class="text-xl font-semibold text-gray-900"></h3>
+            <span id="video-modal-season" class="hidden inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold"></span>
+          </div>
           <button 
             id="close-video-modal"
             class="text-gray-400 hover:text-gray-600 transition-colors"
@@ -458,16 +461,44 @@ import Layout from '../layouts/Layout.astro';
     }
   }
 
-  function openVideoModal(videoId: string, videoTitle: string) {
+  async function openVideoModal(videoId: string, videoTitle: string) {
     const modal = document.getElementById('video-modal');
     const iframe = document.getElementById('video-iframe') as HTMLIFrameElement;
     const title = document.getElementById('video-modal-title');
+    const seasonBadge = document.getElementById('video-modal-season');
     
     if (modal && iframe && title) {
       title.textContent = videoTitle;
       iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
       modal.classList.remove('hidden');
       document.body.style.overflow = 'hidden';
+      
+      // Get liturgical season for the video
+      if (seasonBadge) {
+        try {
+          const { parseDateFromTitle, getLiturgicalSeason } = await import('../utils/clientThumbnailGenerator.js');
+          const parsedDate = parseDateFromTitle(videoTitle);
+          
+          if (parsedDate) {
+            const normalizedDate = new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate(), 0, 0, 0, 0);
+            const liturgical = getLiturgicalSeason(normalizedDate);
+            
+            if (liturgical.season !== 'Default') {
+              seasonBadge.textContent = liturgical.season;
+              seasonBadge.style.backgroundColor = liturgical.color;
+              seasonBadge.style.color = '#ffffff';
+              seasonBadge.classList.remove('hidden');
+            } else {
+              seasonBadge.classList.add('hidden');
+            }
+          } else {
+            seasonBadge.classList.add('hidden');
+          }
+        } catch (error) {
+          console.warn('Failed to get liturgical season:', error);
+          if (seasonBadge) seasonBadge.classList.add('hidden');
+        }
+      }
     }
   }
 
