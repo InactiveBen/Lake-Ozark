@@ -18,6 +18,10 @@ export interface LiturgicalSeason {
   color: string;
   message?: string;
   icon?: string;
+  countdown?: {
+    days: number;
+    holiday: string;
+  };
 }
 
 /**
@@ -165,8 +169,105 @@ export function getLiturgicalSeason(date: Date): LiturgicalSeason {
 }
 
 /**
+ * Get Easter date for a given year (using known dates from liturgical calendar)
+ */
+function getEasterDate(year: number): Date | null {
+  // Use known Easter dates from the liturgical calendar
+  const knownEasterDates: Record<number, { month: number; day: number }> = {
+    2022: { month: 4, day: 17 }, // Approximate - not in calendar but needed for range
+    2023: { month: 4, day: 9 },
+    2024: { month: 3, day: 31 },
+    2025: { month: 4, day: 20 },
+    2026: { month: 4, day: 5 },
+    2027: { month: 3, day: 28 }, // Calculated
+    2028: { month: 4, day: 16 }, // Calculated
+  };
+  
+  if (knownEasterDates[year]) {
+    return new Date(year, knownEasterDates[year].month - 1, knownEasterDates[year].day);
+  }
+  
+  // Fallback calculation for years not in the list
+  const a = year % 19;
+  const b = Math.floor(year / 100);
+  const c = year % 100;
+  const d = Math.floor(b / 4);
+  const e = b % 4;
+  const f = Math.floor((b + 8) / 25);
+  const g = Math.floor((b - f + 1) / 3);
+  const h = (19 * a + b - d - g + 15) % 30;
+  const i = Math.floor(c / 4);
+  const k = c % 4;
+  const l = (32 + 2 * e + 2 * i - h - k) % 7;
+  const m = Math.floor((a + 11 * h + 22 * l) / 451);
+  const month = Math.floor((h + l - 7 * m + 114) / 31);
+  const day = ((h + l - 7 * m + 114) % 31) + 1;
+  return new Date(year, month - 1, day);
+}
+
+/**
+ * Get next major holiday date (Easter or Christmas)
+ */
+function getNextMajorHoliday(currentDate: Date): { date: Date; name: string } | null {
+  const year = currentDate.getFullYear();
+  const currentTime = currentDate.getTime();
+  
+  // Get Easter for current year
+  const easterThisYear = getEasterDate(year);
+  if (!easterThisYear) return null;
+  
+  const easterTime = easterThisYear.getTime();
+  
+  // Get Easter for next year
+  const easterNextYear = getEasterDate(year + 1);
+  if (!easterNextYear) return null;
+  
+  const easterNextYearTime = easterNextYear.getTime();
+  
+  // Get Christmas for current year
+  const christmasThisYear = new Date(year, 11, 25); // December 25
+  const christmasTime = christmasThisYear.getTime();
+  
+  // Get Christmas for next year
+  const christmasNextYear = new Date(year + 1, 11, 25);
+  const christmasNextYearTime = christmasNextYear.getTime();
+  
+  // Find the next upcoming holiday
+  const holidays: Array<{ date: Date; name: string; time: number }> = [];
+  
+  if (easterTime > currentTime) {
+    holidays.push({ date: easterThisYear, name: 'Easter', time: easterTime });
+  } else {
+    holidays.push({ date: easterNextYear, name: 'Easter', time: easterNextYearTime });
+  }
+  
+  if (christmasTime > currentTime) {
+    holidays.push({ date: christmasThisYear, name: 'Christmas', time: christmasTime });
+  } else {
+    holidays.push({ date: christmasNextYear, name: 'Christmas', time: christmasNextYearTime });
+  }
+  
+  // Return the nearest upcoming holiday
+  const nextHoliday = holidays.sort((a, b) => a.time - b.time)[0];
+  
+  return nextHoliday ? { date: nextHoliday.date, name: nextHoliday.name } : null;
+}
+
+/**
+ * Calculate days until a date
+ */
+function daysUntil(targetDate: Date, currentDate: Date): number {
+  const target = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
+  const current = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+  const diffTime = target.getTime() - current.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays;
+}
+
+/**
  * Get banner configuration for a liturgical season
  * Only shows banners for special seasons (not Ordinary Time or Default)
+ * Includes countdown for upcoming major holidays
  */
 export function getSeasonalBannerConfig(date: Date): LiturgicalSeason | null {
   const liturgical = getLiturgicalSeason(date);
@@ -175,7 +276,46 @@ export function getSeasonalBannerConfig(date: Date): LiturgicalSeason | null {
   const specialSeasons = ['Christmas', 'Easter', 'Advent', 'Lent', 'Palm Sunday', 'Good Friday', 'Pentecost', 'Epiphany', 'All Saints'];
   
   if (specialSeasons.includes(liturgical.season)) {
+    // Check if we should show a countdown (only if not currently in that season and within 30 days)
+    const nextHoliday = getNextMajorHoliday(date);
+    
+    if (nextHoliday) {
+      const days = daysUntil(nextHoliday.date, date);
+      
+      // Show countdown if:
+      // 1. We're not currently in that holiday's season
+      // 2. The holiday is within 30 days
+      // 3. It's not the same day
+      if (days > 0 && days <= 30 && liturgical.season !== nextHoliday.name) {
+        liturgical.countdown = {
+          days,
+          holiday: nextHoliday.name
+        };
+      }
+    }
+    
     return liturgical;
+  }
+  
+  // If we're in Ordinary Time but approaching a major holiday, show countdown banner
+  const nextHoliday = getNextMajorHoliday(date);
+  if (nextHoliday) {
+    const days = daysUntil(nextHoliday.date, date);
+    
+    // Show countdown banner if holiday is within 14 days
+    if (days > 0 && days <= 14) {
+      const holidayConfig: LiturgicalSeason = {
+        season: nextHoliday.name,
+        color: nextHoliday.name === 'Christmas' ? '#2563eb' : '#ffffff', // Blue for Christmas countdown, white for Easter
+        message: `Have a blessed ${nextHoliday.name} from your LOCC family!`,
+        icon: nextHoliday.name === 'Christmas' ? '🎄' : '🌸',
+        countdown: {
+          days,
+          holiday: nextHoliday.name
+        }
+      };
+      return holidayConfig;
+    }
   }
   
   return null;

@@ -16,16 +16,46 @@ const bannerConfig = getSeasonalBannerConfig(normalizedDate);
 // Only render if we have a banner config
 const shouldShow = bannerConfig !== null;
 
-// Create a shorter mobile-friendly message
-const getMobileMessage = (message: string | undefined): string => {
-  if (!message) return '';
-  // Extract just the "from your LOCC family" part or create a shorter version
-  if (message.includes('from your LOCC family')) {
-    return 'from your LOCC family!';
+// Create a message that integrates countdown naturally
+const getDisplayMessage = (bannerConfig: typeof bannerConfig): string => {
+  if (!bannerConfig) return '';
+  
+  // If there's a countdown, create natural flow: "It's Advent, there are 25 days until Christmas!"
+  if (bannerConfig.countdown) {
+    const daysText = bannerConfig.countdown.days === 1 
+      ? 'is 1 day' 
+      : `are ${bannerConfig.countdown.days} days`;
+    
+    return `It's ${bannerConfig.season}, there ${daysText} until ${bannerConfig.countdown.holiday}!`;
   }
-  // For other messages, take first part before dash or exclamation
-  const short = message.split(' - ')[0] || message.split('!')[0] || message;
-  return short.length > 30 ? short.substring(0, 27) + '...' : short;
+  
+  // No countdown, use regular message but remove "from your LOCC family" part
+  if (bannerConfig.message) {
+    return bannerConfig.message.replace(/\s*from your LOCC family!?/i, '').trim();
+  }
+  return '';
+};
+
+// Create a shorter mobile-friendly message
+const getMobileMessage = (bannerConfig: typeof bannerConfig): string => {
+  if (!bannerConfig) return '';
+  
+  // If there's a countdown, create shorter version for mobile
+  if (bannerConfig.countdown) {
+    const daysText = bannerConfig.countdown.days === 1 
+      ? '1 day' 
+      : `${bannerConfig.countdown.days} days`;
+    
+    return `${daysText} until ${bannerConfig.countdown.holiday}!`;
+  }
+  
+  // Remove "from your LOCC family" part from message
+  if (bannerConfig.message) {
+    const cleaned = bannerConfig.message.replace(/\s*from your LOCC family!?/i, '').trim();
+    // Take first part if it's still long
+    return cleaned.length > 30 ? cleaned.substring(0, 27) + '...' : cleaned;
+  }
+  return '';
 };
 ---
 
@@ -41,11 +71,22 @@ const getMobileMessage = (message: string | undefined): string => {
         <span class="text-lg md:text-2xl flex-shrink-0" aria-hidden="true">{bannerConfig.icon}</span>
       )}
       <div class="flex items-center justify-center gap-1.5 md:gap-2 min-w-0 flex-wrap">
-        <span class="font-semibold text-sm md:text-lg whitespace-nowrap">{bannerConfig.season}</span>
-        {bannerConfig.message && (
+        {bannerConfig.countdown ? (
           <>
-            <span class="text-xs opacity-90 sm:hidden">{getMobileMessage(bannerConfig.message)}</span>
-            <span class="text-sm md:text-base opacity-90 hidden sm:inline">{bannerConfig.message}</span>
+            <span class="text-xs opacity-90 sm:hidden">{getMobileMessage(bannerConfig)}</span>
+            <span class="text-sm md:text-base opacity-90 hidden sm:inline">
+              {getDisplayMessage(bannerConfig)}
+            </span>
+          </>
+        ) : (
+          <>
+            <span class="font-semibold text-sm md:text-lg whitespace-nowrap">{bannerConfig.season}</span>
+            {bannerConfig.message && (
+              <>
+                <span class="text-xs opacity-90 sm:hidden">{getMobileMessage(bannerConfig)}</span>
+                <span class="text-sm md:text-base opacity-90 hidden sm:inline">{bannerConfig.message}</span>
+              </>
+            )}
           </>
         )}
       </div>
