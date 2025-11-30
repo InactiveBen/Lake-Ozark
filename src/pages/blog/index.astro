@@ -1,6 +1,5 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Slideshow from '../../components/Slideshow.astro';
 
 const mailchimpSignupUrl = "https://lakeozarkdisciples.us7.list-manage.com/subscribe?u=9816d09f0ebdd5f8ce1af28b4&id=b26607b7c1";
 const mailchimpArchiveUrl = "https://us7.campaign-archive.com/home/?u=9816d09f0ebdd5f8ce1af28b4&id=b26607b7c1";
@@ -138,7 +137,7 @@ const breadcrumbs = [
           {sortedPosts.map((post, index) => (
             <div class="post-item" style={index >= 6 ? "display: none;" : ""}>
               <article class="group">
-                <a href={`/blog/${post.frontmatter?.id || ''}`} class="block">
+                <a href={`/blog/${post.frontmatter?.id || ''}?utm_source=lakeozarkdisciples&utm_medium=blog_index&utm_campaign=list&utm_content=${post.frontmatter?.id || 'post'}`} class="block">
                   <div class="mb-6 overflow-hidden rounded-xl relative">
                     {index === 0 && (
                       <div class="absolute top-4 right-4 bg-brand text-white px-3 py-1 rounded-full text-sm font-medium z-10">

@@ -1,7 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import type { GetStaticPaths } from 'astro';
-import RelatedPosts from '../../components/RelatedPosts.astro';
 import SharePost from '../../components/SharePost.astro';
 
 // Define the Props interface for better type safety
@@ -193,8 +192,6 @@ const mailchimpSignupUrl = "https://lakeozarkdisciples.us7.list-manage.com/subsc
         <!-- Share Section -->
         <SharePost title={post.frontmatter.title} postId={post.frontmatter.id} />
 
-        <!-- Related Posts -->
-        <RelatedPosts currentPostId={post.frontmatter.id} />
       </div>
     </div>
   </article>

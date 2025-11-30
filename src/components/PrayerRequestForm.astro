@@ -1,4 +1,18 @@
 ---
+// 
+// File: PrayerRequestForm.astro
+// Component: PrayerRequestForm
+//
+// Description:
+// Renders a two-column section for submitting and explaining prayer requests.
+// Features: Client-side validation, asynchronous Formspree submission, and
+// state management for anonymous submissions.
+//
+// Dependencies:
+// Assumes utility classes (e.g., from Tailwind CSS) are available.
+// Uses an external service (Formspree) for form handling.
+//
+// API:
 interface Props {
   title?: string;
   description?: string;
@@ -14,7 +28,98 @@ const {
 
 <div class="prayer-request-section">
   <div class="grid lg:grid-cols-2 gap-16 items-start">
-    <!-- Left side - Info -->
+    <div class="bg-gray-50 rounded-2xl p-8">
+      <form 
+        id="prayer-request-form" 
+        action="https://formspree.io/f/YOUR_FORM_ID_HERE"
+        method="POST"
+        class="space-y-6"
+      >
+      <div>
+        <label for="prayer-name" class="block text-sm font-medium text-gray-700 mb-2">
+          Your Name {showAnonymous && <span class="text-gray-500 font-normal">(optional)</span>}
+        </label>
+        <input
+          type="text"
+          id="prayer-name"
+          name="name"
+          class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-brand focus:outline-none bg-white transition-colors"
+          placeholder="John Doe"
+        />
+      </div>
+
+      <div>
+        <label for="prayer-email" class="block text-sm font-medium text-gray-700 mb-2">
+          Email <span class="text-gray-500 font-normal">(optional - for follow-up)</span>
+        </label>
+        <input
+          type="email"
+          id="prayer-email"
+          name="email"
+          class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-brand focus:outline-none bg-white transition-colors"
+          placeholder="your@email.com"
+        />
+      </div>
+
+      <div>
+        <label for="prayer-request" class="block text-sm font-medium text-gray-700 mb-2">
+          Prayer Request <span class="text-red-500">*</span>
+        </label>
+        <textarea
+          id="prayer-request"
+          name="request"
+          required
+          rows="6"
+          class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-brand focus:outline-none bg-white transition-colors resize-none"
+          placeholder="Share your prayer need here..."
+        ></textarea>
+        <p class="text-sm text-gray-500 mt-1">Please share as much or as little as you're comfortable with.</p>
+      </div>
+
+      {showAnonymous && (
+        <div>
+          <label class="flex items-start gap-3 p-4 border-2 border-gray-200 rounded-lg bg-white hover:border-brand transition-all duration-300 cursor-pointer">
+            <input
+              type="checkbox"
+              id="prayer-anonymous"
+              name="anonymous"
+              class="mt-1 w-4 h-4 text-brand focus:ring-brand border-gray-300 rounded"
+            />
+            <div>
+              <div class="font-medium text-gray-900">Submit anonymously</div>
+              <div class="text-sm text-gray-600">Your name will not be shared with the prayer team</div>
+            </div>
+          </label>
+        </div>
+      )}
+
+      <div>
+        <button
+          type="submit"
+          id="prayer-submit-btn"
+          class="w-full bg-brand hover:bg-brand-dark text-white font-medium py-4 px-6 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-lg"
+        >
+          <span id="prayer-btn-text">Submit Prayer Request</span>
+          <span id="prayer-btn-loading" class="hidden">Submitting...</span>
+        </button>
+      </div>
+
+      <div class="text-center text-xs text-gray-600 pt-2">
+        <p>All information is kept confidential</p>
+      </div>
+      </form>
+
+      <div id="prayer-success" class="hidden">
+        <div class="bg-green-50 border border-green-200 rounded-lg p-8 text-center">
+          <svg class="w-16 h-16 text-green-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <h3 class="text-2xl font-semibold text-green-900 mb-2">Prayer Request Submitted</h3>
+          <p class="text-green-700 text-lg">Thank you for sharing. Our prayer team will be lifting you up in prayer.</p>
+        </div>
+      </div>
+    </div>
+
     <div>
       <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
         We're Here For You
@@ -33,7 +138,7 @@ const {
             </svg>
             <div>
               <h3 class="font-medium text-gray-900">Confidential & Private</h3>
-              <p class="text-gray-600">Your prayer requests are shared only with our prayer team</p>
+              <p class="text-gray-600">Your prayer requests are shared only with our dedicated prayer team</p>
             </div>
           </div>
           <div class="flex items-start gap-3">
@@ -48,206 +153,114 @@ const {
         </div>
       </div>
     </div>
-
-    <!-- Right side - Form -->
-    <div class="bg-gray-50 rounded-2xl p-8">
-      <form 
-        id="prayer-request-form" 
-        action="https://formspree.io/f/YOUR_FORM_ID_HERE"
-        method="POST"
-        class="space-y-6"
-      >
-      <!-- Name (optional if anonymous) -->
-      <div>
-        <label for="prayer-name" class="block text-sm font-medium text-gray-700 mb-2">
-          Your Name {showAnonymous && <span class="text-gray-500 font-normal">(optional)</span>}
-        </label>
-        <input
-          type="text"
-          id="prayer-name"
-          name="name"
-          class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-brand focus:outline-none bg-white transition-colors"
-          placeholder="John Doe"
-        />
-      </div>
-
-      <!-- Email (optional) -->
-      <div>
-        <label for="prayer-email" class="block text-sm font-medium text-gray-700 mb-2">
-          Email <span class="text-gray-500 font-normal">(optional - for follow-up)</span>
-        </label>
-        <input
-          type="email"
-          id="prayer-email"
-          name="email"
-          class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-brand focus:outline-none bg-white transition-colors"
-          placeholder="your@email.com"
-        />
-      </div>
-
-      <!-- Prayer Request -->
-      <div>
-        <label for="prayer-request" class="block text-sm font-medium text-gray-700 mb-2">
-          Prayer Request <span class="text-red-500">*</span>
-        </label>
-        <textarea
-          id="prayer-request"
-          name="request"
-          required
-          rows="6"
-          class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-brand focus:outline-none bg-white transition-colors resize-none"
-          placeholder="Share your prayer need here..."
-        ></textarea>
-        <p class="text-sm text-gray-500 mt-1">Please share as much or as little as you're comfortable with.</p>
-      </div>
-
-      <!-- Anonymous Option -->
-      {showAnonymous && (
-        <div>
-          <label class="flex items-start gap-3 p-4 border-2 border-gray-200 rounded-lg bg-white hover:border-brand transition-all duration-300 cursor-pointer">
-            <input
-              type="checkbox"
-              id="prayer-anonymous"
-              name="anonymous"
-              class="mt-1 w-4 h-4 text-brand focus:ring-brand border-gray-300 rounded"
-            />
-            <div>
-              <div class="font-medium text-gray-900">Submit anonymously</div>
-              <div class="text-sm text-gray-600">Your name will not be shared with the prayer team</div>
-            </div>
-          </label>
-        </div>
-      )}
-
-      <!-- Submit Button -->
-      <div>
-        <button
-          type="submit"
-          id="prayer-submit-btn"
-          class="w-full bg-brand hover:bg-brand-dark text-white font-medium py-4 px-6 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-lg"
-        >
-          <span id="prayer-btn-text">Submit Prayer Request</span>
-          <span id="prayer-btn-loading" class="hidden">Submitting...</span>
-        </button>
-      </div>
-
-      <!-- Privacy Note -->
-      <div class="text-center text-xs text-gray-600 pt-2">
-        <p>All information is kept confidential</p>
-      </div>
-      </form>
-
-      <!-- Success Message -->
-      <div id="prayer-success" class="hidden">
-        <div class="bg-green-50 border border-green-200 rounded-lg p-8 text-center">
-          <svg class="w-16 h-16 text-green-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-          <h3 class="text-2xl font-semibold text-green-900 mb-2">Prayer Request Submitted</h3>
-          <p class="text-green-700 text-lg">Thank you for sharing. Our prayer team will be lifting you up in prayer.</p>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
 
 <script>
+  // @group Client-Side Progressive Enhancement
+  
   document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('prayer-request-form') as HTMLFormElement;
-    const submitBtn = document.getElementById('prayer-submit-btn') as HTMLButtonElement;
+    const form = document.getElementById('prayer-request-form');
+    const submitBtn = document.getElementById('prayer-submit-btn');
     const btnText = document.getElementById('prayer-btn-text');
     const btnLoading = document.getElementById('prayer-btn-loading');
     const successMessage = document.getElementById('prayer-success');
-    const anonymousCheckbox = document.getElementById('prayer-anonymous') as HTMLInputElement;
-    const nameInput = document.getElementById('prayer-name') as HTMLInputElement;
+    const anonymousCheckbox = document.getElementById('prayer-anonymous');
+    const nameInput = document.getElementById('prayer-name');
 
-    if (!form || !submitBtn) return;
+    if (!form || !submitBtn || !anonymousCheckbox || !nameInput) return;
 
-    // Make name optional if anonymous is checked
-    if (anonymousCheckbox && nameInput) {
-      anonymousCheckbox.addEventListener('change', () => {
-        if (anonymousCheckbox.checked) {
-          nameInput.removeAttribute('required');
-        } else {
-          nameInput.setAttribute('required', 'required');
-        }
-      });
-    }
+    /**
+     * Toggles the 'required' attribute on the Name field based on the 
+     * Anonymous checkbox state.
+     */
+    anonymousCheckbox.addEventListener('change', () => {
+      if ((anonymousCheckbox as HTMLInputElement).checked) {
+        (nameInput as HTMLInputElement).removeAttribute('required');
+      } else {
+        (nameInput as HTMLInputElement).setAttribute('required', 'required');
+      }
+    });
 
+    /**
+     * Asynchronously handles form submission, preventing a full page reload.
+     */
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const formData = new FormData(form);
+      const formData = new FormData(form as HTMLFormElement);
       const request = formData.get('request')?.toString().trim();
       const name = formData.get('name')?.toString().trim() || '';
-      const email = formData.get('email')?.toString().trim() || '';
-      const anonymous = formData.get('anonymous') === 'on';
+      const anonymous = (formData.get('anonymous') === 'on') || false;
 
-      // Validate
+      // Primary Request Validation
       if (!request || request.length < 10) {
-        alert('Please provide a prayer request (at least 10 characters).');
+        alert('Please provide a meaningful prayer request (at least 10 characters).');
         return;
       }
 
-      // Show loading state
-      submitBtn.disabled = true;
-      if (btnText) btnText.classList.add('hidden');
-      if (btnLoading) btnLoading.classList.remove('hidden');
+      // 1. Set Loading State
+      (submitBtn as HTMLButtonElement).disabled = true;
+      btnText?.classList.add('hidden');
+      btnLoading?.classList.remove('hidden');
 
       try {
-        // Submit to Formspree
-        const formData = new FormData(form);
-        
-        // Add hidden field for anonymous status
-        if (anonymous) {
-          formData.append('_anonymous', 'true');
-        }
-        
-        // Add subject line
+        // 2. Prepare Payload (Enriching Form Data for Formspree)
+        // Add hidden fields for better email organization on the server side
+        formData.append('_anonymous', anonymous ? 'true' : 'false');
         formData.append('_subject', anonymous 
           ? 'Anonymous Prayer Request' 
           : `Prayer Request from ${name || 'Someone'}`);
 
-        const response = await fetch(form.action, {
+        // 3. Execute Submission
+        const response = await fetch((form as HTMLFormElement).action, {
           method: 'POST',
           body: formData,
           headers: {
-            'Accept': 'application/json'
+            // Request JSON response for easier error handling
+            'Accept': 'application/json' 
           }
         });
 
         if (!response.ok) {
           const errorData = await response.json();
-          throw new Error(errorData.error || 'Failed to submit');
+          throw new Error(errorData.error || 'Failed to submit via Formspree.');
         }
 
-        // Show success message
+        // 4. Success State
         form.classList.add('hidden');
-        if (successMessage) successMessage.classList.remove('hidden');
+        successMessage?.classList.remove('hidden');
 
-        // Reset form after 5 seconds
+        // 5. Automatic Reset (A refined user flow)
         setTimeout(() => {
-          form.reset();
+          (form as HTMLFormElement).reset();
           form.classList.remove('hidden');
-          if (successMessage) successMessage.classList.add('hidden');
+          successMessage?.classList.add('hidden');
+          // Ensure Name field reverts to required if not anonymous
+          (nameInput as HTMLInputElement).setAttribute('required', 'required');
+          (anonymousCheckbox as HTMLInputElement).checked = false;
         }, 5000);
 
       } catch (error) {
         console.error('Error submitting prayer request:', error);
-        alert('There was an error submitting your prayer request. Please try again or contact us directly.');
+        alert('We encountered an error. Please check your network connection or contact support.');
       } finally {
-        // Reset button state
-        submitBtn.disabled = false;
-        if (btnText) btnText.classList.remove('hidden');
-        if (btnLoading) btnLoading.classList.add('hidden');
+        // 6. Reset Button State
+        (submitBtn as HTMLButtonElement).disabled = false;
+        btnText?.classList.remove('hidden');
+        btnLoading?.classList.add('hidden');
       }
     });
   });
 </script>
 
 <style>
+  /* Base typography for section */
   .prayer-request-section {
     font-family: 'Albert Sans', system-ui, sans-serif;
   }
+  /* Optional: Define a color variable for 'brand' if not using a framework config */
+  /* :root {
+    --color-brand: #4f46e5;
+  } */
 </style>
-

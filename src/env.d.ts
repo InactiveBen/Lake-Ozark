@@ -5,3 +5,7 @@
  * @Last Modified time: 06/14/25 06:30:58 C4T
  */
 /// <reference path="../.astro/types.d.ts" />
+
+interface ImportMetaEnv {
+  readonly TURNSTILE_SECRET_KEY: string;
+}

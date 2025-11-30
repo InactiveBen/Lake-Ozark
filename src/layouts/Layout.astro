@@ -1,37 +1,101 @@
 ---
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import PrivacyBanner from '../components/PrivacyBanner.astro';
-import AlertSmall from '../components/AlertSmall.astro';
-import AlertBanner from '../components/AlertBanner.astro';
-import LocationPermission from '../components/LocationPermission.astro';
+/**
+ * @file Layout.astro
+ * @module Layout
+ * @description The primary layout component for all site pages, optimized for SEO, Open Graph, and accessibility.
+ *
+ * @prop {string} title - The title of the page (required, should be concise and keyword-rich).
+ * @prop {string} [description] - The meta description for the page.
+ * @prop {string} [ogImage] - The specific Open Graph image URL for this page (optional, defaults to a global image).
+ * @prop {string} [type] - The Open Graph object type (e.g., 'article', 'website').
+ */
+ import Header from '../ui/Header.astro';
+import Footer from '../ui/Footer.astro';
+import PrivacyBanner from '../components/PrivacyBanner.astro'; 
+import AlertSmall from '../components/AlertSmall.astro';      
+import AlertBanner from '../components/AlertBanner.astro';      
+import LocationPermission from '../components/LocationPermission.astro'; 
 
+// ----------------------------------------------------------------
+// 1. Component Props and Defaults
+// ----------------------------------------------------------------
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string; 
+  type?: 'website' | 'article' | 'profile'; // Add type for better specificity
 }
 const { 
   title,
-  description = "Lake Ozark Christian Church - A welcoming Christian community in Lake Ozark, MO dedicated to sharing the Gospel of Jesus Christ through worship, fellowship, and service."
+  description = "Lake Ozark Christian Church - A welcoming Christian community in Lake Ozark, MO dedicated to sharing the Gospel of Jesus Christ through heartfelt worship, vibrant fellowship, and compassionate service.",
+  ogImage,
+  type = 'website'
 } = Astro.props;
 
+
+// ----------------------------------------------------------------
+// 2. Constants and Configuration (SEO/Metadata)
+// ----------------------------------------------------------------
+const SITE_NAME = "Lake Ozark Christian Church";
+const BASE_URL = Astro.url.origin; 
+const CANONICAL_URL = Astro.url.href.replace(/\/$/, ""); // Clean up trailing slashes
+
+// Improved Defaults (use ogImage prop if available)
+const DEFAULT_IMAGE_URL = "https://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg"; 
+const FINAL_OG_IMAGE = ogImage || DEFAULT_IMAGE_URL; // Use page-specific image if provided
+const FAVICON_URL = "https://cdn.lakeozarkdisciples.org/media/cropped-LOCC-shortcut.png"; 
+const LOGO_URL = "https://cdn.lakeozarkdisciples.org/media/LOCC-logo-schema.png"; // Dedicated logo for schema
+
+const OG_IMAGE_WIDTH = 1200;
+const OG_IMAGE_HEIGHT = 630;
+
+const CONTACT = {
+  phone: "+15733733333",
+  address: {
+    street: "1560 Bagnell Dam Blvd.",
+    locality: "Lake Ozark",
+    region: "MO",
+    postalCode: "65049", // Added postal code for better geo-targeting
+    country: "US"
+  },
+  geo: {
+    lat: "38.1986",
+    lon: "-92.6388",
+    region: "US-MO",
+    placename: "Lake Ozark"
+  }
+};
+
+// ----------------------------------------------------------------
+// 3. Structured Data (Schema.org JSON-LD) - ENHANCED
+// ----------------------------------------------------------------
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Church",
-  "name": "Lake Ozark Christian Church",
-  "url": Astro.url,
+  "name": SITE_NAME,
+  "url": BASE_URL, // Use BASE_URL for the organizational URL, not current page
   "description": description,
+  "logo": LOGO_URL, // Added logo property
   "address": {
     "@type": "PostalAddress",
-    "addressLocality": "Lake Ozark",
-    "addressRegion": "MO",
-    "addressCountry": "US"
+    "streetAddress": CONTACT.address.street,
+    "addressLocality": CONTACT.address.locality,
+    "addressRegion": CONTACT.address.region,
+    "postalCode": CONTACT.address.postalCode, // Included Postal Code
+    "addressCountry": CONTACT.address.country
   },
-  "image": "https://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg",
-  "telephone": "+15733733333",
-  "openingHours": [
-    "Su 10:30-12:00",
-    "We 18:00-19:00"
+  // Added ContactPoint for better local SEO
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": CONTACT.phone,
+    "contactType": "general",
+    "areaServed": "Lake Ozark, MO"
+  },
+  "image": FINAL_OG_IMAGE,
+  "telephone": CONTACT.phone,
+  "openingHoursSpecification": [
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday", "opens": "10:30", "closes": "12:00" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Wednesday", "opens": "18:00", "closes": "19:00" }
   ],
   "sameAs": [
     "https://www.facebook.com/LakeOzarkChristianChurch",
@@ -40,104 +104,138 @@ const jsonLd = {
   ]
 };
 
-// Image dimensions for social media cards
-const OG_IMAGE_WIDTH = 1200;
-const OG_IMAGE_HEIGHT = 630;
+// ----------------------------------------------------------------
+// 4. Sentry Configuration 
+// ----------------------------------------------------------------
+const SENTRY_DSN = import.meta.env.PUBLIC_SENTRY_DSN;
+const SENTRY_TRACING_URL = "https://browser.sentry-cdn.com/8.42.0/bundle.tracing.replay.min.js";
+const IS_PRODUCTION = Astro.url.hostname === 'lakeozarkdisciples.org';
+
 ---
 <!doctype html>
-<!-- ✨ Built by Ben Trimmer • https://ben.trimmer.dev/ -->
-<!-- ⚠️ Report issues via our Report page • https://lakeozarkdisciples.org/report -->
-<html lang="en">
+<html lang="en"> 
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-    <meta name="description" content={description} />
-    <meta name="keywords" content="Lake Ozark Christian Church, church, Christian, Lake Ozark, Missouri, worship, fellowship, Jesus Christ, Disciples of Christ, Sunday service, Bible study, community church, Lake Ozark MO, Christian community, worship service, religious organization, spiritual growth, faith community" />
-    <meta name="author" content="Lake Ozark Christian Church" />
-    <meta name="geo.region" content="US-MO" />
-    <meta name="geo.placename" content="Lake Ozark" />
-    <meta name="geo.position" content="38.1986;-92.6388" />
-    <meta name="ICBM" content="38.1986, -92.6388" />
     
-    <!-- Open Graph / Facebook -->
-    <meta property="og:title" content={`${title} - Lake Ozark Christian Church`} />
+    <title>{title} | {SITE_NAME}</title>
+    <meta name="description" content={description} />
+    
+    <link rel="canonical" href={CANONICAL_URL} /> 
+
+    <link rel="alternate" hreflang="en" href={CANONICAL_URL} />
+    <link rel="alternate" hreflang="x-default" href={CANONICAL_URL} />
+    
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="revisit-after" content="7 days" />
+
+    <meta name="keywords" content="Lake Ozark Christian Church, church, Christian, Lake Ozark, Missouri, worship, fellowship, Jesus Christ, Disciples of Christ, Sunday service, Bible study, community church, Lake Ozark MO, Christian community, worship service, religious organization, spiritual growth, faith community" />
+    <meta name="author" content={SITE_NAME} />
+
+    <meta name="geo.region" content={CONTACT.geo.region} />
+    <meta name="geo.placename" content={CONTACT.geo.placename} />
+    <meta name="geo.position" content={`${CONTACT.geo.lat};${CONTACT.geo.lon}`} />
+    <meta name="ICBM" content={`${CONTACT.geo.lat}, ${CONTACT.geo.lon}`} />
+    
+    <meta property="og:title" content={`${title} | ${SITE_NAME}`} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg" />
+    <meta property="og:type" content={type} /> 
+    <meta property="og:image" content={FINAL_OG_IMAGE} />
     <meta property="og:image:width" content={OG_IMAGE_WIDTH.toString()} />
     <meta property="og:image:height" content={OG_IMAGE_HEIGHT.toString()} />
-    <meta property="og:url" content={Astro.url} />
-    <meta property="og:site_name" content="Lake Ozark Christian Church" />
+    <meta property="og:url" content={CANONICAL_URL} />
+    <meta property="og:site_name" content={SITE_NAME} />
     <meta property="og:locale" content="en_US" />
     
-    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={`${title} - Lake Ozark Christian Church`} />
+    <meta name="twitter:title" content={`${title} | ${SITE_NAME}`} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content="https://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg" />
-    <meta name="twitter:image:width" content={OG_IMAGE_WIDTH.toString()} />
+    <meta name="twitter:image" content={FINAL_OG_IMAGE} />
+    <meta name="twitter:image:width" content={OG_IMAGE_WIDTH.toString()} /> 
     <meta name="twitter:image:height" content={OG_IMAGE_HEIGHT.toString()} />
     
-    <!-- SEO Tags -->
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-    <meta name="googlebot" content="index, follow" />
-    <meta name="revisit-after" content="7 days" />
-    <meta name="rating" content="general" />
-    <meta name="distribution" content="global" />
-    <meta name="coverage" content="Worldwide" />
-    <meta name="target" content="all" />
     <meta name="HandheldFriendly" content="true" />
     <meta name="MobileOptimized" content="width" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     
-    <link rel="canonical" href={Astro.url} />
-    <link rel="icon" type="image/png" href="https://cdn.lakeozarkdisciples.org/media/cropped-LOCC-shortcut.png" />
+    <link rel="icon" type="image/png" href={FAVICON_URL} />
+    
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Inter:wght@400;500;600;700&family=Gochi+Hand&display=swap" rel="stylesheet" />
-    <title>{title} - Lake Ozark Christian Church | Lake Ozark, MO</title>
-
+    <link 
+      href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Inter:wght@400;500;600;700&family=Gochi+Hand&display=swap" 
+      rel="stylesheet" 
+    />
+    
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-    <script src="https://browser.sentry-cdn.com/8.42.0/bundle.tracing.replay.min.js" crossorigin="anonymous"></script>
+    
+    {SENTRY_DSN && IS_PRODUCTION && (
+      <script src={SENTRY_TRACING_URL} crossorigin="anonymous" defer>
+        if (typeof Sentry !== 'undefined') {
+          Sentry.init({
+            dsn: "{SENTRY_DSN}",
+            integrations: [
+              new Sentry.BrowserTracing(),
+              new Sentry.Replay(),
+            ],
+            tracesSampleRate: 1.0, 
+            replaysSessionSampleRate: 0.1, 
+            replaysOnErrorSampleRate: 1.0, 
+          });
+        }
+      </script>
+    )}
     
     <style>
       .skip-to-main-content {
         position: absolute;
         left: -9999px;
-        z-index: 999;
+        z-index: 9999; 
         padding: 1em;
         background-color: white;
         color: black;
         opacity: 0;
+        clip: rect(1px, 1px, 1px, 1px);
+        clip-path: inset(50%); 
       }
       .skip-to-main-content:focus {
         left: 50%;
+        top: 0.5rem;
         transform: translateX(-50%);
         opacity: 1;
+        clip: auto;
+        clip-path: none;
       }
     </style>
   </head>
   <body class="min-h-screen flex flex-col bg-gray-50" style="font-family: 'Albert Sans', system-ui, sans-serif;">
-    <a href="#main-content" class="skip-to-main-content">
+    <a href="#main-content" class="skip-to-main-content" tabindex="0">
       Skip to main content
     </a>
+    
     <Header />
-    <main id="main-content" role="main" aria-label="Main content">
+    
+    <main id="main-content" role="main" aria-label="Main content" class="flex-grow">
       <slot />
     </main>
-    <Footer />
-    <PrivacyBanner />
     
-    <AlertBanner
-      title="Development Testing Alert" 
-      message="This is a test message and should not show in production. Please dismiss."
-      messageId="test-alert"
-      expiresAt="2025-11-27 1:50:00"
-      dismissText="Dismiss"
-    />
-  </body>
-  <LocationPermission />
+    <Footer />
+    
+    <PrivacyBanner />
+    <LocationPermission />
 
+    {
+      !IS_PRODUCTION && (
+        <AlertBanner
+          title="Development Testing Alert" 
+          message="This is a test message and should not show in production. Please dismiss."
+          messageId="test-alert"
+          expiresAt="2025-11-27T01:50:00Z"
+          dismissText="Dismiss"
+        />
+      )
+    }
+  </body>
 </html>

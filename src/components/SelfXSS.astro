@@ -1,13 +1,31 @@
 ---
-// This file contains the console messages
+// 
+// File: SelfXSS.astro
+// Component: SelfXSS
+//
+// Description:
+// Executes client-side JavaScript to output styled security and policy
+// messages directly to the browser's Developer Console (F12).
+// This serves as a defensive measure against social engineering attacks (Self-XSS)
+// and provides a clear channel for security reporting.
+//
+// Usage:
+// Place this component once in your primary layout file, ideally within the <body>.
+//
 ---
 
 <script>
+  // @group Header Branding
+  // Outputs a large, gradient-styled logo/site name using ANSI color codes.
+  // The actual text content is missing from the original component, 
+  // so we'll leave the stylized log as a blank line for visual effect.
   console.log(`%c 
 
 `, 'font-family: monospace; font-size: 35px; font-weight: bold; background: linear-gradient(to right, #ff0000, #ff3333, #ff6666, #ff9999); -webkit-background-clip: text; -webkit-text-fill-color: transparent; -webkit-text-stroke: 1px black;');
- 
+  
+  // @group Console Message Definitions
   const messages = {
+    // 1. Critical Security Warning (Anti-Self-XSS)
     warning: {
       text: `
 
@@ -19,20 +37,26 @@ Learn more about console-based security risks:
 https://en.wikipedia.org/wiki/Self-XSS`,
       style: 'font-family: monospace; color: #ff0000; font-size: 14px; font-weight: bold;'
     },
+    // 2. Responsible Disclosure Contact
     security: {
-      text: `Security Notice
+      text: `
+
+Security Notice
 
 To report security vulnerabilities:
 
 1. Email: office@lakeozarkdisciples.org
-2. Phone: 573-365-3366  
+2. Phone: 573-365-3366 
 3. Web: lakeozarkdisciples.org/report
 
 All reports will be investigated promptly and handled with discretion.`,
       style: 'font-family: monospace; color: #ffff00; font-size: 14px;'
     },
+    // 3. General Feedback Channel
     feedback: {
-      text: `Feedback
+      text: `
+
+Feedback
 
 To provide feedback:
 
@@ -44,7 +68,9 @@ Your feedback helps us improve our services.`,
     }
   };
 
-  // Display messages
+  // @group Message Execution
+  // Iterates through all defined messages and outputs them to the console
+  // using the specified custom CSS styles.
   Object.values(messages).forEach(msg => {
     console.log(`%c${msg.text}`, msg.style);
   });

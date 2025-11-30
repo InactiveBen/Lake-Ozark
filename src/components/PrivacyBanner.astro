@@ -1,5 +1,21 @@
 ---
-// Simple privacy banner component
+// 
+// File: PrivacyBanner.astro
+// Component: PrivacyBanner
+//
+// Description:
+// Renders a persistent, mobile-optimized privacy disclosure banner.
+// Utilizes client-side JavaScript for state management (cookie persistence)
+// and adheres to high standards of accessibility (ARIA).
+//
+// Usage:
+// Import the component and place it near the end of your main layout file.
+// Example: <PrivacyBanner />
+//
+// Dependencies:
+// This component assumes the utility classes used (e.g., 'bg-white', 'fixed', 'text-sm')
+// are available globally (e.g., via Tailwind CSS integration in your Astro project).
+//
 ---
 
 <div 
@@ -39,13 +55,20 @@
 </div>
 
 <script>
-  // Cookie helper functions
+  // @group State Management Helpers
+  
+  /**
+   * Sets a first-party cookie with specified name, value, and expiration.
+   */
   function setCookie(name, value, days) {
     const expires = new Date();
     expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
     document.cookie = `${name}=${value}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
   }
 
+  /**
+   * Retrieves the value of a named cookie.
+   */
   function getCookie(name) {
     const nameEQ = name + "=";
     const ca = document.cookie.split(';');
@@ -57,7 +80,11 @@
     return null;
   }
 
-  // Check if user has already dismissed the banner
+  // @group Component Logic
+
+  /**
+   * Hides the banner if the dismissal cookie is present.
+   */
   function checkBannerStatus() {
     const banner = document.getElementById('privacy-banner');
     if (!banner) return;
@@ -68,22 +95,24 @@
     }
   }
 
-  // Dismiss banner function
+  /**
+   * Hides the banner and sets a persistent cookie for 365 days.
+   */
   function dismissBanner() {
     const banner = document.getElementById('privacy-banner');
     if (banner) {
       banner.style.display = 'none';
-      setCookie('privacy-banner-dismissed', 'true', 365); // Remember for 1 year
+      setCookie('privacy-banner-dismissed', 'true', 365); // 1-year persistence
     }
   }
 
-  // Initialize banner on page load
+  // @group Initialization
+  
   document.addEventListener('DOMContentLoaded', function() {
     checkBannerStatus();
     
-    // Add event listener for close button
+    // Attach dismissal handler to the close button
     const closeButton = document.getElementById('close-privacy-banner');
-    
     if (closeButton) {
       closeButton.addEventListener('click', dismissBanner);
     }
@@ -91,23 +120,33 @@
 </script>
 
 <style>
-  /* Hide banner on desktop, show only on mobile */
+  /*
+   * @group Adaptive Presentation
+   * The banner is hidden on desktop (default) to maintain a clean layout.
+   */
   #privacy-banner {
     display: none;
   }
   
+  /*
+   * Banner is activated and styled only on mobile viewports.
+   */
   @media (max-width: 768px) {
     #privacy-banner {
       display: block;
+      /* Smooth entry for refined UX */
       animation: slideUp 0.3s ease-out;
     }
     
-    /* Add bottom padding to body when banner is visible on mobile */
+    /* Crucial: Add bottom padding to the body when the banner is visible
+     * to prevent content clipping on mobile scroll.
+     */
     body:has(#privacy-banner:not([style*="display: none"])) {
       padding-bottom: 100px;
     }
   }
   
+  /* @keyframe slideUp */
   @keyframes slideUp {
     from {
       transform: translateY(100%);
@@ -118,4 +157,4 @@
       opacity: 1;
     }
   }
-</style> 
+</style>

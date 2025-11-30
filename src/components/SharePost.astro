@@ -1,4 +1,13 @@
 ---
+// 
+// File: SharePost.astro
+// Component: SharePost
+//
+// Description:
+// Renders a stylized 3-column sharing block for articles. 
+// Features native share links for major platforms and a simple copy-to-clipboard button.
+// Uses custom UTM tracking for analytics measurement.
+//
 interface Props {
   title: string;
   postId: string | number;
@@ -12,6 +21,7 @@ const {
 } = Astro.props;
 
 const baseUrl = "https://lakeozarkdisciples.org";
+// Dynamically construct the full, shareable canonical URL for the post.
 const postUrl = `${baseUrl}/blog/${postId}`;
 ---
 
@@ -23,22 +33,24 @@ const postUrl = `${baseUrl}/blog/${postId}`;
 
   <div class="grid md:grid-cols-3 gap-8">
     <a
-      href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(postUrl)}`}
+      href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(postUrl)}&utm_source=lakeozarkdisciples&utm_medium=social&utm_campaign=share&utm_content=twitter`}
       target="_blank"
       rel="noopener noreferrer"
       class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition group flex flex-col items-center justify-center text-center"
+      aria-label="Share this article on X (Twitter)"
     >
       <svg class="w-8 h-8 text-[#1DA1F2] mb-4" fill="currentColor" viewBox="0 0 24 24">
         <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
       </svg>
-      <span class="font-medium text-gray-900 group-hover:text-brand">Share on Twitter</span>
+      <span class="font-medium text-gray-900 group-hover:text-brand">Share on X (Twitter)</span>
     </a>
 
     <a
-      href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`}
+      href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}&utm_source=lakeozarkdisciples&utm_medium=social&utm_campaign=share&utm_content=facebook`}
       target="_blank"
       rel="noopener noreferrer"
       class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition group flex flex-col items-center justify-center text-center"
+      aria-label="Share this article on Facebook"
     >
       <svg class="w-8 h-8 text-[#4267B2] mb-4" fill="currentColor" viewBox="0 0 24 24">
         <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
@@ -49,12 +61,27 @@ const postUrl = `${baseUrl}/blog/${postId}`;
     <button
       id="copyLinkBtn"
       class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition group flex flex-col items-center justify-center text-center"
-      onclick={`navigator.clipboard.writeText('${postUrl}').then(() => alert('Link copied to clipboard!'))`}
+      onclick={`
+        navigator.clipboard.writeText('${postUrl}').then(() => {
+          // Provide subtle feedback to the user
+          const originalText = this.querySelector('span').textContent;
+          this.querySelector('span').textContent = 'Copied!';
+          this.querySelector('span').style.color = 'green';
+          setTimeout(() => {
+            this.querySelector('span').textContent = originalText;
+            this.querySelector('span').style.color = '';
+          }, 1500);
+        }).catch(err => {
+          console.error('Failed to copy link: ', err);
+          alert('Failed to copy link. Please copy the URL manually.');
+        });
+      `}
+      aria-label="Copy the article link to clipboard"
     >
-      <svg class="w-8 h-8 text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg class="w-8 h-8 text-gray-600 mb-4 group-hover:text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
       </svg>
       <span class="font-medium text-gray-900 group-hover:text-brand">Copy Link</span>
     </button>
   </div>
-</div> 
+</div>

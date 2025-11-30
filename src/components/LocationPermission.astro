@@ -1,5 +1,15 @@
 ---
-// Shows once per session to ask for location permission
+// 
+// File: LocationPermissionPrompt.astro
+// Component: LocationPermissionPrompt
+//
+// Description:
+// Displays a contextual modal overlay asking for user location permission.
+// Manages display state using localStorage to ensure it appears only once
+// per session until the user responds.
+//
+// Note: This component contains no Astro frontmatter logic; it is pure HTML/CSS/JS.
+//
 ---
 
 <div 
@@ -9,7 +19,7 @@
   aria-modal="true"
   style="font-family: 'Albert Sans', system-ui, sans-serif;"
 >
-  <div class="bg-white rounded-lg max-w-sm w-full p-6 animate-in">
+  <div class="bg-white rounded-lg max-w-sm w-full p-6 animate-in" aria-live="polite">
     <h2 class="text-lg font-semibold text-gray-900 mb-2">Share your location?</h2>
     <p class="text-sm text-gray-600 leading-relaxed mb-6">
       We'd like to show you directions to our church and personalize your experience. Your location is never stored or shared.
@@ -33,6 +43,7 @@
 </div>
 
 <style>
+  /* Simple CSS animation for a smoother entry */
   .animate-in {
     animation: fadeIn 0.2s ease-out;
   }
@@ -48,36 +59,44 @@
   const allowBtn = document.getElementById('location-allow');
   const denyBtn = document.getElementById('location-deny');
   
-  // Check if we should show the prompt
-  // Check localStorage for stored location (persists across sessions)
+  // @group State Check
   const storedLocation = localStorage.getItem('user-location');
   const hasLocation = storedLocation || (localStorage.getItem('user-lat') && localStorage.getItem('user-lng'));
   const hasAsked = localStorage.getItem('location-permission-asked');
   const hasPermission = localStorage.getItem('location-permission-granted');
   
-  // Don't prompt if location is already stored or permission was already asked
+  // Show the modal if:
+  // 1. We haven't asked this user before.
+  // 2. We don't have stored permission/location data.
+  // 3. The browser supports the Geolocation API.
   if (!hasAsked && !hasPermission && !hasLocation && 'geolocation' in navigator) {
-    // Small delay so page loads first
+    // Show after a small delay (1 second) to allow main page content to load first.
     setTimeout(() => {
       modal?.classList.remove('hidden');
     }, 1000);
   }
   
+  // @group Event Listeners
+  
+  // 1. ALLOW Button Click Handler
   allowBtn?.addEventListener('click', () => {
-    // Trigger browser's native location prompt
+    // Hide the custom modal before triggering the native browser prompt
+    modal?.classList.add('hidden');
+
+    // Trigger browser's native location prompt (required user gesture)
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        modal?.classList.add('hidden');
+        // Success: User granted permission in the native prompt
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
         
-        // Store in localStorage (persists across sessions)
+        // Persist permissions and data in localStorage
         localStorage.setItem('location-permission-asked', 'true');
         localStorage.setItem('location-permission-granted', 'true');
         localStorage.setItem('user-lat', lat.toString());
         localStorage.setItem('user-lng', lng.toString());
         
-        // Also store in the format used by index.astro
+        // Save combined JSON data for other components/systems to read
         const locationData = {
           lng: lng,
           lat: lat,
@@ -87,30 +106,31 @@
         localStorage.setItem('user-location', JSON.stringify(locationData));
         localStorage.setItem('user-location-time', Date.now().toString());
         
-        // Reload to apply location features
+        // Reload page to initiate location-based features (e.g., dynamic map centers)
         window.location.reload();
       },
       () => {
-        // User denied in browser prompt
-        modal?.classList.add('hidden');
+        // Failure/Denial: User clicked 'Block' in the native browser prompt
         localStorage.setItem('location-permission-asked', 'true');
         localStorage.setItem('location-permission-granted', 'false');
       }
     );
   });
   
+  // 2. DENY Button Click Handler
   denyBtn?.addEventListener('click', () => {
     modal?.classList.add('hidden');
+    // Set 'asked' to true, but 'granted' to false, preventing modal from showing again
     localStorage.setItem('location-permission-asked', 'true');
     localStorage.setItem('location-permission-granted', 'false');
   });
   
-  // Close on backdrop click
+  // 3. Close on backdrop click (treats as denial/dismissal)
   modal?.addEventListener('click', (e) => {
     if (e.target === modal) {
       modal.classList.add('hidden');
       localStorage.setItem('location-permission-asked', 'true');
+      localStorage.setItem('location-permission-granted', 'false');
     }
   });
 </script>
-

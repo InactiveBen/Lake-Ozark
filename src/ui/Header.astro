@@ -1,0 +1,244 @@
+---
+/**
+ * @file The main site header component, including navigation and utility elements.
+ * @module SiteHeader
+ * @description This component manages the sticky site header, desktop/mobile navigation,
+ * and essential utility overlays like accessibility, cookie, and security banners.
+ * It is designed to be fully responsive and accessible.
+ */
+ import { fade } from 'astro:transitions';
+
+// --- Utility Components and Overlays ---
+// Note: These are placed before the main header for proper layering and early hydration/setup.
+import AlertBanner from '../components/AlertBanner.astro'; // Optional: For full-page, critical alerts
+import AlertSmall from '../components/AlertSmall.astro';       // For temporary, high-visibility alerts (used below)
+import CookieBanner from '../components/CookieBanner.astro';   // Manages cookie consent
+import SelfXSS from '../components/SelfXSS.astro';             // Self-XSS protection banner (dev tool/security notice)
+import AccessibilityMenu from '../components/AccessibilityMenu.astro'; // User-facing accessibility controls
+
+// --- Component Props (Optional for better documentation) ---
+// interface Props {}
+// const {} = Astro.props;
+---
+
+<SelfXSS />
+<AccessibilityMenu />
+<CookieBanner />
+
+<header 
+  class="sticky top-0 w-full z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100" 
+  role="banner"
+>
+  <nav class="container mx-auto px-6" aria-label="Main navigation">
+    <div class="flex justify-between items-center h-20">
+      
+      <a 
+        href="/?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=navigation&utm_content=logo" 
+        class="flex items-center gap-4" 
+        aria-label="Lake Ozark Christian Church - Home"
+      >
+        <img 
+          src="http://cdn.lakeozarkdisciples.org/media/LOCC-header.png" 
+          alt="Lake Ozark Christian Church Logo" 
+          class="h-12 rounded-lg" 
+          width="auto" 
+          height="48" 
+          loading="eager" 
+        />
+      </a>
+      
+      <div class="hidden md:flex items-center space-x-8" role="menubar">
+        
+        <a 
+          href="/live?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=navigation"
+          class="text-gray-700 hover:text-brand focus:text-brand focus:outline-none font-medium py-2 px-3 rounded-lg hover:bg-gray-50 transition-all duration-200"
+          role="menuitem"
+        >
+          Watch Live
+        </a>
+        <a 
+          href="/worship?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=navigation&utm_content=sunday_services" 
+          class="text-gray-700 hover:text-brand focus:text-brand focus:outline-none font-medium py-2 px-3 rounded-lg hover:bg-gray-50 transition-all duration-200"
+          role="menuitem"
+        >
+          Sunday Services
+        </a>
+        <a 
+          href="/children-youth?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=navigation&utm_content=children_youth" 
+          class="text-gray-700 hover:text-brand focus:text-brand focus:outline-none font-medium py-2 px-3 rounded-lg hover:bg-gray-50 transition-all duration-200"
+          role="menuitem"
+        >
+          Children & Youth
+        </a>
+        <a 
+          href="/about?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=navigation&utm_content=about_us" 
+          class="text-gray-700 hover:text-brand focus:text-brand focus:outline-none font-medium py-2 px-3 rounded-lg hover:bg-gray-50 transition-all duration-200"
+          role="menuitem"
+        >
+          About Us
+        </a>
+        
+        
+        <div class="relative group">
+          <button 
+            id="more-dropdown-button"
+            class="text-gray-700 hover:text-brand focus:text-brand focus:outline-none font-medium flex items-center gap-1.5 py-2 px-3 rounded-lg hover:bg-gray-50 transition-all duration-200"
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-controls="about-menu"
+            aria-label="More navigation links"
+          >
+            More
+            <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div 
+            id="about-menu" 
+            class="absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-2 hidden" 
+            role="menu"
+            aria-labelledby="more-dropdown-button"
+          >
+            <a href="/chimes?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=dropdown&utm_content=newsletter" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none rounded-lg mx-2" role="menuitem" tabindex="-1">Newsletter</a>
+            <a href="/staff?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=dropdown&utm_content=staff" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none rounded-lg mx-2" role="menuitem" tabindex="-1">Staff</a>
+            <a href="/weddings?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=dropdown&utm_content=weddings" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none rounded-lg mx-2" role="menuitem" tabindex="-1">Weddings</a>
+            <a href="/blog?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=dropdown&utm_content=blog" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none rounded-lg mx-2" role="menuitem" tabindex="-1">Blog</a>
+            <a href="/videos?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=dropdown&utm_content=service_videos" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none rounded-lg mx-2" role="menuitem" tabindex="-1">Service Videos</a>
+            <a href="https://shelterinastorm.org/?utm_source=lakeozarkdisciples&ref=lakeozarkdisciples.org&utm_medium=header&utm_campaign=external&utm_content=shelter_storm" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none rounded-lg mx-2" role="menuitem" tabindex="-1" target="_blank" rel="noopener noreferrer">Shelter in a Storm</a>
+          </div>
+        </div>
+        
+        <a 
+          href="/giving?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=cta&utm_content=donate"
+          class="bg-brand hover:bg-brand-dark focus:bg-brand-dark focus:outline-none text-white px-6 py-2.5 rounded-xl font-semibold transition-all duration-200 shadow-sm hover:shadow-md"
+          role="menuitem"
+        >
+          Donate
+        </a>
+      </div>
+      
+      <button 
+        class="md:hidden p-2.5 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none rounded-xl transition-all duration-200" 
+        id="mobile-menu-button"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Toggle navigation menu"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+    
+    <div 
+      class="md:hidden hidden bg-white rounded-xl mt-2 mb-4 shadow-lg border border-gray-100" 
+      id="mobile-menu" 
+      role="navigation" 
+      aria-label="Mobile navigation links"
+    >
+      <div class="px-4 pt-2 pb-3 space-y-1">
+        <a href="/worship?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=mobile&utm_content=sunday_services" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Sunday Services</a>
+        <a href="/children-youth?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=mobile&utm_content=children_youth" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Children & Youth</a>
+        <a href="/about?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=mobile&utm_content=about_us" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">About Us</a>
+        <a 
+          href="/live?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=mobile"
+          class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50"
+        >
+          Watch Live
+        </a>
+        
+        <div class="border-b border-gray-100 pb-3 mb-3">
+          <h2 class="font-semibold px-3 py-2 text-gray-800" id="more-mobile-heading">More Links</h2>
+          <a href="/chimes?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=mobile&utm_content=newsletter" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Newsletter</a>
+          <a href="/staff?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=mobile&utm_content=staff" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Staff</a>
+          <a href="/blog?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=mobile&utm_content=blog" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Blog</a>
+          <a href="/videos?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=mobile&utm_content=service_videos" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Service Videos</a>
+          <a href="/weddings?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=mobile&utm_content=weddings" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50">Weddings</a>
+          <a href="https://shelterinastorm.org/?utm_source=lakeozarkdisciples&ref=lakeozarkdisciples.org&utm_medium=header&utm_campaign=external&utm_content=shelter_storm" class="block px-3 py-2 text-gray-700 hover:text-brand focus:text-brand focus:outline-none rounded-lg hover:bg-gray-50" target="_blank" rel="noopener noreferrer">Shelter in a Storm</a>
+        </div>
+
+        <a href="/giving?utm_source=lakeozarkdisciples&utm_medium=header&utm_campaign=mobile&utm_content=donate" class="block px-3 py-2 text-brand font-semibold hover:text-brand-dark focus:text-brand-dark focus:outline-none rounded-lg hover:bg-brand/5">Donate</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+
+<script>
+  // Mobile Menu Toggle Logic
+  const mobileMenuButton = document.getElementById('mobile-menu-button');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  if (mobileMenuButton && mobileMenu) {
+    mobileMenuButton.addEventListener('click', () => {
+      const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+      mobileMenuButton.setAttribute('aria-expanded', (!isExpanded).toString());
+      mobileMenu.classList.toggle('hidden');
+    });
+  }
+
+  // Desktop Dropdown Logic
+  const DROPDOWN_ID = 'about-menu';
+  const DROPDOWN_BUTTON_ID = 'more-dropdown-button';
+
+  const dropdownMenu = document.getElementById(DROPDOWN_ID);
+  const dropdownButton = document.getElementById(DROPDOWN_BUTTON_ID);
+
+  if (dropdownMenu && dropdownButton) {
+    // 1. Click Toggle (for desktop users)
+    dropdownButton.addEventListener('click', (event) => {
+      event.preventDefault(); // Prevent default button action
+      const isExpanded = dropdownButton.getAttribute('aria-expanded') === 'true';
+      dropdownButton.setAttribute('aria-expanded', (!isExpanded).toString());
+      dropdownMenu.classList.toggle('hidden');
+    });
+    
+    // 2. Keyboard Navigation Toggle (Space/Enter)
+    dropdownButton.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault(); // Stop scrolling/default behavior
+        const isExpanded = dropdownButton.getAttribute('aria-expanded') === 'true';
+        dropdownButton.setAttribute('aria-expanded', (!isExpanded).toString());
+        dropdownMenu.classList.toggle('hidden');
+      }
+    });
+
+    // 3. Close Dropdown when clicking outside
+    document.addEventListener('click', (event) => {
+      if (
+        !dropdownButton.contains(event.target as Node) &&
+        !dropdownMenu.contains(event.target as Node)
+      ) {
+        dropdownMenu.classList.add('hidden');
+        dropdownButton.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // 4. Handle Escape key to close dropdown
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        dropdownMenu.classList.add('hidden');
+        dropdownButton.setAttribute('aria-expanded', 'false');
+        dropdownButton.focus(); // Return focus to the button after closing
+      }
+    });
+  }
+</script>
+
+
+<AlertSmall
+  title="After School Program Canceled" 
+  message="The after school program for Monday, February 12th, 2025 has been canceled due to inclement weather."
+  type="brand"
+  icon="info"
+  messageId="weather-cancel-2025-02-12"
+  expiresAt="2025-02-13T00:00:00Z" fullMessages={[
+    {
+      title: "After School Program Cancellation Details",
+      message: "Due to forecasted inclement weather conditions, the after school program scheduled for Monday, February 12th, 2025 has been canceled.\n\nParents and guardians should make alternate arrangements for student pickup at regular dismissal time.\n\nWe apologize for any inconvenience this may cause.",
+      icon: "info"
+    }
+  ]}
+  readMoreText="View Full Details"
+  showMailingList={false}
+/>

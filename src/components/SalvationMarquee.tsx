@@ -80,7 +80,7 @@ export default function SalvationMarquee({ testimonies = defaultTestimonies }: P
           onMouseLeave={() => setIsPaused(false)}
           className="py-4"
         >
-          <Marquee speed={15} direction={-1} play={!isPaused} rootClassName="salvation-marquee">
+          <Marquee speed={30} direction={-1} play={!isPaused} rootClassName="salvation-marquee">
             <div style={{ display: 'flex', gap: '12px' }}>
               {duplicatedTestimonies.map((testimony, index) => (
                 <div
