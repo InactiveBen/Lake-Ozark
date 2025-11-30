@@ -10,6 +10,21 @@ const TURNSTILE_SECRET_KEY = import.meta.env.TURNSTILE_SECRET_KEY;
 const CHALLENGE_COOKIE_NAME = 'turnstile_verified';
 const CHALLENGE_COOKIE_MAX_AGE = 60 * 60 * 24; // 24 hours
 
+// GET handler for testing/debugging
+export const GET: APIRoute = async () => {
+  return new Response(
+    JSON.stringify({ 
+      status: 'ok', 
+      message: 'Turnstile verification endpoint is accessible',
+      hasSecretKey: !!TURNSTILE_SECRET_KEY,
+    }),
+    {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    }
+  );
+};
+
 export const POST: APIRoute = async ({ request, cookies }) => {
   try {
     // Check if secret key is configured

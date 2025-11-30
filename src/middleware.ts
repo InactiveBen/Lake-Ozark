@@ -197,8 +197,17 @@ function getChallengePageHTML(originalUrl: string): string {
         body: JSON.stringify({ token: token }),
       })
       .then(async response => {
+        // Handle 404 or other non-OK statuses
+        if (!response.ok) {
+          const text = await response.text();
+          console.error('API error:', response.status, text);
+          throw new Error(\`Server error: \${response.status}\`);
+        }
+        
         const contentType = response.headers.get('content-type');
         if (!contentType || !contentType.includes('application/json')) {
+          const text = await response.text();
+          console.error('Invalid response format:', text);
           throw new Error('Invalid response format');
         }
         return response.json();
