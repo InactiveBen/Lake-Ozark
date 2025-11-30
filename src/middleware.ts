@@ -274,12 +274,5 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
   
   // Allow request to proceed (fallback - shouldn't normally reach here)
   return next();
-}; 
-
-// Intentional syntax error for testing deployment notifications
-const intentionalError = {
-  thisWillFail: true
-  // Missing comma - will cause build to fail
-  missingComma: 'error'
 };
 
