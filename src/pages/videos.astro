@@ -59,6 +59,103 @@ import Layout from '../layouts/Layout.astro';
               Never miss a message that speaks to your heart.
             </p>
           </div>
+
+          <!-- Search and Filter Section -->
+          <div class="mb-12 bg-gray-50 rounded-xl p-6 border border-gray-200">
+            <!-- Search Bar -->
+            <div class="mb-6">
+              <label for="video-search" class="block text-sm font-medium text-gray-700 mb-2">
+                Search Sermons
+              </label>
+              <div class="relative">
+                <input
+                  type="text"
+                  id="video-search"
+                  placeholder="Search by title, date, or keywords..."
+                  class="w-full px-4 py-3 pl-11 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-brand transition-all"
+                />
+                <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <!-- Year Filter -->
+              <div>
+                <label for="filter-year" class="block text-sm font-medium text-gray-700 mb-2">
+                  Year
+                </label>
+                <select
+                  id="filter-year"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-brand transition-all bg-white"
+                >
+                  <option value="">All Years</option>
+                </select>
+              </div>
+
+              <!-- Month Filter -->
+              <div>
+                <label for="filter-month" class="block text-sm font-medium text-gray-700 mb-2">
+                  Month
+                </label>
+                <select
+                  id="filter-month"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-brand transition-all bg-white"
+                >
+                  <option value="">All Months</option>
+                  <option value="0">January</option>
+                  <option value="1">February</option>
+                  <option value="2">March</option>
+                  <option value="3">April</option>
+                  <option value="4">May</option>
+                  <option value="5">June</option>
+                  <option value="6">July</option>
+                  <option value="7">August</option>
+                  <option value="8">September</option>
+                  <option value="9">October</option>
+                  <option value="10">November</option>
+                  <option value="11">December</option>
+                </select>
+              </div>
+
+              <!-- Liturgical Season Filter -->
+              <div>
+                <label for="filter-season" class="block text-sm font-medium text-gray-700 mb-2">
+                  Liturgical Season
+                </label>
+                <select
+                  id="filter-season"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-brand transition-all bg-white"
+                >
+                  <option value="">All Seasons</option>
+                  <option value="Advent">Advent</option>
+                  <option value="Christmas">Christmas</option>
+                  <option value="Epiphany">Epiphany</option>
+                  <option value="Lent">Lent</option>
+                  <option value="Easter">Easter</option>
+                  <option value="Pentecost">Pentecost</option>
+                  <option value="Ordinary Time">Ordinary Time</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Clear Filters Button -->
+            <div class="mt-4 flex justify-end">
+              <button
+                id="clear-filters"
+                class="text-sm text-gray-600 hover:text-gray-900 underline"
+              >
+                Clear all filters
+              </button>
+            </div>
+
+            <!-- Results Count -->
+            <div id="results-count" class="mt-4 text-sm text-gray-600 hidden">
+              Showing <span id="results-number" class="font-medium">0</span> of <span id="total-videos" class="font-medium">0</span> videos
+            </div>
+          </div>
           
           <!-- Loading State -->
           <div id="video-loading" class="text-center py-16">
@@ -127,7 +224,9 @@ import Layout from '../layouts/Layout.astro';
 
 <script>
   let allVideos: any[] = [];
+  let filteredVideos: any[] = [];
   let thumbnailGenerator: any = null;
+  let liturgicalCalendar: any = null;
 
   // Parse date from video title and return both formatted date and day of week
   function parseDateFromVideoTitle(title: string): string {
@@ -352,6 +451,191 @@ import Layout from '../layouts/Layout.astro';
     }
   }
 
+  async function initLiturgicalCalendar() {
+    try {
+      // Use the client-side thumbnail generator which has getLiturgicalSeason
+      liturgicalCalendar = await import('../utils/clientThumbnailGenerator.js');
+    } catch (error) {
+      console.warn('Failed to load liturgical calendar:', error);
+    }
+  }
+
+  // Get date object from video title
+  function getDateFromTitle(title: string): Date | null {
+    const cleanTitle = title.replace(/^(Service|LOCC|Church Service)\s*[-|]\s*/i, '').replace(/\s*[-|]\s*(Service)$/i, '');
+    
+    // Check for MMDDYY or MDDYY format first
+    const compactDateMatch = cleanTitle.match(/\b(\d{5,6})\b/);
+    if (compactDateMatch) {
+      const dateStr = compactDateMatch[1];
+      let month, day, year;
+      
+      if (dateStr.length === 6) {
+        month = parseInt(dateStr.substring(0, 2));
+        day = parseInt(dateStr.substring(2, 4));
+        year = parseInt(dateStr.substring(4, 6));
+      } else if (dateStr.length === 5) {
+        month = parseInt(dateStr.substring(0, 1));
+        day = parseInt(dateStr.substring(1, 3));
+        year = parseInt(dateStr.substring(3, 5));
+      }
+      
+      if (year !== undefined) {
+        year = year + 2000;
+        if (month >= 1 && month <= 12 && day >= 1 && day <= 31 && year >= 2000) {
+          const date = new Date(year, month - 1, day);
+          if (date.getMonth() === month - 1 && date.getDate() === day) {
+            return date;
+          }
+        }
+      }
+    }
+    
+    const patterns = [
+      /(\d{1,2})\/(\d{1,2})\/(\d{2,4})/,
+      /(\d{1,2})-(\d{1,2})-(\d{2,4})/,
+      /(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),?\s+(\d{4})/i,
+      /(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})(st|nd|rd|th),?\s+(\d{4})/i,
+      /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),?\s+(\d{4})/i,
+      /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})(st|nd|rd|th),?\s+(\d{4})/i
+    ];
+    
+    for (const pattern of patterns) {
+      const match = cleanTitle.match(pattern);
+      if (match) {
+        let month, day, year;
+        
+        if (pattern.source.includes('January|February')) {
+          const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                             'July', 'August', 'September', 'October', 'November', 'December'];
+          month = monthNames.indexOf(match[1]) + 1;
+          
+          if (pattern.source.includes('st|nd|rd|th')) {
+            day = parseInt(match[2]);
+            year = parseInt(match[4]);
+          } else {
+            day = parseInt(match[2]);
+            year = parseInt(match[3]);
+          }
+        } else if (pattern.source.includes('Jan|Feb')) {
+          const monthAbbr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+          month = monthAbbr.indexOf(match[1]) + 1;
+          
+          if (pattern.source.includes('st|nd|rd|th')) {
+            day = parseInt(match[2]);
+            year = parseInt(match[4]);
+          } else {
+            day = parseInt(match[2]);
+            year = parseInt(match[3]);
+          }
+        } else {
+          month = parseInt(match[1]);
+          day = parseInt(match[2]);
+          year = parseInt(match[3]);
+        }
+        
+        if (year < 50) year += 2000;
+        else if (year < 100) year += 1900;
+        
+        if (month >= 1 && month <= 12 && day >= 1 && day <= 31 && year >= 1900) {
+          return new Date(year, month - 1, day);
+        }
+      }
+    }
+    
+    return null;
+  }
+
+  // Get liturgical season for a video
+  function getVideoSeason(video: any): string {
+    if (!liturgicalCalendar) return 'Default';
+    
+    const date = getDateFromTitle(video.title);
+    if (!date) return 'Default';
+    
+    try {
+      const normalizedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
+      const getSeason = liturgicalCalendar.getLiturgicalSeason;
+      if (!getSeason) return 'Default';
+      
+      const liturgical = getSeason(normalizedDate);
+      return liturgical?.season || 'Default';
+    } catch (error) {
+      return 'Default';
+    }
+  }
+
+  // Populate year dropdown
+  function populateYearFilter() {
+    const yearSelect = document.getElementById('filter-year') as HTMLSelectElement;
+    if (!yearSelect) return;
+    
+    const years = new Set<number>();
+    allVideos.forEach(video => {
+      const date = getDateFromTitle(video.title);
+      if (date) {
+        years.add(date.getFullYear());
+      }
+    });
+    
+    const sortedYears = Array.from(years).sort((a, b) => b - a);
+    sortedYears.forEach(year => {
+      const option = document.createElement('option');
+      option.value = year.toString();
+      option.textContent = year.toString();
+      yearSelect.appendChild(option);
+    });
+  }
+
+  // Apply filters
+  function applyFilters() {
+    const searchTerm = (document.getElementById('video-search') as HTMLInputElement)?.value.toLowerCase() || '';
+    const yearFilter = (document.getElementById('filter-year') as HTMLSelectElement)?.value || '';
+    const monthFilter = (document.getElementById('filter-month') as HTMLSelectElement)?.value || '';
+    const seasonFilter = (document.getElementById('filter-season') as HTMLSelectElement)?.value || '';
+    
+    filteredVideos = allVideos.filter(video => {
+      // Search filter
+      if (searchTerm) {
+        const titleMatch = video.title.toLowerCase().includes(searchTerm);
+        const dateMatch = parseDateFromVideoTitle(video.title).toLowerCase().includes(searchTerm);
+        if (!titleMatch && !dateMatch) return false;
+      }
+      
+      // Date filters
+      const date = getDateFromTitle(video.title);
+      if (date) {
+        if (yearFilter && date.getFullYear().toString() !== yearFilter) return false;
+        if (monthFilter && date.getMonth().toString() !== monthFilter) return false;
+      } else {
+        // If we can't parse date and filters are set, exclude it
+        if (yearFilter || monthFilter) return false;
+      }
+      
+      // Liturgical season filter
+      if (seasonFilter) {
+        const season = getVideoSeason(video);
+        if (season !== seasonFilter) return false;
+      }
+      
+      return true;
+    });
+    
+    // Update results count
+    const resultsCount = document.getElementById('results-count');
+    const resultsNumber = document.getElementById('results-number');
+    const totalVideos = document.getElementById('total-videos');
+    
+    if (resultsCount && resultsNumber && totalVideos) {
+      resultsNumber.textContent = filteredVideos.length.toString();
+      totalVideos.textContent = allVideos.length.toString();
+      resultsCount.classList.remove('hidden');
+    }
+    
+    displayVideos();
+  }
+
   async function loadAllVideos() {
     const loadingEl = document.getElementById('video-loading');
     const errorEl = document.getElementById('video-error');
@@ -370,7 +654,12 @@ import Layout from '../layouts/Layout.astro';
       
       if (allVideos.length > 0) {
         await initThumbnailGenerator();
-        displayVideos();
+        await initLiturgicalCalendar();
+        
+        // Initialize filters
+        populateYearFilter();
+        filteredVideos = [...allVideos];
+        applyFilters();
         
         // Preload thumbnails for better performance
         if (thumbnailGenerator) {
@@ -401,8 +690,18 @@ import Layout from '../layouts/Layout.astro';
     // Clear container first
     containerEl.innerHTML = '';
     
-    // Show all videos at once
-    allVideos.forEach(video => {
+    // Show filtered videos
+    if (filteredVideos.length === 0) {
+      containerEl.innerHTML = `
+        <div class="col-span-full text-center py-16">
+          <p class="text-gray-600 text-lg mb-2">No videos found</p>
+          <p class="text-gray-500 text-sm">Try adjusting your search or filters</p>
+        </div>
+      `;
+      return;
+    }
+    
+    filteredVideos.forEach(video => {
       const videoEl = document.createElement('div');
       videoEl.className = 'bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300 cursor-pointer';
       videoEl.onclick = () => openVideoModal(video.id, video.title);
@@ -433,9 +732,9 @@ import Layout from '../layouts/Layout.astro';
       containerEl.appendChild(videoEl);
     });
     
-    // Generate dynamic thumbnails for all videos
+    // Generate dynamic thumbnails for filtered videos
     if (thumbnailGenerator) {
-      generateDynamicThumbnails(allVideos);
+      generateDynamicThumbnails(filteredVideos);
     }
   }
 
@@ -536,6 +835,35 @@ import Layout from '../layouts/Layout.astro';
         closeVideoModal();
       }
     });
+
+    // Search and filter event listeners
+    const searchInput = document.getElementById('video-search');
+    const yearFilter = document.getElementById('filter-year');
+    const monthFilter = document.getElementById('filter-month');
+    const seasonFilter = document.getElementById('filter-season');
+    const clearFiltersBtn = document.getElementById('clear-filters');
+
+    if (searchInput) {
+      searchInput.addEventListener('input', applyFilters);
+    }
+    if (yearFilter) {
+      yearFilter.addEventListener('change', applyFilters);
+    }
+    if (monthFilter) {
+      monthFilter.addEventListener('change', applyFilters);
+    }
+    if (seasonFilter) {
+      seasonFilter.addEventListener('change', applyFilters);
+    }
+    if (clearFiltersBtn) {
+      clearFiltersBtn.addEventListener('click', () => {
+        if (searchInput) (searchInput as HTMLInputElement).value = '';
+        if (yearFilter) (yearFilter as HTMLSelectElement).value = '';
+        if (monthFilter) (monthFilter as HTMLSelectElement).value = '';
+        if (seasonFilter) (seasonFilter as HTMLSelectElement).value = '';
+        applyFilters();
+      });
+    }
   });
 
   // Initialize
