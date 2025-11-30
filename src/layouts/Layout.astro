@@ -12,9 +12,10 @@
  import Header from '../ui/Header.astro';
 import Footer from '../ui/Footer.astro';
 import PrivacyBanner from '../components/PrivacyBanner.astro'; 
-import AlertSmall from '../components/AlertSmall.astro';      
-import AlertBanner from '../components/AlertBanner.astro';      
-import LocationPermission from '../components/LocationPermission.astro'; 
+import AlertSmall from '../components/AlertSmall.astro';      
+import AlertBanner from '../components/AlertBanner.astro';      
+import LocationPermission from '../components/LocationPermission.astro';
+import SeasonalBanner from '../components/SeasonalBanner.astro'; 
 
 // ----------------------------------------------------------------
 // 1. Component Props and Defaults
@@ -216,6 +217,7 @@ const IS_PRODUCTION = Astro.url.hostname === 'lakeozarkdisciples.org';
     </a>
     
     <Header />
+    <SeasonalBanner />
     
     <main id="main-content" role="main" aria-label="Main content" class="flex-grow">
       <slot />
