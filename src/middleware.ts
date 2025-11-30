@@ -196,7 +196,13 @@ function getChallengePageHTML(originalUrl: string): string {
         },
         body: JSON.stringify({ token: token }),
       })
-      .then(response => response.json())
+      .then(async response => {
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          throw new Error('Invalid response format');
+        }
+        return response.json();
+      })
       .then(data => {
         if (data.success) {
           // Redirect to original URL
