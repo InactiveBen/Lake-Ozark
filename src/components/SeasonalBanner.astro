@@ -83,10 +83,17 @@
         ` : ''}
       `;
 
+    // Determine text color based on background color
+    const isLightBackground = bannerConfig.color.toLowerCase() === '#ffffff' || 
+                               bannerConfig.color.toLowerCase() === '#fff' ||
+                               bannerConfig.color === 'rgb(255, 255, 255)';
+    const textColor = isLightBackground ? '#1f2937' : '#ffffff';
+    const borderStyle = isLightBackground ? 'border-bottom: 1px solid rgba(0, 0, 0, 0.1);' : '';
+    
     root.innerHTML = `
       <div 
         class="seasonal-banner w-full py-2 px-3 md:py-3 md:px-4 text-center font-medium shadow-sm"
-        style="background-color: ${bannerConfig.color};"
+        style="background-color: ${bannerConfig.color}; color: ${textColor}; ${borderStyle}"
         role="banner"
         aria-label="${bannerConfig.season} season banner"
       >
