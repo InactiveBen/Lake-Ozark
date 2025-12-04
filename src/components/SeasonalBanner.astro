@@ -3,96 +3,110 @@
  * Seasonal Banner Component
  * Automatically displays banners for liturgical seasons and holidays
  * Uses the liturgical calendar to determine current season
+ * Note: Countdown updates client-side for real-time accuracy
  */
-import { getSeasonalBannerConfig } from '../utils/liturgicalCalendar';
-
-// Get current date
-const today = new Date();
-const normalizedDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
-
-// Get seasonal banner configuration
-const bannerConfig = getSeasonalBannerConfig(normalizedDate);
-
-// Only render if we have a banner config
-const shouldShow = bannerConfig !== null;
-
-// Create a message that integrates countdown naturally
-const getDisplayMessage = (bannerConfig: typeof bannerConfig): string => {
-  if (!bannerConfig) return '';
-  
-  // If there's a countdown, create natural flow: "It's Advent, there are 25 days until Christmas!"
-  if (bannerConfig.countdown) {
-    const daysText = bannerConfig.countdown.days === 1 
-      ? 'is 1 day' 
-      : `are ${bannerConfig.countdown.days} days`;
-    
-    return `It's ${bannerConfig.season}, there ${daysText} until ${bannerConfig.countdown.holiday}!`;
-  }
-  
-  // No countdown, use regular message but remove "from your LOCC family" part
-  if (bannerConfig.message) {
-    return bannerConfig.message.replace(/\s*from your LOCC family!?/i, '').trim();
-  }
-  return '';
-};
-
-// Create a shorter mobile-friendly message
-const getMobileMessage = (bannerConfig: typeof bannerConfig): string => {
-  if (!bannerConfig) return '';
-  
-  // If there's a countdown, create shorter version for mobile
-  if (bannerConfig.countdown) {
-    const daysText = bannerConfig.countdown.days === 1 
-      ? '1 day' 
-      : `${bannerConfig.countdown.days} days`;
-    
-    return `${daysText} until ${bannerConfig.countdown.holiday}!`;
-  }
-  
-  // Remove "from your LOCC family" part from message
-  if (bannerConfig.message) {
-    const cleaned = bannerConfig.message.replace(/\s*from your LOCC family!?/i, '').trim();
-    // Take first part if it's still long
-    return cleaned.length > 30 ? cleaned.substring(0, 27) + '...' : cleaned;
-  }
-  return '';
-};
 ---
 
-{shouldShow && bannerConfig && (
-  <div 
-    class="seasonal-banner w-full py-2 px-3 md:py-3 md:px-4 text-center font-medium shadow-sm"
-    style={`background-color: ${bannerConfig.color};`}
-    role="banner"
-    aria-label={`${bannerConfig.season} season banner`}
-  >
-    <div class="container mx-auto flex items-center justify-center gap-2 md:gap-3">
-      {bannerConfig.icon && (
-        <span class="text-lg md:text-2xl flex-shrink-0" aria-hidden="true">{bannerConfig.icon}</span>
-      )}
-      <div class="flex items-center justify-center gap-1.5 md:gap-2 min-w-0 flex-wrap">
-        {bannerConfig.countdown ? (
-          <>
-            <span class="text-xs opacity-90 sm:hidden">{getMobileMessage(bannerConfig)}</span>
-            <span class="text-sm md:text-base opacity-90 hidden sm:inline">
-              {getDisplayMessage(bannerConfig)}
-            </span>
-          </>
-        ) : (
-          <>
-            <span class="font-semibold text-sm md:text-lg whitespace-nowrap">{bannerConfig.season}</span>
-            {bannerConfig.message && (
-              <>
-                <span class="text-xs opacity-90 sm:hidden">{getMobileMessage(bannerConfig)}</span>
-                <span class="text-sm md:text-base opacity-90 hidden sm:inline">{bannerConfig.message}</span>
-              </>
-            )}
-          </>
-        )}
+<div id="seasonal-banner-root"></div>
+
+<script>
+  // Import liturgical calendar utilities
+  import { getSeasonalBannerConfig } from '../utils/liturgicalCalendar';
+
+  // Function to create and display the banner
+  function updateSeasonalBanner() {
+    // Get current date (this runs in the browser, so it's always current)
+    const today = new Date();
+    const normalizedDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
+
+    // Get seasonal banner configuration
+    const bannerConfig = getSeasonalBannerConfig(normalizedDate);
+
+    const root = document.getElementById('seasonal-banner-root');
+    if (!root) return;
+
+    // Only render if we have a banner config
+    if (!bannerConfig) {
+      root.innerHTML = '';
+      return;
+    }
+
+    // Create display messages
+    const getDisplayMessage = () => {
+      if (bannerConfig.countdown) {
+        const daysText = bannerConfig.countdown.days === 1 
+          ? 'is 1 day' 
+          : `are ${bannerConfig.countdown.days} days`;
+        
+        return `It's ${bannerConfig.season}, there ${daysText} until ${bannerConfig.countdown.holiday}!`;
+      }
+      
+      if (bannerConfig.message) {
+        return bannerConfig.message.replace(/\s*from your LOCC family!?/i, '').trim();
+      }
+      return '';
+    };
+
+    const getMobileMessage = () => {
+      if (bannerConfig.countdown) {
+        const daysText = bannerConfig.countdown.days === 1 
+          ? '1 day' 
+          : `${bannerConfig.countdown.days} days`;
+        
+        return `${daysText} until ${bannerConfig.countdown.holiday}!`;
+      }
+      
+      if (bannerConfig.message) {
+        const cleaned = bannerConfig.message.replace(/\s*from your LOCC family!?/i, '').trim();
+        return cleaned.length > 30 ? cleaned.substring(0, 27) + '...' : cleaned;
+      }
+      return '';
+    };
+
+    // Build the banner HTML
+    const iconHTML = bannerConfig.icon 
+      ? `<span class="text-lg md:text-2xl flex-shrink-0" aria-hidden="true">${bannerConfig.icon}</span>`
+      : '';
+
+    const contentHTML = bannerConfig.countdown
+      ? `
+        <span class="text-xs opacity-90 sm:hidden">${getMobileMessage()}</span>
+        <span class="text-sm md:text-base opacity-90 hidden sm:inline">
+          ${getDisplayMessage()}
+        </span>
+      `
+      : `
+        <span class="font-semibold text-sm md:text-lg whitespace-nowrap">${bannerConfig.season}</span>
+        ${bannerConfig.message ? `
+          <span class="text-xs opacity-90 sm:hidden">${getMobileMessage()}</span>
+          <span class="text-sm md:text-base opacity-90 hidden sm:inline">${bannerConfig.message}</span>
+        ` : ''}
+      `;
+
+    root.innerHTML = `
+      <div 
+        class="seasonal-banner w-full py-2 px-3 md:py-3 md:px-4 text-center font-medium shadow-sm"
+        style="background-color: ${bannerConfig.color};"
+        role="banner"
+        aria-label="${bannerConfig.season} season banner"
+      >
+        <div class="container mx-auto flex items-center justify-center gap-2 md:gap-3">
+          ${iconHTML}
+          <div class="flex items-center justify-center gap-1.5 md:gap-2 min-w-0 flex-wrap">
+            ${contentHTML}
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-)}
+    `;
+  }
+
+  // Update banner immediately on page load
+  updateSeasonalBanner();
+
+  // Update banner daily at midnight (or when the date changes)
+  // Check every hour to catch date changes
+  setInterval(updateSeasonalBanner, 60 * 60 * 1000); // Every hour
+</script>
 
 <style>
   .seasonal-banner {
