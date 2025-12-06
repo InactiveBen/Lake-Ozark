@@ -75,7 +75,7 @@ const isExpired = expiresAt ? new Date() > new Date(expiresAt) : false;
     <!-- Main Alert Toast -->
     <div 
       id={`alertSmall-${uniqueId}`}
-      class={`fixed bottom-6 right-6 left-6 md:left-auto z-50 ${color.bg} ${color.border} border shadow-xl rounded-2xl p-5 md:max-w-md w-auto transform transition-all duration-300 alert-enter`}
+      class={`fixed bottom-6 right-6 left-6 md:left-auto z-[150] ${color.bg} ${color.border} border shadow-xl rounded-2xl p-5 md:max-w-md w-auto transform transition-all duration-300 alert-enter`}
       role="alert"
       style="font-family: 'Albert Sans', system-ui, sans-serif;"
     >

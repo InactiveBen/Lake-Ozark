@@ -163,8 +163,30 @@ const IS_PRODUCTION = Astro.url.hostname === 'lakeozarkdisciples.org';
     
     <link rel="icon" type="image/png" href={FAVICON_URL} />
     
+    <!-- DNS Prefetch for external APIs (resolve DNS early) -->
+    <link rel="dns-prefetch" href="https://cdn.lakeozarkdisciples.org" />
+    <link rel="dns-prefetch" href="https://api.mapbox.com" />
+    <link rel="dns-prefetch" href="https://www.youtube.com" />
+    <link rel="dns-prefetch" href="https://i.ytimg.com" />
+    <link rel="dns-prefetch" href="https://geo.locc.us" />
+    <link rel="dns-prefetch" href="https://live.locc.us" />
+    <link rel="dns-prefetch" href="https://api.locc.us" />
+    <link rel="dns-prefetch" href="https://calendar.google.com" />
+    
+    <!-- Preconnect to critical origins (DNS + TCP + TLS handshake) -->
+    <link rel="preconnect" href="https://cdn.lakeozarkdisciples.org" crossorigin />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://api.mapbox.com" crossorigin />
+    
+    <!-- Preload critical font (Albert Sans - primary font) for faster initial render -->
+    <link 
+      rel="preload"
+      href="https://fonts.gstatic.com/s/albertsans/v1/i7dZIFdwYjGaAMFtZd_QA3xXSKZqhr-TenSHq5P_rI32TxAj1g.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <link 
       href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Inter:wght@400;500;600;700&family=Gochi+Hand&display=swap" 
       rel="stylesheet" 
@@ -173,20 +195,25 @@ const IS_PRODUCTION = Astro.url.hostname === 'lakeozarkdisciples.org';
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     
     {SENTRY_DSN && IS_PRODUCTION && (
-      <script src={SENTRY_TRACING_URL} crossorigin="anonymous" defer>
-        if (typeof Sentry !== 'undefined') {
-          Sentry.init({
-            dsn: "{SENTRY_DSN}",
-            integrations: [
-              new Sentry.BrowserTracing(),
-              new Sentry.Replay(),
-            ],
-            tracesSampleRate: 1.0, 
-            replaysSessionSampleRate: 0.1, 
-            replaysOnErrorSampleRate: 1.0, 
+      <>
+        <script src={SENTRY_TRACING_URL} crossorigin="anonymous" defer></script>
+        <script define:vars={{ SENTRY_DSN }}>
+          window.addEventListener('load', function() {
+            if (typeof Sentry !== 'undefined') {
+              Sentry.init({
+                dsn: SENTRY_DSN,
+                integrations: [
+                  new Sentry.BrowserTracing(),
+                  new Sentry.Replay(),
+                ],
+                tracesSampleRate: 1.0, 
+                replaysSessionSampleRate: 0.1, 
+                replaysOnErrorSampleRate: 1.0, 
+              });
+            }
           });
-        }
-      </script>
+        </script>
+      </>
     )}
     
     <style>
@@ -211,7 +238,7 @@ const IS_PRODUCTION = Astro.url.hostname === 'lakeozarkdisciples.org';
       }
     </style>
   </head>
-  <body class="min-h-screen flex flex-col bg-gray-50" style="font-family: 'Albert Sans', system-ui, sans-serif;">
+  <body class="min-h-screen flex flex-col bg-white" style="font-family: 'Albert Sans', system-ui, sans-serif;">
     <a href="#main-content" class="skip-to-main-content" tabindex="0">
       Skip to main content
     </a>

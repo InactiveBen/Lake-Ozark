@@ -15,12 +15,16 @@ const bannerLink = "/worship";
 const bannerLinkText = "Learn more →";
 
 const welcomeImage = {
-  url: "http://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg",
+  url: "https://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg",
   alt: "Church Sanctuary"
 };
 
+// After-school program image for preloading
+const afterSchoolImage = "https://cdn.lakeozarkdisciples.org/media/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg";
+
 // Get recent blog posts for featured section
-const posts = await Astro.glob('../blogs/*.md');
+const postsGlob = import.meta.glob('../blogs/*.md', { eager: true });
+const posts = Object.values(postsGlob) as any[];
 const recentPosts = posts
   .filter(post => post.frontmatter && post.frontmatter.id)
   .sort((a, b) => (b.frontmatter?.id || 0) - (a.frontmatter?.id || 0))
@@ -41,15 +45,23 @@ function formatDate(dateStr: string): string {
 ---
 
 <Layout title="Welcome">
+<!-- Preload critical above-the-fold images for faster LCP -->
+<link rel="preload" href={welcomeImage.url} as="image" fetchpriority="high" />
+
 <!-- Hero Section - Clean and Minimalist -->
-<section class="relative overflow-hidden bg-white">
+<section id="hero-section" class="relative overflow-hidden bg-white hero-section">
   <div class="absolute inset-0">
     <img 
       src={welcomeImage.url} 
       alt={welcomeImage.alt}
       class="w-full h-full object-cover"
+      fetchpriority="high"
+      loading="eager"
+      decoding="async"
     />
     <div class="absolute inset-0 bg-black/40"></div>
+    <!-- Bottom fade to white (mobile only) -->
+    <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent md:hidden"></div>
   </div>
 
   <div class="relative container mx-auto px-6 py-32 md:py-40">
@@ -60,10 +72,8 @@ function formatDate(dateStr: string): string {
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
         </svg>
         <p class="text-white font-medium text-sm">
-          <strong>New:</strong> {bannerText}
+          {bannerText}
           <a href={bannerLink} 
-             target="_blank" 
-             rel="noopener noreferrer"
              class="underline hover:no-underline ml-2">
             {bannerLinkText}
           </a>
@@ -144,10 +154,10 @@ function formatDate(dateStr: string): string {
       <div class="grid lg:grid-cols-2 gap-16 items-center">
         <div>
           <span id="location-greeting" class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
-            You're Invited
+            You're invited
           </span>
           <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
-            Join Us This Sunday
+            Join us this Sunday
           </h2>
           <div class="space-y-6">
             <p id="distance-message" class="text-lg text-gray-600 leading-relaxed">
@@ -214,7 +224,7 @@ function formatDate(dateStr: string): string {
           <div class="relative hidden lg:block">
             <div class="bg-gray-50 rounded-2xl p-8">
               <div class="text-center mb-6">
-                <p class="text-sm text-gray-500 uppercase tracking-wide">Countdown to Service</p>
+                <p class="text-sm text-gray-500 uppercase tracking-wide">Countdown to service</p>
               </div>
               <div class="grid grid-cols-4 gap-4">
                 <div class="text-center">
@@ -239,7 +249,7 @@ function formatDate(dateStr: string): string {
           <!-- Text on RIGHT -->
           <div>
             <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
-              Next Live Service
+              Next live service
             </span>
             <h2 id="service-title" class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
               Loading...
@@ -254,7 +264,7 @@ function formatDate(dateStr: string): string {
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                   </svg>
                   <div>
-                    <h3 class="font-medium text-gray-900">Watch from Anywhere</h3>
+                    <h3 class="font-medium text-gray-900">Watch from anywhere</h3>
                     <p class="text-gray-600">Stream live on YouTube or through our website</p>
                   </div>
                 </div>
@@ -263,7 +273,7 @@ function formatDate(dateStr: string): string {
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                   </svg>
                   <div>
-                    <h3 class="font-medium text-gray-900">Join the Conversation</h3>
+                    <h3 class="font-medium text-gray-900">Join the conversation</h3>
                     <p class="text-gray-600">Chat with our community during the live stream</p>
                   </div>
                 </div>
@@ -314,9 +324,11 @@ function formatDate(dateStr: string): string {
         <!-- Image on LEFT -->
         <div class="relative hidden lg:block">
           <img 
-            src="http://cdn.lakeozarkdisciples.org/media/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg"
+            src="https://cdn.lakeozarkdisciples.org/media/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg"
             alt="Children participating in after-school activities"
             class="w-full h-[600px] object-cover rounded-2xl"
+            loading="lazy"
+            decoding="async"
           />
         </div>
         <!-- Text on RIGHT -->
@@ -324,10 +336,10 @@ function formatDate(dateStr: string): string {
 {isLocal ? (
             <>
               <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
-                Community Program
+                Community program
               </span>
               <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
-                After-School Program
+                After-school program
               </h2>
               <div class="space-y-6">
                 <p class="text-lg text-gray-600 leading-relaxed">
@@ -339,7 +351,7 @@ function formatDate(dateStr: string): string {
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                     <div>
-                      <h3 class="font-medium text-gray-900">Perfect for Busy Parents</h3>
+                      <h3 class="font-medium text-gray-900">Perfect for busy parents</h3>
                       <p class="text-gray-600">Wednesdays 3:30-5:30 PM, giving you time to handle errands or work commitments</p>
                     </div>
                   </div>
@@ -348,7 +360,7 @@ function formatDate(dateStr: string): string {
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
                     </svg>
                     <div>
-                      <h3 class="font-medium text-gray-900">Safe & Supervised</h3>
+                      <h3 class="font-medium text-gray-900">Safe and supervised</h3>
                       <p class="text-gray-600 group relative">
                         Qualified staff and volunteers ensure a secure, caring environment
                         <span class="tooltip invisible group-hover:visible absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg">
@@ -379,10 +391,10 @@ function formatDate(dateStr: string): string {
           ) : (
             <>
               <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
-                Children's Ministry
+                Children's ministry
               </span>
               <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
-                Family-Friendly Worship
+                Family-friendly worship
               </h2>
               <div class="space-y-6">
                 <p class="text-lg text-gray-600 leading-relaxed">
@@ -394,7 +406,7 @@ function formatDate(dateStr: string): string {
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                     </svg>
                     <div>
-                      <h3 class="font-medium text-gray-900">Children's Church (Ages 4-13)</h3>
+                      <h3 class="font-medium text-gray-900">Children's church (ages 4-13)</h3>
                       <p class="text-gray-600">Available during our 10:30 AM service, featuring interactive Bible lessons, music, and activities</p>
                     </div>
                   </div>
@@ -403,7 +415,7 @@ function formatDate(dateStr: string): string {
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
                     </svg>
                     <div>
-                      <h3 class="font-medium text-gray-900">Nursery Care (Ages 0-3)</h3>
+                      <h3 class="font-medium text-gray-900">Nursery care (ages 0-3)</h3>
                       <p class="text-gray-600">Available at both services, staffed by caring volunteers who have passed background checks</p>
                     </div>
                   </div>
@@ -438,10 +450,10 @@ function formatDate(dateStr: string): string {
       <div class="grid lg:grid-cols-2 gap-16 items-center">
         <div>
           <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
-            Support Our Ministry
+            Support our ministry
           </span>
           <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
-            Help Us Share God's Love
+            Help us share God's love
           </h2>
           <p class="text-lg text-gray-600 mb-8 leading-relaxed">
             Your generous donations help support our worship services, community programs, and outreach efforts. 
@@ -554,7 +566,7 @@ function formatDate(dateStr: string): string {
                     class="w-4 h-4 text-brand focus:ring-brand border-gray-300 rounded"
                   />
                   <div class="flex-1">
-                    <div class="font-medium text-gray-900">Cover Processing Fees</div>
+                    <div class="font-medium text-gray-900">Cover processing fees</div>
                     <div class="text-sm text-gray-600">Add <span id="homepage-fee-amount">$1.75</span> to cover payment processing costs (2.9% + $0.30)</div>
                   </div>
                 </label>
@@ -592,10 +604,10 @@ function formatDate(dateStr: string): string {
               <!-- Security Note -->
               <div class="text-center text-xs text-gray-600 space-y-2">
                 <p>Secure donation processed through Stripe by DonorKit, Inc.</p>
-                <p>By making a donation you agree to the DonorKit <a href="http://donork.it/privacy" target="_blank" rel="noopener noreferrer" class="text-brand hover:text-brand-dark underline">Privacy Policy</a>, <a href="http://donork.it/terms" target="_blank" rel="noopener noreferrer" class="text-brand hover:text-brand-dark underline">Terms of Service</a>, and <a href="http://donork.it/refund" target="_blank" rel="noopener noreferrer" class="text-brand hover:text-brand-dark underline">Refund Policy</a>.</p>
+                <p>By making a donation you agree to the DonorKit <a href="https://donork.it/privacy" target="_blank" rel="noopener noreferrer" class="text-brand hover:text-brand-dark underline">Privacy Policy</a>, <a href="https://donork.it/terms" target="_blank" rel="noopener noreferrer" class="text-brand hover:text-brand-dark underline">Terms of Service</a>, and <a href="https://donork.it/refund" target="_blank" rel="noopener noreferrer" class="text-brand hover:text-brand-dark underline">Refund Policy</a>.</p>
                 <p>
                   <a 
-                    href="http://donork.it/locc" 
+                    href="https://donork.it/locc" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     class="text-brand hover:text-brand-dark underline"
@@ -631,9 +643,9 @@ function formatDate(dateStr: string): string {
     <div class="max-w-7xl mx-auto">
       <div class="text-center mb-16">
         <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
-          Watch & Listen
+          Watch and listen
         </span>
-        <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Recent Services</h2>
+        <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Recent services</h2>
         <p class="text-lg text-gray-600 max-w-2xl mx-auto">
           Catch up on our latest worship services and messages
         </p>
@@ -664,9 +676,9 @@ function formatDate(dateStr: string): string {
     <div class="max-w-7xl mx-auto">
       <div class="text-center mb-16">
         <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
-          Stay Connected
+          Stay connected
         </span>
-        <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Upcoming Events</h2>
+        <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Upcoming events</h2>
         <p class="text-lg text-gray-600 max-w-2xl mx-auto">
           Join us for worship, fellowship, and community events
         </p>
@@ -687,13 +699,12 @@ function formatDate(dateStr: string): string {
     </div>
   </div>
 </section>
-\
 
 <!-- Toast Container -->
-<div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+<div id="toast-container" class="fixed top-4 right-4 z-[150] space-y-2"></div>
 
 <!-- Video Modal -->
-<div id="video-modal" class="hidden fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4" onclick="closeVideoModal()">
+<div id="video-modal" class="hidden fixed inset-0 bg-black bg-opacity-75 z-[150] flex items-center justify-center p-4" onclick="closeVideoModal()">
   <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden" onclick="event.stopPropagation()">
     <div class="flex justify-between items-center p-4 border-b">
       <div class="flex items-center gap-3">
@@ -722,13 +733,47 @@ function formatDate(dateStr: string): string {
   </div>
 </div>
 
-<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet" />
-<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+<!-- Mapbox GL CSS - preload then apply -->
+<link 
+  rel="preload"
+  href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript><link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet" /></noscript>
+<!-- Mapbox GL JS - loaded async to avoid render blocking -->
+<script async src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
 
 <script>
   // Initialize Mapbox map and personalized location experience
+  // Wait for Mapbox to be available (async loaded)
+  function waitForMapbox() {
+    return new Promise((resolve) => {
+      if ((window as any).mapboxgl) {
+        resolve(true);
+        return;
+      }
+      // Check every 100ms for up to 10 seconds
+      let attempts = 0;
+      const maxAttempts = 100;
+      const interval = setInterval(() => {
+        attempts++;
+        if ((window as any).mapboxgl) {
+          clearInterval(interval);
+          resolve(true);
+        } else if (attempts >= maxAttempts) {
+          clearInterval(interval);
+          console.warn('Mapbox failed to load after 10s');
+          resolve(false);
+        }
+      }, 100);
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', async () => {
-    const accessToken = 'pk.eyJ1IjoiZG9ub3JraXQiLCJhIjoiY21paDBqZjJwMGM3ZjNjcHNnaWt2Z2l3aiJ9.fXOKheOAlOOIIh2mB6t-mA';
+    // Wait for Mapbox to load (async)
+    const mapboxLoaded = await waitForMapbox();
+    const accessToken = 'pk.eyJ1IjoiZG9ub3JraXQiLCJhIjoiY21pdW9xb3I5MjEzajNlcHd6M2oycWZsNSJ9.5l169f8YSxjr5540qIkMoA';
     const churchAddress = '1560 Bagnell Dam Blvd, Lake Ozark, MO 65049';
     // Hardcoded coordinates for church (verified via API - no API call needed)
     const churchCoords: [number, number] = [-92.64159, 38.19839];
@@ -737,20 +782,17 @@ function formatDate(dateStr: string): string {
     const distanceEl = document.getElementById('distance-message');
     const directionsLink = document.getElementById('directions-link') as HTMLAnchorElement;
     
-    // Use hardcoded coordinates (no geocoding API call to save money)
-    const coords = churchCoords;
-    
     // Initialize map first (shows church only)
     const mapContainer = document.getElementById('mapbox-map');
     let map: any = null;
     
-    if (mapContainer && (window as any).mapboxgl) {
+    if (mapContainer && mapboxLoaded && (window as any).mapboxgl) {
       (window as any).mapboxgl.accessToken = accessToken;
       
       map = new (window as any).mapboxgl.Map({
         container: 'mapbox-map',
         style: 'mapbox://styles/mapbox/outdoors-v12',
-        center: coords,
+        center: churchCoords,
         zoom: 15
       });
       
@@ -775,7 +817,7 @@ function formatDate(dateStr: string): string {
       // Add church marker immediately
       map.on('load', () => {
         new (window as any).mapboxgl.Marker({ color: '#8B5A2B' })
-          .setLngLat(coords)
+          .setLngLat(churchCoords)
           .setPopup(new (window as any).mapboxgl.Popup().setHTML('<strong>Lake Ozark Christian Church</strong><br>1560 Bagnell Dam Blvd'))
           .addTo(map);
       });
@@ -786,7 +828,7 @@ function formatDate(dateStr: string): string {
       if (!map) return;
       
       try {
-        const directionsUrl = `https://api.mapbox.com/directions/v5/mapbox/driving/${visitorLng},${visitorLat};${coords[0]},${coords[1]}?geometries=geojson&overview=full&access_token=${accessToken}`;
+        const directionsUrl = `https://api.mapbox.com/directions/v5/mapbox/driving/${visitorLng},${visitorLat};${churchCoords[0]},${churchCoords[1]}?geometries=geojson&overview=full&access_token=${accessToken}`;
         const directionsResponse = await fetch(directionsUrl);
         const directionsData = await directionsResponse.json();
         
@@ -948,7 +990,6 @@ function formatDate(dateStr: string): string {
     
     // If we have stored location with actual coordinates, use it (no permission needed!)
     if (userLocation && userLocation.lng && userLocation.lat && userLocation.source === 'browser') {
-      console.log('Using stored browser location:', userLocation);
       await useLocation(userLocation.lng, userLocation.lat, userLocation.city, 'stored');
     } else {
       // Only request location if we don't have stored browser location
@@ -957,7 +998,6 @@ function formatDate(dateStr: string): string {
       
       if (permissionDenied) {
         // User previously denied, fall back to IP location (less accurate but no permission needed)
-        console.log('Location permission previously denied, using IP location');
         await fallbackToIPLocation();
       } else if ('geolocation' in navigator) {
         // Try browser geolocation (most accurate - actual coordinates)
@@ -965,12 +1005,10 @@ function formatDate(dateStr: string): string {
           // Success - user granted permission
           async (position) => {
             const { longitude, latitude } = position.coords;
-            console.log('Got browser location:', { longitude, latitude });
             await useLocation(longitude, latitude, undefined, 'browser');
           },
           // Error or denied - fall back to IP geolocation
           async (error) => {
-            console.log('Geolocation denied or failed:', error);
             localStorage.setItem('location-permission-granted', 'false');
             await fallbackToIPLocation();
           },
@@ -1064,8 +1102,8 @@ function formatDate(dateStr: string): string {
   (window as any).removeToast = removeToast;
 
   // Live Service Countdown functionality
-  let countdownInterval;
-  let nextServiceTime = null;
+  let countdownInterval: ReturnType<typeof setInterval> | null = null;
+  let nextServiceTime: Date | null = null;
   
   async function fetchNextService() {
     const loadingEl = document.getElementById('countdown-loading');
@@ -1223,7 +1261,12 @@ function formatDate(dateStr: string): string {
   setInterval(fetchNextService, 30 * 60 * 1000);
   
   let currentVideoPage = 0;
-  let allVideos: any[] = [];
+  interface VideoData {
+    id: string;
+    title: string;
+    thumbnail?: string;
+  }
+  let allVideos: VideoData[] = [];
   const videosPerPage = 3;
 
   async function loadVideos() {
@@ -1232,7 +1275,7 @@ function formatDate(dateStr: string): string {
     const containerEl = document.getElementById('video-container');
     
     try {
-      const response = await fetch('/api/videos.json?' + new Date().getTime()); // Cache busting
+      const response = await fetch('/api/videos.json');
       
       if (!response.ok) {
         const errorText = await response.text();
@@ -1721,16 +1764,6 @@ function formatDate(dateStr: string): string {
   // Initialize recurring warning since recurring is default
   updateHomepageRecurringWarning();
 
-  // Clear thumbnail cache to force regeneration with new church background
-  function clearThumbnailCache() {
-    const keys = Object.keys(sessionStorage);
-    keys.forEach(key => {
-      if (key.startsWith('thumbnail_')) {
-        sessionStorage.removeItem(key);
-      }
-    });
-    console.log('Cleared thumbnail cache for regeneration');
-  }
 </script>
 
 <style>
@@ -1811,5 +1844,53 @@ function formatDate(dateStr: string): string {
   .toast-exit {
     animation: slideOutToRight 0.3s ease-in;
   }
+
+  /* Hero section offset for header/banner */
+  .hero-section {
+    min-height: calc(100vh - var(--header-offset, 0px));
+    min-height: calc(100dvh - var(--header-offset, 0px));
+  }
 </style>
+
+<script>
+  // Calculate and set header offset for hero section
+  function updateHeaderOffset() {
+    const topBar = document.querySelector('.top-bar') as HTMLElement | null;
+    const mainHeader = document.querySelector('.main-header') as HTMLElement | null;
+    const seasonalBanner = document.querySelector('.seasonal-banner') as HTMLElement | null;
+    
+    let totalOffset = 0;
+    
+    // Add top bar height (desktop only)
+    if (topBar && window.getComputedStyle(topBar).display !== 'none') {
+      totalOffset += topBar.offsetHeight;
+    }
+    
+    // Add main header height
+    if (mainHeader) {
+      totalOffset += mainHeader.offsetHeight;
+    }
+    
+    // Add seasonal banner height if visible
+    if (seasonalBanner) {
+      totalOffset += seasonalBanner.offsetHeight;
+    }
+    
+    document.documentElement.style.setProperty('--header-offset', `${totalOffset}px`);
+  }
+  
+  // Run on load and resize
+  updateHeaderOffset();
+  window.addEventListener('resize', updateHeaderOffset);
+  
+  // Watch for DOM changes (seasonal banner appearing)
+  const observer = new MutationObserver(updateHeaderOffset);
+  const bannerRoot = document.getElementById('seasonal-banner-root');
+  if (bannerRoot) {
+    observer.observe(bannerRoot, { childList: true, subtree: true });
+  }
+  
+  // Also observe document.body for late-loading components
+  observer.observe(document.body, { childList: true, subtree: true });
+</script>
 </Layout>

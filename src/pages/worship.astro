@@ -8,12 +8,15 @@ import { isLocalVisitor } from '../utils/locationCheck';
 const isLocal = await isLocalVisitor();
 
 const heroImage = {
-  url: "http://cdn.lakeozarkdisciples.org/media/69CA977C-2462-4E2A-B067-A2FCD5D87A3F.jpeg",
+  url: "https://cdn.lakeozarkdisciples.org/media/69CA977C-2462-4E2A-B067-A2FCD5D87A3F.jpeg",
   alt: "Interior view of Lake Ozark Christian Church sanctuary"
 };
 ---
 
 <Layout title="Worship With Us">
+<!-- Preload hero image for faster LCP -->
+<link rel="preload" href={heroImage.url} as="image" fetchpriority="high" />
+
   <!-- Hero Section -->
   <section class="relative overflow-hidden bg-white">
     <div class="absolute inset-0">
@@ -21,6 +24,9 @@ const heroImage = {
         src={heroImage.url} 
         alt={heroImage.alt}
         class="w-full h-full object-cover"
+        fetchpriority="high"
+        loading="eager"
+        decoding="async"
       />
       <div class="absolute inset-0 bg-black/40"></div>
     </div>
@@ -64,10 +70,10 @@ const heroImage = {
         <div class="grid lg:grid-cols-2 gap-16 items-center">
           <div>
             <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
-              Join Us
+              Join us
             </span>
             <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
-              Sunday Worship
+              Sunday worship
             </h2>
             <div class="space-y-6">
               <p class="text-lg text-gray-600 leading-relaxed">
@@ -98,7 +104,7 @@ const heroImage = {
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path>
                   </svg>
                   <div>
-                    <h3 class="font-medium text-gray-900">Children's Programs</h3>
+                    <h3 class="font-medium text-gray-900">Children's programs</h3>
                     <p class="text-gray-600">Nursery and children's church available during service</p>
                   </div>
                 </div>
@@ -137,7 +143,7 @@ const heroImage = {
           <!-- Image on LEFT -->
           <div class="relative hidden lg:block">
             <img 
-              src="http://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg"
+              src="https://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg"
               alt="Church sanctuary during worship"
               class="w-full h-[500px] object-cover rounded-2xl"
             />
@@ -145,7 +151,7 @@ const heroImage = {
           <!-- Text on RIGHT -->
           <div>
             <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
-              First Time?
+              First time?
             </span>
             <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
               What to Expect

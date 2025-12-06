@@ -24,7 +24,7 @@ const isExpired = expiresAt ? new Date() > new Date(expiresAt) : false;
 {!isExpired && (
   <div 
     id={`alertModal-${uniqueId}`}
-    class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-6" 
+    class="fixed inset-0 bg-black/70 z-[150] flex items-center justify-center p-6" 
     role="alertdialog" 
     aria-modal="true"
     style="font-family: 'Albert Sans', system-ui, sans-serif;"

@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 
 const heroImage = {
-  url: "http://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg",
+  url: "https://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg",
   alt: "Church Sanctuary"
 };
 
@@ -49,6 +49,9 @@ const impactAreas = [
 ---
 
 <Layout title="Giving">
+<!-- Preload hero image for faster LCP -->
+<link rel="preload" href={heroImage.url} as="image" fetchpriority="high" />
+
   <!-- Hero Section -->
   <section class="relative overflow-hidden bg-white">
     <div class="absolute inset-0">
@@ -56,6 +59,9 @@ const impactAreas = [
         src={heroImage.url} 
         alt={heroImage.alt}
         class="w-full h-full object-cover"
+        fetchpriority="high"
+        loading="eager"
+        decoding="async"
       />
       <div class="absolute inset-0 bg-black/40"></div>
     </div>
@@ -258,10 +264,10 @@ const impactAreas = [
                 <!-- Security Note -->
                 <div class="text-center text-xs text-gray-600 space-y-2">
                   <p>Secure donation processed through Stripe by DonorKit, Inc.</p>
-                  <p>By making a donation you agree to the DonorKit <a href="http://donork.it/privacy" target="_blank" rel="noopener noreferrer" class="text-brand hover:text-brand-dark underline">Privacy Policy</a>, <a href="http://donork.it/terms" target="_blank" rel="noopener noreferrer" class="text-brand hover:text-brand-dark underline">Terms of Service</a>, and <a href="http://donork.it/refund" target="_blank" rel="noopener noreferrer" class="text-brand hover:text-brand-dark underline">Refund Policy</a>.</p>
+                  <p>By making a donation you agree to the DonorKit <a href="https://donork.it/privacy" target="_blank" rel="noopener noreferrer" class="text-brand hover:text-brand-dark underline">Privacy Policy</a>, <a href="https://donork.it/terms" target="_blank" rel="noopener noreferrer" class="text-brand hover:text-brand-dark underline">Terms of Service</a>, and <a href="https://donork.it/refund" target="_blank" rel="noopener noreferrer" class="text-brand hover:text-brand-dark underline">Refund Policy</a>.</p>
                   <p>
                     <a 
-                      href="http://donork.it/locc" 
+                      href="https://donork.it/locc" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       class="text-brand hover:text-brand-dark underline"
@@ -348,7 +354,7 @@ const impactAreas = [
   </section>
 
   <!-- Toast Container -->
-  <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+  <div id="toast-container" class="fixed top-4 right-4 z-[150] space-y-2"></div>
 
   <style>
     * {

@@ -1,23 +1,23 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import '../pages/weddings.css';
+import '../pages/_weddings.css';
 
 const heroImage = {
-  url: "http://cdn.lakeozarkdisciples.org/media/69CA977C-2462-4E2A-B067-A2FCD5D87A3F.jpeg",
+  url: "https://cdn.lakeozarkdisciples.org/media/69CA977C-2462-4E2A-B067-A2FCD5D87A3F.jpeg",
   alt: "Beautiful Church Sanctuary for Weddings"
 };
 
 const galleryImages = [
   {
-    url: "http://cdn.lakeozarkdisciples.org/media/69CA977C-2462-4E2A-B067-A2FCD5D87A3F.jpeg",
+    url: "https://cdn.lakeozarkdisciples.org/media/69CA977C-2462-4E2A-B067-A2FCD5D87A3F.jpeg",
     alt: "Main Sanctuary View"
   },
   {
-    url: "http://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg",
+    url: "https://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg",
     alt: "Altar and Choir Area"
   },
   {
-    url: "http://cdn.lakeozarkdisciples.org/media/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg",
+    url: "https://cdn.lakeozarkdisciples.org/media/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg",
     alt: "Church Interior"
   }
 ];
@@ -123,6 +123,9 @@ const testimonials = [
 ---
 
 <Layout title="Weddings">
+<!-- Preload hero image for faster LCP -->
+<link rel="preload" href={heroImage.url} as="image" fetchpriority="high" />
+
   <!-- Hero Section - Clean and Minimalist -->
   <section class="relative overflow-hidden bg-white">
     <div class="absolute inset-0">
@@ -130,6 +133,9 @@ const testimonials = [
         src={heroImage.url} 
         alt={heroImage.alt}
         class="w-full h-full object-cover"
+        fetchpriority="high"
+        loading="eager"
+        decoding="async"
       />
       <div class="absolute inset-0 bg-black/50"></div>
     </div>
@@ -265,7 +271,7 @@ const testimonials = [
           <div class="relative">
             <div class="relative rounded-2xl overflow-hidden shadow-2xl">
               <img 
-                src="http://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg"
+                src="https://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg"
                 alt="Beautiful church sanctuary interior"
                 class="w-full h-[500px] object-cover"
               />

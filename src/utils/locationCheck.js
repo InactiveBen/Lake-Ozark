@@ -186,12 +186,5 @@ export async function getVisitorInfo() {
 
 export async function isLocalVisitor() {
   const info = await getVisitorInfo();
-  
-  // Log visitor info for debugging
-  console.log('[GEO] Visitor Info:', {
-    ...info,
-    distance: info.distance ? `${Math.round(info.distance)} miles` : 'unknown'
-  });
-  
   return info.isLocal;
 }

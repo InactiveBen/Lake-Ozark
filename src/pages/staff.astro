@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 
 const heroImage = {
-  url: "http://cdn.lakeozarkdisciples.org/media/69CA977C-2462-4E2A-B067-A2FCD5D87A3F.jpeg",
+  url: "https://cdn.lakeozarkdisciples.org/media/69CA977C-2462-4E2A-B067-A2FCD5D87A3F.jpeg",
   alt: "Church Sanctuary"
 };
 
@@ -10,14 +10,14 @@ const staff = [
   {
     name: "Rev. Ron Trimmer",
     title: "Senior Minister",
-    image: "http://cdn.lakeozarkdisciples.org/media/0AB4CB10-0C10-487F-BE24-28F19AD01DBB.jpeg",
+    image: "https://cdn.lakeozarkdisciples.org/media/0AB4CB10-0C10-487F-BE24-28F19AD01DBB.jpeg",
     bio: "Pastor Ron Trimmer serves as the senior minister at Lake Ozark Christian Church. With over 25 years in ministry, he brings deep faith, compassion, and a strong sense of calling to his leadership. Pastor Ron believes in a God of extravagant welcome and invites all to experience the transforming love and grace of Jesus Christ. His heart for justice, peace, and renewal shapes every aspect of his ministry. Alongside his wife Wendy and their four children, Pastor Ron continues to lead with hope and a commitment to sharing God’s love both inside and outside the church walls.",
     showPhoto: true
   },
   {
     name: "Michael Lindeman",
     title: "Director of Music",
-    image: "http://cdn.lakeozarkdisciples.org/media/88041345-79DE-4CC1-9AE1-B2BD94B13DEF.jpeg",
+    image: "https://cdn.lakeozarkdisciples.org/media/88041345-79DE-4CC1-9AE1-B2BD94B13DEF.jpeg",
     bio: "Michael Lindeman leads our music ministry with creativity and dedication. His extensive background in music ministry helps create meaningful worship experiences that inspire and uplift our congregation.",
     showPhoto: true
   },
@@ -49,6 +49,9 @@ const staff = [
 ---
 
 <Layout title="Staff">
+<!-- Preload hero image for faster LCP -->
+<link rel="preload" href={heroImage.url} as="image" fetchpriority="high" />
+
 <!-- Hero Section - Clean and Minimalist -->
 <section class="relative overflow-hidden bg-white">
   <div class="absolute inset-0">
@@ -56,6 +59,9 @@ const staff = [
       src={heroImage.url} 
       alt={heroImage.alt}
       class="w-full h-full object-cover"
+      fetchpriority="high"
+      loading="eager"
+      decoding="async"
     />
     <div class="absolute inset-0 bg-black/40"></div>
   </div>
@@ -162,7 +168,7 @@ const staff = [
 
   function showStaffBio(member) {
     const modal = document.createElement('div');
-    modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50';
+    modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[150]';
     modal.onclick = (e) => {
       if (e.target === modal) {
         modal.remove();

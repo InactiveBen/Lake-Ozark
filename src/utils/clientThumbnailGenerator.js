@@ -506,7 +506,7 @@ export function generateThumbnail(video, options = {}) {
  * Get or generate thumbnail for a video
  */
 export async function getVideoThumbnail(video) {
-  // Parse date to determine liturgical season (for cache key)
+  // Parse date to determine liturgical season (for cache key) - only calculate once
   const parsedDate = parseDateFromTitle(video.title);
   let seasonKey = 'default';
   if (parsedDate) {
@@ -526,17 +526,9 @@ export async function getVideoThumbnail(video) {
   try {
     const generatedThumbnail = await generateThumbnail(video);
     if (generatedThumbnail) {
-      // Cache in sessionStorage (with season in key)
+      // Cache in sessionStorage - reuse the already calculated cacheKey
       try {
-        const parsedDate = parseDateFromTitle(video.title);
-        let seasonKey = 'default';
-        if (parsedDate) {
-          const normalizedDate = new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate(), 0, 0, 0, 0);
-          const liturgical = getLiturgicalSeason(normalizedDate);
-          seasonKey = liturgical.season.toLowerCase().replace(/\s+/g, '-');
-        }
-        const cacheKeyWithSeason = `thumbnail_${video.id}_${seasonKey}`;
-        sessionStorage.setItem(cacheKeyWithSeason, generatedThumbnail);
+        sessionStorage.setItem(cacheKey, generatedThumbnail);
       } catch (e) {
         console.warn('Failed to cache thumbnail in sessionStorage:', e);
       }

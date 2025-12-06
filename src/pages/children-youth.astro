@@ -5,8 +5,14 @@ import { isLocalVisitor } from '../utils/locationCheck';
 
 const isLocal = await isLocalVisitor();
 
+// Toggle announcement banner
+const showAnnouncementBanner = true;
+const bannerText = "After-school program now enrolling for K-5th grade";
+const bannerLink = "https://docs.google.com/forms/d/e/1FAIpQLSdIri3EaabwsN84Al7Xd7zVnWI7Jzfaoyu6NVkENI6w9FRaeA/viewform?usp=sf_link";
+const bannerLinkText = "Register now →";
+
 const heroImage = {
-  url: "http://cdn.lakeozarkdisciples.org/media/E88583FB-D8A2-4D0E-8391-7D97D11B710F.jpeg",
+  url: "https://cdn.lakeozarkdisciples.org/media/E88583FB-D8A2-4D0E-8391-7D97D11B710F.jpeg",
   alt: "Children's Time"
 };
 
@@ -39,18 +45,45 @@ const programs = [
 ---
 
 <Layout title="Children & Youth">
-<!-- Hero Section - Clean and Minimalist -->
-<section class="relative overflow-hidden bg-white">
+<!-- Preload hero image for faster LCP -->
+<link rel="preload" href={heroImage.url} as="image" fetchpriority="high" />
+
+<!-- Hero Section -->
+<section id="hero-section" class="relative overflow-hidden bg-white hero-section">
   <div class="absolute inset-0">
     <img 
       src={heroImage.url} 
       alt={heroImage.alt}
-      class="w-full h-full object-cover"
+      class="w-full h-full object-cover object-[center_40%]"
+      fetchpriority="high"
+      loading="eager"
+      decoding="async"
     />
-    <div class="absolute inset-0 bg-black/40"></div>
+    <div class="absolute inset-0 bg-black/30"></div>
+    <!-- Bottom fade to white (mobile only) -->
+    <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent md:hidden"></div>
   </div>
 
   <div class="relative container mx-auto px-6 py-32 md:py-40">
+    {showAnnouncementBanner && (
+    <div class="mb-8">
+      <div class="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full border border-white/20">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+        <p class="text-white font-medium text-sm">
+          {bannerText}
+          <a href={bannerLink} 
+             target="_blank"
+             rel="noopener noreferrer"
+             class="underline hover:no-underline ml-2">
+            {bannerLinkText}
+          </a>
+        </p>
+      </div>
+    </div>
+    )}
+
     <div class="max-w-4xl">
       {isLocal ? (
         <>
@@ -61,37 +94,35 @@ const programs = [
             Children & Youth
           </h1>
           <p class="text-lg md:text-xl text-white/80 mb-12 max-w-2xl font-light leading-relaxed">
-            A community of faith dedicated to helping children grow in Christ's love through engaging programs and activities.
+            Safe, engaging programs where children learn about God's love through play, creativity, and community.
           </p>
           
           <div class="flex flex-col sm:flex-row gap-4">
             <a 
-              href="https://docs.google.com/forms/d/e/1FAIpQLSdIri3EaabwsN84Al7Xd7zVnWI7Jzfaoyu6NVkENI6w9FRaeA/viewform?usp=sf_link"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#sunday-programs"
               class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300 text-lg"
             >
-              Register Now
+              Our Programs
             </a>
             <a 
-              href="/connect" 
+              href="#visitor-info" 
               class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-medium rounded-lg transition-all duration-300 text-lg"
             >
-              Get Involved
+              First Time? Start Here
             </a>
           </div>
         </>
       ) : (
         <>
           <p class="text-xl md:text-2xl text-white/90 mb-4 font-light leading-relaxed">
-            Visiting with Family?
+            Visiting with family?
           </p>
           <h1 class="text-5xl md:text-7xl font-semibold text-white mb-8 leading-tight tracking-tight">
             Family-Friendly Worship
           </h1>
           <p class="text-lg md:text-xl text-white/80 mb-12 max-w-2xl font-light leading-relaxed">
-            Your children are welcome here! We offer engaging programs during services, including Children's Church 
-            and nursery care, so you can focus on worship knowing your kids are having fun and learning about God's love.
+            Your children are welcome here. We offer engaging programs during services, including Children's Church 
+            and nursery care, so you can worship knowing your kids are having fun and learning about God's love.
           </p>
           
           <div class="flex flex-col sm:flex-row gap-4">
@@ -105,7 +136,7 @@ const programs = [
               href="#visitor-info" 
               class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-medium rounded-lg transition-all duration-300 text-lg"
             >
-              Visitor Information
+              What to Expect
             </a>
           </div>
         </>
@@ -293,7 +324,7 @@ const programs = [
       <div class="grid lg:grid-cols-2 gap-16 items-center">
         <div class="relative">
           <img 
-            src="http://cdn.lakeozarkdisciples.org/media/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg"
+            src="https://cdn.lakeozarkdisciples.org/media/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg"
             alt="Children participating in church activities"
             class="w-full h-[600px] object-cover rounded-2xl"
           />
@@ -446,5 +477,63 @@ const programs = [
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Albert Sans', system-ui, sans-serif;
   }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Ensure sections are properly centered when navigated to */
+  section[id] {
+    scroll-margin-top: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    section[id] {
+      scroll-margin-top: 1rem;
+    }
+  }
+
+  /* Hero section offset for header/banner */
+  .hero-section {
+    min-height: calc(100vh - var(--header-offset, 0px));
+    min-height: calc(100dvh - var(--header-offset, 0px));
+  }
 </style>
+
+<script>
+  // Calculate and set header offset for hero section
+  function updateHeaderOffset() {
+    const topBar = document.querySelector('.top-bar') as HTMLElement | null;
+    const mainHeader = document.querySelector('.main-header') as HTMLElement | null;
+    const seasonalBanner = document.querySelector('.seasonal-banner') as HTMLElement | null;
+    
+    let totalOffset = 0;
+    
+    // Add top bar height (desktop only)
+    if (topBar && window.getComputedStyle(topBar).display !== 'none') {
+      totalOffset += topBar.offsetHeight;
+    }
+    
+    // Add main header height
+    if (mainHeader) {
+      totalOffset += mainHeader.offsetHeight;
+    }
+    
+    // Add seasonal banner height if visible
+    if (seasonalBanner) {
+      totalOffset += seasonalBanner.offsetHeight;
+    }
+    
+    document.documentElement.style.setProperty('--header-offset', `${totalOffset}px`);
+  }
+  
+  // Run on load and resize
+  updateHeaderOffset();
+  window.addEventListener('resize', updateHeaderOffset);
+  
+  // Watch for DOM changes (seasonal banner appearing)
+  const observer = new MutationObserver(updateHeaderOffset);
+  observer.observe(document.body, { childList: true, subtree: true });
+</script>
 </Layout>
