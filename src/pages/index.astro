@@ -1905,6 +1905,15 @@ function formatDate(dateStr: string): string {
   }
 
   /* Flip Clock Custom Styles */
+  
+  /* Hide the pqina credits link */
+  .tick-credits,
+  .tick a[href*="pqina"],
+  a[href*="pqina.nl"] {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
   .flip-clock-container {
     display: flex;
     justify-content: center;
