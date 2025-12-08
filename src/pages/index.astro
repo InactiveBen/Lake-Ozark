@@ -1330,6 +1330,12 @@ function formatDate(dateStr: string): string {
           credits: false
         });
         
+        // Remove any credits links that might appear
+        setTimeout(() => {
+          const creditsLinks = document.querySelectorAll('a[href*="pqina"], .tick-credits, .tick a');
+          creditsLinks.forEach(el => el.remove());
+        }, 100);
+        
       } else {
         // Keep checking until Tick is loaded
         setTimeout(waitForTick, 100);
@@ -1908,10 +1914,20 @@ function formatDate(dateStr: string): string {
   
   /* Hide the pqina credits link */
   .tick-credits,
+  .tick-flip-panel-text-wrapper + a,
   .tick a[href*="pqina"],
-  a[href*="pqina.nl"] {
+  a[href*="pqina.nl"],
+  a[href*="pqina"],
+  .flip-clock-container a,
+  .tick > a,
+  [data-credits],
+  .tick-credits-text {
     display: none !important;
     visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    position: absolute !important;
+    left: -9999px !important;
   }
 
   .flip-clock-container {
