@@ -48,6 +48,10 @@ function formatDate(dateStr: string): string {
 <!-- Preload critical above-the-fold images for faster LCP -->
 <link rel="preload" href={welcomeImage.url} as="image" fetchpriority="high" />
 
+<!-- Typed.js for hero text animation -->
+<script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+
+
 <!-- Hero Section - Clean and Minimalist -->
 <section id="hero-section" class="relative overflow-hidden bg-white hero-section">
   <div class="absolute inset-0">
@@ -85,8 +89,8 @@ function formatDate(dateStr: string): string {
           <div class="max-w-4xl">
         {isLocal ? (
           <>
-            <p class="text-xl md:text-2xl text-white/90 mb-4 font-light leading-relaxed">
-              There's a place for you here.
+            <p class="text-xl md:text-2xl text-white/90 mb-4 font-light leading-relaxed h-8">
+              <span id="typed-local"></span>
             </p>
             <h1 class="text-5xl md:text-7xl font-semibold text-white mb-8 leading-tight tracking-tight">
               Lake Ozark Christian
@@ -114,8 +118,8 @@ function formatDate(dateStr: string): string {
           </>
         ) : (
           <>
-            <p class="text-xl md:text-2xl text-white/90 mb-4 font-light leading-relaxed">
-              Welcome to the Lake of the Ozarks
+            <p class="text-xl md:text-2xl text-white/90 mb-4 font-light leading-relaxed h-8">
+              <span id="typed-visitor"></span>
             </p>
             <h1 class="text-5xl md:text-7xl font-semibold text-white mb-8 leading-tight tracking-tight">
               Plan Your Visit to<br />Lake Ozark Christian
@@ -214,6 +218,9 @@ function formatDate(dateStr: string): string {
   </div>
 </section>
 
+<!-- Flip Clock CSS -->
+<link href="https://unpkg.com/@pqina/flip/dist/flip.min.css" rel="stylesheet">
+
 <!-- Live Service Countdown -->
 <section id="live-service" class="py-20 bg-white">
   <div class="container mx-auto px-6">
@@ -223,25 +230,21 @@ function formatDate(dateStr: string): string {
           <!-- Countdown on LEFT -->
           <div class="relative hidden lg:block">
             <div class="bg-gray-50 rounded-2xl p-8">
-              <div class="text-center mb-6">
-                <p class="text-sm text-gray-500 uppercase tracking-wide">Countdown to service</p>
+              <div class="text-center mb-8">
+                <p class="text-sm text-gray-500 uppercase tracking-widest font-medium">Countdown to service</p>
               </div>
-              <div class="grid grid-cols-4 gap-4">
-                <div class="text-center">
-                  <div id="days" class="text-4xl lg:text-5xl font-bold text-brand mb-1">00</div>
-                  <div class="text-sm text-gray-600">Days</div>
-                </div>
-                <div class="text-center">
-                  <div id="hours" class="text-4xl lg:text-5xl font-bold text-brand mb-1">00</div>
-                  <div class="text-sm text-gray-600">Hours</div>
-                </div>
-                <div class="text-center">
-                  <div id="minutes" class="text-4xl lg:text-5xl font-bold text-brand mb-1">00</div>
-                  <div class="text-sm text-gray-600">Minutes</div>
-                </div>
-                <div class="text-center">
-                  <div id="seconds" class="text-4xl lg:text-5xl font-bold text-brand mb-1">00</div>
-                  <div class="text-sm text-gray-600">Seconds</div>
+              <div 
+                class="tick flip-clock-container"
+                data-did-init="handleFlipClockInit"
+                aria-label="Countdown timer"
+              >
+                <div data-repeat="true" data-layout="horizontal fit" data-transform="preset(d, h, m, s) -> delay" aria-hidden="true">
+                  <div class="tick-group">
+                    <div data-key="value" data-repeat="true" data-transform="pad(00) -> split -> delay">
+                      <span data-view="flip"></span>
+                    </div>
+                    <span data-key="label" data-view="text" class="tick-label"></span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -315,6 +318,9 @@ function formatDate(dateStr: string): string {
     </div>
   </div>
 </section>
+
+<!-- Flip Clock JS -->
+<script src="https://unpkg.com/@pqina/flip/dist/flip.min.js"></script>
 
 <!-- After School Program -->
 <section id="after-school" class="py-20 bg-white">
@@ -745,6 +751,65 @@ function formatDate(dateStr: string): string {
 <script async src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
 
 <script>
+  // Initialize Typed.js for hero text animation
+  function initTypedHero() {
+    const Typed = (window as any).Typed;
+    if (!Typed) {
+      setTimeout(initTypedHero, 100);
+      return;
+    }
+    
+    // Local visitor messages
+    const localElement = document.getElementById('typed-local');
+    if (localElement) {
+      new Typed('#typed-local', {
+        strings: [
+          "There's a place for you here.",
+          "Come as you are.",
+          "You're always welcome.",
+          "Faith, hope, and love.",
+          "Growing together in Christ.",
+          "Your church family awaits."
+        ],
+        typeSpeed: 45,
+        backSpeed: 25,
+        backDelay: 2500,
+        startDelay: 500,
+        loop: true,
+        showCursor: true,
+        cursorChar: '|'
+      });
+    }
+    
+    // Visitor messages
+    const visitorElement = document.getElementById('typed-visitor');
+    if (visitorElement) {
+      new Typed('#typed-visitor', {
+        strings: [
+          "Welcome to the Lake.",
+          "Worship with us this Sunday.",
+          "A warm welcome awaits you.",
+          "Find rest for your soul.",
+          "All are welcome here."
+        ],
+        typeSpeed: 45,
+        backSpeed: 25,
+        backDelay: 2500,
+        startDelay: 500,
+        loop: true,
+        showCursor: true,
+        cursorChar: '|'
+      });
+    }
+  }
+  
+  // Start typed.js when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTypedHero);
+  } else {
+    initTypedHero();
+  }
+
   // Initialize Mapbox map and personalized location experience
   // Wait for Mapbox to be available (async loaded)
   function waitForMapbox() {
@@ -1101,9 +1166,18 @@ function formatDate(dateStr: string): string {
   // Make removeToast globally available
   (window as any).removeToast = removeToast;
 
-  // Live Service Countdown functionality
+  // Live Service Countdown functionality with Flip Clock
   let countdownInterval: ReturnType<typeof setInterval> | null = null;
   let nextServiceTime: Date | null = null;
+  let flipClockInstance: any = null;
+  
+  // Function to handle flip clock initialization (called by data-did-init)
+  function handleFlipClockInit(tick: any) {
+    flipClockInstance = tick;
+  }
+  
+  // Make it globally available
+  (window as any).handleFlipClockInit = handleFlipClockInit;
   
   async function fetchNextService() {
     const loadingEl = document.getElementById('countdown-loading');
@@ -1156,31 +1230,30 @@ function formatDate(dateStr: string): string {
       
       if (upcomingServices.length > 0) {
         const nextService = upcomingServices[0];
-        nextServiceTime = nextService.parsedTime; // Use pre-parsed date
+        nextServiceTime = nextService.parsedTime;
         
-                 // Service title: If available, use service title. Otherwise, fallback.
-         const titleEl = document.getElementById('service-title');
-         if (titleEl) {
-           // Use the service's title if available, else fallback string
-           titleEl.textContent = nextService?.content?.title?.trim()
-             ? nextService.content.title
-             : 'Late Worship Service';
-         }
-        // Calculate and display initial countdown values immediately
-        updateCountdownDisplay();
+        // Service title: If available, use service title. Otherwise, fallback.
+        const titleEl = document.getElementById('service-title');
+        if (titleEl) {
+          titleEl.textContent = nextService?.content?.title?.trim()
+            ? nextService.content.title
+            : 'Late Worship Service';
+        }
         
         // Show countdown and start timer
         if (loadingEl) loadingEl.style.display = 'none';
         if (containerEl) containerEl.classList.remove('hidden');
         
-        startCountdown();
+        // Initialize the flip clock with the countdown
+        initializeFlipClock();
         
       } else {
         // No upcoming services
         if (loadingEl) loadingEl.style.display = 'none';
         if (errorEl) {
           errorEl.classList.remove('hidden');
-          errorEl.querySelector('p').textContent = 'No upcoming services scheduled';
+          const pEl = errorEl.querySelector('p');
+          if (pEl) pEl.textContent = 'No upcoming services scheduled';
         }
       }
       
@@ -1191,67 +1264,101 @@ function formatDate(dateStr: string): string {
     }
   }
   
-  function updateCountdownDisplay() {
+  function initializeFlipClock() {
     if (!nextServiceTime) return;
     
-    const now = new Date().getTime();
-    const distance = nextServiceTime.getTime() - now;
+    // Wait for Tick to be available
+    const waitForTick = () => {
+      if ((window as any).Tick) {
+        const Tick = (window as any).Tick;
+        
+        // Find the flip clock container
+        const flipContainer = document.querySelector('.flip-clock-container');
+        if (!flipContainer) return;
+        
+        // Calculate initial countdown
+        const now = new Date().getTime();
+        const distance = nextServiceTime!.getTime() - now;
+        
+        if (distance < 0) {
+          showLiveNow();
+          return;
+        }
+        
+        // Create tick counter with countdown
+        const counter = Tick.count.down(nextServiceTime, {
+          format: ['d', 'h', 'm', 's']
+        });
+        
+        counter.onupdate = function(value: number[]) {
+          // Check if countdown is complete
+          if (value.every((v: number) => v === 0)) {
+            showLiveNow();
+            return;
+          }
+          
+          // Update the flip clock
+          if (flipClockInstance) {
+            flipClockInstance.value = value;
+          }
+        };
+        
+        counter.onended = function() {
+          showLiveNow();
+        };
+        
+        // Set initial value
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        // Initialize the Tick DOM
+        Tick.DOM.create(flipContainer, {
+          value: [days, hours, minutes, seconds],
+          didInit: function(tick: any) {
+            flipClockInstance = tick;
+            
+            counter.onupdate = function(value: number[]) {
+              if (value.every((v: number) => v === 0)) {
+                showLiveNow();
+                return;
+              }
+              tick.value = value;
+            };
+          },
+          credits: false
+        });
+        
+      } else {
+        // Keep checking until Tick is loaded
+        setTimeout(waitForTick, 100);
+      }
+    };
     
-    if (distance < 0) {
-      // Service has started or passed
-      const containerEl = document.getElementById('countdown-container');
-      if (containerEl) {
-        containerEl.innerHTML = `
-          <span class="inline-block px-4 py-2 bg-red-100 text-red-600 text-sm font-medium mb-4">
-            Live Now
+    waitForTick();
+  }
+  
+  function showLiveNow() {
+    const containerEl = document.getElementById('countdown-container');
+    if (containerEl) {
+      containerEl.innerHTML = `
+        <div class="text-center py-8">
+          <span class="inline-block px-6 py-3 bg-red-100 text-red-600 text-lg font-semibold mb-6 rounded-full animate-pulse">
+            🔴 Live Now
           </span>
-          <h2 class="text-2xl lg:text-3xl font-light mb-6 text-gray-900">
+          <h2 class="text-3xl lg:text-4xl font-light mb-8 text-gray-900">
             Service is Live!
           </h2>
           <a 
             href="/live?utm_source=lakeozarkdisciples&utm_medium=countdown&utm_campaign=button" 
-            class="inline-flex items-center justify-center px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-all duration-300 text-lg animate-pulse"
+            class="inline-flex items-center justify-center px-10 py-5 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-all duration-300 text-xl"
           >
             Join Live Stream Now
           </a>
-        `;
-      }
-      return false; // Indicate service has started
+        </div>
+      `;
     }
-    
-    // Calculate time units
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    
-    // Update countdown display
-    const daysEl = document.getElementById('days');
-    const hoursEl = document.getElementById('hours');
-    const minutesEl = document.getElementById('minutes');
-    const secondsEl = document.getElementById('seconds');
-    const liveStreamBtn = document.getElementById('live-stream-btn');
-    
-    if (daysEl) daysEl.textContent = days.toString().padStart(2, '0');
-    if (hoursEl) hoursEl.textContent = hours.toString().padStart(2, '0');
-    if (minutesEl) minutesEl.textContent = minutes.toString().padStart(2, '0');
-    if (secondsEl) secondsEl.textContent = seconds.toString().padStart(2, '0');
-    
-    // Button is now always visible in the new layout
-    
-    return true; // Indicate countdown is active
-  }
-
-  function startCountdown() {
-    if (!nextServiceTime) return;
-    
-    countdownInterval = setInterval(() => {
-      const isActive = updateCountdownDisplay();
-      if (!isActive) {
-        // Service has started, clear the interval
-        clearInterval(countdownInterval);
-      }
-    }, 1000);
   }
   
   // Initialize countdown
@@ -1795,6 +1902,77 @@ function formatDate(dateStr: string): string {
   .homepage-amount-btn.selected {
     border-color: #8B5A2B;
     background-color: rgba(139, 90, 43, 0.05);
+  }
+
+  /* Flip Clock Custom Styles */
+  .flip-clock-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .flip-clock-container .tick {
+    font-size: 1rem;
+    white-space: nowrap;
+  }
+
+  .flip-clock-container .tick-flip,
+  .flip-clock-container .tick-text-inline {
+    font-size: 2.5em;
+  }
+
+  .flip-clock-container .tick-label {
+    margin-top: 0.5em;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #6b7280;
+    text-align: center;
+    display: block;
+  }
+
+  .flip-clock-container .tick-flip-panel {
+    background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+    color: #f9fafb;
+    border-radius: 0.375rem;
+  }
+
+  .flip-clock-container .tick-flip-panel-back {
+    background: linear-gradient(180deg, #111827 0%, #0f172a 100%);
+  }
+
+  .flip-clock-container .tick-flip-panel-front {
+    background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+  }
+
+  .flip-clock-container .tick-group {
+    margin: 0 0.25rem;
+    text-align: center;
+  }
+
+  /* Make flip panels have shadow for depth */
+  .flip-clock-container .tick-flip {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  /* Responsive adjustments for flip clock */
+  @media (min-width: 1024px) {
+    .flip-clock-container .tick-flip,
+    .flip-clock-container .tick-text-inline {
+      font-size: 3.5em;
+    }
+  }
+
+  /* Typed.js cursor styling */
+  .typed-cursor {
+    color: white;
+    opacity: 0.8;
+    animation: blink 0.7s infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
   }
 
   .tooltip {
