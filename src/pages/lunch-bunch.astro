@@ -1,0 +1,452 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Lunch Bunch schedule data for 2026
+const lunchSchedule = [
+  { date: "2026-01-06", day: "Tuesday", restaurant: "Silver Dollar Restaurant", address: "20 Acorn Rd, Eldon", note: "Junction 54 & 52" },
+  { date: "2026-01-13", day: "Tuesday", restaurant: "Alley Cat's Pizzeria & Pub", address: "1263 Bagnell Dam Blvd., Lake Ozark" },
+  { date: "2026-01-20", day: "Tuesday", restaurant: "Off the Cliff", address: "66 North Shore Drive (Hwy. W), Lake Ozark" },
+  { date: "2026-01-27", day: "Tuesday", restaurant: "Lil' Rizzo's", address: "929 Premium Outlets Drive, Osage Beach" },
+  { date: "2026-02-03", day: "Tuesday", restaurant: "Applebee's Restaurant", address: "4040 Osage Beach Parkway, Osage Beach" },
+  { date: "2026-02-10", day: "Tuesday", restaurant: "Bonnie's Buffet & Grill", address: "3784 Osage Beach Parkway, Osage Beach" },
+  { date: "2026-02-17", day: "Tuesday", restaurant: "Cozy Cafe", address: "1018 Highway KK, Osage Beach" },
+  { date: "2026-02-24", day: "Tuesday", restaurant: "Pablito's Taqueria", address: "5896 Osage Beach Parkway, Osage Beach" },
+  { date: "2026-03-03", day: "Tuesday", restaurant: "Stewart's Restaurant", address: "1260 Bagnell Dam Blvd., Lake Ozark" },
+  { date: "2026-03-10", day: "Tuesday", restaurant: "Tirebiter's Pub", address: "4704 Jayhawk St., Osage Beach" },
+  { date: "2026-03-17", day: "Tuesday", restaurant: "R.J.'s Family Restaurant", address: "275 Hwy. 54, Camdenton" },
+  { date: "2026-03-24", day: "Tuesday", restaurant: "Chili's Restaurant", address: "2820 Osage Beach Parkway, Osage Beach" },
+  { date: "2026-03-31", day: "Tuesday", restaurant: "First Watch", address: "4325 Osage Beach Parkway, Osage Beach" },
+  { date: "2026-04-07", day: "Tuesday", restaurant: "The Pancake House", address: "5980 Osage Beach Parkway, Osage Beach" },
+  { date: "2026-04-14", day: "Tuesday", restaurant: "Yankee Peddler Tea Room", address: "1011 Main Street, Osage Beach" },
+  { date: "2026-04-21", day: "Tuesday", restaurant: "China Town", address: "465 W. Highway 54, Camdenton" },
+  { date: "2026-04-28", day: "Tuesday", restaurant: "Outback Steak House", address: "3930 Osage Beach Parkway, Osage Beach" },
+  { date: "2026-05-05", day: "Tuesday", restaurant: "Vista Grande Mexican Restaurant", address: "4579 Osage Beach Parkway, Osage Beach" },
+  { date: "2026-05-12", day: "Tuesday", restaurant: "Chevy's Grill & Pizzeria", address: "5151 Osage Beach Parkway, Osage Beach" },
+  { date: "2026-05-19", day: "Tuesday", restaurant: "Wobbly Boot's Roadhouse", address: "4717 Osage Beach Parkway, Osage Beach" },
+  { date: "2026-05-26", day: "Tuesday", restaurant: "Backwater Jack's Restaurant", address: "4341 Beach Drive, Osage Beach" },
+  { date: "2026-06-02", day: "Tuesday", restaurant: "Angel's Mexican Restaurant", address: "4640 Horseshoe Bend Pkwy, Four Seasons" },
+  { date: "2026-06-09", day: "Tuesday", restaurant: "Twisted Tony's", address: "76 Chestnut Ave, Suite 103, Camdenton" },
+  { date: "2026-06-16", day: "Tuesday", restaurant: "Dog Days", address: "1232 Jeffries Road, Osage Beach" },
+  { date: "2026-06-23", day: "Tuesday", restaurant: "Culver's Restaurant", address: "5785 Osage Beach Parkway, Osage Beach" },
+  { date: "2026-06-30", day: "Tuesday", restaurant: "PaPPo's Pizzeria & Pub", address: "4705 Osage Beach Parkway, Osage Beach" },
+  { date: "2026-07-08", day: "Wednesday", restaurant: "Half Sauced Barbecue", address: "4185 Osage Beach Parkway, Osage Beach" },
+  { date: "2026-07-14", day: "Tuesday", restaurant: "The Highlander Public House", address: "1165 N. Bus. Hwy 5, Camdenton" },
+  { date: "2026-07-21", day: "Tuesday", restaurant: "J. B. Hook's Restaurant", address: "2260 Bagnell Dam Blvd., Lake Ozark" },
+  { date: "2026-07-28", day: "Tuesday", restaurant: "Whittle's Pub & Grub", address: "108 S. Maple, Eldon", note: "Downtown" },
+  { date: "2026-08-04", day: "Tuesday", restaurant: "Sergio's Restaurant", address: "2107 Bagnell Dam Blvd., Lake Ozark", note: "By Wood's" },
+  { date: "2026-08-11", day: "Tuesday", restaurant: "Smokin' Jones BBQ", address: "5837 Osage Beach Parkway, Osage Beach" },
+  { date: "2026-08-18", day: "Tuesday", restaurant: "Tokyo Hibachi Sushi Japanese Restaurant", address: "207 E. 2nd St., Eldon" },
+  { date: "2026-08-25", day: "Tuesday", restaurant: "Lil' Rizzo's Italian Restaurant", address: "2146 Horseshoe Bend Parkway (Hwy. HH)" },
+  { date: "2026-09-01", day: "Tuesday", restaurant: "E.C.'s Bar & Grill", address: "4344 Osage Beach Parkway, Osage Beach" },
+  { date: "2026-09-08", day: "Tuesday", restaurant: "Bear Creek Golf Club Restaurant", address: "910 Highway 42, Osage Beach" },
+  { date: "2026-09-15", day: "Tuesday", restaurant: "Buffalo Wild Wings", address: "200 Kestrel Lane, Lake Ozark" },
+  { date: "2026-09-22", day: "Tuesday", restaurant: "Stude-A-Baker's Restaurant", address: "53 Business Hwy. 5, Camdenton" },
+  { date: "2026-09-29", day: "Tuesday", restaurant: "Mama Cita's Mexican Cantina", address: "939 Chef St., Osage Beach" },
+  { date: "2026-10-06", day: "Tuesday", restaurant: "Barn-B-Q Restaurant", address: "14 Ravenwood (Horseshoe Bend)" },
+  { date: "2026-10-13", day: "Tuesday", restaurant: "The Lowlander", address: "111 E. Valley Rd., Linn Creek" },
+  { date: "2026-10-20", day: "Tuesday", restaurant: "RIP Pub & Grill", address: "1151 Bagnell Dam Blvd., Lake Ozark" },
+  { date: "2026-10-27", day: "Tuesday", restaurant: "Sergio's Taqueria", address: "4824 Osage Beach Pkwy., Osage Beach" },
+  { date: "2026-11-03", day: "Tuesday", restaurant: "Wicked Willie's Sports Grill", address: "5384 Osage Beach Parkway, Osage Beach" },
+  { date: "2026-11-10", day: "Tuesday", restaurant: "Shell's Pasta Emporium", address: "3924 Jr. Prewitt Pkwy., Osage Beach" },
+  { date: "2026-11-17", day: "Tuesday", restaurant: "Chuckwagon Cafe", address: "888 Business Highway 5, Camdenton" },
+  { date: "2026-11-24", day: "Tuesday", restaurant: "Tucker's Shucker's", address: "1339 Bagnell Dam Blvd., Lake Ozark" },
+  { date: "2026-12-01", day: "Tuesday", restaurant: "Baxter's Lakeside Grill", address: "2124 Bagnell Dam Blvd., Lake Ozark", note: "Opens at 11:30" },
+  { date: "2026-12-08", day: "Tuesday", restaurant: "Lil' Rizzo's", address: "929 Premium Outlets Drive, Osage Beach" },
+  { date: "2026-12-15", day: "Tuesday", restaurant: "Yankee Peddler Tea Room", address: "1011 Main Street, Osage Beach" },
+  { date: "2026-12-22", day: "Tuesday", restaurant: "Tirebiter's Pub", address: "4704 Jayhawk St., Osage Beach" },
+  { date: "2026-12-29", day: "Tuesday", restaurant: "Bandana's Bar-B-Q", address: "4315 Osage Beach Parkway, Osage Beach" },
+];
+
+// Helper function to format date
+function formatDate(dateStr: string): string {
+  const date = new Date(dateStr + 'T12:00:00');
+  return date.toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric'
+  });
+}
+
+// Helper to generate Google Maps link
+function getMapsLink(restaurant: string, address: string): string {
+  const query = encodeURIComponent(`${restaurant}, ${address}`);
+  return `https://www.google.com/maps/search/?api=1&query=${query}`;
+}
+
+// Group by month
+const monthGroups: Record<string, typeof lunchSchedule> = {};
+lunchSchedule.forEach(lunch => {
+  const date = new Date(lunch.date + 'T12:00:00');
+  const monthKey = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  if (!monthGroups[monthKey]) {
+    monthGroups[monthKey] = [];
+  }
+  monthGroups[monthKey].push(lunch);
+});
+---
+
+<Layout title="Lunch Bunch">
+
+<!-- Hero Section -->
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
+            Food & Fellowship
+          </span>
+          <h1 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
+            Lunch Bunch 2026
+          </h1>
+          <div class="space-y-6">
+            <p class="text-lg text-gray-600 leading-relaxed">
+              Join us for food and fellowship every week! Everyone is welcome — we'd love to get to know you better. Each Tuesday we visit a different local restaurant.
+            </p>
+            <div class="bg-gray-50 rounded-xl p-6 space-y-4">
+              <div class="flex items-start gap-3">
+                <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div>
+                  <h3 class="font-medium text-gray-900">We order at 11:30 AM</h3>
+                  <p class="text-gray-600">Arrive a few minutes early to get settled and say hello</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                <div>
+                  <h3 class="font-medium text-gray-900">Every Tuesday</h3>
+                  <p class="text-gray-600">Schedule is subject to change as needed</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+                <div>
+                  <h3 class="font-medium text-gray-900">Everyone is welcome</h3>
+                  <p class="text-gray-600">Bring a friend, meet new people, enjoy great conversation</p>
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-4">
+              <a 
+                href="#schedule"
+                class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
+              >
+                View Schedule
+              </a>
+              <a 
+                href="tel:573-365-3366" 
+                class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
+              >
+                Contact Us
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- Next Lunch Card -->
+        <div class="relative">
+          <div class="bg-gray-50 rounded-2xl p-8">
+            <div class="text-center mb-6">
+              <p class="text-sm text-gray-500 uppercase tracking-wide font-medium">Next Lunch</p>
+            </div>
+            <div id="next-lunch-card" class="text-center">
+              <h2 id="next-restaurant" class="text-2xl lg:text-3xl font-semibold text-gray-900 mb-4">Loading...</h2>
+              <p id="next-date" class="text-lg text-gray-600 mb-2"></p>
+              <p id="next-address" class="text-gray-500 mb-6"></p>
+              <a 
+                id="next-directions"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                Get Directions
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Full Schedule -->
+<section id="schedule" class="py-20 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
+          2026 Schedule
+        </span>
+        <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Where we're eating</h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          A different restaurant each week — explore the best of the Lake area with us
+        </p>
+      </div>
+
+      <div class="space-y-12">
+        {Object.entries(monthGroups).map(([month, lunches]) => (
+          <div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-6 pb-2 border-b border-gray-200">
+              {month}
+            </h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {lunches.map((lunch) => (
+                <div 
+                  class="lunch-item bg-white border border-gray-200 rounded-xl p-5 hover:shadow-lg hover:border-brand/30 transition-all duration-300 group"
+                  data-date={lunch.date}
+                >
+                  <div class="flex items-start justify-between gap-4">
+                    <div class="flex-1 min-w-0">
+                      <div class="flex items-center gap-2 mb-2">
+                        <span class="text-sm font-medium text-brand">
+                          {new Date(lunch.date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                        </span>
+                        {lunch.day !== "Tuesday" && (
+                          <span class="px-2 py-0.5 bg-yellow-100 text-yellow-800 text-xs font-medium rounded">
+                            {lunch.day}
+                          </span>
+                        )}
+                      </div>
+                      <h4 class="font-semibold text-gray-900 group-hover:text-brand transition-colors truncate">{lunch.restaurant}</h4>
+                      <p class="text-sm text-gray-500 mt-1 truncate">
+                        {lunch.address}
+                        {lunch.note && <span class="text-brand"> · {lunch.note}</span>}
+                      </p>
+                    </div>
+                    <a 
+                      href={getMapsLink(lunch.restaurant, lunch.address)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="flex-shrink-0 p-2 text-gray-400 hover:text-brand hover:bg-brand/10 rounded-lg transition-all"
+                      aria-label={`Get directions to ${lunch.restaurant}`}
+                    >
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
+            Questions?
+          </span>
+          <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
+            We'd love to hear from you
+          </h2>
+          <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+            Have questions about Lunch Bunch? Want to know more about joining us? 
+            Contact the church office and we'll be happy to help.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a 
+              href="tel:573-365-3366"
+              class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+              </svg>
+              Call (573) 365-3366
+            </a>
+            <a 
+              href="/"
+              class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
+            >
+              Back to Home
+            </a>
+          </div>
+        </div>
+        <div class="relative">
+          <div class="bg-gray-50 rounded-2xl p-8">
+            <div class="space-y-6">
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-brand/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-medium text-gray-900">Lake Ozark Christian Church</h3>
+                  <p class="text-gray-600">1560 Bagnell Dam Blvd<br>Lake Ozark, MO 65049</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-brand/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-medium text-gray-900">Phone</h3>
+                  <p class="text-gray-600">(573) 365-3366</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-brand/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-medium text-gray-900">Lunch Bunch Time</h3>
+                  <p class="text-gray-600">Tuesdays at 11:30 AM</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</Layout>
+
+<script>
+  // Lunch schedule data (duplicated for client-side)
+  const lunchSchedule = [
+    { date: "2026-01-06", restaurant: "Silver Dollar Restaurant", address: "20 Acorn Rd, Eldon" },
+    { date: "2026-01-13", restaurant: "Alley Cat's Pizzeria & Pub", address: "1263 Bagnell Dam Blvd., Lake Ozark" },
+    { date: "2026-01-20", restaurant: "Off the Cliff", address: "66 North Shore Drive (Hwy. W), Lake Ozark" },
+    { date: "2026-01-27", restaurant: "Lil' Rizzo's", address: "929 Premium Outlets Drive, Osage Beach" },
+    { date: "2026-02-03", restaurant: "Applebee's Restaurant", address: "4040 Osage Beach Parkway, Osage Beach" },
+    { date: "2026-02-10", restaurant: "Bonnie's Buffet & Grill", address: "3784 Osage Beach Parkway, Osage Beach" },
+    { date: "2026-02-17", restaurant: "Cozy Cafe", address: "1018 Highway KK, Osage Beach" },
+    { date: "2026-02-24", restaurant: "Pablito's Taqueria", address: "5896 Osage Beach Parkway, Osage Beach" },
+    { date: "2026-03-03", restaurant: "Stewart's Restaurant", address: "1260 Bagnell Dam Blvd., Lake Ozark" },
+    { date: "2026-03-10", restaurant: "Tirebiter's Pub", address: "4704 Jayhawk St., Osage Beach" },
+    { date: "2026-03-17", restaurant: "R.J.'s Family Restaurant", address: "275 Hwy. 54, Camdenton" },
+    { date: "2026-03-24", restaurant: "Chili's Restaurant", address: "2820 Osage Beach Parkway, Osage Beach" },
+    { date: "2026-03-31", restaurant: "First Watch", address: "4325 Osage Beach Parkway, Osage Beach" },
+    { date: "2026-04-07", restaurant: "The Pancake House", address: "5980 Osage Beach Parkway, Osage Beach" },
+    { date: "2026-04-14", restaurant: "Yankee Peddler Tea Room", address: "1011 Main Street, Osage Beach" },
+    { date: "2026-04-21", restaurant: "China Town", address: "465 W. Highway 54, Camdenton" },
+    { date: "2026-04-28", restaurant: "Outback Steak House", address: "3930 Osage Beach Parkway, Osage Beach" },
+    { date: "2026-05-05", restaurant: "Vista Grande Mexican Restaurant", address: "4579 Osage Beach Parkway, Osage Beach" },
+    { date: "2026-05-12", restaurant: "Chevy's Grill & Pizzeria", address: "5151 Osage Beach Parkway, Osage Beach" },
+    { date: "2026-05-19", restaurant: "Wobbly Boot's Roadhouse", address: "4717 Osage Beach Parkway, Osage Beach" },
+    { date: "2026-05-26", restaurant: "Backwater Jack's Restaurant", address: "4341 Beach Drive, Osage Beach" },
+    { date: "2026-06-02", restaurant: "Angel's Mexican Restaurant", address: "4640 Horseshoe Bend Pkwy, Four Seasons" },
+    { date: "2026-06-09", restaurant: "Twisted Tony's", address: "76 Chestnut Ave, Suite 103, Camdenton" },
+    { date: "2026-06-16", restaurant: "Dog Days", address: "1232 Jeffries Road, Osage Beach" },
+    { date: "2026-06-23", restaurant: "Culver's Restaurant", address: "5785 Osage Beach Parkway, Osage Beach" },
+    { date: "2026-06-30", restaurant: "PaPPo's Pizzeria & Pub", address: "4705 Osage Beach Parkway, Osage Beach" },
+    { date: "2026-07-08", restaurant: "Half Sauced Barbecue", address: "4185 Osage Beach Parkway, Osage Beach" },
+    { date: "2026-07-14", restaurant: "The Highlander Public House", address: "1165 N. Bus. Hwy 5, Camdenton" },
+    { date: "2026-07-21", restaurant: "J. B. Hook's Restaurant", address: "2260 Bagnell Dam Blvd., Lake Ozark" },
+    { date: "2026-07-28", restaurant: "Whittle's Pub & Grub", address: "108 S. Maple, Eldon" },
+    { date: "2026-08-04", restaurant: "Sergio's Restaurant", address: "2107 Bagnell Dam Blvd., Lake Ozark" },
+    { date: "2026-08-11", restaurant: "Smokin' Jones BBQ", address: "5837 Osage Beach Parkway, Osage Beach" },
+    { date: "2026-08-18", restaurant: "Tokyo Hibachi Sushi Japanese Restaurant", address: "207 E. 2nd St., Eldon" },
+    { date: "2026-08-25", restaurant: "Lil' Rizzo's Italian Restaurant", address: "2146 Horseshoe Bend Parkway (Hwy. HH)" },
+    { date: "2026-09-01", restaurant: "E.C.'s Bar & Grill", address: "4344 Osage Beach Parkway, Osage Beach" },
+    { date: "2026-09-08", restaurant: "Bear Creek Golf Club Restaurant", address: "910 Highway 42, Osage Beach" },
+    { date: "2026-09-15", restaurant: "Buffalo Wild Wings", address: "200 Kestrel Lane, Lake Ozark" },
+    { date: "2026-09-22", restaurant: "Stude-A-Baker's Restaurant", address: "53 Business Hwy. 5, Camdenton" },
+    { date: "2026-09-29", restaurant: "Mama Cita's Mexican Cantina", address: "939 Chef St., Osage Beach" },
+    { date: "2026-10-06", restaurant: "Barn-B-Q Restaurant", address: "14 Ravenwood (Horseshoe Bend)" },
+    { date: "2026-10-13", restaurant: "The Lowlander", address: "111 E. Valley Rd., Linn Creek" },
+    { date: "2026-10-20", restaurant: "RIP Pub & Grill", address: "1151 Bagnell Dam Blvd., Lake Ozark" },
+    { date: "2026-10-27", restaurant: "Sergio's Taqueria", address: "4824 Osage Beach Pkwy., Osage Beach" },
+    { date: "2026-11-03", restaurant: "Wicked Willie's Sports Grill", address: "5384 Osage Beach Parkway, Osage Beach" },
+    { date: "2026-11-10", restaurant: "Shell's Pasta Emporium", address: "3924 Jr. Prewitt Pkwy., Osage Beach" },
+    { date: "2026-11-17", restaurant: "Chuckwagon Cafe", address: "888 Business Highway 5, Camdenton" },
+    { date: "2026-11-24", restaurant: "Tucker's Shucker's", address: "1339 Bagnell Dam Blvd., Lake Ozark" },
+    { date: "2026-12-01", restaurant: "Baxter's Lakeside Grill", address: "2124 Bagnell Dam Blvd., Lake Ozark" },
+    { date: "2026-12-08", restaurant: "Lil' Rizzo's", address: "929 Premium Outlets Drive, Osage Beach" },
+    { date: "2026-12-15", restaurant: "Yankee Peddler Tea Room", address: "1011 Main Street, Osage Beach" },
+    { date: "2026-12-22", restaurant: "Tirebiter's Pub", address: "4704 Jayhawk St., Osage Beach" },
+    { date: "2026-12-29", restaurant: "Bandana's Bar-B-Q", address: "4315 Osage Beach Parkway, Osage Beach" },
+  ];
+
+  function formatDateNice(dateStr: string): string {
+    const date = new Date(dateStr + 'T12:00:00');
+    return date.toLocaleDateString('en-US', {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric'
+    });
+  }
+
+  function getMapsLink(restaurant: string, address: string): string {
+    const query = encodeURIComponent(`${restaurant}, ${address}`);
+    return `https://www.google.com/maps/search/?api=1&query=${query}`;
+  }
+
+  function updateNextLunch() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Find the next upcoming lunch
+    const nextLunch = lunchSchedule.find(lunch => {
+      const lunchDate = new Date(lunch.date + 'T12:00:00');
+      lunchDate.setHours(0, 0, 0, 0);
+      return lunchDate >= today;
+    });
+
+    const restaurantEl = document.getElementById('next-restaurant');
+    const dateEl = document.getElementById('next-date');
+    const addressEl = document.getElementById('next-address');
+    const directionsEl = document.getElementById('next-directions') as HTMLAnchorElement;
+
+    if (nextLunch && restaurantEl && dateEl && addressEl && directionsEl) {
+      restaurantEl.textContent = nextLunch.restaurant;
+      dateEl.textContent = formatDateNice(nextLunch.date);
+      addressEl.textContent = nextLunch.address;
+      directionsEl.href = getMapsLink(nextLunch.restaurant, nextLunch.address);
+
+      // Highlight the next lunch in the schedule
+      const lunchItems = document.querySelectorAll('.lunch-item');
+      lunchItems.forEach(item => {
+        const itemDate = item.getAttribute('data-date');
+        if (itemDate === nextLunch.date) {
+          item.classList.add('ring-2', 'ring-brand', 'bg-brand/5');
+        }
+      });
+    } else if (restaurantEl) {
+      restaurantEl.textContent = "See you next year!";
+      if (dateEl) dateEl.textContent = "The 2026 schedule has concluded";
+      if (addressEl) addressEl.textContent = "";
+      if (directionsEl) directionsEl.style.display = 'none';
+    }
+  }
+
+  // Run on page load
+  document.addEventListener('DOMContentLoaded', updateNextLunch);
+  
+  // Also run immediately in case DOMContentLoaded already fired
+  if (document.readyState !== 'loading') {
+    updateNextLunch();
+  }
+</script>
+
+<style>
+  section[id] {
+    scroll-margin-top: 2rem;
+  }
+</style>
