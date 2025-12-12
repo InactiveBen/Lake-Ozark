@@ -6,12 +6,24 @@ const heroImage = {
   alt: "Church Sanctuary"
 };
 
-const staff = [
+// Guest/Interim Ministers - temporary pulpit supply
+const guestMinisters = [
+  {
+    name: "Rev. Eddy",
+    title: "Guest Minister",
+    dates: "January 4 – February 8, 2026",
+    bio: "Rev. Eddy will be preaching and leading worship at Lake Ozark Christian Church for six weeks while our senior minister is away. We are blessed to have their leadership during this time.",
+    image: null,
+    showPhoto: false
+  }
+];
+
+const leadership = [
   {
     name: "Rev. Ron Trimmer",
     title: "Senior Minister",
     image: "https://cdn.lakeozarkdisciples.org/media/0AB4CB10-0C10-487F-BE24-28F19AD01DBB.jpeg",
-    bio: "Pastor Ron Trimmer serves as the senior minister at Lake Ozark Christian Church. With over 25 years in ministry, he brings deep faith, compassion, and a strong sense of calling to his leadership. Pastor Ron believes in a God of extravagant welcome and invites all to experience the transforming love and grace of Jesus Christ. His heart for justice, peace, and renewal shapes every aspect of his ministry. Alongside his wife Wendy and their four children, Pastor Ron continues to lead with hope and a commitment to sharing God’s love both inside and outside the church walls.",
+    bio: "Pastor Ron Trimmer serves as the senior minister at Lake Ozark Christian Church. With over 25 years in ministry, he brings deep faith, compassion, and a strong sense of calling to his leadership. Pastor Ron believes in a God of extravagant welcome and invites all to experience the transforming love and grace of Jesus Christ.",
     showPhoto: true
   },
   {
@@ -21,38 +33,43 @@ const staff = [
     bio: "Michael Lindeman leads our music ministry with creativity and dedication. His extensive background in music ministry helps create meaningful worship experiences that inspire and uplift our congregation.",
     showPhoto: true
   },
+];
+
+const staff = [
   {
     name: "Angela Edwards",
     title: "Administrative Assistant",
-    bio: "Angela Edwards keeps our church operations running smoothly. Her organizational skills and warm personality help coordinate our various ministries and maintain communication with our congregation. Angela ensures that all administrative aspects of church life function efficiently, from managing the church calendar to preparing weekly bulletins and coordinating with ministry leaders.",
+    bio: "Angela Edwards keeps our church operations running smoothly. Her organizational skills and warm personality help coordinate our various ministries and maintain communication with our congregation.",
     showPhoto: false
   },
   {
     name: "Ben Trimmer",
     title: "AV Technician",
-    bio: "Ben Trimmer serves as our Audio/Visual Technician, ensuring high quality sound and video for both in-person and online worship experiences. His technical expertise and attention to detail help create an engaging environment for our congregation to connect and worship together.",
+    bio: "Ben Trimmer serves as our Audio/Visual Technician, ensuring high quality sound and video for both in-person and online worship experiences.",
     showPhoto: false
   },
   {
     name: "Steve Martonfi",
     title: "Pianist",
-    bio: "Steve Martonfi serves as our church pianist, enriching our worship services with beautiful music. His skilled piano playing helps create a meaningful atmosphere of worship and praise for our congregation.",
+    bio: "Steve Martonfi serves as our church pianist, enriching our worship services with beautiful music.",
     showPhoto: false
   },
   {
     name: "Sandra Sloan",
-    title: "Sunday Morning Nursery Coordinator", 
-    bio: "Sandra Sloan coordinates our Sunday morning nursery program, ensuring our youngest members are cared for in a safe and nurturing environment. Her dedication helps parents participate fully in worship knowing their children are in good hands.",
+    title: "Nursery Coordinator", 
+    bio: "Sandra Sloan coordinates our Sunday morning nursery program, ensuring our youngest members are cared for in a safe and nurturing environment.",
     showPhoto: false
   }
 ];
+
+const getInitials = (name: string) => name.split(' ').map(n => n[0]).join('').slice(0, 2);
 ---
 
-<Layout title="Staff">
+<Layout title="Our Team">
 <!-- Preload hero image for faster LCP -->
 <link rel="preload" href={heroImage.url} as="image" fetchpriority="high" />
 
-<!-- Hero Section - Clean and Minimalist -->
+<!-- Hero Section -->
 <section class="relative overflow-hidden bg-white">
   <div class="absolute inset-0">
     <img 
@@ -72,7 +89,7 @@ const staff = [
         Meet our dedicated team
       </p>
       <h1 class="text-5xl md:text-7xl font-semibold text-white mb-8 leading-tight tracking-tight">
-        Our Staff
+        Our Team
       </h1>
       <p class="text-lg md:text-xl text-white/80 mb-12 max-w-2xl font-light leading-relaxed">
         Passionate individuals serving our church community with love, dedication, and unwavering faith.
@@ -80,7 +97,7 @@ const staff = [
       
       <div class="flex flex-col sm:flex-row gap-4">
         <a 
-          href="/connect" 
+          href="mailto:office@lakeozarkdisciples.org" 
           class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300 text-lg"
         >
           Contact Us
@@ -89,57 +106,76 @@ const staff = [
           href="/about" 
           class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-medium rounded-lg transition-all duration-300 text-lg"
         >
-          Learn More About Us
+          About Our Church
         </a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Staff Grid -->
-<section class="py-20 bg-white">
+<!-- Guest Minister Notice -->
+{guestMinisters.length > 0 && (
+  <section class="py-12 bg-amber-50 border-y border-amber-200">
+    <div class="container mx-auto px-6">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </div>
+          {guestMinisters.map(guest => (
+            <div>
+              <p class="font-semibold text-gray-900 text-lg">
+                {guest.name} <span class="text-amber-700">· {guest.title}</span>
+              </p>
+              <p class="text-sm text-amber-700 font-medium mt-1">{guest.dates}</p>
+              <p class="text-gray-600 mt-2">{guest.bio}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+)}
+
+<!-- Leadership Section -->
+<section class="py-20 bg-gray-50">
   <div class="container mx-auto px-6">
-    <div class="max-w-6xl mx-auto">
+    <div class="max-w-7xl mx-auto">
       <div class="text-center mb-16">
         <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
-          Meet the Team
+          Leadership
         </span>
-        <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Staff Members</h2>
+        <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Church Leadership</h2>
         <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-          Click on any staff member to learn more about their ministry and background
+          Our leadership team is dedicated to guiding our congregation in faith and service
         </p>
       </div>
       
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {staff.map(member => (
-          <div 
-            class="group cursor-pointer bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
-            onclick={`showStaffBio(${JSON.stringify(member)})`}
-          >
-            <div class="aspect-square overflow-hidden">
-              {member.showPhoto ? (
-                <img 
-                  src={member.image} 
-                  alt={member.name}
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              ) : (
-                <div class="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                  <div class="text-center">
-                    <div class="w-20 h-20 bg-brand/10 rounded-full mx-auto mb-4 flex items-center justify-center">
-                      <svg class="w-10 h-10 text-brand/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                      </svg>
-                    </div>
-                    <p class="text-gray-500 text-sm">Photo Coming Soon</p>
+      <div class="grid md:grid-cols-2 gap-8">
+        {leadership.map(person => (
+          <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300">
+            <div class="md:flex">
+              <div class="md:w-48 flex-shrink-0">
+                {person.showPhoto && person.image ? (
+                  <img 
+                    src={person.image} 
+                    alt={person.name}
+                    class="w-full h-48 md:h-full object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div class="w-full h-48 md:h-full bg-gradient-to-br from-brand/10 to-brand/20 flex items-center justify-center">
+                    <span class="text-4xl font-semibold text-brand/40">{getInitials(person.name)}</span>
                   </div>
-                </div>
-              )}
-            </div>
-            <div class="p-6">
-              <h3 class="text-xl font-semibold text-gray-900 mb-2">{member.name}</h3>
-              <p class="text-brand font-medium mb-3">{member.title}</p>
-              <p class="text-gray-600 text-sm leading-relaxed">Click to learn more about {member.name.split(' ')[0]}'s ministry</p>
+                )}
+              </div>
+              <div class="p-6 md:p-8 flex-1">
+                <h3 class="text-2xl font-semibold text-gray-900 mb-1">{person.name}</h3>
+                <p class="text-brand font-medium mb-4">{person.title}</p>
+                <p class="text-gray-600 leading-relaxed">{person.bio}</p>
+              </div>
             </div>
           </div>
         ))}
@@ -147,6 +183,157 @@ const staff = [
     </div>
   </div>
 </section>
+
+<!-- Staff Section -->
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
+          Our Team
+        </span>
+        <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Staff Members</h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          Meet the dedicated individuals who help make our church a welcoming place
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-6">
+        {staff.map(person => (
+          <div class="flex gap-4 p-6 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+            <div class="w-14 h-14 rounded-full bg-brand/10 flex items-center justify-center flex-shrink-0">
+              <span class="text-lg font-semibold text-brand/60">{getInitials(person.name)}</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="text-lg font-semibold text-gray-900">{person.name}</h3>
+              <p class="text-brand text-sm font-medium mb-2">{person.title}</p>
+              <p class="text-gray-600 text-sm leading-relaxed">{person.bio}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Contact CTA -->
+<section class="py-20 bg-gray-50">
+  <div class="container mx-auto px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-12 items-start">
+        <div class="lg:py-4">
+          <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-4">Get in Touch</p>
+          <h2 class="text-3xl lg:text-4xl font-semibold text-gray-900 mb-6">
+            We'd Love to Hear From You
+          </h2>
+          <p class="text-gray-600 mb-8 leading-relaxed">
+            Have questions about our church, ministries, or want to learn more? 
+            Our team is here to help and would be happy to connect with you.
+          </p>
+          
+          <div class="space-y-4 mb-8">
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+                <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+              </div>
+              <div>
+                <p class="font-medium text-gray-900">Email Us</p>
+                <a href="mailto:office@lakeozarkdisciples.org" class="text-sm text-brand hover:text-brand-dark">office@lakeozarkdisciples.org</a>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+                <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                </svg>
+              </div>
+              <div>
+                <p class="font-medium text-gray-900">Call Us</p>
+                <a href="tel:573-365-3366" class="text-sm text-brand hover:text-brand-dark">(573) 365-3366</a>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+                <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+              </div>
+              <div>
+                <p class="font-medium text-gray-900">Visit Us</p>
+                <p class="text-sm text-gray-500">1560 Bagnell Dam Blvd, Lake Ozark, MO 65049</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex flex-col sm:flex-row gap-3">
+            <a 
+              href="mailto:office@lakeozarkdisciples.org"
+              class="inline-flex items-center justify-center px-6 py-3 bg-brand hover:bg-brand-dark text-white font-medium rounded transition-colors"
+            >
+              Send Email
+            </a>
+            <a 
+              href="https://www.google.com/maps/dir//Lake+Ozark+Christian+Church,+1560+Bagnell+Dam+Blvd,+Lake+Ozark,+MO+65049"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded transition-colors"
+            >
+              Get Directions
+            </a>
+          </div>
+        </div>
+        
+        <!-- Office Hours Card -->
+        <div class="bg-white rounded-2xl border border-gray-200 p-8">
+          <h3 class="text-xl font-semibold text-gray-900 mb-6">Office Hours</h3>
+          
+          <div class="space-y-4">
+            <div class="flex justify-between items-center py-3 border-b border-gray-100">
+              <span class="text-gray-600">Monday</span>
+              <span class="font-medium text-gray-900">9:00 AM – 1:00 PM</span>
+            </div>
+            <div class="flex justify-between items-center py-3 border-b border-gray-100">
+              <span class="text-gray-600">Tuesday</span>
+              <span class="font-medium text-gray-900">9:00 AM – 1:00 PM</span>
+            </div>
+            <div class="flex justify-between items-center py-3 border-b border-gray-100">
+              <span class="text-gray-600">Wednesday</span>
+              <span class="font-medium text-gray-900">9:00 AM – 1:00 PM</span>
+            </div>
+            <div class="flex justify-between items-center py-3 border-b border-gray-100">
+              <span class="text-gray-600">Thursday</span>
+              <span class="font-medium text-gray-900">9:00 AM – 1:00 PM</span>
+            </div>
+            <div class="flex justify-between items-center py-3 border-b border-gray-100">
+              <span class="text-gray-600">Friday</span>
+              <span class="text-gray-500">Closed</span>
+            </div>
+            <div class="flex justify-between items-center py-3 border-b border-gray-100">
+              <span class="text-gray-600">Saturday</span>
+              <span class="text-gray-500">Closed</span>
+            </div>
+            <div class="flex justify-between items-center py-3">
+              <span class="text-gray-600">Sunday</span>
+              <span class="font-medium text-brand">Worship at 10:30 AM</span>
+            </div>
+          </div>
+          
+          <div class="mt-6 pt-6 border-t border-gray-200">
+            <p class="text-sm text-gray-500">
+              The pastor is available by appointment for pastoral care, counseling, and meetings.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</Layout>
 
 <style>
   * {
@@ -157,65 +344,3 @@ const staff = [
     font-family: 'Albert Sans', system-ui, sans-serif;
   }
 </style>
-</Layout>
-
-<script>
-  declare global {
-    interface Window {
-      showStaffBio: (member: any) => void;
-    }
-  }
-
-  function showStaffBio(member) {
-    const modal = document.createElement('div');
-    modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[150]';
-    modal.onclick = (e) => {
-      if (e.target === modal) {
-        modal.remove();
-      }
-    };
-    
-    const photoContent = member.showPhoto 
-      ? `<div class="w-32 h-32 rounded-full overflow-hidden mb-6 mx-auto border-4 border-white shadow-lg">
-           <img 
-             src="${member.image || ''}" 
-             alt="${member.name}"
-             class="w-full h-full object-cover"
-           />
-         </div>`
-      : `<div class="w-32 h-32 rounded-full bg-gradient-to-br from-brand/10 to-brand/20 flex items-center justify-center mb-6 mx-auto border-4 border-white shadow-lg">
-           <svg class="w-16 h-16 text-brand/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-           </svg>
-         </div>`;
-    
-    modal.innerHTML = `
-      <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div class="p-8 text-center">
-          <button 
-            onclick="this.closest('.fixed').remove()"
-            class="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full transition-colors"
-            aria-label="Close modal"
-          >
-            <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-          
-          ${photoContent}
-          
-          <h2 class="text-3xl font-semibold text-gray-900 mb-2">${member.name}</h2>
-          <p class="text-brand text-lg font-medium mb-6">${member.title}</p>
-          
-          <div class="bg-gray-50 p-6 rounded-xl text-left">
-            <p class="text-gray-700 leading-relaxed">${member.bio}</p>
-          </div>
-        </div>
-      </div>
-    `;
-    
-    document.body.appendChild(modal);
-  }
-  
-  window.showStaffBio = showStaffBio;
-</script>

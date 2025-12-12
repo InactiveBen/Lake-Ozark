@@ -1,0 +1,363 @@
+---
+interface Props {
+  id?: string;
+  showHeader?: boolean;
+}
+
+const { id = 'donation', showHeader = true } = Astro.props;
+const formId = `${id}-form`;
+const prefix = id;
+---
+
+<div class="bg-gray-50 border border-gray-200 rounded-lg overflow-hidden">
+  {showHeader && (
+    <div class="bg-white px-6 py-4 border-b border-gray-200">
+      <h3 class="font-semibold text-gray-900">Make a Donation</h3>
+    </div>
+  )}
+  
+  <form id={formId} class="p-6 space-y-5" data-prefix={prefix}>
+    <!-- Donation Type -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-2">Gift Type</label>
+      <div class="grid grid-cols-2 gap-3">
+        <label class="relative">
+          <input type="radio" name="donationType" value="one-time" class="peer sr-only" />
+          <div class="px-4 py-3 border border-gray-300 bg-white cursor-pointer peer-checked:border-brand peer-checked:ring-1 peer-checked:ring-brand transition-all text-center rounded">
+            <span class="font-medium text-gray-900">One-Time</span>
+          </div>
+        </label>
+        <label class="relative">
+          <input type="radio" name="donationType" value="recurring" checked class="peer sr-only" />
+          <div class="px-4 py-3 border border-gray-300 bg-white cursor-pointer peer-checked:border-brand peer-checked:ring-1 peer-checked:ring-brand transition-all text-center rounded">
+            <span class="font-medium text-gray-900">Recurring</span>
+          </div>
+        </label>
+      </div>
+    </div>
+    
+    <!-- Frequency -->
+    <div class="frequency-selection" data-field="frequency">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Billing Frequency</label>
+      <select 
+        name="frequency" 
+        class="frequency-select w-full px-3 py-2.5 border border-gray-300 rounded bg-white text-gray-900 focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none"
+      >
+        <option value="weekly">Weekly</option>
+        <option value="biweekly">Bi-weekly (Every 2 Weeks)</option>
+        <option value="monthly" selected>Monthly</option>
+        <option value="yearly">Annually</option>
+      </select>
+    </div>
+
+    <!-- Amount -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-2">Donation Amount</label>
+      <div class="grid grid-cols-4 gap-2 mb-3">
+        <button type="button" class="amount-btn py-2.5 border border-gray-300 rounded bg-white font-medium text-gray-700 hover:border-gray-400 transition-all" data-amount="25">$25</button>
+        <button type="button" class="amount-btn py-2.5 border border-brand rounded bg-brand/5 font-medium text-brand selected" data-amount="50">$50</button>
+        <button type="button" class="amount-btn py-2.5 border border-gray-300 rounded bg-white font-medium text-gray-700 hover:border-gray-400 transition-all" data-amount="100">$100</button>
+        <button type="button" class="amount-btn py-2.5 border border-gray-300 rounded bg-white font-medium text-gray-700 hover:border-gray-400 transition-all" data-amount="250">$250</button>
+      </div>
+      <div class="relative">
+        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+        <input 
+          type="number" 
+          name="amount"
+          class="custom-amount w-full pl-7 pr-3 py-2.5 border border-gray-300 rounded bg-white focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none"
+          min="5" 
+          max="999999"
+          step="0.01"
+          value="50"
+          placeholder="Enter amount"
+        />
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+      <input 
+        type="email" 
+        name="email"
+        required
+        placeholder="you@example.com"
+        class="email-input w-full px-3 py-2.5 border border-gray-300 rounded bg-white focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none"
+      />
+      <p class="text-xs text-gray-500 mt-1">We'll send your receipt to this address.</p>
+    </div>
+
+    <!-- Cover Fees -->
+    <div class="flex items-start gap-3 py-3 border-t border-b border-gray-200">
+      <input 
+        type="checkbox" 
+        name="coverFees"
+        class="cover-fees w-4 h-4 mt-0.5 text-brand focus:ring-brand border-gray-300 rounded"
+      />
+      <label class="cursor-pointer cover-fees-label">
+        <span class="text-sm font-medium text-gray-900">Cover transaction fees</span>
+        <span class="block text-xs text-gray-500">Add <span class="fee-amount">$1.75</span> (2.9% + $0.30) so Lake Ozark Christian Church receives your full donation.</span>
+      </label>
+    </div>
+
+    <!-- Legal Disclaimer for Recurring -->
+    <div class="recurring-disclaimer text-xs text-gray-500 leading-relaxed">
+      By clicking "Complete Donation", you authorize Lake Ozark Christian Church Inc. to charge your payment method <strong class="text-gray-700 disclaimer-amount">$50.00</strong> <strong class="text-gray-700 disclaimer-frequency">every month</strong> until cancelled. Manage or cancel at <a href="https://donork.it/locc" target="_blank" rel="noopener noreferrer" class="text-brand hover:underline">donork.it/locc</a>. View our <a href="/legal/terms" class="text-brand hover:underline">Terms</a>, <a href="/legal/privacy" class="text-brand hover:underline">Privacy Policy</a>, and <a href="/legal/refunds" class="text-brand hover:underline">Refund Policy</a>.
+    </div>
+
+    <!-- Submit Button -->
+    <button 
+      type="submit"
+      class="donate-btn w-full bg-brand hover:bg-brand-dark text-white font-medium py-3 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      <span class="btn-text">Complete Donation</span>
+      <span class="btn-loading hidden">Processing...</span>
+    </button>
+
+    <!-- Security Note -->
+    <div class="flex items-center justify-center gap-1.5 text-xs text-gray-400 pt-2">
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+      </svg>
+      <span>Secure donation by <a href="https://donorkit.io" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-gray-600">DonorKit</a></span>
+    </div>
+  </form>
+</div>
+
+<style>
+  .amount-btn.selected {
+    border-color: #8B5A2B;
+    background-color: rgba(139, 90, 43, 0.05);
+    color: #8B5A2B;
+  }
+  
+  /* Hide number input spinners */
+  .custom-amount::-webkit-inner-spin-button,
+  .custom-amount::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .custom-amount {
+    -moz-appearance: textfield;
+  }
+</style>
+
+<script>
+  // Initialize all donation forms on the page
+  function initDonationForms() {
+    document.querySelectorAll('form[data-prefix]').forEach(form => {
+      initDonationForm(form as HTMLFormElement);
+    });
+  }
+
+  function initDonationForm(form: HTMLFormElement) {
+    const prefix = form.dataset.prefix || 'donation';
+    
+    // Helper to calculate processing fee
+    function calculateFee(amount: number): number {
+      return Math.round((amount * 0.029 + 0.30) * 100) / 100;
+    }
+    
+    // Get form elements
+    const amountInput = form.querySelector('.custom-amount') as HTMLInputElement;
+    const frequencySelect = form.querySelector('.frequency-select') as HTMLSelectElement;
+    const frequencyDiv = form.querySelector('.frequency-selection') as HTMLElement;
+    const coverFeesCheckbox = form.querySelector('.cover-fees') as HTMLInputElement;
+    const coverFeesLabel = form.querySelector('.cover-fees-label') as HTMLElement;
+    const feeAmountSpan = form.querySelector('.fee-amount') as HTMLElement;
+    const disclaimerDiv = form.querySelector('.recurring-disclaimer') as HTMLElement;
+    const disclaimerAmount = form.querySelector('.disclaimer-amount') as HTMLElement;
+    const disclaimerFrequency = form.querySelector('.disclaimer-frequency') as HTMLElement;
+    const donateBtn = form.querySelector('.donate-btn') as HTMLButtonElement;
+    const btnText = form.querySelector('.btn-text') as HTMLElement;
+    const btnLoading = form.querySelector('.btn-loading') as HTMLElement;
+    const amountBtns = form.querySelectorAll('.amount-btn');
+    
+    // Update displays
+    function updateDisplays() {
+      const amount = parseFloat(amountInput?.value || '50') || 50;
+      const isRecurring = (form.querySelector('input[name="donationType"]:checked') as HTMLInputElement)?.value === 'recurring';
+      const coverFees = coverFeesCheckbox?.checked || false;
+      
+      // Update fee display
+      if (feeAmountSpan) {
+        feeAmountSpan.textContent = `$${calculateFee(amount).toFixed(2)}`;
+      }
+      
+      // Show/hide frequency
+      if (frequencyDiv) {
+        frequencyDiv.style.display = isRecurring ? 'block' : 'none';
+      }
+      
+      // Show/hide disclaimer
+      if (disclaimerDiv) {
+        if (isRecurring) {
+          let totalAmount = amount;
+          if (coverFees) totalAmount += calculateFee(amount);
+          
+          if (disclaimerAmount) disclaimerAmount.textContent = `$${totalAmount.toFixed(2)}`;
+          if (disclaimerFrequency) {
+            const freqMap: Record<string, string> = {
+              'weekly': 'every week',
+              'biweekly': 'every 2 weeks',
+              'monthly': 'every month',
+              'yearly': 'every year'
+            };
+            disclaimerFrequency.textContent = freqMap[frequencySelect?.value || 'monthly'] || 'every month';
+          }
+          disclaimerDiv.style.display = 'block';
+        } else {
+          disclaimerDiv.style.display = 'none';
+        }
+      }
+    }
+    
+    // Amount button clicks
+    amountBtns.forEach(btn => {
+      btn.addEventListener('click', function(this: HTMLElement) {
+        const amount = this.dataset.amount;
+        if (!amount) return;
+        
+        if (amountInput) amountInput.value = amount;
+        
+        // Update button styles
+        amountBtns.forEach(b => {
+          b.classList.remove('border-brand', 'bg-brand/5', 'text-brand', 'selected');
+          b.classList.add('border-gray-300', 'text-gray-700', 'bg-white');
+        });
+        this.classList.remove('border-gray-300', 'text-gray-700', 'bg-white');
+        this.classList.add('border-brand', 'bg-brand/5', 'text-brand', 'selected');
+        
+        updateDisplays();
+      });
+    });
+    
+    // Custom amount input
+    if (amountInput) {
+      amountInput.addEventListener('input', function() {
+        amountBtns.forEach(b => {
+          b.classList.remove('border-brand', 'bg-brand/5', 'text-brand', 'selected');
+          b.classList.add('border-gray-300', 'text-gray-700', 'bg-white');
+        });
+        updateDisplays();
+      });
+    }
+    
+    // Donation type change
+    form.querySelectorAll('input[name="donationType"]').forEach(radio => {
+      radio.addEventListener('change', updateDisplays);
+    });
+    
+    // Frequency change
+    if (frequencySelect) {
+      frequencySelect.addEventListener('change', updateDisplays);
+    }
+    
+    // Cover fees change
+    if (coverFeesCheckbox) {
+      coverFeesCheckbox.addEventListener('change', updateDisplays);
+    }
+    
+    // Make cover fees label clickable
+    if (coverFeesLabel && coverFeesCheckbox) {
+      coverFeesLabel.addEventListener('click', () => {
+        coverFeesCheckbox.checked = !coverFeesCheckbox.checked;
+        updateDisplays();
+      });
+    }
+    
+    // Form submission
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      if (!donateBtn || !btnText || !btnLoading) return;
+      
+      const formData = new FormData(form);
+      let amount = parseFloat(formData.get('amount')?.toString() || '0');
+      const email = formData.get('email')?.toString() || '';
+      const donationType = formData.get('donationType')?.toString() || 'one-time';
+      const frequency = formData.get('frequency')?.toString() || 'monthly';
+      const coverFees = formData.get('coverFees') === 'on';
+      
+      if (coverFees) {
+        amount += calculateFee(amount);
+      }
+      
+      // Validation
+      if (!amount || amount < 5) {
+        showToast('Please enter an amount of at least $5', 'warning', 3000);
+        return;
+      }
+      if (amount > 999999) {
+        showToast('Amount cannot exceed $999,999', 'warning', 3000);
+        return;
+      }
+      if (!email || !email.includes('@')) {
+        showToast('Please enter a valid email address', 'warning', 3000);
+        return;
+      }
+      
+      // Show loading
+      donateBtn.disabled = true;
+      btnText.classList.add('hidden');
+      btnLoading.classList.remove('hidden');
+      
+      const loadingToastId = showToast('Processing your donation...', 'info', 0);
+      
+      try {
+        const response = await fetch('https://api.locc.us/api/v2/donation', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ amount, email, donationType, frequency, coverFees })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success && data.url) {
+          removeToast(loadingToastId);
+          showToast('Redirecting to payment...', 'success', 2000);
+          setTimeout(() => { window.location.href = data.url; }, 500);
+        } else {
+          throw new Error(data.message || 'Failed to create donation session');
+        }
+        
+      } catch (error) {
+        console.error('Donation error:', error);
+        removeToast(loadingToastId);
+        showToast('There was an error. Please try again.', 'error', 5000);
+        donateBtn.disabled = false;
+        btnText.classList.remove('hidden');
+        btnLoading.classList.add('hidden');
+      }
+    });
+    
+    // Initialize
+    updateDisplays();
+  }
+
+  // Toast functions (use global if available, otherwise define)
+  function showToast(message: string, type: 'success' | 'error' | 'info' | 'warning' = 'info', duration: number = 5000): string {
+    if (typeof (window as any).showToast === 'function') {
+      return (window as any).showToast(message, type, duration);
+    }
+    // Fallback to alert
+    if (type === 'error' || type === 'warning') {
+      alert(message);
+    }
+    return '';
+  }
+
+  function removeToast(toastId: string) {
+    if (typeof (window as any).removeToast === 'function') {
+      (window as any).removeToast(toastId);
+    }
+  }
+
+  // Initialize on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDonationForms);
+  } else {
+    initDonationForms();
+  }
+</script>
+

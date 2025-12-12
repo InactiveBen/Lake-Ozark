@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import PrayerRequestForm from '../components/PrayerRequestForm.astro';
 import SalvationMarquee from '../components/SalvationMarquee';
+import DonationForm from '../components/DonationForm.astro';
 
 import { isLocalVisitor } from '../utils/locationCheck';
 
@@ -152,66 +153,83 @@ function formatDate(dateStr: string): string {
 </section>
 
 <!-- Visit Us Section -->
-<section id="visit" class="py-20 bg-white">
+<section id="visit" class="py-20 bg-gray-50">
   <div class="container mx-auto px-6">
     <div class="max-w-7xl mx-auto">
-      <div class="grid lg:grid-cols-2 gap-16 items-center">
-        <div>
-          <span id="location-greeting" class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
-            You're invited
-          </span>
-          <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
-            Join us this Sunday
+      <div class="grid lg:grid-cols-2 gap-12 items-start">
+        <!-- Content on LEFT -->
+        <div class="lg:py-4">
+          <p id="location-greeting" class="text-sm font-semibold text-brand uppercase tracking-wider mb-4">
+            Visit Us
+          </p>
+          <h2 class="text-3xl lg:text-4xl font-semibold text-gray-900 mb-6">
+            Join Us This Sunday
           </h2>
-          <div class="space-y-6">
-            <p id="distance-message" class="text-lg text-gray-600 leading-relaxed">
-              Whether you're new to faith or have been walking with God for years, you'll find a warm welcome here. No perfect people allowed — just Christ followers doing life together.
-            </p>
-            <div class="bg-gray-50 rounded-xl p-6 space-y-4">
-              <div class="flex items-start gap-3">
-                <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          <p id="distance-message" class="text-gray-600 mb-8 leading-relaxed">
+            Whether you're new to faith or have been walking with God for years, you'll find a warm welcome here. 
+            No perfect people allowed — just Christ followers doing life together.
+          </p>
+          
+          <div class="space-y-4 mb-8">
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+                <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
-                <div>
-                  <h3 class="font-medium text-gray-900">Sundays at 10:30 AM</h3>
-                  <p class="text-gray-600">About an hour — come as you are, casual dress welcome</p>
-                </div>
               </div>
-              <div class="flex items-start gap-3">
-                <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                </svg>
-                <div>
-                  <h3 class="font-medium text-gray-900">1560 Bagnell Dam Blvd</h3>
-                  <p class="text-gray-600">Lake Ozark, MO 65049 · Free parking available</p>
-                </div>
+              <div>
+                <p class="font-medium text-gray-900">Sunday Worship at 10:30 AM</p>
+                <p class="text-sm text-gray-500">About an hour · Casual dress welcome</p>
               </div>
-             
             </div>
-            <div class="flex flex-col sm:flex-row gap-4">
-              <a 
-                id="directions-link"
-                href="https://www.google.com/maps/dir//Lake+Ozark+Christian+Church,+1560+Bagnell+Dam+Blvd,+Lake+Ozark,+MO+65049?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=visit_section&utm_content=get_directions"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
-              >
-                Get Directions
-              </a>
-              <a 
-                href="https://www.youtube.com/channel/UCUcLKfZo5Su6-ypmt1dkPKA?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=visit_section&utm_content=watch_online"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
-              >
-                Watch Online
-              </a>
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+                <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+              </div>
+              <div>
+                <p class="font-medium text-gray-900">1560 Bagnell Dam Blvd</p>
+                <p class="text-sm text-gray-500">Lake Ozark, MO 65049</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+                <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+                </svg>
+              </div>
+              <div>
+                <p class="font-medium text-gray-900">Free parking available</p>
+                <p class="text-sm text-gray-500">Accessible entrance on south side</p>
+              </div>
             </div>
           </div>
+          
+          <div class="flex flex-col sm:flex-row gap-3">
+            <a 
+              id="directions-link"
+              href="https://www.google.com/maps/dir//Lake+Ozark+Christian+Church,+1560+Bagnell+Dam+Blvd,+Lake+Ozark,+MO+65049?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=visit_section&utm_content=get_directions"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center px-6 py-3 bg-brand hover:bg-brand-dark text-white font-medium rounded transition-colors"
+            >
+              Get Directions
+            </a>
+            <a 
+              href="https://www.youtube.com/channel/UCUcLKfZo5Su6-ypmt1dkPKA?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=visit_section&utm_content=watch_online"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded transition-colors"
+            >
+              Watch Online
+            </a>
+          </div>
         </div>
+        <!-- Map on RIGHT -->
         <div class="relative">
-          <div id="mapbox-map" class="w-full h-[400px] lg:h-[600px] rounded-2xl"></div>
+          <div id="mapbox-map" class="w-full h-[400px] lg:h-[500px] rounded-lg border border-gray-200"></div>
         </div>
       </div>
     </div>
@@ -222,17 +240,15 @@ function formatDate(dateStr: string): string {
 <link href="https://unpkg.com/@pqina/flip/dist/flip.min.css" rel="stylesheet">
 
 <!-- Live Service Countdown -->
-<section id="live-service" class="py-20 bg-white">
+<section id="live-service" class="py-20 bg-white border-t border-gray-100">
   <div class="container mx-auto px-6">
     <div class="max-w-7xl mx-auto">
       <div id="countdown-container" class="hidden">
-        <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div class="grid lg:grid-cols-2 gap-12 items-start">
           <!-- Countdown on LEFT -->
-          <div class="relative hidden lg:block">
-            <div class="bg-gray-50 rounded-2xl p-8">
-              <div class="text-center mb-8">
-                <p class="text-sm text-gray-500 uppercase tracking-widest font-medium">Countdown to service</p>
-              </div>
+          <div class="relative">
+            <div class="bg-gray-50 border border-gray-200 rounded-lg p-8">
+              <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider text-center mb-6">Time Until Service</p>
               <div 
                 class="tick flip-clock-container"
                 data-did-init="handleFlipClockInit"
@@ -249,71 +265,84 @@ function formatDate(dateStr: string): string {
               </div>
             </div>
           </div>
-          <!-- Text on RIGHT -->
-          <div>
-            <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
-              Next live service
-            </span>
-            <h2 id="service-title" class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
+          <!-- Content on RIGHT -->
+          <div class="lg:py-4">
+            <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-4">Live Stream</p>
+            <h2 id="service-title" class="text-3xl lg:text-4xl font-semibold text-gray-900 mb-6">
               Loading...
             </h2>
-            <div class="space-y-6">
-              <p class="text-lg text-gray-600 leading-relaxed">
-                Join us online for worship, prayer, and an inspiring message. Our live stream begins every Sunday at 10:30 AM.
-              </p>
-              <div class="bg-gray-50 rounded-xl p-6 space-y-4">
-                <div class="flex items-start gap-3">
-                  <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+            <p class="text-gray-600 mb-8 leading-relaxed">
+              Join us online for worship, prayer, and an inspiring message. Stream live every Sunday at 10:30 AM Central.
+            </p>
+            
+            <div class="space-y-4 mb-8">
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
                   </svg>
-                  <div>
-                    <h3 class="font-medium text-gray-900">Watch from anywhere</h3>
-                    <p class="text-gray-600">Stream live on YouTube or through our website</p>
-                  </div>
                 </div>
-                <div class="flex items-start gap-3">
-                  <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                  </svg>
-                  <div>
-                    <h3 class="font-medium text-gray-900">Join the conversation</h3>
-                    <p class="text-gray-600">Chat with our community during the live stream</p>
-                  </div>
+                <div>
+                  <p class="font-medium text-gray-900">Watch from anywhere</p>
+                  <p class="text-sm text-gray-500">Stream on YouTube or our website</p>
                 </div>
               </div>
-              <div class="flex flex-col sm:flex-row gap-4">
-                <a 
-                  id="live-stream-btn"
-                  href="/live?utm_source=lakeozarkdisciples&utm_medium=countdown&utm_campaign=button" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
-                >
-                  Join Live Stream
-                </a>
-                <a 
-                  href="https://www.youtube.com/channel/UCUcLKfZo5Su6-ypmt1dkPKA?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=live_service&utm_content=watch_past_services"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
-                >
-                  Watch Past Services
-                </a>
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-medium text-gray-900">Live chat available</p>
+                  <p class="text-sm text-gray-500">Connect with our community in real time</p>
+                </div>
               </div>
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-medium text-gray-900">On-demand replays</p>
+                  <p class="text-sm text-gray-500">Missed a service? Watch anytime on YouTube</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-3">
+              <a 
+                id="live-stream-btn"
+                href="/live?utm_source=lakeozarkdisciples&utm_medium=countdown&utm_campaign=button" 
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center px-6 py-3 bg-brand hover:bg-brand-dark text-white font-medium rounded transition-colors"
+              >
+                Join Live Stream
+              </a>
+              <a 
+                href="https://www.youtube.com/channel/UCUcLKfZo5Su6-ypmt1dkPKA?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=live_service&utm_content=watch_past_services"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded transition-colors"
+              >
+                Past Services
+              </a>
             </div>
           </div>
         </div>
       </div>
       
-      <div id="countdown-loading" class="py-8 text-center">
+      <div id="countdown-loading" class="py-12 text-center">
         <div class="inline-flex items-center gap-3">
-          <div class="animate-spin rounded-full h-8 w-8 border-2 border-brand border-t-transparent"></div>
-          <p class="text-lg text-gray-600">Loading next service...</p>
+          <div class="animate-spin rounded-full h-6 w-6 border-2 border-brand border-t-transparent"></div>
+          <p class="text-gray-500">Loading service information...</p>
         </div>
       </div>
       
-      <div id="countdown-error" class="hidden py-8 text-center">
-        <p class="text-gray-600">Unable to load service information</p>
+      <div id="countdown-error" class="hidden py-12 text-center">
+        <p class="text-gray-500">Unable to load service information. Please try again later.</p>
       </div>
     </div>
   </div>
@@ -323,123 +352,146 @@ function formatDate(dateStr: string): string {
 <script src="https://unpkg.com/@pqina/flip/dist/flip.min.js"></script>
 
 <!-- After School Program -->
-<section id="after-school" class="py-20 bg-white">
+<section id="after-school" class="py-20 bg-gray-50">
   <div class="container mx-auto px-6">
     <div class="max-w-7xl mx-auto">
-      <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <div class="grid lg:grid-cols-2 gap-12 items-start">
         <!-- Image on LEFT -->
-        <div class="relative hidden lg:block">
+        <div class="relative">
           <img 
             src="https://cdn.lakeozarkdisciples.org/media/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg"
             alt="Children participating in after-school activities"
-            class="w-full h-[600px] object-cover rounded-2xl"
+            class="w-full h-[500px] object-cover rounded-lg"
             loading="lazy"
             decoding="async"
           />
         </div>
-        <!-- Text on RIGHT -->
-        <div>
+        <!-- Content on RIGHT -->
+        <div class="lg:py-4">
 {isLocal ? (
             <>
-              <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
-                Community program
-              </span>
-              <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
-                After-school program
+              <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-4">Community Program</p>
+              <h2 class="text-3xl lg:text-4xl font-semibold text-gray-900 mb-6">
+                After-School Program
               </h2>
-              <div class="space-y-6">
-                <p class="text-lg text-gray-600 leading-relaxed">
-                  Give your child a safe, engaging space to grow after school! Our program combines fun activities, homework help, and meaningful connections - all in a nurturing environment.
-                </p>
-                <div class="bg-gray-50 rounded-xl p-6 space-y-4">
-                  <div class="flex items-start gap-3">
-                    <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              <p class="text-gray-600 mb-8 leading-relaxed">
+                A safe, supervised environment where children can learn, play, and grow. Our program provides 
+                homework help, engaging activities, and meaningful connections in a nurturing Christian setting.
+              </p>
+              
+              <div class="space-y-4 mb-8">
+                <div class="flex items-start gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
-                    <div>
-                      <h3 class="font-medium text-gray-900">Perfect for busy parents</h3>
-                      <p class="text-gray-600">Wednesdays 3:30-5:30 PM, giving you time to handle errands or work commitments</p>
-                    </div>
                   </div>
-                  <div class="flex items-start gap-3">
-                    <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                    </svg>
-                    <div>
-                      <h3 class="font-medium text-gray-900">Safe and supervised</h3>
-                      <p class="text-gray-600 group relative">
-                        Qualified staff and volunteers ensure a secure, caring environment
-                        <span class="tooltip invisible group-hover:visible absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg">
-                          For your child's safety, every staff member and volunteer must pass comprehensive background checks. 
-                        </span>
-                      </p>
-                    </div>
+                  <div>
+                    <p class="font-medium text-gray-900">Wednesdays, 3:30 – 5:30 PM</p>
+                    <p class="text-sm text-gray-500">During the school year</p>
                   </div>
                 </div>
-                <div class="flex flex-col sm:flex-row gap-4">
-                  <a 
-                    href="https://docs.google.com/forms/d/e/1FAIpQLSdIri3EaabwsN84Al7Xd7zVnWI7Jzfaoyu6NVkENI6w9FRaeA/viewform?usp=sf_link&utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=after_school&utm_content=reserve_spot"
-                    target="_blank"
-                    rel="noopener noreferrer" 
-                    class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
-                  >
-                    Reserve Your Spot
-                  </a>
-                  <a 
-                    href="/children-youth?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=after_school&utm_content=learn_more" 
-                    class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
-                  >
-                    Learn More
-                  </a>
+                <div class="flex items-start gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="font-medium text-gray-900">Background-checked staff</p>
+                    <p class="text-sm text-gray-500">All volunteers complete comprehensive screening</p>
+                  </div>
                 </div>
+                <div class="flex items-start gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="font-medium text-gray-900">Free of charge</p>
+                    <p class="text-sm text-gray-500">Open to all families in the community</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="flex flex-col sm:flex-row gap-3">
+                <a 
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSdIri3EaabwsN84Al7Xd7zVnWI7Jzfaoyu6NVkENI6w9FRaeA/viewform?usp=sf_link&utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=after_school&utm_content=reserve_spot"
+                  target="_blank"
+                  rel="noopener noreferrer" 
+                  class="inline-flex items-center justify-center px-6 py-3 bg-brand hover:bg-brand-dark text-white font-medium rounded transition-colors"
+                >
+                  Register Your Child
+                </a>
+                <a 
+                  href="/children-youth?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=after_school&utm_content=learn_more" 
+                  class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded transition-colors"
+                >
+                  Program Details
+                </a>
               </div>
             </>
           ) : (
             <>
-              <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
-                Children's ministry
-              </span>
-              <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
-                Family-friendly worship
+              <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-4">Children's Ministry</p>
+              <h2 class="text-3xl lg:text-4xl font-semibold text-gray-900 mb-6">
+                Family-Friendly Worship
               </h2>
-              <div class="space-y-6">
-                <p class="text-lg text-gray-600 leading-relaxed">
-                  Visiting with family? We have engaging programs for children of all ages during our services. Your children will experience God's love through age-appropriate activities and teaching.
-                </p>
-                <div class="bg-gray-50 rounded-xl p-6 space-y-4">
-                  <div class="flex items-start gap-3">
-                    <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+              <p class="text-gray-600 mb-8 leading-relaxed">
+                Visiting with family? We offer engaging, age-appropriate programs for children during our services. 
+                Your kids will learn about God's love while you enjoy the worship experience.
+              </p>
+              
+              <div class="space-y-4 mb-8">
+                <div class="flex items-start gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
                     </svg>
-                    <div>
-                      <h3 class="font-medium text-gray-900">Children's church (ages 4-13)</h3>
-                      <p class="text-gray-600">Available during our 10:30 AM service, featuring interactive Bible lessons, music, and activities</p>
-                    </div>
                   </div>
-                  <div class="flex items-start gap-3">
-                    <svg class="w-6 h-6 text-brand mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                    </svg>
-                    <div>
-                      <h3 class="font-medium text-gray-900">Nursery care (ages 0-3)</h3>
-                      <p class="text-gray-600">Available at both services, staffed by caring volunteers who have passed background checks</p>
-                    </div>
+                  <div>
+                    <p class="font-medium text-gray-900">Children's Church (Ages 4–13)</p>
+                    <p class="text-sm text-gray-500">During 10:30 AM service – Bible lessons, music & activities</p>
                   </div>
                 </div>
-                <div class="flex flex-col sm:flex-row gap-4">
-                  <a 
-                    href="/children-youth?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=after_school_visitor&utm_content=what_to_expect#visitor" 
-                    class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
-                  >
-                    What to Expect
-                  </a>
-                  <a 
-                    href="/worship?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=after_school_visitor&utm_content=family_faq#family-faq" 
-                    class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
-                  >
-                    Family FAQ
-                  </a>
+                <div class="flex items-start gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="font-medium text-gray-900">Nursery Care (Ages 0–3)</p>
+                    <p class="text-sm text-gray-500">Available at both services with trained caregivers</p>
+                  </div>
                 </div>
+                <div class="flex items-start gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="font-medium text-gray-900">Background-checked volunteers</p>
+                    <p class="text-sm text-gray-500">Your child's safety is our priority</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="flex flex-col sm:flex-row gap-3">
+                <a 
+                  href="/children-youth?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=after_school_visitor&utm_content=what_to_expect#visitor" 
+                  class="inline-flex items-center justify-center px-6 py-3 bg-brand hover:bg-brand-dark text-white font-medium rounded transition-colors"
+                >
+                  What to Expect
+                </a>
+                <a 
+                  href="/worship?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=after_school_visitor&utm_content=family_faq#family-faq" 
+                  class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded transition-colors"
+                >
+                  Family FAQ
+                </a>
               </div>
             </>
           )}
@@ -453,177 +505,62 @@ function formatDate(dateStr: string): string {
 <section id="donate" class="py-20 bg-white">
   <div class="container mx-auto px-6">
     <div class="max-w-7xl mx-auto">
-      <div class="grid lg:grid-cols-2 gap-16 items-center">
-        <div>
-          <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6">
-            Support our ministry
-          </span>
-          <h2 class="text-4xl lg:text-5xl font-light mb-8 text-gray-900 leading-tight">
-            Help us share God's love
+      <div class="grid lg:grid-cols-2 gap-16 items-start">
+        <!-- Left Column - Content -->
+        <div class="lg:sticky lg:top-8">
+          <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-4">Support Our Ministry</p>
+          <h2 class="text-3xl lg:text-4xl font-semibold text-gray-900 mb-6">
+            Partner with us in sharing God's love
           </h2>
-          <p class="text-lg text-gray-600 mb-8 leading-relaxed">
-            Your generous donations help support our worship services, community programs, and outreach efforts. 
-            Every gift makes a difference in our mission to serve others.
+          <p class="text-gray-600 mb-8 leading-relaxed">
+            Your tax-deductible donation supports our worship services, community outreach programs, 
+            and mission to serve families across the Lake of the Ozarks region.
           </p>
-          <div class="flex flex-col sm:flex-row gap-4">
-            <a 
-              href="/giving?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=donate_section&utm_content=more_giving_options" 
-              class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
-            >
-              More Giving Options
-            </a>
-            <a 
-              href="tel:573-365-3366" 
-              class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
-            >
-              Contact Us
-            </a>
+          
+          <div class="space-y-4 mb-8">
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+                <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2zM10 8.5a.5.5 0 11-1 0 .5.5 0 011 0zm5 5a.5.5 0 11-1 0 .5.5 0 011 0z"/>
+                </svg>
+              </div>
+              <p class="text-gray-600">100% tax-deductible contribution</p>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+                <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+              </div>
+              <p class="text-gray-600">Secure processing via Stripe</p>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+                <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>
+              </div>
+              <p class="text-gray-600">Cancel recurring gifts anytime</p>
+            </div>
+          </div>
+          
+          <div class="pt-6 border-t border-gray-200">
+            <p class="text-sm text-gray-500 mb-4">Other ways to give:</p>
+            <div class="flex gap-3">
+              <a href="/giving" class="text-sm font-medium text-brand hover:text-brand-dark">
+                View all options →
+              </a>
+              <span class="text-gray-300">|</span>
+              <a href="tel:573-365-3366" class="text-sm font-medium text-gray-600 hover:text-gray-900">
+                Call 573-365-3366
+              </a>
+            </div>
           </div>
         </div>
-        <div class="relative">
-          <div class="bg-gray-50 rounded-2xl p-8">
-            <form id="homepage-donation-form" class="space-y-6">
-              <!-- Donation Type -->
-              <div>
-                <div class="grid grid-cols-2 gap-4 mb-4">
-                  <label class="relative">
-                    <input 
-                      type="radio" 
-                      name="donationType" 
-                      value="one-time" 
-                      class="peer sr-only"
-                    />
-                    <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-brand peer-checked:bg-brand/5 transition-all duration-300 bg-white">
-                      <div class="text-center">
-                        <div class="font-medium text-gray-900">One-time</div>
-                        <div class="text-sm text-gray-600">Single donation</div>
-                      </div>
-                    </div>
-                  </label>
-                  <label class="relative">
-                    <input 
-                      type="radio" 
-                      name="donationType" 
-                      value="recurring" 
-                      checked 
-                      class="peer sr-only"
-                    />
-                    <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-brand peer-checked:bg-brand/5 transition-all duration-300 bg-white">
-                      <div class="text-center">
-                        <div class="font-medium text-gray-900">Recurring</div>
-                        <div class="text-sm text-gray-600">Ongoing giving</div>
-                      </div>
-                    </div>
-                  </label>
-                </div>
-                
-                <!-- Recurring Frequency Selection -->
-                <div id="homepage-frequency-selection">
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Frequency</label>
-                  <select 
-                    name="frequency" 
-                    id="homepage-frequency-select"
-                    class="w-full px-3 py-3 border-2 border-gray-200 rounded-lg focus:border-brand focus:outline-none bg-white"
-                  >
-                    <option value="weekly">Weekly</option>
-                    <option value="biweekly">Every Two Weeks</option>
-                    <option value="monthly" selected>Monthly</option>
-                    <option value="every6months">Every Six Months</option>
-                    <option value="yearly">Every Year</option>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Amount Selection -->
-              <div>
-                <div class="grid grid-cols-3 gap-3 mb-4">
-                  <button type="button" class="homepage-amount-btn p-3 border-2 border-gray-200 rounded-lg hover:border-brand transition-all duration-300 bg-white" data-amount="25">
-                    <div class="font-medium">$25</div>
-                  </button>
-                  <button type="button" class="homepage-amount-btn p-3 border-2 border-gray-200 rounded-lg hover:border-brand transition-all duration-300 bg-white" data-amount="50">
-                    <div class="font-medium">$50</div>
-                  </button>
-                  <button type="button" class="homepage-amount-btn p-3 border-2 border-gray-200 rounded-lg hover:border-brand transition-all duration-300 bg-white" data-amount="100">
-                    <div class="font-medium">$100</div>
-                  </button>
-                </div>
-                <div class="relative">
-                  <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
-                  <input 
-                    type="number" 
-                    id="homepage-custom-amount" 
-                    name="amount"
-                    min="5" 
-                    max="999999"
-                    step="0.01"
-                    placeholder="Enter custom amount"
-                    class="w-full pl-7 pr-3 py-3 border-2 border-gray-200 rounded-lg focus:border-brand focus:outline-none bg-white"
-                  />
-                </div>
-              </div>
-
-              <!-- Cover Processing Fees -->
-              <div>
-                <label class="flex items-center gap-3 p-3 border-2 border-gray-200 rounded-lg bg-white hover:border-brand transition-all duration-300">
-                  <input 
-                    type="checkbox" 
-                    id="homepage-cover-fees" 
-                    name="coverFees"
-                    class="w-4 h-4 text-brand focus:ring-brand border-gray-300 rounded"
-                  />
-                  <div class="flex-1">
-                    <div class="font-medium text-gray-900">Cover processing fees</div>
-                    <div class="text-sm text-gray-600">Add <span id="homepage-fee-amount">$1.75</span> to cover payment processing costs (2.9% + $0.30)</div>
-                  </div>
-                </label>
-              </div>
-
-              <!-- Email -->
-              <div>
-                <input 
-                  type="email" 
-                  id="homepage-email" 
-                  name="email"
-                  required
-                  placeholder="your@email.com"
-                  class="w-full px-3 py-3 border-2 border-gray-200 rounded-lg focus:border-brand focus:outline-none bg-white"
-                />
-              </div>
-
-              <!-- Submit Button -->
-              <div>
-                <button 
-                  type="submit"
-                  id="homepage-donate-btn"
-                  class="w-full bg-brand hover:bg-brand-dark text-white font-medium py-3 px-6 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <span id="homepage-btn-text">Give Now</span>
-                  <span id="homepage-btn-loading" class="hidden">Processing...</span>
-                </button>
-              </div>
-
-              <!-- Recurring Donation Warning -->
-              <div id="homepage-recurring-warning" class="text-center text-xs text-gray-600 bg-gray-50 rounded-lg p-3 hidden">
-                <p class="text-gray-700">You will be charged <span id="homepage-warning-amount" class="font-medium">$50</span> <span id="homepage-warning-frequency" class="font-medium">monthly</span> starting <span id="homepage-warning-date" class="font-medium"></span>. Cancel anytime.</p>
-              </div>
-
-              <!-- Security Note -->
-              <div class="text-center text-xs text-gray-600 space-y-2">
-                <p>Secure donation processed through Stripe by DonorKit, Inc.</p>
-                <p>By making a donation you agree to the DonorKit <a href="https://donork.it/privacy" target="_blank" rel="noopener noreferrer" class="text-brand hover:text-brand-dark underline">Privacy Policy</a>, <a href="https://donork.it/terms" target="_blank" rel="noopener noreferrer" class="text-brand hover:text-brand-dark underline">Terms of Service</a>, and <a href="https://donork.it/refund" target="_blank" rel="noopener noreferrer" class="text-brand hover:text-brand-dark underline">Refund Policy</a>.</p>
-                <p>
-                  <a 
-                    href="https://donork.it/locc" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    class="text-brand hover:text-brand-dark underline"
-                  >
-                    Manage existing subscription →
-                  </a>
-                </p>
-              </div>
-            </form>
-          </div>
+        
+        <!-- Right Column - Form -->
+        <div>
+          <DonationForm id="homepage" />
         </div>
       </div>
     </div>
@@ -1009,36 +946,25 @@ function formatDate(dateStr: string): string {
       saveLocationToStorage(lng, lat, city, source);
       
       // Update greeting based on source and city
-      if (greetingEl && distanceEl) {
-        if (source === 'browser') {
+      if (greetingEl) {
+        if (source === 'browser' || source === 'stored') {
+          // Browser geolocation (precise) - we know they're nearby
           greetingEl.textContent = `👋 Hello, neighbor!`;
           greetingEl.className = `inline-block px-4 py-2 bg-blue-100 text-blue-700 text-sm font-medium mb-6`;
         } else if (source === 'ip' && city) {
+          // IP geolocation with city info
           const localCities = ['lake ozark', 'osage beach', 'camdenton', 'eldon', 'versailles', 'laurie', 'sunrise beach', 'gravois mills'];
           const isLocal = localCities.some((c: string) => city.toLowerCase().includes(c));
           
           if (isLocal) {
             greetingEl.textContent = `👋 Hello, neighbor!`;
             greetingEl.className = `inline-block px-4 py-2 bg-green-100 text-green-700 text-sm font-medium mb-6`;
-            distanceEl.textContent = `We're right here in your community. Stop by this Sunday!`;
+            if (distanceEl) distanceEl.textContent = `We're right here in your community. Stop by this Sunday!`;
           } else {
             const cityName = city.split(' ').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
             greetingEl.textContent = `Welcome from ${cityName}!`;
             greetingEl.className = `inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6`;
-            distanceEl.textContent = `Visiting the Lake? We'd love to have you join us for worship.`;
-          }
-        } else if (source === 'stored' && city) {
-          // Use stored city info for greeting
-          const localCities = ['lake ozark', 'osage beach', 'camdenton', 'eldon', 'versailles', 'laurie', 'sunrise beach', 'gravois mills'];
-          const isLocal = localCities.some((c: string) => city.toLowerCase().includes(c));
-          
-          if (isLocal) {
-            greetingEl.textContent = `👋 Hello, neighbor!`;
-            greetingEl.className = `inline-block px-4 py-2 bg-green-100 text-green-700 text-sm font-medium mb-6`;
-          } else {
-            const cityName = city.split(' ').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-            greetingEl.textContent = `Welcome from ${cityName}!`;
-            greetingEl.className = `inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6`;
+            if (distanceEl) distanceEl.textContent = `Visiting the Lake? We'd love to have you join us for worship.`;
           }
         }
       }
@@ -1054,8 +980,9 @@ function formatDate(dateStr: string): string {
     }
     
     // If we have stored location with actual coordinates, use it (no permission needed!)
-    if (userLocation && userLocation.lng && userLocation.lat && userLocation.source === 'browser') {
-      await useLocation(userLocation.lng, userLocation.lat, userLocation.city, 'stored');
+    if (userLocation && userLocation.lng && userLocation.lat) {
+      // Reuse any valid stored location (browser or IP)
+      await useLocation(userLocation.lng, userLocation.lat, userLocation.city, userLocation.source === 'browser' ? 'stored' : 'ip');
     } else {
       // Only request location if we don't have stored browser location
       // Check if user has already denied permission
@@ -1619,264 +1546,6 @@ function formatDate(dateStr: string): string {
   (window as any).openVideoModal = openVideoModal;
   (window as any).closeVideoModal = closeVideoModal;
 
-  // Homepage donation form functionality
-  // Function to calculate processing fee
-  function calculateHomepageProcessingFee(amount: number): number {
-    return Math.round((amount * 0.029 + 0.30) * 100) / 100;
-  }
-
-  // Function to update fee display
-  function updateHomepageFeeDisplay() {
-    const amountInput = document.getElementById('homepage-custom-amount') as HTMLInputElement;
-    const feeAmountSpan = document.getElementById('homepage-fee-amount');
-    
-    if (amountInput && feeAmountSpan) {
-      const amount = parseFloat(amountInput.value) || 50;
-      const fee = calculateHomepageProcessingFee(amount);
-      feeAmountSpan.textContent = `$${fee.toFixed(2)}`;
-    }
-  }
-
-  // Function to update recurring warning
-  function updateHomepageRecurringWarning() {
-    const recurringRadio = document.querySelector('input[name="donationType"][value="recurring"]') as HTMLInputElement;
-    const warningDiv = document.getElementById('homepage-recurring-warning');
-    const warningAmount = document.getElementById('homepage-warning-amount');
-    const warningFrequency = document.getElementById('homepage-warning-frequency');
-    const warningDate = document.getElementById('homepage-warning-date');
-    const amountInput = document.getElementById('homepage-custom-amount') as HTMLInputElement;
-    const frequencySelect = document.getElementById('homepage-frequency-select') as HTMLSelectElement;
-    const coverFeesCheckbox = document.getElementById('homepage-cover-fees') as HTMLInputElement;
-    
-    if (recurringRadio && recurringRadio.checked && warningDiv && warningAmount && warningFrequency && warningDate) {
-      // Get current amount
-      let amount = parseFloat(amountInput.value) || 50;
-      
-      // Add processing fee if checked
-      if (coverFeesCheckbox && coverFeesCheckbox.checked) {
-        amount += calculateHomepageProcessingFee(amount);
-      }
-      
-      warningAmount.textContent = `$${amount.toFixed(2)}`;
-      
-      // Get frequency text
-      const frequency = frequencySelect.value;
-      const frequencyMap: Record<string, string> = {
-        'weekly': 'weekly',
-        'biweekly': 'every two weeks',
-        'monthly': 'monthly',
-        'every6months': 'every six months',
-        'yearly': 'yearly'
-      };
-      warningFrequency.textContent = frequencyMap[frequency] || 'monthly';
-      
-      // Use today's date
-      const today = new Date();
-      const dateStr = today.toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-      });
-      warningDate.textContent = dateStr;
-      
-      // Show warning
-      warningDiv.classList.remove('hidden');
-    } else if (warningDiv) {
-      // Hide warning for one-time donations
-      warningDiv.classList.add('hidden');
-    }
-  }
-
-  // Function to toggle frequency selection
-  function toggleHomepageFrequencySelection() {
-    const recurringRadio = document.querySelector('input[name="donationType"][value="recurring"]') as HTMLInputElement;
-    const frequencyDiv = document.getElementById('homepage-frequency-selection');
-    
-    if (frequencyDiv) {
-      if (recurringRadio && recurringRadio.checked) {
-        frequencyDiv.classList.remove('hidden');
-      } else {
-        frequencyDiv.classList.add('hidden');
-      }
-    }
-  }
-
-  // Donation type radio buttons
-  document.querySelectorAll('input[name="donationType"]').forEach(radio => {
-    radio.addEventListener('change', () => {
-      toggleHomepageFrequencySelection();
-      updateHomepageRecurringWarning();
-    });
-  });
-
-  // Frequency selection change
-  const homepageFrequencySelect = document.getElementById('homepage-frequency-select');
-  if (homepageFrequencySelect) {
-    homepageFrequencySelect.addEventListener('change', updateHomepageRecurringWarning);
-  }
-
-  // Amount button selection
-  document.querySelectorAll('.homepage-amount-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      // Remove selected class from all buttons
-      document.querySelectorAll('.homepage-amount-btn').forEach(b => b.classList.remove('selected'));
-      // Add selected class to clicked button
-      this.classList.add('selected');
-      // Set the amount in the input
-      const customAmountInput = document.getElementById('homepage-custom-amount') as HTMLInputElement;
-      if (customAmountInput && this instanceof HTMLElement && this.dataset.amount) {
-        customAmountInput.value = this.dataset.amount;
-      }
-      // Update fee display and warning
-      updateHomepageFeeDisplay();
-      updateHomepageRecurringWarning();
-    });
-  });
-
-  // Custom amount input
-  const homepageCustomAmountInput = document.getElementById('homepage-custom-amount');
-  if (homepageCustomAmountInput) {
-    homepageCustomAmountInput.addEventListener('input', function() {
-      // Remove selected class from preset buttons when typing custom amount
-      document.querySelectorAll('.homepage-amount-btn').forEach(b => b.classList.remove('selected'));
-      // Update fee display and warning
-      updateHomepageFeeDisplay();
-      updateHomepageRecurringWarning();
-    });
-  }
-
-  // Cover fees checkbox
-  const homepageCoverFeesCheckbox = document.getElementById('homepage-cover-fees');
-  if (homepageCoverFeesCheckbox) {
-    homepageCoverFeesCheckbox.addEventListener('change', updateHomepageRecurringWarning);
-  }
-
-  // Form submission
-  const homepageDonationForm = document.getElementById('homepage-donation-form') as HTMLFormElement;
-  if (homepageDonationForm) {
-    homepageDonationForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      
-      const btn = document.getElementById('homepage-donate-btn') as HTMLButtonElement;
-      const btnText = document.getElementById('homepage-btn-text');
-      const btnLoading = document.getElementById('homepage-btn-loading');
-      
-      if (!btn || !btnText || !btnLoading) return;
-      
-      // Get form data
-      const formData = new FormData(this);
-      const amountValue = formData.get('amount');
-      const emailValue = formData.get('email');
-      const donationTypeValue = formData.get('donationType');
-      const frequencyValue = formData.get('frequency');
-      const coverFeesValue = formData.get('coverFees');
-      
-      // Type-safe conversions
-      let amount = parseFloat(amountValue?.toString() || '0');
-      const email = emailValue?.toString() || '';
-      const donationType = donationTypeValue?.toString() || '';
-      const frequency = frequencyValue?.toString() || 'monthly';
-      const coverFees = coverFeesValue === 'on';
-      
-      // Add processing fee if selected
-      if (coverFees) {
-        amount += calculateHomepageProcessingFee(amount);
-      }
-      
-      // Validate amount
-      if (!amount || amount < 5) {
-        alert('Please enter a donation amount of at least $5');
-        return;
-      }
-      
-      if (amount > 999999) {
-        alert('Donation amount cannot exceed $999,999');
-        return;
-      }
-      
-      // Validate email
-      if (!email || !email.includes('@')) {
-        alert('Please enter a valid email address');
-        return;
-      }
-      
-              // Show loading state and toast
-        btn.disabled = true;
-        btnText.classList.add('hidden');
-        btnLoading.classList.remove('hidden');
-        
-        const loadingToastId = showToast(
-          'Processing your donation... You\'ll be redirected to complete payment.',
-          'info',
-          0 // Don't auto-remove
-        );
-        
-        try {
-          // Call the donation API
-          const response = await fetch('https://api.locc.us/api/v2/donation', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              amount: amount,
-              email: email,
-              donationType: donationType,
-              frequency: frequency,
-              coverFees: coverFees
-            })
-          });
-          
-          const data = await response.json();
-          
-          if (data.success && data.url) {
-            // Remove loading toast and show success
-            removeToast(loadingToastId);
-            showToast(
-              'Redirecting to secure payment page...',
-              'success',
-              3000
-            );
-            
-            // Redirect to Stripe checkout
-            setTimeout(() => {
-              window.location.href = data.url;
-            }, 500);
-          } else {
-            throw new Error(data.message || 'Failed to create donation session');
-          }
-          
-        } catch (error) {
-          console.error('Donation error:', error);
-          
-          // Remove loading toast and show error
-          removeToast(loadingToastId);
-          showToast(
-            'There was an error processing your donation. Please try again or contact us for assistance.',
-            'error',
-            8000
-          );
-          
-          // Reset button state
-          btn.disabled = false;
-          btnText.classList.remove('hidden');
-          btnLoading.classList.add('hidden');
-        }
-    });
-  }
-
-  // Set default amount for homepage form and initialize displays
-  const homepageDefaultBtn = document.querySelector('.homepage-amount-btn[data-amount="50"]') as HTMLElement;
-  if (homepageDefaultBtn) {
-    homepageDefaultBtn.click();
-  }
-  
-  // Initialize fee display
-  updateHomepageFeeDisplay();
-  
-  // Initialize recurring warning since recurring is default
-  updateHomepageRecurringWarning();
-
 </script>
 
 <style>
@@ -1903,11 +1572,6 @@ function formatDate(dateStr: string): string {
     section[id] {
       scroll-margin-top: 1rem;
     }
-  }
-
-  .homepage-amount-btn.selected {
-    border-color: #8B5A2B;
-    background-color: rgba(139, 90, 43, 0.05);
   }
 
   /* Flip Clock Custom Styles */
