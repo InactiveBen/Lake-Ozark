@@ -1,0 +1,293 @@
+---
+/**
+ * @file External Link Warning Modal
+ * @description Shows a warning when users click external links
+ */
+---
+
+<div id="external-link-modal" class="external-modal" aria-hidden="true" role="dialog" aria-labelledby="external-modal-title" aria-describedby="external-modal-desc">
+  <div class="external-modal-backdrop"></div>
+  <div class="external-modal-container">
+    <div class="external-modal-content">
+      <div class="external-modal-header">
+        <svg class="external-modal-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+          <polyline points="15 3 21 3 21 9"/>
+          <line x1="10" y1="14" x2="21" y2="3"/>
+        </svg>
+        <h2 id="external-modal-title" class="external-modal-title">External link</h2>
+        <button id="external-modal-close" class="external-modal-close" aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="external-modal-body">
+        <p id="external-modal-desc" class="external-modal-desc">
+          You are about to leave Lake Ozark Christian Church's website and visit an external site.
+        </p>
+        <div class="external-modal-destination">
+          <span id="external-link-url" class="external-modal-url"></span>
+        </div>
+      </div>
+      <div class="external-modal-footer">
+        <button id="external-modal-cancel" class="external-modal-btn external-modal-btn-secondary">
+          Cancel
+        </button>
+        <a id="external-modal-continue" href="#" target="_blank" rel="noopener noreferrer" class="external-modal-btn external-modal-btn-primary">
+          Continue to site
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .external-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s ease, visibility 0.15s ease;
+  }
+
+  .external-modal[aria-hidden="false"] {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .external-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .external-modal-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    transform: translateY(8px);
+    transition: transform 0.15s ease;
+  }
+
+  .external-modal[aria-hidden="false"] .external-modal-container {
+    transform: translateY(0);
+  }
+
+  .external-modal-content {
+    background: var(--bg, #ffffff);
+    border-radius: 8px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+  }
+
+  .external-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border, #e5e5e5);
+  }
+
+  .external-modal-icon {
+    color: var(--text-muted, #666);
+  }
+
+  .external-modal-title {
+    flex: 1;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text, #1a1a1a);
+    margin: 0;
+  }
+
+  .external-modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--text-muted, #666);
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.1s ease, color 0.1s ease;
+  }
+
+  .external-modal-close:hover {
+    background: var(--bg-subtle, #f5f5f5);
+    color: var(--text, #1a1a1a);
+  }
+
+  .external-modal-body {
+    padding: 1.25rem;
+  }
+
+  .external-modal-desc {
+    font-size: 0.875rem;
+    color: var(--text-muted, #555);
+    margin: 0 0 1rem;
+    line-height: 1.5;
+  }
+
+  .external-modal-destination {
+    background: var(--bg-subtle, #f8f8f8);
+    border: 1px solid var(--border, #e5e5e5);
+    border-radius: 4px;
+    padding: 0.75rem;
+  }
+
+  .external-modal-url {
+    display: block;
+    font-size: 0.8125rem;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+    color: var(--text, #333);
+    word-break: break-all;
+  }
+
+  .external-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 1rem 1.25rem;
+    border-top: 1px solid var(--border, #e5e5e5);
+    background: var(--bg-subtle, #fafafa);
+  }
+
+  .external-modal-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.1s ease;
+  }
+
+  .external-modal-btn-secondary {
+    background: var(--bg, #fff);
+    border-color: var(--border, #d1d1d1);
+    color: var(--text, #333);
+  }
+
+  .external-modal-btn-secondary:hover {
+    background: var(--bg-subtle, #f5f5f5);
+    border-color: var(--text-muted, #999);
+  }
+
+  .external-modal-btn-primary {
+    background: var(--brand, #4285f4);
+    color: white;
+  }
+
+  .external-modal-btn-primary:hover {
+    background: var(--brand-dark, #3367d6);
+  }
+
+  .external-modal-btn:focus-visible {
+    outline: 2px solid var(--brand, #4285f4);
+    outline-offset: 2px;
+  }
+</style>
+
+<script>
+  class ExternalLinkWarning {
+    private modal: HTMLElement;
+    private urlDisplay: HTMLElement;
+    private continueBtn: HTMLAnchorElement;
+    private cancelBtn: HTMLButtonElement;
+    private closeBtn: HTMLButtonElement;
+    private backdrop: HTMLElement;
+    private previousActiveElement: HTMLElement | null = null;
+
+    constructor() {
+      this.modal = document.getElementById('external-link-modal')!;
+      this.urlDisplay = document.getElementById('external-link-url')!;
+      this.continueBtn = document.getElementById('external-modal-continue') as HTMLAnchorElement;
+      this.cancelBtn = document.getElementById('external-modal-cancel') as HTMLButtonElement;
+      this.closeBtn = document.getElementById('external-modal-close') as HTMLButtonElement;
+      this.backdrop = this.modal.querySelector('.external-modal-backdrop')!;
+
+      this.init();
+    }
+
+    private init() {
+      // Attach to all external links with data-external attribute
+      document.querySelectorAll('a[data-external="true"]').forEach(link => {
+        link.addEventListener('click', (e) => this.handleExternalClick(e as MouseEvent));
+      });
+
+      // Close handlers
+      this.cancelBtn.addEventListener('click', () => this.close());
+      this.closeBtn.addEventListener('click', () => this.close());
+      this.backdrop.addEventListener('click', () => this.close());
+      
+      // Keyboard handling
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && this.modal.getAttribute('aria-hidden') === 'false') {
+          this.close();
+        }
+      });
+
+      // Close after clicking continue
+      this.continueBtn.addEventListener('click', () => {
+        setTimeout(() => this.close(), 50);
+      });
+    }
+
+    private handleExternalClick(e: MouseEvent) {
+      e.preventDefault();
+      const link = e.currentTarget as HTMLAnchorElement;
+      const url = link.href;
+
+      this.open(url);
+    }
+
+    private open(url: string) {
+      this.previousActiveElement = document.activeElement as HTMLElement;
+      
+      // Display the full URL
+      this.urlDisplay.textContent = url;
+      
+      this.continueBtn.href = url;
+      this.modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      
+      // Focus the continue button for accessibility
+      setTimeout(() => this.continueBtn.focus(), 50);
+    }
+
+    private close() {
+      this.modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      
+      // Return focus to previous element
+      if (this.previousActiveElement) {
+        this.previousActiveElement.focus();
+      }
+    }
+  }
+
+  // Initialize when DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    new ExternalLinkWarning();
+  });
+
+  // Also initialize on Astro page navigation
+  document.addEventListener('astro:page-load', () => {
+    new ExternalLinkWarning();
+  });
+</script>
+
