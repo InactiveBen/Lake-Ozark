@@ -1,0 +1,77 @@
+---
+/**
+ * @file QR Code Donation Page
+ * @description Simple donation page for QR code scanning
+ */
+import Layout from '../layouts/Layout.astro';
+import DonationForm from '../components/DonationForm.astro';
+
+const pageData = {
+  title: "Give",
+  description: "Support Lake Ozark Christian Church with a secure online donation.",
+};
+---
+
+<Layout {...pageData}>
+  <main class="give-page">
+    <div class="give-container">
+      <div class="give-header">
+        <h1 class="give-title">Support Our Ministry</h1>
+        <p class="give-subtitle">Your generosity makes a difference in our community.</p>
+      </div>
+      
+      <div class="form-wrapper">
+        <DonationForm id="qr-donation" />
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .give-page {
+    min-height: 60vh;
+    padding: 3rem 1.5rem 4rem;
+    background: #f8f9fa;
+  }
+
+  .give-container {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .give-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .give-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 0.5rem;
+  }
+
+  .give-subtitle {
+    font-size: 1rem;
+    color: #666;
+    margin: 0;
+  }
+
+  .form-wrapper {
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 640px) {
+    .give-page {
+      padding: 2rem 1rem 3rem;
+    }
+
+    .give-title {
+      font-size: 1.5rem;
+    }
+
+    .give-subtitle {
+      font-size: 0.9375rem;
+    }
+  }
+</style>

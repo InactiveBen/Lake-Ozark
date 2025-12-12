@@ -107,9 +107,9 @@ const prefix = id;
       </label>
     </div>
 
-    <!-- Legal Disclaimer for Recurring -->
-    <div class="recurring-disclaimer text-xs text-gray-500 leading-relaxed">
-      By clicking "Complete Donation", you authorize Lake Ozark Christian Church Inc. to charge your payment method <strong class="text-gray-700 disclaimer-amount">$50.00</strong> <strong class="text-gray-700 disclaimer-frequency">every month</strong> until cancelled. Manage or cancel at <a href="https://donork.it/locc" target="_blank" rel="noopener noreferrer" class="text-brand hover:underline">donork.it/locc</a>. View our <a href="/legal/terms" class="text-brand hover:underline">Terms</a>, <a href="/legal/privacy" class="text-brand hover:underline">Privacy Policy</a>, and <a href="/legal/refunds" class="text-brand hover:underline">Refund Policy</a>.
+    <!-- Legal Disclaimer -->
+    <div class="donation-disclaimer text-xs text-gray-500 leading-relaxed">
+      <span class="disclaimer-text">By clicking "Complete Donation", you authorize Lake Ozark Christian Church Inc. to charge your payment method <strong class="text-gray-700 disclaimer-amount">$50.00</strong><span class="recurring-text"> <strong class="text-gray-700 disclaimer-frequency">every month</strong> until cancelled. Manage or cancel at <a href="https://donork.it/locc" target="_blank" rel="noopener noreferrer" class="text-brand hover:underline">donork.it/locc</a>.</span><span class="onetime-text" style="display: none;">.</span></span> View our <a href="/legal/terms" class="text-brand hover:underline">Terms</a>, <a href="/legal/privacy" class="text-brand hover:underline">Privacy Policy</a>, and <a href="/legal/refunds" class="text-brand hover:underline">Refund Policy</a>.
     </div>
 
     <!-- Submit Button -->
@@ -231,9 +231,11 @@ const prefix = id;
     const coverFeesCheckbox = form.querySelector('.cover-fees') as HTMLInputElement;
     const coverFeesLabel = form.querySelector('.cover-fees-label') as HTMLElement;
     const feeAmountSpan = form.querySelector('.fee-amount') as HTMLElement;
-    const disclaimerDiv = form.querySelector('.recurring-disclaimer') as HTMLElement;
+    const disclaimerDiv = form.querySelector('.donation-disclaimer') as HTMLElement;
     const disclaimerAmount = form.querySelector('.disclaimer-amount') as HTMLElement;
     const disclaimerFrequency = form.querySelector('.disclaimer-frequency') as HTMLElement;
+    const recurringText = form.querySelector('.recurring-text') as HTMLElement;
+    const onetimeText = form.querySelector('.onetime-text') as HTMLElement;
     const donateBtn = form.querySelector('.donate-btn') as HTMLButtonElement;
     const btnText = form.querySelector('.btn-text') as HTMLElement;
     const btnLoading = form.querySelector('.btn-loading') as HTMLElement;
@@ -255,13 +257,14 @@ const prefix = id;
         frequencyDiv.style.display = isRecurring ? 'block' : 'none';
       }
       
-      // Show/hide disclaimer
+      // Update disclaimer for both one-time and recurring
       if (disclaimerDiv) {
+        let totalAmount = amount;
+        if (coverFees) totalAmount += calculateFee(amount);
+        
+        if (disclaimerAmount) disclaimerAmount.textContent = `$${totalAmount.toFixed(2)}`;
+        
         if (isRecurring) {
-          let totalAmount = amount;
-          if (coverFees) totalAmount += calculateFee(amount);
-          
-          if (disclaimerAmount) disclaimerAmount.textContent = `$${totalAmount.toFixed(2)}`;
           if (disclaimerFrequency) {
             const freqMap: Record<string, string> = {
               'weekly': 'every week',
@@ -271,10 +274,13 @@ const prefix = id;
             };
             disclaimerFrequency.textContent = freqMap[frequencySelect?.value || 'monthly'] || 'every month';
           }
-          disclaimerDiv.style.display = 'block';
+          if (recurringText) recurringText.style.display = 'inline';
+          if (onetimeText) onetimeText.style.display = 'none';
         } else {
-          disclaimerDiv.style.display = 'none';
+          if (recurringText) recurringText.style.display = 'none';
+          if (onetimeText) onetimeText.style.display = 'inline';
         }
+        disclaimerDiv.style.display = 'block';
       }
     }
     
