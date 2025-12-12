@@ -498,7 +498,7 @@ export function generateThumbnail(video, options = {}) {
     };
     
     // Start loading the background image
-    backgroundImg.src = 'https://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg';
+    backgroundImg.src = 'https://usercontent.donorkit.io/clients/LOCC/7767E813-185B-48B7-A7C8-A5C919258FEA%20(1).jpeg';
   });
 }
 

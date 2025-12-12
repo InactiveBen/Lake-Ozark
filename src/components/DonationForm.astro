@@ -89,12 +89,19 @@ const prefix = id;
 
     <!-- Cover Fees -->
     <div class="flex items-start gap-3 py-3 border-t border-b border-gray-200">
-      <input 
-        type="checkbox" 
-        name="coverFees"
-        class="cover-fees w-4 h-4 mt-0.5 text-brand focus:ring-brand border-gray-300 rounded"
-      />
-      <label class="cursor-pointer cover-fees-label">
+      <label class="custom-checkbox-wrapper">
+        <input 
+          type="checkbox" 
+          name="coverFees"
+          class="cover-fees sr-only"
+        />
+        <span class="custom-checkbox" aria-hidden="true">
+          <svg class="checkmark" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 5L4.5 8.5L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </label>
+      <label class="cursor-pointer cover-fees-label flex-1">
         <span class="text-sm font-medium text-gray-900">Cover transaction fees</span>
         <span class="block text-xs text-gray-500">Add <span class="fee-amount">$1.75</span> (2.9% + $0.30) so Lake Ozark Christian Church receives your full donation.</span>
       </label>
@@ -139,6 +146,65 @@ const prefix = id;
   }
   .custom-amount {
     -moz-appearance: textfield;
+  }
+
+  /* Custom Checkbox Styles */
+  .custom-checkbox-wrapper {
+    display: inline-flex;
+    align-items: flex-start;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .custom-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #d1d5db;
+    border-radius: 4px;
+    background-color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease-in-out;
+    margin-top: 1px;
+  }
+
+  .custom-checkbox .checkmark {
+    width: 12px;
+    height: 10px;
+    color: #fff;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.15s ease-in-out;
+  }
+
+  /* Hover state */
+  .custom-checkbox-wrapper:hover .custom-checkbox {
+    border-color: #8B5A2B;
+    background-color: rgba(139, 90, 43, 0.05);
+  }
+
+  /* Focus state */
+  .cover-fees:focus + .custom-checkbox {
+    border-color: #8B5A2B;
+    box-shadow: 0 0 0 3px rgba(139, 90, 43, 0.15);
+  }
+
+  /* Checked state */
+  .cover-fees:checked + .custom-checkbox {
+    background-color: #8B5A2B;
+    border-color: #8B5A2B;
+  }
+
+  .cover-fees:checked + .custom-checkbox .checkmark {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Checked + hover state */
+  .custom-checkbox-wrapper:hover .cover-fees:checked + .custom-checkbox {
+    background-color: #6d471f;
+    border-color: #6d471f;
   }
 </style>
 

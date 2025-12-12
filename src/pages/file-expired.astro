@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="File Not Found">
+  <head>
+    <meta name="robots" content="noindex, nofollow" />
+  </head>
+  <section class="min-h-[60vh] flex flex-col justify-center items-center text-center py-24">
+    <h1 class="text-6xl font-bold text-brand mb-4">410</h1>
+    <h2 class="text-2xl font-semibold text-gray-800 mb-2">File No Longer Available</h2>
+    <p class="text-gray-600 mb-6 max-w-xl">
+      The file you're looking for has expired or been removed.<br />
+      If you need access to this file, please contact the church office.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-3">
+      <a href="/" class="inline-block px-6 py-3 bg-brand text-white rounded-lg hover:bg-brand-dark transition">
+        Go Home
+      </a>
+      <a href="mailto:office@lakeozarkdisciples.org" class="inline-block px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
+        Contact Us
+      </a>
+    </div>
+  </section>
+</Layout>
+
