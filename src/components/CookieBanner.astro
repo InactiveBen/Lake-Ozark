@@ -41,7 +41,7 @@
       <div class="cookie-panel-header">
         <h3 id="cookie-title">Privacy Settings</h3>
         <button id="close-cookie-settings" class="cookie-close" aria-label="Close">
-          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
@@ -49,7 +49,7 @@
 
       <!-- GPC Notice -->
       <div id="gpc-notice" class="cookie-gpc" style="display: none;">
-        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
         </svg>
         <span>Global Privacy Control detected — you're opted out</span>
@@ -156,7 +156,9 @@
     box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
   }
   .cookie-expanded.visible { display: block; }
-  .cookie-expanded.visible + .cookie-compact { display: none; }
+  
+  /* Hide compact when expanded is visible */
+  .cookie-compact.hidden { display: none; }
 
   .cookie-panel {
     max-width: 420px;
@@ -359,6 +361,7 @@
   const banner = document.getElementById('cookie-banner');
   const backdrop = document.getElementById('cookie-banner-backdrop');
   const expanded = document.getElementById('cookie-expanded');
+  const compact = document.getElementById('cookie-compact');
   const gpcNotice = document.getElementById('gpc-notice');
 
   const hasGPC = () => navigator.globalPrivacyControl === true;
@@ -367,14 +370,17 @@
     banner?.classList.remove('visible');
     backdrop?.classList.remove('visible');
     expanded?.classList.remove('visible');
+    compact?.classList.remove('hidden');
   };
   const showExpanded = () => {
     expanded?.classList.add('visible');
     backdrop?.classList.add('visible');
+    compact?.classList.add('hidden');
   };
   const hideExpanded = () => {
     expanded?.classList.remove('visible');
     backdrop?.classList.remove('visible');
+    compact?.classList.remove('hidden');
   };
 
   window.showCookieSettings = () => { showBanner(); showExpanded(); };
