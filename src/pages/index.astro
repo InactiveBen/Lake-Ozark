@@ -11,8 +11,8 @@ const isLocal = await isLocalVisitor();
 // Toggle this to show/hide the announcement banner
 const showAnnouncementBanner = true;
 // Banner content - edit these to change the announcement
-const bannerText = "Join us for worship every Sunday at 10:30 AM";
-const bannerLink = "/worship";
+const bannerText = "Welcome Reception for Rev. Lina Eddy, our interim minister - Sunday, January 4, 2026 following service";
+const bannerLink = "/blog/4";
 const bannerLinkText = "Learn more →";
 
 const welcomeImage = {
@@ -1305,9 +1305,135 @@ function formatDate(dateStr: string): string {
     id: string;
     title: string;
     thumbnail?: string;
+    customThumbnail?: string;
   }
   let allVideos: VideoData[] = [];
   const videosPerPage = 3;
+
+  // Parse date from video title
+  function parseDateFromVideoTitle(title: string): string {
+    const cleanTitle = title.replace(/^(Service|LOCC|Church Service)\s*[-|]\s*/i, '').replace(/\s*[-|]\s*(Service)$/i, '');
+    
+    const patterns = [
+      /(\d{1,2})\/(\d{1,2})\/(\d{2,4})/,
+      /(\d{1,2})-(\d{1,2})-(\d{2,4})/,
+      /(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),?\s+(\d{4})/i,
+      /(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})(st|nd|rd|th),?\s+(\d{4})/i,
+      /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),?\s+(\d{4})/i,
+      /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})(st|nd|rd|th),?\s+(\d{4})/i
+    ];
+    
+    for (const pattern of patterns) {
+      const match = cleanTitle.match(pattern);
+      if (match) {
+        let month, day, year;
+        
+        if (pattern.source.includes('January|February')) {
+          const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                             'July', 'August', 'September', 'October', 'November', 'December'];
+          month = monthNames.indexOf(match[1]) + 1;
+          
+          if (pattern.source.includes('st|nd|rd|th')) {
+            day = parseInt(match[2]);
+            year = parseInt(match[4]);
+          } else {
+            day = parseInt(match[2]);
+            year = parseInt(match[3]);
+          }
+        } else if (pattern.source.includes('Jan|Feb')) {
+          const monthAbbr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+          month = monthAbbr.indexOf(match[1]) + 1;
+          
+          if (pattern.source.includes('st|nd|rd|th')) {
+            day = parseInt(match[2]);
+            year = parseInt(match[4]);
+          } else {
+            day = parseInt(match[2]);
+            year = parseInt(match[3]);
+          }
+        } else {
+          month = parseInt(match[1]);
+          day = parseInt(match[2]);
+          year = parseInt(match[3]);
+        }
+        
+        if (year < 50) year += 2000;
+        else if (year < 100) year += 1900;
+        
+        if (month >= 1 && month <= 12 && day >= 1 && day <= 31 && year >= 1900) {
+          const date = new Date(year, month - 1, day);
+          return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          });
+        }
+      }
+    }
+    
+    return 'Date not available';
+  }
+
+  // Create clean display title
+  function createDisplayTitle(originalTitle: string): string {
+    // Parse sermon title and date from video title (for 2026+ videos)
+    let displayTitle = originalTitle;
+    
+    // Remove common prefixes
+    displayTitle = displayTitle.replace(/^(LOCC|Service|Church Service)\s*[-|]\s*/i, '');
+    
+    // Extract date
+    const dateStr = parseDateFromVideoTitle(originalTitle);
+    
+    // Try to parse sermon title and pastor name (similar to thumbnail generator)
+    // Remove date patterns first
+    const datePatterns = [
+      /^\s*(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}\s*[-|]?\s*/gi,
+      /^\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}\s*[-|]?\s*/gi,
+      /\s*[-|]\s*(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}/gi,
+      /\s*[-|]\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}/gi,
+      /\s*\d{1,2}\/\d{1,2}\/\d{2,4}\s*[-|]?\s*/g,
+      /\s*\d{1,2}-\d{1,2}-\d{2,4}\s*[-|]?\s*/g
+    ];
+    
+    datePatterns.forEach(pattern => {
+      displayTitle = displayTitle.replace(pattern, '');
+    });
+    
+    displayTitle = displayTitle.replace(/^[-|]\s*/, '').replace(/\s*[-|]$/, '').trim();
+    
+    // Try to parse sermon title and pastor name
+    const pipeParts = displayTitle.split('|').map(s => s.trim()).filter(s => s.length > 0);
+    const dashParts = displayTitle.split('-').map(s => s.trim()).filter(s => s.length > 0);
+    
+    let sermonTitle = null;
+    
+    if (pipeParts.length >= 1) {
+      // Format: "| Sermon Title | Pastor Name" or "| Sermon Title |"
+      sermonTitle = pipeParts[0] || null;
+    } else if (dashParts.length >= 1) {
+      // Format: "Sermon Title - Pastor Name"
+      sermonTitle = dashParts[0] || null;
+    } else {
+      // No clear structure, use cleaned title
+      sermonTitle = displayTitle || null;
+    }
+    
+    // Clean up sermon title
+    if (sermonTitle) {
+      sermonTitle = sermonTitle.replace(/^[-|]\s*/, '').replace(/\s*[-|]$/, '').trim();
+    }
+    
+    // Format the display title
+    if (sermonTitle && sermonTitle.length > 0) {
+      // For 2026+ videos: "Sermon Title - Date"
+      return `${sermonTitle} - ${dateStr}`;
+    } else {
+      // Fallback: "Service - Date"
+      return `Service - ${dateStr}`;
+    }
+  }
 
   async function loadVideos() {
     const loadingEl = document.getElementById('video-loading');
@@ -1335,6 +1461,8 @@ function formatDate(dateStr: string): string {
       if (loadingEl) loadingEl.style.display = 'none';
       
       if (allVideos.length > 0) {
+        // Initialize thumbnail generator before displaying videos
+        await initThumbnailGenerator();
         displayVideos();
       } else {
         if (errorEl) {
@@ -1366,31 +1494,31 @@ function formatDate(dateStr: string): string {
       <div class="space-y-12">
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="video-grid">
           ${videosToShow.map((video) => `
-             <div class="video-item bg-white border border-gray-200 overflow-hidden group hover:shadow-lg transition-all duration-300 rounded-xl">
+             <div class="group bg-white rounded-xl overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer">
                <button 
-                 onclick="openVideoModal('${video.id}', '${video.title.replace(/"/g, '&quot;')}')"
+                 onclick="window.location.href = '/live?video=${video.id}&title=${encodeURIComponent(createDisplayTitle(video.title))}'"
                  class="block w-full text-left"
                  aria-label="Watch ${video.title}"
                >
-                 <div class="relative aspect-video overflow-hidden">
+                 <div class="aspect-video relative overflow-hidden bg-gray-100">
                    <img 
                      id="thumbnail-${video.id}"
-                     src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='270' viewBox='0 0 480 270'%3E%3Crect width='480' height='270' fill='%23f3f4f6'/%3E%3Ctext x='240' y='135' text-anchor='middle' dy='0.35em' font-family='Arial, sans-serif' font-size='16' fill='%23666'%3ELoading...%3C/text%3E%3C/svg%3E"
-                     alt="Thumbnail for ${video.title}"
-                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                     data-video-id="${video.id}"
-                     data-video-title="${video.title.replace(/"/g, '&quot;')}"
+                     src="${video.customThumbnail || `https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}"
+                     alt="${video.title}"
+                     class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                     loading="lazy"
                    />
-                   <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
-                     <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/20 backdrop-blur-sm rounded-full p-4">
-                       <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+                   <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                     <div class="bg-white rounded-full p-4 transform scale-95 group-hover:scale-100 transition-transform duration-300">
+                       <svg class="w-7 h-7 text-brand ml-0.5" fill="currentColor" viewBox="0 0 24 24">
                          <path d="M8 5v14l11-7z"/>
                        </svg>
                      </div>
                    </div>
                  </div>
-                 <div class="p-6">
-                   <h3 class="font-semibold text-lg text-gray-900 group-hover:text-brand transition-colors duration-300 leading-tight">${video.title}</h3>
+                 <div class="p-5">
+                   <h3 class="text-lg font-semibold text-gray-900 mb-1.5 line-clamp-2">${createDisplayTitle(video.title)}</h3>
+                   <p class="text-sm text-gray-500">${parseDateFromVideoTitle(video.title)}</p>
                  </div>
                </button>
              </div>
@@ -1445,11 +1573,14 @@ function formatDate(dateStr: string): string {
       const thumbnailEl = document.getElementById(`thumbnail-${video.id}`);
       if (!thumbnailEl || !(thumbnailEl instanceof HTMLImageElement)) continue;
 
+      // Generate thumbnails for all videos (2026 videos will use new background image)
+
       try {
-        // Generate dynamic thumbnail for ALL videos with church background
+        // Generate dynamic thumbnail for videos without custom thumbnails
         const dynamicThumbnail = await thumbnailGenerator.getVideoThumbnail({
           id: video.id,
-          title: video.title
+          title: video.title,
+          customThumbnail: video.customThumbnail
         });
 
         // Make sure we got a valid data URL string, not a Promise
@@ -1544,6 +1675,7 @@ function formatDate(dateStr: string): string {
 
   // Make functions globally available
   (window as any).openVideoModal = openVideoModal;
+  (window as any).createDisplayTitle = createDisplayTitle;
   (window as any).closeVideoModal = closeVideoModal;
 
 </script>

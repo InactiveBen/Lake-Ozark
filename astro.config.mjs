@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
+import node from '@astrojs/node';
 
 export default defineConfig({
   // Integrations enable support for external libraries and UI frameworks.
@@ -8,6 +9,14 @@ export default defineConfig({
     tailwind(), // Configures and enables Tailwind CSS utility framework.
     react()     // Enables rendering and usage of React components.
   ],
+  
+  // Output configuration - use server mode so API routes run at request time
+  output: 'server',
+  
+  // Adapter for Node.js server
+  adapter: node({
+    mode: 'standalone'
+  }),
   
   // Markdown configuration settings.
   markdown: {

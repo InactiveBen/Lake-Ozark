@@ -137,34 +137,35 @@ const breadcrumbs = [
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {sortedPosts.map((post, index) => (
             <div class="post-item" style={index >= 6 ? "display: none;" : ""}>
-              <article class="group">
+              <article class="group bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-200">
                 <a href={`/blog/${post.frontmatter?.id || ''}?utm_source=lakeozarkdisciples&utm_medium=blog_index&utm_campaign=list&utm_content=${post.frontmatter?.id || 'post'}`} class="block">
-                  <div class="mb-6 overflow-hidden rounded-xl relative">
+                  <div class="relative overflow-hidden bg-gray-100">
                     {index === 0 && (
-                      <div class="absolute top-4 right-4 bg-brand text-white px-3 py-1 rounded-full text-sm font-medium z-10">
+                      <div class="absolute top-4 right-4 bg-brand text-white px-3 py-1.5 rounded-full text-xs font-semibold z-10 shadow-lg">
                         LATEST
                       </div>
                     )}
                     <img 
                       src={post.frontmatter?.image || 'https://usercontent.donorkit.io/clients/LOCC/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg'} 
                       alt={post.frontmatter?.title || 'Blog post'}
-                      class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
+                      class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"
                       onerror="this.src='https://usercontent.donorkit.io/clients/LOCC/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg'"
                     />
+                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
                   </div>
-                  <div>
-                    <div class="flex items-center gap-4 text-sm text-gray-500 mb-2">
-                      <time class="block" datetime={post.frontmatter?.date ? new Date(post.frontmatter.date).toISOString() : ''}>
+                  <div class="p-6">
+                    <div class="flex items-center gap-3 text-sm text-gray-500 mb-3">
+                      <time datetime={post.frontmatter?.date ? new Date(post.frontmatter.date).toISOString() : ''}>
                         {formatDate(post.frontmatter?.date || '')}
                       </time>
                       <span>·</span>
                       <span>{post.calculatedReadingTime} min read</span>
                     </div>
-                    <h3 class="text-xl font-semibold mb-3 text-gray-900 group-hover:text-brand transition-colors duration-300">
+                    <h3 class="text-xl font-semibold mb-3 text-gray-900 group-hover:text-brand transition-colors duration-300 line-clamp-2">
                       {post.frontmatter?.title || 'Untitled'}
                     </h3>
-                    <p class="text-gray-600 leading-relaxed">
+                    <p class="text-gray-600 leading-relaxed line-clamp-3">
                       {post.frontmatter?.excerpt || ''}
                     </p>
                   </div>
@@ -175,10 +176,10 @@ const breadcrumbs = [
         </div>
         
         {sortedPosts.length > 6 && (
-          <div class="text-center mt-12">
+          <div class="text-center mt-16">
             <button
               id="view-more-btn"
-              class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300"
+              class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300"
             >
               View More Posts
             </button>

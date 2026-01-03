@@ -190,32 +190,70 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
-    <!-- Video Modal -->
-    <div id="video-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[150] hidden">
-      <div class="bg-white rounded-lg max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden">
-        <div class="flex justify-between items-center p-6 border-b">
-          <div class="flex items-center gap-3">
-            <h3 id="video-modal-title" class="text-xl font-semibold text-gray-900"></h3>
-            <span id="video-modal-season" class="hidden inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold"></span>
+    <!-- Custom Video Player Modal -->
+    <div id="video-modal" class="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-[150] hidden">
+      <div class="bg-white rounded-2xl max-w-6xl w-full mx-4 max-h-[95vh] overflow-hidden shadow-2xl border border-gray-200">
+        <!-- Header -->
+        <div class="flex justify-between items-start p-6 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
+          <div class="flex-1 pr-4">
+            <div class="flex items-center gap-3 mb-2">
+              <h3 id="video-modal-title" class="text-2xl font-bold text-gray-900"></h3>
+              <span id="video-modal-season" class="hidden inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold shadow-sm"></span>
+            </div>
+            <p id="video-modal-date" class="text-sm text-gray-500 flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span id="video-modal-date-text"></span>
+            </p>
           </div>
-          <button 
+          <button
             id="close-video-modal"
-            class="text-gray-400 hover:text-gray-600 transition-colors"
+            class="text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-full p-2 transition-all duration-200"
+            aria-label="Close video"
           >
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
-        <div class="aspect-video">
-          <iframe 
-            id="video-iframe"
-            class="w-full h-full"
-            src=""
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-          ></iframe>
+        
+        <!-- Video Player -->
+        <div class="relative bg-black">
+          <div class="aspect-video">
+            <iframe
+              id="video-iframe"
+              class="w-full h-full"
+              src=""
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+        
+        <!-- Footer Actions -->
+        <div class="p-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between">
+          <div class="flex items-center gap-4">
+            <a
+              id="video-youtube-link"
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-brand transition-colors"
+            >
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+              Watch on YouTube
+            </a>
+          </div>
+          <button
+            id="close-video-modal-bottom"
+            class="px-4 py-2 bg-brand hover:bg-brand-dark text-white rounded-lg text-sm font-medium transition-colors"
+          >
+            Close
+          </button>
         </div>
       </div>
     </div>
@@ -426,21 +464,62 @@ import Layout from '../layouts/Layout.astro';
 
   // Create clean display title
   function createDisplayTitle(originalTitle: string): string {
-    const dayOfWeek = getDayOfWeekFromTitle(originalTitle);
+    // Parse sermon title and date from video title (for 2026+ videos)
+    let displayTitle = originalTitle;
     
-    // Check if title starts with LOCC
-    if (originalTitle.toLowerCase().startsWith('locc')) {
-      return `LOCC | ${dayOfWeek} Worship Service`;
+    // Remove common prefixes
+    displayTitle = displayTitle.replace(/^(LOCC|Service|Church Service)\s*[-|]\s*/i, '');
+    
+    // Extract date
+    const dateStr = parseDateFromVideoTitle(originalTitle);
+    
+    // Try to parse sermon title and pastor name (similar to thumbnail generator)
+    // Remove date patterns first
+    const datePatterns = [
+      /^\s*(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}\s*[-|]?\s*/gi,
+      /^\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}\s*[-|]?\s*/gi,
+      /\s*[-|]\s*(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}/gi,
+      /\s*[-|]\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}/gi,
+      /\s*\d{1,2}\/\d{1,2}\/\d{2,4}\s*[-|]?\s*/g,
+      /\s*\d{1,2}-\d{1,2}-\d{2,4}\s*[-|]?\s*/g
+    ];
+    
+    datePatterns.forEach(pattern => {
+      displayTitle = displayTitle.replace(pattern, '');
+    });
+    
+    displayTitle = displayTitle.replace(/^[-|]\s*/, '').replace(/\s*[-|]$/, '').trim();
+    
+    // Try to parse sermon title and pastor name
+    const pipeParts = displayTitle.split('|').map(s => s.trim()).filter(s => s.length > 0);
+    const dashParts = displayTitle.split('-').map(s => s.trim()).filter(s => s.length > 0);
+    
+    let sermonTitle = null;
+    
+    if (pipeParts.length >= 1) {
+      // Format: "| Sermon Title | Pastor Name" or "| Sermon Title |"
+      sermonTitle = pipeParts[0] || null;
+    } else if (dashParts.length >= 1) {
+      // Format: "Sermon Title - Pastor Name"
+      sermonTitle = dashParts[0] || null;
+    } else {
+      // No clear structure, use cleaned title
+      sermonTitle = displayTitle || null;
     }
     
-    // Check if it's a generic service title
-    if (originalTitle.toLowerCase().includes('service') || originalTitle.toLowerCase().includes('worship')) {
-      return `${dayOfWeek} Worship Service`;
+    // Clean up sermon title
+    if (sermonTitle) {
+      sermonTitle = sermonTitle.replace(/^[-|]\s*/, '').replace(/\s*[-|]$/, '').trim();
     }
     
-    // For other titles, try to preserve the beginning and add day of week
-    const baseName = originalTitle.split(/[-|]/)[0].trim() || 'Worship Service';
-    return `${baseName} | ${dayOfWeek} Service`;
+    // Format the display title
+    if (sermonTitle && sermonTitle.length > 0) {
+      // For 2026+ videos: "Sermon Title - Date"
+      return `${sermonTitle} - ${dateStr}`;
+    } else {
+      // Fallback: "Service - Date"
+      return `Service - ${dateStr}`;
+    }
   }
 
   async function initThumbnailGenerator() {
@@ -661,9 +740,12 @@ import Layout from '../layouts/Layout.astro';
         filteredVideos = [...allVideos];
         applyFilters();
         
-        // Preload thumbnails for better performance
+        // Preload thumbnails for better performance (skip videos with custom thumbnails)
         if (thumbnailGenerator) {
-          thumbnailGenerator.preloadThumbnails(allVideos);
+          const videosToPreload = allVideos.filter(v => !v.customThumbnail);
+          if (videosToPreload.length > 0) {
+            thumbnailGenerator.preloadThumbnails(videosToPreload);
+          }
         }
       } else {
         if (errorEl) {
@@ -703,29 +785,32 @@ import Layout from '../layouts/Layout.astro';
     
     filteredVideos.forEach(video => {
       const videoEl = document.createElement('div');
-      videoEl.className = 'bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300 cursor-pointer';
-      videoEl.onclick = () => openVideoModal(video.id, video.title);
+      videoEl.className = 'group bg-white rounded-xl overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer';
+      videoEl.onclick = () => {
+        const displayTitle = createDisplayTitle(video.title);
+        window.location.href = `/live?video=${video.id}&title=${encodeURIComponent(displayTitle)}`;
+      };
       
       videoEl.innerHTML = `
-        <div class="aspect-video relative overflow-hidden">
+        <div class="aspect-video relative overflow-hidden bg-gray-100">
           <img 
             id="thumbnail-${video.id}"
-            class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-            src="https://img.youtube.com/vi/${video.id}/maxresdefault.jpg"
+            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            src="${video.customThumbnail || `https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}"
             alt="${video.title}"
             loading="lazy"
           />
-          <div class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
-            <div class="bg-white bg-opacity-90 rounded-full p-3 transform scale-0 hover:scale-100 transition-transform duration-300">
-              <svg class="w-6 h-6 text-brand" fill="currentColor" viewBox="0 0 24 24">
+          <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+            <div class="bg-white rounded-full p-4 transform scale-95 group-hover:scale-100 transition-transform duration-300">
+              <svg class="w-7 h-7 text-brand ml-0.5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z"/>
               </svg>
             </div>
           </div>
         </div>
-        <div class="p-6">
-          <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">${createDisplayTitle(video.title)}</h3>
-          <p class="text-sm text-gray-600">${parseDateFromVideoTitle(video.title)}</p>
+        <div class="p-5">
+          <h3 class="text-lg font-semibold text-gray-900 mb-1.5 line-clamp-2">${createDisplayTitle(video.title)}</h3>
+          <p class="text-sm text-gray-500">${parseDateFromVideoTitle(video.title)}</p>
         </div>
       `;
       
@@ -745,10 +830,13 @@ import Layout from '../layouts/Layout.astro';
       const thumbnailEl = document.getElementById(`thumbnail-${video.id}`);
       if (!thumbnailEl || !(thumbnailEl instanceof HTMLImageElement)) continue;
 
+      // Generate thumbnails for all videos (2026 videos will use new background image)
+
       try {
         const dynamicThumbnail = await thumbnailGenerator.getVideoThumbnail({
           id: video.id,
-          title: video.title
+          title: video.title,
+          customThumbnail: video.customThumbnail
         });
 
         if (dynamicThumbnail && typeof dynamicThumbnail === 'string') {
@@ -765,10 +853,25 @@ import Layout from '../layouts/Layout.astro';
     const iframe = document.getElementById('video-iframe') as HTMLIFrameElement;
     const title = document.getElementById('video-modal-title');
     const seasonBadge = document.getElementById('video-modal-season');
+    const dateText = document.getElementById('video-modal-date-text');
+    const youtubeLink = document.getElementById('video-youtube-link') as HTMLAnchorElement;
     
     if (modal && iframe && title) {
-      title.textContent = videoTitle;
-      iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+      // Set title
+      title.textContent = createDisplayTitle(videoTitle);
+      
+      // Set date
+      if (dateText) {
+        dateText.textContent = parseDateFromVideoTitle(videoTitle);
+      }
+      
+      // Set YouTube link
+      if (youtubeLink) {
+        youtubeLink.href = `https://www.youtube.com/watch?v=${videoId}`;
+      }
+      
+      // Load video
+      iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
       modal.classList.remove('hidden');
       document.body.style.overflow = 'hidden';
       
@@ -815,10 +918,15 @@ import Layout from '../layouts/Layout.astro';
   // Event listeners
   document.addEventListener('DOMContentLoaded', () => {
     const closeModalBtn = document.getElementById('close-video-modal');
+    const closeModalBtnBottom = document.getElementById('close-video-modal-bottom');
     const modal = document.getElementById('video-modal');
     
     if (closeModalBtn) {
       closeModalBtn.addEventListener('click', closeVideoModal);
+    }
+    
+    if (closeModalBtnBottom) {
+      closeModalBtnBottom.addEventListener('click', closeVideoModal);
     }
     
     if (modal) {
@@ -884,5 +992,18 @@ import Layout from '../layouts/Layout.astro';
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.2s ease-in-out;
   }
 </style> 

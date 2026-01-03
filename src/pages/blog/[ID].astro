@@ -3,6 +3,9 @@ import Layout from '../../layouts/Layout.astro';
 import type { GetStaticPaths } from 'astro';
 import SharePost from '../../components/SharePost.astro';
 
+// Prerender this page as static HTML even in server mode
+export const prerender = true;
+
 // Define the Props interface for better type safety
 interface Props {
   post: {
@@ -37,12 +40,13 @@ export const getStaticPaths = (async () => {
       params: { ID: post.frontmatter.id.toString() },
       props: {
         post: {
-          ...post,
           frontmatter: {
             ...post.frontmatter,
             readingTime,
             authorImage: post.frontmatter.authorImage || 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'
           },
+          Content: post.Content,
+          rawContent: post.rawContent,
         },
       },
     };
@@ -51,6 +55,12 @@ export const getStaticPaths = (async () => {
 
 // Get the post from props
 const { post } = Astro.props;
+
+// Guard against undefined post
+if (!post || !post.Content) {
+  return Astro.redirect('/404');
+}
+
 const { Content } = post;
 
 // Format date helper function
@@ -77,122 +87,146 @@ const mailchimpSignupUrl = "https://lakeozarkdisciples.us7.list-manage.com/subsc
 ---
 
 <Layout title={post.frontmatter.title}>
-  <!-- Navigation -->
-  <nav class="bg-gray-50 py-4">
-    <div class="container mx-auto px-4">
-      <div class="flex items-center space-x-4">
-        {
-          breadcrumbs.map((item, index) => (
-            <div class="flex items-center">
-              {index > 0 && (
-                <svg
-                  class="h-5 w-5 flex-shrink-0 text-gray-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
-                </svg>
-              )}
-              <a
-                href={item.href}
-                class:list={[
-                  'ml-4 text-sm font-medium',
-                  item.current
-                    ? 'text-brand cursor-default'
-                    : 'text-gray-500 hover:text-gray-700',
-                ]}
-                aria-current={item.current ? 'page' : undefined}
-              >
-                {item.name}
-              </a>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  </nav>
-
-  <!-- Page Header -->
-  <div class="relative min-h-[60vh] flex items-center">
+  <!-- Hero Section - Matching index page style -->
+  <section class="relative overflow-hidden bg-white">
     <div class="absolute inset-0">
       <img
         src={post.frontmatter.image || "https://usercontent.donorkit.io/clients/LOCC/6408A096-4585-4540-806B-66A6EB4027D7.jpeg"}
         alt={post.frontmatter.title}
         class="w-full h-full object-cover"
+        fetchpriority="high"
+        loading="eager"
+        decoding="async"
       />
-      <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+      <div class="absolute inset-0 bg-black/40"></div>
     </div>
-    <div class="relative container mx-auto px-4 py-24">
-      <div class="max-w-4xl mx-auto text-center text-white">
-        <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+
+    <div class="relative container mx-auto px-6 py-32 md:py-40">
+      <div class="max-w-4xl">
+        <!-- Breadcrumbs -->
+        <nav class="mb-8">
+          <div class="flex items-center space-x-2 text-white/80">
+            {
+              breadcrumbs.map((item, index) => (
+                <div class="flex items-center">
+                  {index > 0 && (
+                    <svg
+                      class="h-4 w-4 mx-2 text-white/60"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
+                    </svg>
+                  )}
+                  <a
+                    href={item.href}
+                    class:list={[
+                      'text-sm font-medium hover:text-white transition-colors',
+                      item.current
+                        ? 'text-white cursor-default'
+                        : 'text-white/80',
+                    ]}
+                    aria-current={item.current ? 'page' : undefined}
+                  >
+                    {item.name}
+                  </a>
+                </div>
+              ))
+            }
+          </div>
+        </nav>
+
+        <!-- Post Meta -->
+        <div class="flex flex-wrap items-center gap-4 text-white/90 mb-6 text-sm">
+          <time datetime={new Date(post.frontmatter.date).toISOString()}>
+            {formatDate(post.frontmatter.date)}
+          </time>
+          <span>·</span>
+          <span>{post.frontmatter.readingTime} min read</span>
+          {
+            post.frontmatter.location && (
+              <>
+                <span>·</span>
+                <span>{post.frontmatter.location}</span>
+              </>
+            )
+          }
+        </div>
+
+        <!-- Title and Excerpt -->
+        <h1 class="text-5xl md:text-7xl font-semibold text-white mb-8 leading-tight tracking-tight">
           {post.frontmatter.title}
         </h1>
-        <p class="text-xl md:text-2xl text-gray-100 max-w-2xl mx-auto leading-relaxed">
+        <p class="text-lg md:text-xl text-white/80 mb-12 max-w-2xl font-light leading-relaxed">
           {post.frontmatter.excerpt}
         </p>
-        <div class="mt-8 flex justify-center gap-4">
-          <a href="#post-content" class="bg-white text-brand px-8 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors">
+        
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a 
+            href="#post-content" 
+            class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300 text-lg"
+          >
             Read Post
           </a>
-          <a href={mailchimpSignupUrl} target="_blank" class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-medium hover:bg-white/10 transition-colors">
+          <a 
+            href={mailchimpSignupUrl} 
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-medium rounded-lg transition-all duration-300 text-lg"
+          >
             Subscribe to Updates
           </a>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- Main Content -->
-  <article id="post-content" class="min-h-screen bg-white py-12">
-    <div class="container mx-auto px-4">
+  <article id="post-content" class="py-20 bg-white">
+    <div class="container mx-auto px-6">
       <div class="max-w-4xl mx-auto">
-        <!-- Post Content -->
-        <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
-          <!-- Author and Meta Info -->
-          <div class="flex flex-col md:flex-row md:items-center gap-6 mb-8 pb-8 border-b border-gray-200">
-            <div class="flex items-center gap-4">
-              <img
-                src={post.frontmatter.authorImage}
-                alt={post.frontmatter.author || 'Author Image'}
-                class="w-12 h-12 rounded-full object-cover ring-2 ring-gray-200"
-                onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'"
-              />
-              <div>
-                <div class="font-medium text-gray-900">
-                  {post.frontmatter.author || '[Unknown Author]'}
-                </div>
-                <div class="text-sm text-gray-500">
-                  {post.frontmatter.authorRole || '[Content Writer for LOCC]'}
-                </div>
+        <!-- Author Info Card -->
+        <div class="bg-gray-50 rounded-xl p-6 mb-12 border border-gray-200">
+          <div class="flex items-center gap-4">
+            <img
+              src={post.frontmatter.authorImage}
+              alt={post.frontmatter.author || 'Author Image'}
+              class="w-14 h-14 rounded-full object-cover ring-2 ring-white"
+              onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'"
+            />
+            <div>
+              <div class="font-semibold text-gray-900 text-lg">
+                {post.frontmatter.author || '[Unknown Author]'}
+              </div>
+              <div class="text-sm text-gray-600">
+                {post.frontmatter.authorRole || '[Content Writer for LOCC]'}
               </div>
             </div>
-
-            <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500">
-              <time datetime={new Date(post.frontmatter.date).toISOString()}>
-                {formatDate(post.frontmatter.date)}
-              </time>
-              <span>·</span>
-              <span>{post.frontmatter.readingTime} min read</span>
-              {
-                post.frontmatter.location && (
-                  <>
-                    <span>·</span>
-                    <span>{post.frontmatter.location}</span>
-                  </>
-                )
-              }
-            </div>
-          </div>
-
-          <!-- Post Body -->
-          <div class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-600 prose-a:text-brand hover:prose-a:text-brand/80 prose-strong:text-gray-900 prose-code:text-gray-800 prose-img:rounded-lg prose-img:shadow-lg">
-            <Content />
           </div>
         </div>
 
-        <!-- Share Section -->
-        <SharePost title={post.frontmatter.title} postId={post.frontmatter.id} />
+        <!-- Post Body -->
+        <div class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-600 prose-a:text-brand hover:prose-a:text-brand/80 prose-strong:text-gray-900 prose-code:text-gray-800 prose-img:rounded-lg prose-img:shadow-lg prose-img:my-8">
+          <Content />
+        </div>
 
+        <!-- Share Section -->
+        <div class="mt-16 pt-12 border-t border-gray-200">
+          <SharePost title={post.frontmatter.title} postId={post.frontmatter.id} />
+        </div>
+
+        <!-- Back to Blog Link -->
+        <div class="mt-12 text-center">
+          <a 
+            href="/blog" 
+            class="inline-flex items-center gap-2 text-brand hover:text-brand-dark font-medium transition-colors"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            Back to All Posts
+          </a>
+        </div>
       </div>
     </div>
   </article>

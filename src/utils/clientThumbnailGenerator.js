@@ -257,7 +257,8 @@ export function generateThumbnail(video, options = {}) {
   const {
     width = 480,  // Smaller for client-side performance
     height = 270,
-    pastor = "Rev. Ron Trimmer"
+    pastor = "Rev. Ron Trimmer",
+    skipBottomBar = false  // Skip bottom bar and text overlay for live page
   } = options;
 
   // Parse date from title
@@ -304,9 +305,47 @@ export function generateThumbnail(video, options = {}) {
       };
     }
 
-    // Load the church background image
+    // Load the church background image - use new image for 2026+ videos
     const backgroundImg = new Image();
+    
+    // Use new image for 2026+ videos, old image for pre-2026
+    const is2026OrLater = parsedDate.getFullYear() >= 2026;
+    let backgroundImageUrl;
+    
+    if (is2026OrLater) {
+      // Array of 2026 series background images
+      const seriesBackgrounds = [
+        'https://usercontent.donorkit.io/clients/LOCC/69CA977C-2462-4E2A-B067-A2FCD5D87A3F.jpeg',
+        'https://usercontent.donorkit.io/clients/LOCC/7767E813-185B-48B7-A7C8-A5C919258FEA%20(1).jpeg',
+        'https://usercontent.donorkit.io/clients/LOCC/8F240771-48E1-4868-9BC6-6AB8256F433F.jpeg'
+      ];
+      
+      // Use video ID to consistently select an image (hash-based selection)
+      // This ensures the same video always gets the same background
+      let hash = 0;
+      for (let i = 0; i < video.id.length; i++) {
+        hash = ((hash << 5) - hash) + video.id.charCodeAt(i);
+        hash = hash & hash; // Convert to 32-bit integer
+      }
+      const imageIndex = Math.abs(hash) % seriesBackgrounds.length;
+      backgroundImageUrl = seriesBackgrounds[imageIndex];
+      
+      // Use proxy endpoint to enable CORS for canvas manipulation
+      backgroundImageUrl = `/api/thumbnail-proxy?url=${encodeURIComponent(backgroundImageUrl)}`;
+    } else {
+      backgroundImageUrl = 'https://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg';
+    }
+    
+    // Set crossOrigin for canvas manipulation
     backgroundImg.crossOrigin = 'anonymous';
+    
+    // Load 2026 series icon for 2026+ videos
+    let seriesIcon = null;
+    if (is2026OrLater) {
+      seriesIcon = new Image();
+      seriesIcon.crossOrigin = 'anonymous';
+      seriesIcon.src = `/api/thumbnail-proxy?url=${encodeURIComponent('https://usercontent.donorkit.io/clients/LOCC/New Project (1).png')}`;
+    }
     
     backgroundImg.onload = function() {
       // Draw the background image with proper aspect ratio (cover behavior)
@@ -331,106 +370,493 @@ export function generateThumbnail(video, options = {}) {
       
       ctx.drawImage(backgroundImg, drawX, drawY, drawWidth, drawHeight);
       
-      // Create shadow blur overlay from the left side
-      const shadowGradient = ctx.createLinearGradient(0, 0, width * 0.65, 0);
-      shadowGradient.addColorStop(0, 'rgba(0, 0, 0, 0.85)');
-      shadowGradient.addColorStop(0.7, 'rgba(0, 0, 0, 0.4)');
-      shadowGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-      ctx.fillStyle = shadowGradient;
-      ctx.fillRect(0, 0, width, height);
-      
-      // Add liturgical season tag in top right corner (if not default)
-      if (liturgical.season !== 'Default') {
-        const tagPadding = 8;
-        const tagFontSize = Math.max(12, height * 0.04);
-        ctx.font = `bold ${tagFontSize}px Arial, sans-serif`;
-        ctx.textAlign = 'right';
+      if (is2026OrLater) {
+        // MODERN DESIGN FOR 2026+ VIDEOS
+        // Modern gradient overlay - diagonal from top-left to bottom-right
+        const overlayGradient = ctx.createLinearGradient(0, 0, width, height);
+        overlayGradient.addColorStop(0, 'rgba(0, 0, 0, 0.75)');
+        overlayGradient.addColorStop(0.4, 'rgba(0, 0, 0, 0.5)');
+        overlayGradient.addColorStop(0.7, 'rgba(0, 0, 0, 0.3)');
+        overlayGradient.addColorStop(1, 'rgba(0, 0, 0, 0.6)');
+        ctx.fillStyle = overlayGradient;
+        ctx.fillRect(0, 0, width, height);
+        
+        // Add subtle vignette effect
+        const vignetteGradient = ctx.createRadialGradient(width/2, height/2, width * 0.4, width/2, height/2, width * 0.8);
+        vignetteGradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
+        vignetteGradient.addColorStop(1, 'rgba(0, 0, 0, 0.4)');
+        ctx.fillStyle = vignetteGradient;
+        ctx.fillRect(0, 0, width, height);
+        
+        // Basic badge for 2026 series (bottom right)
+        if (liturgical.season !== 'Default') {
+          const badgePadding = 12;
+          const badgeFontSize = Math.max(12, height * 0.042);
+          ctx.font = `700 ${badgeFontSize}px "Google Sans Flex", sans-serif`;
+          ctx.textAlign = 'right';
+          ctx.textBaseline = 'bottom';
+          
+          const badgeText = liturgical.season.toUpperCase();
+          const textMetrics = ctx.measureText(badgeText);
+          const badgeWidth = textMetrics.width + badgePadding * 2;
+          const badgeHeight = badgeFontSize + badgePadding * 1.2;
+          const badgeX = width - 16;
+          const badgeY = height - 16;
+          const badgeRadius = 6;
+          
+          // Determine if background is light or dark for text color
+          const baseColor = liturgical.color;
+          const isLightColor = (() => {
+            if (baseColor === '#ffffff' || baseColor.toLowerCase() === '#fff') return true;
+            const rgb = baseColor.replace('#', '').match(/.{2}/g);
+            if (!rgb) return false;
+            const r = parseInt(rgb[0], 16);
+            const g = parseInt(rgb[1], 16);
+            const b = parseInt(rgb[2], 16);
+            const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+            return luminance > 0.6;
+          })();
+          
+          // Simple shadow
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+          ctx.shadowBlur = 8;
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 2;
+          
+          // Badge background
+          ctx.fillStyle = baseColor;
+          ctx.beginPath();
+          ctx.roundRect(badgeX - badgeWidth, badgeY - badgeHeight, badgeWidth, badgeHeight, badgeRadius);
+          ctx.fill();
+          
+          // Reset shadow
+          ctx.shadowColor = 'transparent';
+          ctx.shadowBlur = 0;
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 0;
+          
+          // Simple border
+          ctx.strokeStyle = isLightColor ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.3)';
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.roundRect(badgeX - badgeWidth, badgeY - badgeHeight, badgeWidth, badgeHeight, badgeRadius);
+          ctx.stroke();
+          
+          // Text
+          ctx.fillStyle = isLightColor ? '#1a1a1a' : '#ffffff';
+          ctx.shadowColor = isLightColor ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.4)';
+          ctx.shadowBlur = 4;
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 1;
+          ctx.fillText(badgeText, badgeX - badgePadding, badgeY - badgePadding * 0.4);
+          
+          // Reset shadow
+          ctx.shadowColor = 'transparent';
+          ctx.shadowBlur = 0;
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 0;
+        }
+        
+        // Modern text layout on the left side
+        const textX = width * 0.06;
+        const textY = height * 0.15;
+        
+        // Day of week - large, bold, Google Sans Flex typography
+        ctx.fillStyle = BRAND_COLORS.white;
+        ctx.font = `800 ${height * 0.14}px "Google Sans Flex", sans-serif`;
+        ctx.textAlign = 'left';
         ctx.textBaseline = 'top';
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
+        ctx.shadowBlur = 12;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 2;
         
-        // Measure text width
-        const tagText = liturgical.season;
-        const textMetrics = ctx.measureText(tagText);
-        const tagWidth = textMetrics.width + tagPadding * 2;
-        const tagHeight = tagFontSize + tagPadding * 2;
-        const tagX = width - 10; // 10px from right edge
-        const tagY = 10; // 10px from top
+        const dayText = dayOfWeek.toUpperCase();
+        ctx.fillText(dayText, textX, textY);
         
-        // Draw tag background with liturgical color
-        ctx.fillStyle = liturgical.color;
-        ctx.beginPath();
-        ctx.roundRect(tagX - tagWidth, tagY, tagWidth, tagHeight, 4);
-        ctx.fill();
+        // Date - medium weight, Google Sans Flex
+        ctx.font = `500 ${height * 0.085}px "Google Sans Flex", sans-serif`;
+        ctx.shadowBlur = 10;
+        ctx.fillText(formattedDate, textX, textY + height * 0.16);
         
-        // Draw white text
-        ctx.fillStyle = '#ffffff';
-        ctx.fillText(tagText, tagX - tagPadding, tagY + tagPadding);
+        // Reset shadow
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        
+        // Skip bottom bar and text overlay if requested (for live page)
+        if (skipBottomBar) {
+          // Just draw the icon and finalize - no text overlay
+          const finalizeThumbnail = () => {
+            // Draw 2026 series icon in top right corner (20px down from top) if loaded
+            if (seriesIcon && seriesIcon.complete && seriesIcon.naturalWidth > 0) {
+              const iconMaxWidth = height * 0.15;
+              const iconAspectRatio = seriesIcon.naturalWidth / seriesIcon.naturalHeight;
+              const iconWidth = iconMaxWidth;
+              const iconHeight = iconWidth / iconAspectRatio;
+              
+              const iconX = width - iconWidth - 12;
+              const iconY = 20;
+              
+              ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+              ctx.shadowBlur = 8;
+              ctx.shadowOffsetX = 0;
+              ctx.shadowOffsetY = 2;
+              ctx.drawImage(seriesIcon, iconX, iconY, iconWidth, iconHeight);
+              ctx.shadowColor = 'transparent';
+              ctx.shadowBlur = 0;
+              ctx.shadowOffsetX = 0;
+              ctx.shadowOffsetY = 0;
+            }
+            
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+            resolve(dataUrl);
+          };
+          
+          if (seriesIcon && seriesIcon.complete && seriesIcon.naturalWidth > 0) {
+            finalizeThumbnail();
+          } else if (seriesIcon) {
+            seriesIcon.onload = finalizeThumbnail;
+            seriesIcon.onerror = finalizeThumbnail;
+          } else {
+            finalizeThumbnail();
+          }
+          return; // Exit early, don't draw text or bottom bar
+        }
+        
+        // Parse sermon title and pastor name from video title (for 2026+ videos)
+        // Expected formats:
+        // - "LOCC | Service | January 5, 2026 | Sermon Title | Pastor Name"
+        // - "Service | January 5, 2026 | Sermon Title - Pastor Name"
+        // - "LOCC | January 5, 2026 | Sermon Title | Pastor Name"
+        let sermonTitle = null;
+        let pastorName = null;
+        let displayTitle = video.title;
+        
+        // Remove common prefixes
+        displayTitle = displayTitle.replace(/^(LOCC|Service|Church Service)\s*[-|]\s*/i, '');
+        
+        // Remove date patterns (including dates at start of string)
+        const datePatterns = [
+          /^\s*(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}\s*[-|]?\s*/gi,
+          /^\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}\s*[-|]?\s*/gi,
+          /^\s*\d{1,2}\/\d{1,2}\/\d{2,4}\s*[-|]?\s*/g,
+          /^\s*\d{1,2}-\d{1,2}-\d{2,4}\s*[-|]?\s*/g,
+          /\s*[-|]\s*\d{1,2}\/\d{1,2}\/\d{2,4}/g,
+          /\s*[-|]\s*\d{1,2}-\d{1,2}-\d{2,4}/g,
+          /\s*[-|]\s*(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}/gi,
+          /\s*[-|]\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}/gi,
+          /\s*(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}\s*[-|]?\s*/gi,
+          /\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}\s*[-|]?\s*/gi,
+          /\s*\d{1,2}\/\d{1,2}\/\d{2,4}\s*[-|]?\s*/g,
+          /\s*\d{1,2}-\d{1,2}-\d{2,4}\s*[-|]?\s*/g
+        ];
+        
+        datePatterns.forEach(pattern => {
+          displayTitle = displayTitle.replace(pattern, '');
+        });
+        
+        // Clean up any leading/trailing pipes or dashes
+        displayTitle = displayTitle.replace(/^[-|]\s*/, '').replace(/\s*[-|]$/, '').trim();
+        
+        // Try to parse sermon title and pastor name
+        // Look for patterns like "| Title | Pastor" or "Title - Pastor"
+        const pipeParts = displayTitle.split('|').map(s => s.trim()).filter(s => s.length > 0);
+        const dashParts = displayTitle.split('-').map(s => s.trim()).filter(s => s.length > 0);
+        
+        if (pipeParts.length >= 2) {
+          // Format: "| Sermon Title | Pastor Name" or "| Sermon Title |"
+          sermonTitle = pipeParts[0] || null;
+          if (pipeParts.length >= 2) {
+            pastorName = pipeParts[1] || null;
+          }
+        } else if (dashParts.length >= 2) {
+          // Format: "Sermon Title - Pastor Name"
+          sermonTitle = dashParts[0] || null;
+          pastorName = dashParts[1] || null;
+        } else {
+          // No clear structure, use cleaned title as sermon title
+          sermonTitle = displayTitle.replace(/^[-|]\s*/, '').replace(/\s*[-|]$/, '').trim();
+        }
+        
+        // Clean up any remaining separators
+        if (sermonTitle) {
+          sermonTitle = sermonTitle.replace(/^[-|]\s*/, '').replace(/\s*[-|]$/, '').trim();
+        }
+        if (pastorName) {
+          pastorName = pastorName.replace(/^[-|]\s*/, '').replace(/\s*[-|]$/, '').trim();
+        }
+        
+        // No bottom bar - text floating over image with shadow for readability
+        const textPadding = width * 0.06;
+        const bottomPadding = height * 0.04; // Padding from bottom edge
+        
+        // Draw sermon title (main content) with shadow for readability
+        const titleFontSize = height * 0.075;
+        ctx.fillStyle = BRAND_COLORS.white;
+        ctx.font = `700 ${titleFontSize}px "Google Sans Flex", sans-serif`;
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'bottom';
+        
+        const maxTitleWidth = width - (textPadding * 2);
+        let titleLines = [];
+        const titleLineHeight = titleFontSize * 1.3;
+        
+        if (sermonTitle) {
+          // Word wrap for sermon title (max 2 lines)
+          const words = sermonTitle.split(' ');
+          let line = '';
+          
+          for (let i = 0; i < words.length; i++) {
+            const testLine = line + (line ? ' ' : '') + words[i];
+            const metrics = ctx.measureText(testLine);
+            
+            if (metrics.width > maxTitleWidth && line) {
+              titleLines.push(line);
+              line = words[i];
+              if (titleLines.length >= 2) break;
+            } else {
+              line = testLine;
+            }
+          }
+          if (line && titleLines.length < 2) titleLines.push(line);
+          
+          // Truncate last line if needed
+          if (titleLines.length === 2) {
+            const lastLine = titleLines[1];
+            let truncated = lastLine;
+            while (ctx.measureText(truncated + '...').width > maxTitleWidth && truncated.length > 0) {
+              truncated = truncated.slice(0, -1);
+            }
+            titleLines[1] = truncated + '...';
+          }
+          
+          // Calculate starting Y position (from bottom)
+          let titleStartY = height - bottomPadding;
+          if (pastorName) {
+            // Make room for pastor name
+            titleStartY -= height * 0.045; // Space for pastor name
+          }
+          
+          // Draw sermon title lines with shadow for readability
+          titleLines.forEach((lineText, index) => {
+            const lineY = titleStartY - ((titleLines.length - 1 - index) * titleLineHeight);
+            
+            // Draw text shadow for readability
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+            ctx.shadowBlur = 8;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 2;
+            ctx.fillText(lineText, textPadding, lineY);
+            
+            // Reset shadow
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+          });
+        }
+        
+        // Draw pastor name (smaller, below title) with shadow
+        if (pastorName) {
+          const pastorFontSize = height * 0.042;
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+          ctx.font = `500 ${pastorFontSize}px "Google Sans Flex", sans-serif`;
+          ctx.textBaseline = 'bottom';
+          
+          const pastorY = height - bottomPadding;
+          
+          // Truncate if too long
+          let displayPastor = pastorName;
+          const maxPastorWidth = width - (textPadding * 2);
+          if (ctx.measureText(displayPastor).width > maxPastorWidth) {
+            while (ctx.measureText(displayPastor + '...').width > maxPastorWidth && displayPastor.length > 0) {
+              displayPastor = displayPastor.slice(0, -1);
+            }
+            displayPastor += '...';
+          }
+          
+          // Draw with shadow for readability
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+          ctx.shadowBlur = 6;
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 2;
+          ctx.fillText(displayPastor, textPadding, pastorY);
+          
+          // Reset shadow
+          ctx.shadowColor = 'transparent';
+          ctx.shadowBlur = 0;
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 0;
+        }
+        
+        // Function to draw icon and finalize
+        const finalizeThumbnail = () => {
+          // Draw 2026 series icon in top right corner (3px down from top) if loaded
+          if (seriesIcon && seriesIcon.complete && seriesIcon.naturalWidth > 0) {
+            // Maintain aspect ratio - use width as base, calculate height proportionally
+            const iconMaxWidth = height * 0.15; // Max width relative to thumbnail
+            const iconAspectRatio = seriesIcon.naturalWidth / seriesIcon.naturalHeight;
+            const iconWidth = iconMaxWidth;
+            const iconHeight = iconWidth / iconAspectRatio;
+            
+            const iconX = width - iconWidth - 12; // 12px from right edge
+            const iconY = 20; // Just 3px down from top
+            
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+            ctx.shadowBlur = 8;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 2;
+            ctx.drawImage(seriesIcon, iconX, iconY, iconWidth, iconHeight);
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+          }
+          
+          // Convert to data URL
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+          resolve(dataUrl);
+        };
+        
+        // Draw icon if already loaded, otherwise wait for it
+        if (seriesIcon && seriesIcon.complete && seriesIcon.naturalWidth > 0) {
+          finalizeThumbnail();
+        } else if (seriesIcon) {
+          seriesIcon.onload = finalizeThumbnail;
+          seriesIcon.onerror = finalizeThumbnail; // Resolve even if icon fails
+        } else {
+          finalizeThumbnail();
+        }
+      } else {
+        // ORIGINAL DESIGN FOR PRE-2026 VIDEOS
+        // Create shadow blur overlay from the left side
+        const shadowGradient = ctx.createLinearGradient(0, 0, width * 0.65, 0);
+        shadowGradient.addColorStop(0, 'rgba(0, 0, 0, 0.85)');
+        shadowGradient.addColorStop(0.7, 'rgba(0, 0, 0, 0.4)');
+        shadowGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = shadowGradient;
+        ctx.fillRect(0, 0, width, height);
+        
+        // Skip bottom bar if requested (for live page)
+        if (skipBottomBar) {
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+          resolve(dataUrl);
+          return; // Exit early, don't draw bottom bar
+        }
+        
+        // Add liturgical season tag in top right corner (if not default)
+        if (liturgical.season !== 'Default') {
+          const tagPadding = 8;
+          const tagFontSize = Math.max(12, height * 0.04);
+          ctx.font = `bold ${tagFontSize}px Arial, sans-serif`;
+          ctx.textAlign = 'right';
+          ctx.textBaseline = 'top';
+          
+          // Measure text width
+          const tagText = liturgical.season;
+          const textMetrics = ctx.measureText(tagText);
+          const tagWidth = textMetrics.width + tagPadding * 2;
+          const tagHeight = tagFontSize + tagPadding * 2;
+          const tagX = width - 10; // 10px from right edge
+          const tagY = 10; // 10px from top
+          
+          // Determine if background is light or dark for text color
+          const baseColor = liturgical.color;
+          const isLightColor = (() => {
+            // Check if color is white or very light
+            if (baseColor === '#ffffff' || baseColor.toLowerCase() === '#fff') return true;
+            // Parse RGB values
+            const rgb = baseColor.replace('#', '').match(/.{2}/g);
+            if (!rgb) return false;
+            const r = parseInt(rgb[0], 16);
+            const g = parseInt(rgb[1], 16);
+            const b = parseInt(rgb[2], 16);
+            // Calculate luminance (perceived brightness)
+            const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+            return luminance > 0.6; // If luminance > 60%, use dark text
+          })();
+          
+          // Draw tag background with liturgical color
+          ctx.fillStyle = liturgical.color;
+          ctx.beginPath();
+          ctx.roundRect(tagX - tagWidth, tagY, tagWidth, tagHeight, 4);
+          ctx.fill();
+          
+          // Text color based on background - dark text for light backgrounds, white for dark
+          ctx.fillStyle = isLightColor ? '#1a1a1a' : '#ffffff';
+          ctx.fillText(tagText, tagX - tagPadding, tagY + tagPadding);
+        }
+        
+        // Text positioning on the left side - moved to a better position
+        const textX = width * 0.08;
+        
+        // Day of week service text with shadow - moved up slightly
+        ctx.fillStyle = BRAND_COLORS.white;
+        ctx.font = `bold ${height * 0.12}px Arial, sans-serif`;
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+        ctx.shadowBlur = 8;
+        ctx.shadowOffsetX = 2;
+        ctx.shadowOffsetY = 2;
+        ctx.fillText(`${dayOfWeek} Service`, textX, height * 0.16);
+        
+        // Date text - moved up slightly
+        ctx.font = `bold ${height * 0.09}px Arial, sans-serif`;
+        ctx.fillText(formattedDate, textX, height * 0.27);
+        
+        // Reset shadow for bottom bar
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        
+        // Bottom red bar - made smaller from 0.18 to 0.14
+        const barHeight = height * 0.14;
+        ctx.fillStyle = BRAND_COLORS.red;
+        ctx.fillRect(0, height - barHeight, width, barHeight);
+        
+        // Video title on bar (without date) - smaller text
+        let displayTitle = video.title;
+        
+        // Remove date patterns from title for cleaner display
+        const datePatterns = [
+          /\s*[-|]\s*\d{1,2}\/\d{1,2}\/\d{2,4}/g,
+          /\s*[-|]\s*\d{1,2}-\d{1,2}-\d{2,4}/g,
+          /\s*[-|]\s*(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}/gi,
+          /\s*[-|]\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}/gi,
+          /\s*(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}\s*[-|]?\s*/gi,
+          /\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}\s*[-|]?\s*/gi,
+          /\s*\d{1,2}\/\d{1,2}\/\d{2,4}\s*[-|]?\s*/g,
+          /\s*\d{1,2}-\d{1,2}-\d{2,4}\s*[-|]?\s*/g
+        ];
+        
+        datePatterns.forEach(pattern => {
+          displayTitle = displayTitle.replace(pattern, '');
+        });
+        
+        // Clean up any remaining separators at start/end
+        displayTitle = displayTitle.replace(/^[-|]\s*/, '').replace(/\s*[-|]$/, '').trim();
+        
+        // If title is too long, truncate it
+        if (displayTitle.length > 45) {
+          displayTitle = displayTitle.substring(0, 42) + '...';
+        }
+        
+        ctx.fillStyle = BRAND_COLORS.white;
+        ctx.font = `bold ${height * 0.06}px Arial, sans-serif`; // Smaller font from 0.07 to 0.06
+        ctx.textAlign = 'center';
+        ctx.fillText(displayTitle, width/2, height - barHeight/2);
       }
-      
-      // Text positioning on the left side - moved to a better position
-      const textX = width * 0.08;
-      
-      // Day of week service text with shadow - moved up slightly
-      ctx.fillStyle = BRAND_COLORS.white;
-      ctx.font = `bold ${height * 0.12}px Arial, sans-serif`;
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'middle';
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
-      ctx.shadowBlur = 8;
-      ctx.shadowOffsetX = 2;
-      ctx.shadowOffsetY = 2;
-      ctx.fillText(`${dayOfWeek} Service`, textX, height * 0.16);
-      
-      // Date text - moved up slightly
-      ctx.font = `bold ${height * 0.09}px Arial, sans-serif`;
-      ctx.fillText(formattedDate, textX, height * 0.27);
-      
-      // Reset shadow for bottom bar
-      ctx.shadowColor = 'transparent';
-      ctx.shadowBlur = 0;
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 0;
-      
-      // Bottom red bar - made smaller from 0.18 to 0.14
-      const barHeight = height * 0.14;
-      ctx.fillStyle = BRAND_COLORS.red;
-      ctx.fillRect(0, height - barHeight, width, barHeight);
-      
-      // Video title on bar (without date) - smaller text
-      let displayTitle = video.title;
-      
-      // Remove date patterns from title for cleaner display
-      const datePatterns = [
-        /\s*[-|]\s*\d{1,2}\/\d{1,2}\/\d{2,4}/g,
-        /\s*[-|]\s*\d{1,2}-\d{1,2}-\d{2,4}/g,
-        /\s*[-|]\s*(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}/gi,
-        /\s*[-|]\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}/gi,
-        /\s*(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}\s*[-|]?\s*/gi,
-        /\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}\s*[-|]?\s*/gi,
-        /\s*\d{1,2}\/\d{1,2}\/\d{2,4}\s*[-|]?\s*/g,
-        /\s*\d{1,2}-\d{1,2}-\d{2,4}\s*[-|]?\s*/g
-      ];
-      
-      datePatterns.forEach(pattern => {
-        displayTitle = displayTitle.replace(pattern, '');
-      });
-      
-      // Clean up any remaining separators at start/end
-      displayTitle = displayTitle.replace(/^[-|]\s*/, '').replace(/\s*[-|]$/, '').trim();
-      
-      // If title is too long, truncate it
-      if (displayTitle.length > 45) {
-        displayTitle = displayTitle.substring(0, 42) + '...';
-      }
-      
-      ctx.fillStyle = BRAND_COLORS.white;
-      ctx.font = `bold ${height * 0.06}px Arial, sans-serif`; // Smaller font from 0.07 to 0.06
-      ctx.textAlign = 'center';
-      ctx.fillText(displayTitle, width/2, height - barHeight/2);
       
       // Convert to data URL
       const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
       resolve(dataUrl);
     };
+    
+    backgroundImg.src = backgroundImageUrl;
     
     backgroundImg.onerror = function() {
       console.warn('Failed to load church background image, using fallback');
@@ -496,46 +922,124 @@ export function generateThumbnail(video, options = {}) {
       const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
       resolve(dataUrl);
     };
-    
-    // Start loading the background image
-    backgroundImg.src = 'https://cdn.lakeozarkdisciples.org/media/7767E813-185B-48B7-A7C8-A5C919258FEA.jpeg';
   });
+}
+
+/**
+ * Check if we're in development mode
+ */
+function isDevelopmentMode() {
+  if (typeof window === 'undefined') return false;
+  const hostname = window.location.hostname;
+  return hostname === 'localhost' || hostname === '127.0.0.1' || hostname.includes('localhost') || hostname.includes('127.0.0.1');
 }
 
 /**
  * Get or generate thumbnail for a video
  */
-export async function getVideoThumbnail(video) {
+export async function getVideoThumbnail(video, options = {}) {
+  const { highResolution = false } = options;
+  const isDev = isDevelopmentMode();
+  
   // Parse date to determine liturgical season (for cache key) - only calculate once
   const parsedDate = parseDateFromTitle(video.title);
   let seasonKey = 'default';
+  let yearKey = '';
   if (parsedDate) {
     const normalizedDate = new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate(), 0, 0, 0, 0);
     const liturgical = getLiturgicalSeason(normalizedDate);
     seasonKey = liturgical.season.toLowerCase().replace(/\s+/g, '-');
+    yearKey = parsedDate.getFullYear().toString(); // Include year in cache key for different backgrounds
   }
   
-  // Check sessionStorage for cached thumbnail first (include season in cache key)
-  const cacheKey = `thumbnail_${video.id}_${seasonKey}`;
-  const cached = sessionStorage.getItem(cacheKey);
-  if (cached) {
-    return cached;
+  // Use different cache key for high resolution
+  const resolutionKey = highResolution ? '_hr' : '';
+  const cacheKeyBase = `thumbnail_${video.id}_${seasonKey}_${yearKey}${resolutionKey}`;
+  
+  // Skip caching in development mode
+  if (!isDev) {
+    // Check sessionStorage for cached thumbnail first (include season and year in cache key)
+    const cached = sessionStorage.getItem(cacheKeyBase);
+    if (cached) {
+      return cached;
+    }
   }
 
-  // Generate new thumbnail with church background
+  // Generate new thumbnail with appropriate background (new image for 2026+, old for pre-2026)
   try {
-    const generatedThumbnail = await generateThumbnail(video);
+    // Use high resolution for live page (1920x1080), normal for cards (480x270)
+    const thumbnailOptions = highResolution 
+      ? { width: 1920, height: 1080 }
+      : {};
+    
+    const generatedThumbnail = await generateThumbnail(video, thumbnailOptions);
     if (generatedThumbnail) {
-      // Cache in sessionStorage - reuse the already calculated cacheKey
-      try {
-        sessionStorage.setItem(cacheKey, generatedThumbnail);
-      } catch (e) {
-        console.warn('Failed to cache thumbnail in sessionStorage:', e);
+      // Only cache in production mode
+      if (!isDev) {
+        try {
+          sessionStorage.setItem(cacheKeyBase, generatedThumbnail);
+        } catch (e) {
+          console.warn('Failed to cache thumbnail in sessionStorage:', e);
+        }
       }
       return generatedThumbnail;
     }
   } catch (error) {
     console.warn('Failed to generate thumbnail:', error);
+  }
+
+  // Fallback to YouTube thumbnail
+  return `https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`;
+}
+
+/**
+ * Get high-resolution thumbnail for live page without bottom bar or text overlay
+ */
+export async function getVideoThumbnailForLive(video) {
+  const isDev = isDevelopmentMode();
+  
+  // Parse date to determine liturgical season (for cache key)
+  const parsedDate = parseDateFromTitle(video.title);
+  let seasonKey = 'default';
+  let yearKey = '';
+  if (parsedDate) {
+    const normalizedDate = new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate(), 0, 0, 0, 0);
+    const liturgical = getLiturgicalSeason(normalizedDate);
+    seasonKey = liturgical.season.toLowerCase().replace(/\s+/g, '-');
+    yearKey = parsedDate.getFullYear().toString();
+  }
+  
+  const cacheKey = `thumbnail_live_${video.id}_${seasonKey}_${yearKey}`;
+  
+  // Skip caching in development mode
+  if (!isDev) {
+    const cached = sessionStorage.getItem(cacheKey);
+    if (cached) {
+      return cached;
+    }
+  }
+
+  try {
+    // Generate thumbnail without bottom bar - pass skipBottomBar option
+    const thumbnail = await generateThumbnail(video, { 
+      width: 1920, 
+      height: 1080,
+      skipBottomBar: true 
+    });
+    
+    if (thumbnail) {
+      // Cache if not in dev mode
+      if (!isDev) {
+        try {
+          sessionStorage.setItem(cacheKey, thumbnail);
+        } catch (e) {
+          console.warn('Failed to cache live thumbnail:', e);
+        }
+      }
+      return thumbnail;
+    }
+  } catch (error) {
+    console.warn('Failed to generate live thumbnail:', error);
   }
 
   // Fallback to YouTube thumbnail

@@ -3,31 +3,54 @@ import LiveLayout from '../layouts/LiveLayout.astro';
 ---
 
 <LiveLayout title="Watch Live">
-<div class="fixed inset-0 bg-black flex flex-col">
-  <!-- Simple Top Bar -->
-  <div class="flex items-center justify-between p-4 bg-black/90 z-50">
-    <a href="/" class="flex items-center gap-2 text-white hover:text-gray-300 transition-colors text-lg">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-      </svg>
-      <span class="font-medium">Back</span>
-    </a>
-    
-    <div class="flex items-center gap-4">
-      <div id="live-badge" class="hidden">
-        <span class="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white text-base font-semibold rounded-full animate-pulse">
-          <span class="w-2 h-2 bg-white rounded-full animate-pulse"></span>
-          LIVE NOW
-        </span>
+<div class="fixed inset-0 bg-black flex flex-col overflow-hidden">
+  <!-- Netflix-style Top Navigation -->
+  <div class="absolute top-0 left-0 right-0 z-50 bg-gradient-to-b from-black via-black/80 to-transparent">
+    <div class="flex items-center justify-between px-6 py-4">
+      <a href="/" class="flex items-center gap-2 text-white hover:text-gray-300 transition-colors group">
+        <svg class="w-6 h-6 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        <span class="font-medium text-lg">Back</span>
+      </a>
+      
+      <div class="flex items-center gap-6">
+        <div id="live-badge" class="hidden">
+          <span class="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white text-sm font-bold rounded-full shadow-lg animate-pulse">
+            <span class="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+            LIVE NOW
+          </span>
+        </div>
+        <p id="status-text" class="text-base text-gray-300 font-light">
+          Sundays at 10:30 AM CT
+        </p>
       </div>
-      <p id="status-text" class="text-base text-gray-300 font-light">
-        Sundays at 10:30 AM CT
-      </p>
     </div>
   </div>
 
-  <!-- Full Screen Video -->
-  <div class="flex-1 relative" style="height: calc(100vh - 80px);">
+  <!-- Full Screen Video Container -->
+  <div class="flex-1 relative w-full h-screen">
+    <!-- Custom Thumbnail (shown before play) -->
+    <div id="video-thumbnail-container" class="absolute inset-0 w-full h-full hidden">
+      <img
+        id="video-thumbnail"
+        class="absolute inset-0 w-full h-full object-cover"
+        alt="Video thumbnail"
+      />
+    </div>
+    
+    <!-- Background YouTube Video (shown after play) -->
+    <div id="youtube-background" class="absolute inset-0 w-full h-full hidden overflow-hidden">
+      <iframe
+        id="youtube-player"
+        class="absolute border-none"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+    
+    <!-- Live Stream (default) -->
     <iframe
       id="live-player"
       src="https://customer-w9xtramr9fjat2m3.cloudflarestream.com/b49456d6a25da93af131a919453dc5ad/iframe"
@@ -35,10 +58,156 @@ import LiveLayout from '../layouts/LiveLayout.astro';
       allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
       allowfullscreen="true"
     ></iframe>
+    
+    <!-- Video Info Overlay (Netflix-style) -->
+    <div id="video-info-overlay" class="absolute bottom-0 left-0 right-0 z-40 p-8 pb-16 bg-gradient-to-t from-black via-black/90 to-transparent hidden">
+      <div class="max-w-4xl">
+        <h1 id="video-title" class="text-4xl md:text-5xl font-bold text-white mb-4 drop-shadow-2xl"></h1>
+        <p id="video-date" class="text-lg text-gray-300 mb-6 drop-shadow-lg"></p>
+        <div class="flex items-center gap-4">
+          <button
+            id="play-button"
+            class="flex items-center gap-2 px-8 py-3 bg-white text-black font-semibold rounded hover:bg-gray-200 transition-colors text-lg"
+          >
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+            Play
+          </button>
+          <a
+            id="info-button"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center gap-2 px-8 py-3 bg-gray-600/70 text-white font-semibold rounded hover:bg-gray-600 transition-colors text-lg backdrop-blur-sm"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            More Info
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
+  // Check for video parameter and embed YouTube video in background
+  async function initVideoBackground() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const videoId = urlParams.get('video');
+    
+    if (videoId) {
+      const thumbnailContainer = document.getElementById('video-thumbnail-container');
+      const videoThumbnail = document.getElementById('video-thumbnail') as HTMLImageElement;
+      const youtubeBackground = document.getElementById('youtube-background');
+      const youtubePlayer = document.getElementById('youtube-player') as HTMLIFrameElement;
+      const livePlayer = document.getElementById('live-player') as HTMLIFrameElement;
+      const videoInfoOverlay = document.getElementById('video-info-overlay');
+      const videoTitle = document.getElementById('video-title');
+      const videoDate = document.getElementById('video-date');
+      const playButton = document.getElementById('play-button');
+      const infoButton = document.getElementById('info-button') as HTMLAnchorElement;
+      
+      // Hide live stream
+      if (livePlayer) {
+        livePlayer.style.display = 'none';
+      }
+      
+      // Show video info overlay
+      if (videoInfoOverlay) {
+        videoInfoOverlay.classList.remove('hidden');
+      }
+      
+      // Fetch video data to get custom thumbnail
+      try {
+        const response = await fetch('/api/videos.json');
+        const videos = await response.json();
+        const video = videos.find((v: any) => v.id === videoId);
+        
+        if (video && thumbnailContainer && videoThumbnail) {
+          // Use custom thumbnail or generate one
+          let thumbnailUrl = video.customThumbnail || `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+          
+          // Generate high-resolution dynamic thumbnail for live page
+          try {
+            const { getVideoThumbnailForLive } = await import('../utils/clientThumbnailGenerator.js');
+            const dynamicThumbnail = await getVideoThumbnailForLive({
+              id: video.id,
+              title: video.title,
+              customThumbnail: video.customThumbnail
+            });
+            if (dynamicThumbnail) {
+              thumbnailUrl = dynamicThumbnail;
+            }
+          } catch (e) {
+            console.warn('Could not generate dynamic thumbnail, using fallback');
+          }
+          
+          videoThumbnail.src = thumbnailUrl;
+          thumbnailContainer.classList.remove('hidden');
+        }
+        
+        // Set up More Info button to link to YouTube
+        if (infoButton && videoId) {
+          infoButton.href = `https://www.youtube.com/watch?v=${videoId}`;
+        }
+      } catch (error) {
+        console.error('Error fetching video data:', error);
+        // Fallback to YouTube thumbnail
+        if (thumbnailContainer && videoThumbnail) {
+          videoThumbnail.src = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+          thumbnailContainer.classList.remove('hidden');
+        }
+        // Set up More Info button even if fetch fails
+        if (infoButton && videoId) {
+          infoButton.href = `https://www.youtube.com/watch?v=${videoId}`;
+        }
+      }
+      
+      // Fetch video title from URL
+      const videoTitleFromUrl = decodeURIComponent(urlParams.get('title') || 'Service Video');
+      
+      if (videoTitle && videoDate) {
+        // Parse title to extract sermon title and date
+        const titleParts = videoTitleFromUrl.split(' - ');
+        if (titleParts.length >= 2) {
+          videoTitle.textContent = titleParts[0];
+          videoDate.textContent = titleParts[1];
+        } else {
+          videoTitle.textContent = videoTitleFromUrl;
+          videoDate.textContent = '';
+        }
+      }
+      
+      // Play button functionality
+      if (playButton) {
+        playButton.onclick = (e) => {
+          e.preventDefault();
+          // Hide thumbnail and show YouTube player
+          if (thumbnailContainer) {
+            thumbnailContainer.classList.add('hidden');
+          }
+          if (youtubeBackground && youtubePlayer) {
+            youtubeBackground.classList.remove('hidden');
+            // Start playing with controls
+            youtubePlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&modestbranding=1&rel=0&playsinline=1`;
+          }
+          if (videoInfoOverlay) {
+            videoInfoOverlay.classList.add('hidden');
+          }
+        };
+      }
+    } else {
+      // Hide video info overlay if no video
+      const videoInfoOverlay = document.getElementById('video-info-overlay');
+      if (videoInfoOverlay) {
+        videoInfoOverlay.classList.add('hidden');
+      }
+    }
+  }
+  
   // Simple live status check
   function checkIfLive() {
     try {
@@ -83,10 +252,14 @@ import LiveLayout from '../layouts/LiveLayout.astro';
     }
   }
   
-  // Check on load and every minute
+  // Initialize video background on load
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', checkIfLive);
+    document.addEventListener('DOMContentLoaded', () => {
+      initVideoBackground();
+      checkIfLive();
+    });
   } else {
+    initVideoBackground();
     checkIfLive();
   }
   setInterval(checkIfLive, 60000);
@@ -112,5 +285,28 @@ import LiveLayout from '../layouts/LiveLayout.astro';
   body {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  /* YouTube video sizing to fill screen */
+  #youtube-background {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100vw;
+    height: 100vh;
+    min-width: 100%;
+    min-height: 100%;
+  }
+
+  #youtube-player {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1.2);
+    width: 100vw;
+    height: 56.25vw; /* 16:9 aspect ratio */
+    min-height: 100vh;
+    min-width: 177.78vh; /* 16:9 aspect ratio */
   }
 </style>

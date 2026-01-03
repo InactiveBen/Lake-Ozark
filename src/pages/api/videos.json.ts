@@ -7,6 +7,9 @@
 import type { APIRoute } from 'astro';
 import { fetchLatestVideos } from '../../utils/fetchYouTubeVideos.js';
 
+// Ensure this route is never pre-rendered - always run at request time
+export const prerender = false;
+
 // Cache video results for 5 minutes to reduce API calls
 // Videos don't change frequently, so short caching improves performance
 const CACHE_MAX_AGE = 300; // 5 minutes in seconds

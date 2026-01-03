@@ -180,10 +180,12 @@ export async function fetchLatestVideos() {
         parsedDate: parsedDate
       };
       
-      // Use custom thumbnail if available
+      // Use custom thumbnail if available in map
       if (customThumbnailMap[video.id]) {
         videoData.customThumbnail = customThumbnailMap[video.id];
       }
+        // For all 2026 videos, thumbnail generator will rotate between series images
+        // No need to set customThumbnail - it will be generated dynamically
       
       return videoData;
     });
@@ -198,6 +200,15 @@ export async function fetchLatestVideos() {
     });
     
     const videos = sortedVideos.map(({ parsedDate, ...video }) => video);
+    
+    // Add dummy 2026 video for testing the new design
+    const dummy2026Video = {
+      id: 'dummy-2026-test',
+      title: 'LOCC | December 25, 2026 | Your Light Has Come! | Rev. Lina Eddy',
+    };
+    
+    // Insert dummy video at the beginning (most recent)
+   // videos.unshift(dummy2026Video);
     
     return videos;
   } catch (error) {
