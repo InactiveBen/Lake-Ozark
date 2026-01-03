@@ -1,7 +1,7 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
-import node from '@astrojs/node';
+import vercel from '@astrojs/vercel/serverless';
 
 export default defineConfig({
   // Integrations enable support for external libraries and UI frameworks.
@@ -13,10 +13,8 @@ export default defineConfig({
   // Output configuration - use server mode so API routes run at request time
   output: 'server',
   
-  // Adapter for Node.js server
-  adapter: node({
-    mode: 'standalone'
-  }),
+  // Adapter for Vercel serverless functions
+  adapter: vercel(),
   
   // Markdown configuration settings.
   markdown: {
