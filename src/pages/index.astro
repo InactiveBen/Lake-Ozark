@@ -6,7 +6,17 @@ import DonationForm from '../components/DonationForm.astro';
 
 import { isLocalVisitor } from '../utils/locationCheck';
 
-const isLocal = await isLocalVisitor();
+// This page uses server-side rendering for location checking
+export const prerender = false;
+
+// Safely get local visitor status, default to false if check fails
+let isLocal = false;
+try {
+  isLocal = await isLocalVisitor();
+} catch (error) {
+  console.warn('Location check failed, defaulting to non-local:', error);
+  isLocal = false;
+}
 
 // Toggle this to show/hide the announcement banner
 const showAnnouncementBanner = true;
