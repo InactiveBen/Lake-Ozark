@@ -6,7 +6,7 @@ This is the codebase for the Lake Ozark Christian Church website, built with Ast
 
 Our codebase is organized into several key directories:
 
-- `src/pages/`: The heart of our routing system
+- `src/pages/`: The heart of our routing system 
   - Contains `.astro` and `.md` files that automatically generate website routes
   - Each file corresponds to a page on the site
   - Markdown files power our content-heavy pages
