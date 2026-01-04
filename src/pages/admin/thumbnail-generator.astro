@@ -1,0 +1,760 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Thumbnail Generator">
+  <head>
+    <meta name="robots" content="noindex, nofollow" />
+  </head>
+  
+  <section class="min-h-[80vh] py-12 px-4">
+    <div class="max-w-6xl mx-auto">
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">Thumbnail Generator</h1>
+      <p class="text-gray-600 mb-8">Create custom thumbnails with your own background images</p>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Form Section -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <h2 class="text-2xl font-semibold mb-6">Thumbnail Settings</h2>
+          
+          <form id="thumbnail-form" class="space-y-6">
+            <!-- Background Image Input -->
+            <div>
+              <label for="background-type" class="block text-sm font-medium text-gray-700 mb-2">
+                Background Image Source
+              </label>
+              <select id="background-type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent">
+                <option value="url">Image URL</option>
+                <option value="file">Upload File</option>
+              </select>
+            </div>
+            
+            <!-- URL Input -->
+            <div id="url-input-container">
+              <label for="background-url" class="block text-sm font-medium text-gray-700 mb-2">
+                Background Image URL
+              </label>
+              <input 
+                type="url" 
+                id="background-url" 
+                placeholder="https://example.com/image.jpg"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+              />
+              <p class="mt-1 text-xs text-gray-500">Enter a direct image URL</p>
+            </div>
+            
+            <!-- File Input -->
+            <div id="file-input-container" class="hidden">
+              <label for="background-file" class="block text-sm font-medium text-gray-700 mb-2">
+                Upload Background Image
+              </label>
+              <input 
+                type="file" 
+                id="background-file" 
+                accept="image/*"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+              />
+              <p class="mt-1 text-xs text-gray-500">Upload a JPG, PNG, or other image file</p>
+            </div>
+            
+            <!-- Title Input -->
+            <div>
+              <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
+                Title
+              </label>
+              <input 
+                type="text" 
+                id="title" 
+                placeholder="Sunday Service"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+              />
+            </div>
+            
+            <!-- Date Input -->
+            <div>
+              <label for="date" class="block text-sm font-medium text-gray-700 mb-2">
+                Date
+              </label>
+              <input 
+                type="date" 
+                id="date" 
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+              />
+            </div>
+            
+            <!-- Pastor Name Input -->
+            <div>
+              <label for="pastor" class="block text-sm font-medium text-gray-700 mb-2">
+                Pastor Name (Optional)
+              </label>
+              <input 
+                type="text" 
+                id="pastor" 
+                placeholder="Rev. Ron Trimmer"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+              />
+            </div>
+            
+            <!-- Sermon Title Input -->
+            <div>
+              <label for="sermon-title" class="block text-sm font-medium text-gray-700 mb-2">
+                Sermon Title (Optional)
+              </label>
+              <input 
+                type="text" 
+                id="sermon-title" 
+                placeholder="Sermon Title"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+              />
+            </div>
+            
+            <!-- Theme/Style Selection -->
+            <div>
+              <label for="theme" class="block text-sm font-medium text-gray-700 mb-2">
+                Theme/Style
+              </label>
+              <select id="theme" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent">
+                <option value="modern">Modern (2026 Style)</option>
+                <option value="classic">Classic</option>
+              </select>
+            </div>
+            
+            <!-- Liturgical Season Badge -->
+            <div>
+              <label for="liturgical-season" class="block text-sm font-medium text-gray-700 mb-2">
+                Liturgical Season Badge (Optional)
+              </label>
+              <select id="liturgical-season" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent">
+                <option value="">None</option>
+                <option value="Advent">Advent (Blue)</option>
+                <option value="Christmas">Christmas (White)</option>
+                <option value="Epiphany">Epiphany (White)</option>
+                <option value="Lent">Lent (Purple)</option>
+                <option value="Easter">Easter (White)</option>
+                <option value="Pentecost">Pentecost (Red)</option>
+                <option value="Ordinary Time">Ordinary Time (Green)</option>
+                <option value="All Saints">All Saints (White)</option>
+              </select>
+            </div>
+            
+            <!-- Series Icon Toggle -->
+            <div>
+              <label class="flex items-center space-x-2">
+                <input 
+                  type="checkbox" 
+                  id="show-series-icon"
+                  class="w-4 h-4 text-brand border-gray-300 rounded focus:ring-brand"
+                />
+                <span class="text-sm font-medium text-gray-700">Show 2026 Series Icon</span>
+              </label>
+              <p class="mt-1 text-xs text-gray-500">Displays icon in top right corner</p>
+            </div>
+            
+            <!-- Overlay Opacity -->
+            <div>
+              <label for="overlay-opacity" class="block text-sm font-medium text-gray-700 mb-2">
+                Overlay Opacity: <span id="opacity-value">50</span>%
+              </label>
+              <input 
+                type="range" 
+                id="overlay-opacity" 
+                min="0"
+                max="100"
+                value="50"
+                class="w-full"
+              />
+            </div>
+            
+            <!-- Dimensions -->
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label for="width" class="block text-sm font-medium text-gray-700 mb-2">
+                  Width (px)
+                </label>
+                <input 
+                  type="number" 
+                  id="width" 
+                  value="1920"
+                  min="100"
+                  max="4000"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label for="height" class="block text-sm font-medium text-gray-700 mb-2">
+                  Height (px)
+                </label>
+                <input 
+                  type="number" 
+                  id="height" 
+                  value="1080"
+                  min="100"
+                  max="4000"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+                />
+              </div>
+            </div>
+            
+            <!-- Generate Button -->
+            <button 
+              type="submit"
+              class="w-full bg-brand text-white py-3 px-6 rounded-md hover:bg-brand-dark transition-colors font-medium"
+            >
+              Generate Thumbnail
+            </button>
+          </form>
+        </div>
+        
+        <!-- Preview Section -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <h2 class="text-2xl font-semibold mb-6">Preview</h2>
+          
+          <div id="preview-container" class="bg-gray-100 rounded-lg p-4 min-h-[400px] flex items-center justify-center">
+            <p class="text-gray-500">Generated thumbnail will appear here</p>
+          </div>
+          
+          <div id="download-container" class="mt-6 hidden">
+            <button 
+              id="download-btn"
+              class="w-full bg-green-600 text-white py-3 px-6 rounded-md hover:bg-green-700 transition-colors font-medium"
+            >
+              Download Thumbnail
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  // Background type toggle
+  const backgroundType = document.getElementById('background-type') as HTMLSelectElement | null;
+  const urlInputContainer = document.getElementById('url-input-container');
+  const fileInputContainer = document.getElementById('file-input-container');
+  
+  backgroundType.addEventListener('change', (e) => {
+    const target = e.target as HTMLSelectElement;
+    if (target.value === 'url') {
+      urlInputContainer.classList.remove('hidden');
+      fileInputContainer.classList.add('hidden');
+    } else {
+      urlInputContainer.classList.add('hidden');
+      fileInputContainer.classList.remove('hidden');
+    }
+  });
+  
+  // Form submission
+  const form = document.getElementById('thumbnail-form');
+  const previewContainer = document.getElementById('preview-container');
+  const downloadContainer = document.getElementById('download-container');
+  const downloadBtn = document.getElementById('download-btn');
+  
+  let currentCanvas = null;
+  
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const backgroundTypeValue = (backgroundType as HTMLSelectElement).value;
+    const title = (document.getElementById('title') as HTMLInputElement).value;
+    const dateInput = (document.getElementById('date') as HTMLInputElement).value;
+    const pastor = (document.getElementById('pastor') as HTMLInputElement).value;
+    const sermonTitle = (document.getElementById('sermon-title') as HTMLInputElement).value;
+    const theme = (document.getElementById('theme') as HTMLSelectElement).value;
+    const liturgicalSeason = (document.getElementById('liturgical-season') as HTMLSelectElement).value;
+    const showSeriesIcon = (document.getElementById('show-series-icon') as HTMLInputElement).checked;
+    const overlayOpacity = parseInt((document.getElementById('overlay-opacity') as HTMLInputElement).value) || 50;
+    const width = parseInt((document.getElementById('width') as HTMLInputElement).value) || 1920;
+    const height = parseInt((document.getElementById('height') as HTMLInputElement).value) || 1080;
+    
+    // Show loading state
+    previewContainer.innerHTML = '<p class="text-gray-500">Generating thumbnail...</p>';
+    downloadContainer.classList.add('hidden');
+    
+    try {
+      let backgroundImage;
+      
+      // Load background image
+      if (backgroundTypeValue === 'url') {
+        const url = (document.getElementById('background-url') as HTMLInputElement).value;
+        if (!url) {
+          throw new Error('Please provide a background image URL');
+        }
+        backgroundImage = await loadImageFromUrl(url);
+      } else {
+        const fileInput = document.getElementById('background-file') as HTMLInputElement;
+        if (!fileInput.files || !fileInput.files[0]) {
+          throw new Error('Please select a background image file');
+        }
+        backgroundImage = await loadImageFromFile(fileInput.files[0]);
+      }
+      
+      // Load series icon if needed
+      let seriesIcon = null;
+      if (showSeriesIcon) {
+        try {
+          // Use proxy for series icon to handle CORS
+          const iconUrl = `/api/thumbnail-proxy?url=${encodeURIComponent('https://usercontent.donorkit.io/clients/LOCC/New Project (1).png')}`;
+          seriesIcon = await loadImageFromUrl(iconUrl);
+        } catch (error) {
+          console.warn('Failed to load series icon:', error);
+        }
+      }
+      
+      // Generate thumbnail
+      const canvas = await generateThumbnail({
+        backgroundImage,
+        title,
+        date: dateInput,
+        pastor,
+        sermonTitle,
+        theme,
+        liturgicalSeason,
+        seriesIcon,
+        overlayOpacity,
+        width,
+        height
+      });
+      
+      currentCanvas = canvas;
+      
+      // Display preview
+      const img = document.createElement('img');
+      img.src = canvas.toDataURL('image/jpeg', 0.9);
+      img.className = 'max-w-full h-auto rounded-lg';
+      img.alt = 'Generated thumbnail';
+      
+      previewContainer.innerHTML = '';
+      previewContainer.appendChild(img);
+      downloadContainer.classList.remove('hidden');
+      
+    } catch (error) {
+      console.error('Error generating thumbnail:', error);
+      previewContainer.innerHTML = `<p class="text-red-600">Error: ${error.message}</p>`;
+    }
+  });
+  
+  // Overlay opacity slider update
+  const overlayOpacitySlider = document.getElementById('overlay-opacity') as HTMLInputElement;
+  const opacityValue = document.getElementById('opacity-value');
+  if (overlayOpacitySlider && opacityValue) {
+    overlayOpacitySlider.addEventListener('input', (e) => {
+      const target = e.target as HTMLInputElement;
+      if (opacityValue) {
+        opacityValue.textContent = target.value;
+      }
+    });
+  }
+  
+  // Download button
+  downloadBtn.addEventListener('click', () => {
+    if (!currentCanvas) return;
+    
+    const link = document.createElement('a');
+    link.download = `thumbnail-${Date.now()}.jpg`;
+    link.href = currentCanvas.toDataURL('image/jpeg', 0.9);
+    link.click();
+  });
+  
+  // Helper functions
+  function loadImageFromUrl(url) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => resolve(img);
+      img.onerror = () => {
+        // Try using proxy if CORS fails
+        const proxyUrl = `/api/thumbnail-proxy?url=${encodeURIComponent(url)}`;
+        const proxyImg = new Image();
+        proxyImg.crossOrigin = 'anonymous';
+        proxyImg.onload = () => resolve(proxyImg);
+        proxyImg.onerror = () => reject(new Error('Failed to load image. Please check the URL or try uploading a file instead.'));
+        proxyImg.src = proxyUrl;
+      };
+      img.src = url;
+    });
+  }
+  
+  function loadImageFromFile(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(new Error('Failed to load image file'));
+        img.src = e.target?.result as string;
+      };
+      reader.onerror = () => reject(new Error('Failed to read file'));
+      reader.readAsDataURL(file);
+    });
+  }
+  
+  async function generateThumbnail({ backgroundImage, title, date, pastor, sermonTitle, theme, liturgicalSeason, seriesIcon, overlayOpacity, width, height }) {
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    
+    // Add roundRect polyfill if not available
+    if (!ctx.roundRect) {
+      ctx.roundRect = function(x, y, width, height, radius) {
+        this.beginPath();
+        this.moveTo(x + radius, y);
+        this.lineTo(x + width - radius, y);
+        this.quadraticCurveTo(x + width, y, x + width, y + radius);
+        this.lineTo(x + width, y + height - radius);
+        this.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+        this.lineTo(x + radius, y + height);
+        this.quadraticCurveTo(x, y + height, x, y + height - radius);
+        this.lineTo(x, y + radius);
+        this.quadraticCurveTo(x, y, x + radius, y);
+        this.closePath();
+      };
+    }
+    
+    // Draw background image with cover behavior
+    const imgAspect = backgroundImage.width / backgroundImage.height;
+    const canvasAspect = width / height;
+    
+    let drawWidth, drawHeight, drawX, drawY;
+    
+    if (imgAspect > canvasAspect) {
+      // Image is wider than canvas - fit height and crop width
+      drawHeight = height;
+      drawWidth = height * imgAspect;
+      drawX = (width - drawWidth) / 2;
+      drawY = 0;
+    } else {
+      // Image is taller than canvas - fit width and crop height
+      drawWidth = width;
+      drawHeight = width / imgAspect;
+      drawX = 0;
+      drawY = (height - drawHeight) / 2;
+    }
+    
+    ctx.drawImage(backgroundImage, drawX, drawY, drawWidth, drawHeight);
+    
+    // Calculate overlay opacity (0-100 to 0-1)
+    const opacity = overlayOpacity / 100;
+    
+    // Add gradient overlay for text readability
+    if (theme === 'modern') {
+      const overlayGradient = ctx.createLinearGradient(0, 0, width, height);
+      overlayGradient.addColorStop(0, `rgba(0, 0, 0, ${0.75 * opacity})`);
+      overlayGradient.addColorStop(0.4, `rgba(0, 0, 0, ${0.5 * opacity})`);
+      overlayGradient.addColorStop(0.7, `rgba(0, 0, 0, ${0.3 * opacity})`);
+      overlayGradient.addColorStop(1, `rgba(0, 0, 0, ${0.6 * opacity})`);
+      ctx.fillStyle = overlayGradient;
+      ctx.fillRect(0, 0, width, height);
+      
+      // Add vignette effect
+      const vignetteGradient = ctx.createRadialGradient(width/2, height/2, width * 0.4, width/2, height/2, width * 0.8);
+      vignetteGradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
+      vignetteGradient.addColorStop(1, `rgba(0, 0, 0, ${0.4 * opacity})`);
+      ctx.fillStyle = vignetteGradient;
+      ctx.fillRect(0, 0, width, height);
+    } else {
+      // Classic style - shadow from left
+      const shadowGradient = ctx.createLinearGradient(0, 0, width * 0.65, 0);
+      shadowGradient.addColorStop(0, `rgba(0, 0, 0, ${0.85 * opacity})`);
+      shadowGradient.addColorStop(0.7, `rgba(0, 0, 0, ${0.4 * opacity})`);
+      shadowGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = shadowGradient;
+      ctx.fillRect(0, 0, width, height);
+    }
+    
+    // Format date
+    let formattedDate = '';
+    let dayOfWeek = '';
+    if (date) {
+      // Parse date string manually to avoid timezone issues
+      // Date input format is YYYY-MM-DD
+      const [year, month, day] = date.split('-').map(Number);
+      const dateObj = new Date(year, month - 1, day); // month is 0-indexed
+      formattedDate = dateObj.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      dayOfWeek = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
+    }
+    
+    // Text positioning
+    const textX = width * 0.06;
+    const textY = height * 0.15;
+    
+    // Day of week or title - large, bold
+    if (dayOfWeek) {
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = theme === 'modern' 
+        ? `800 ${height * 0.14}px "Google Sans Flex", sans-serif`
+        : `bold ${height * 0.12}px Arial, sans-serif`;
+      ctx.textAlign = 'left';
+      ctx.textBaseline = theme === 'modern' ? 'top' : 'middle';
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
+      ctx.shadowBlur = 12;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 2;
+      
+      const dayText = title ? `${dayOfWeek.toUpperCase()} - ${title.toUpperCase()}` : dayOfWeek.toUpperCase();
+      ctx.fillText(dayText, textX, textY);
+      
+      // Date - medium weight
+      ctx.font = theme === 'modern'
+        ? `500 ${height * 0.085}px "Google Sans Flex", sans-serif`
+        : `bold ${height * 0.09}px Arial, sans-serif`;
+      ctx.shadowBlur = 10;
+      const dateY = theme === 'modern' ? textY + height * 0.16 : height * 0.27;
+      ctx.fillText(formattedDate, textX, dateY);
+      
+      // Reset shadow
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+    } else if (title) {
+      // Show title if no date
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = theme === 'modern'
+        ? `800 ${height * 0.14}px "Google Sans Flex", sans-serif`
+        : `bold ${height * 0.12}px Arial, sans-serif`;
+      ctx.textAlign = 'left';
+      ctx.textBaseline = theme === 'modern' ? 'top' : 'middle';
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
+      ctx.shadowBlur = 12;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 2;
+      
+      ctx.fillText(title.toUpperCase(), textX, textY);
+      
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+    }
+    
+    // Liturgical season badge (modern theme only)
+    if (liturgicalSeason && theme === 'modern') {
+      const seasonColors = {
+        'Advent': '#2563eb',
+        'Christmas': '#ffffff',
+        'Epiphany': '#ffffff',
+        'Lent': '#7c3aed',
+        'Easter': '#ffffff',
+        'Pentecost': '#dc2626',
+        'Ordinary Time': '#16a34a',
+        'All Saints': '#ffffff'
+      };
+      
+      const badgeColor = seasonColors[liturgicalSeason] || '#dc2626';
+      const badgePadding = 12;
+      const badgeFontSize = Math.max(12, height * 0.042);
+      ctx.font = `700 ${badgeFontSize}px "Google Sans Flex", sans-serif`;
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'bottom';
+      
+      const badgeText = liturgicalSeason.toUpperCase();
+      const textMetrics = ctx.measureText(badgeText);
+      const badgeWidth = textMetrics.width + badgePadding * 2;
+      const badgeHeight = badgeFontSize + badgePadding * 1.2;
+      const badgeX = width - 16;
+      const badgeY = height - 16;
+      const badgeRadius = 6;
+      
+      // Determine if background is light or dark for text color
+      const isLightColor = badgeColor === '#ffffff' || badgeColor.toLowerCase() === '#fff' || 
+        (() => {
+          const rgb = badgeColor.replace('#', '').match(/.{2}/g);
+          if (!rgb) return false;
+          const r = parseInt(rgb[0], 16);
+          const g = parseInt(rgb[1], 16);
+          const b = parseInt(rgb[2], 16);
+          const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+          return luminance > 0.6;
+        })();
+      
+      // Shadow
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+      ctx.shadowBlur = 8;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 2;
+      
+      // Badge background
+      ctx.fillStyle = badgeColor;
+      ctx.beginPath();
+      ctx.roundRect(badgeX - badgeWidth, badgeY - badgeHeight, badgeWidth, badgeHeight, badgeRadius);
+      ctx.fill();
+      
+      // Reset shadow
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+      
+      // Border
+      ctx.strokeStyle = isLightColor ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.3)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.roundRect(badgeX - badgeWidth, badgeY - badgeHeight, badgeWidth, badgeHeight, badgeRadius);
+      ctx.stroke();
+      
+      // Text
+      ctx.fillStyle = isLightColor ? '#1a1a1a' : '#ffffff';
+      ctx.shadowColor = isLightColor ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.4)';
+      ctx.shadowBlur = 4;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 1;
+      ctx.fillText(badgeText, badgeX - badgePadding, badgeY - badgePadding * 0.4);
+      
+      // Reset shadow
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+    }
+    
+    // Sermon title and pastor name at bottom
+    const textPadding = width * 0.06;
+    const bottomPadding = height * 0.04;
+    
+    if (sermonTitle) {
+      const titleFontSize = theme === 'modern' ? height * 0.075 : height * 0.06;
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = theme === 'modern'
+        ? `700 ${titleFontSize}px "Google Sans Flex", sans-serif`
+        : `bold ${titleFontSize}px Arial, sans-serif`;
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'bottom';
+      
+      const maxTitleWidth = width - (textPadding * 2);
+      let titleLines = [];
+      const titleLineHeight = titleFontSize * 1.3;
+      
+      // Word wrap for sermon title (max 2 lines)
+      const words = sermonTitle.split(' ');
+      let line = '';
+      
+      for (let i = 0; i < words.length; i++) {
+        const testLine = line + (line ? ' ' : '') + words[i];
+        const metrics = ctx.measureText(testLine);
+        
+        if (metrics.width > maxTitleWidth && line) {
+          titleLines.push(line);
+          line = words[i];
+          if (titleLines.length >= 2) break;
+        } else {
+          line = testLine;
+        }
+      }
+      if (line && titleLines.length < 2) titleLines.push(line);
+      
+      // Truncate last line if needed
+      if (titleLines.length === 2) {
+        const lastLine = titleLines[1];
+        let truncated = lastLine;
+        while (ctx.measureText(truncated + '...').width > maxTitleWidth && truncated.length > 0) {
+          truncated = truncated.slice(0, -1);
+        }
+        titleLines[1] = truncated + '...';
+      }
+      
+      // Calculate starting Y position (from bottom)
+      let titleStartY = height - bottomPadding;
+      if (pastor) {
+        titleStartY -= height * 0.045;
+      }
+      
+      // Draw sermon title lines with shadow
+      titleLines.forEach((lineText, index) => {
+        const lineY = titleStartY - ((titleLines.length - 1 - index) * titleLineHeight);
+        
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+        ctx.shadowBlur = 8;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 2;
+        ctx.fillText(lineText, textPadding, lineY);
+        
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+      });
+    }
+    
+    // Draw pastor name
+    if (pastor) {
+      const pastorFontSize = theme === 'modern' ? height * 0.042 : height * 0.05;
+      ctx.fillStyle = theme === 'modern' ? 'rgba(255, 255, 255, 0.95)' : '#FFFFFF';
+      ctx.font = theme === 'modern'
+        ? `500 ${pastorFontSize}px "Google Sans Flex", sans-serif`
+        : `bold ${pastorFontSize}px Arial, sans-serif`;
+      ctx.textBaseline = 'bottom';
+      
+      const pastorY = height - bottomPadding;
+      
+      // Truncate if too long
+      let displayPastor = pastor;
+      const maxPastorWidth = width - (textPadding * 2);
+      if (ctx.measureText(displayPastor).width > maxPastorWidth) {
+        while (ctx.measureText(displayPastor + '...').width > maxPastorWidth && displayPastor.length > 0) {
+          displayPastor = displayPastor.slice(0, -1);
+        }
+        displayPastor += '...';
+      }
+      
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+      ctx.shadowBlur = 6;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 2;
+      ctx.fillText(displayPastor, textPadding, pastorY);
+      
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+    }
+    
+    // Classic theme bottom bar
+    if (theme === 'classic' && !liturgicalSeason) {
+      const barHeight = height * 0.14;
+      ctx.fillStyle = '#9e1e3e'; // Brand red
+      ctx.fillRect(0, height - barHeight, width, barHeight);
+      
+      // Title on bar
+      if (title || sermonTitle) {
+        const barText = sermonTitle || title || '';
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = `bold ${height * 0.06}px Arial, sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.fillText(barText.length > 45 ? barText.substring(0, 42) + '...' : barText, width/2, height - barHeight/2);
+      }
+    }
+    
+    // Draw series icon if provided (top right)
+    if (seriesIcon && seriesIcon.complete && seriesIcon.naturalWidth > 0) {
+      const iconMaxWidth = height * 0.15;
+      const iconAspectRatio = seriesIcon.naturalWidth / seriesIcon.naturalHeight;
+      const iconWidth = iconMaxWidth;
+      const iconHeight = iconWidth / iconAspectRatio;
+      
+      const iconX = width - iconWidth - 12;
+      const iconY = 20;
+      
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+      ctx.shadowBlur = 8;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 2;
+      ctx.drawImage(seriesIcon, iconX, iconY, iconWidth, iconHeight);
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+    }
+    
+    return canvas;
+  }
+</script>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap');
+</style>
