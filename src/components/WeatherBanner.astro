@@ -1,0 +1,102 @@
+---
+/**
+ * Weather Banner Component (Dialog Style)
+ * Displays a dialog box informing visitors to check for Sunday weather updates
+ * This is NOT an active weather alert - just a notice about where to find updates
+ * Auto-expires at 3:30 AM Sunday (5 hours before 8:30 AM alert time)
+ */
+interface Props {
+  messageId?: string;
+  expiresAt?: string;
+}
+
+// Calculate next Sunday at 3:30 AM Central (5 hours before 8:30 AM alert time)
+function getNextSundayExpiration(): Date {
+  const now = new Date();
+  const dayOfWeek = now.getDay(); // 0 = Sunday
+  
+  // Calculate days until next Sunday
+  const daysUntilSunday = dayOfWeek === 0 ? 0 : 7 - dayOfWeek;
+  
+  const nextSunday = new Date(now);
+  nextSunday.setDate(now.getDate() + daysUntilSunday);
+  nextSunday.setHours(3, 30, 0, 0); // 3:30 AM
+  
+  // If it's already past 3:30 AM on Sunday, we're past expiration
+  if (daysUntilSunday === 0 && now >= nextSunday) {
+    return nextSunday; // Already expired
+  }
+  
+  return nextSunday;
+}
+
+const { messageId = 'weather-notice', expiresAt } = Astro.props;
+const defaultExpiration = getNextSundayExpiration();
+const expirationDate = expiresAt ? new Date(expiresAt) : defaultExpiration;
+const isExpired = new Date() > expirationDate;
+---
+
+{!isExpired && (
+  <div 
+    id={`weatherModal-${messageId}`}
+    class="fixed inset-0 bg-black/70 z-[150] flex items-center justify-center p-6" 
+    role="dialog" 
+    aria-modal="true"
+    aria-labelledby={`weatherTitle-${messageId}`}
+    style="font-family: 'Albert Sans', system-ui, sans-serif;"
+  >
+    <div class="bg-white rounded-lg max-w-sm w-full p-6 modal-content">
+      <p class="text-xs font-semibold text-brand uppercase tracking-wider mb-2">
+        Inclement Weather
+      </p>
+      <h2 id={`weatherTitle-${messageId}`} class="text-xl font-semibold text-gray-900 mb-4">
+        Where to find service updates
+      </h2>
+      <p class="text-sm text-gray-600 leading-relaxed mb-6">
+        If winter weather affects our Sunday service, we'll post an update right here on our website. We do our best to have announcements posted by <strong class="text-gray-900">8:30 AM</strong> on Sunday morning.
+      </p>
+      <button
+        id={`closeWeather-${messageId}`}
+        class="w-full bg-brand hover:bg-brand-dark text-white text-sm font-medium py-3 rounded-lg transition-colors"
+      >
+        Got it
+      </button>
+    </div>
+  </div>
+)}
+
+<style>
+  .modal-content {
+    animation: fadeIn 0.2s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+</style>
+
+<script define:vars={{ messageId, expirationDate: expirationDate.toISOString() }}>
+  const modal = document.getElementById(`weatherModal-${messageId}`);
+  const closeBtn = document.getElementById(`closeWeather-${messageId}`);
+  
+  function closeModal() {
+    if (messageId) sessionStorage.setItem(`weather-${messageId}`, 'dismissed');
+    modal?.remove();
+  }
+
+  // Check if already dismissed or expired
+  if (messageId && sessionStorage.getItem(`weather-${messageId}`) === 'dismissed') {
+    modal?.remove();
+  }
+  
+  // Check if expired (3:30 AM Sunday or custom expiration)
+  if (expirationDate && new Date() > new Date(expirationDate)) {
+    modal?.remove();
+  }
+
+  // Event listeners
+  closeBtn?.addEventListener('click', closeModal);
+  modal?.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+</script>
