@@ -1,0 +1,89 @@
+---
+/**
+ * Funeral Banner Component (Dialog Style)
+ * ACTIVE: Funeral service for Riggins — May 16, 2026
+ * Expires: May 17, 2026
+ */
+interface Props {
+  messageId?: string;
+  expiresAt?: string;
+  liveUrl?: string;
+}
+
+const {
+  messageId = 'funeral-riggins-may-16-2026',
+  expiresAt = '2026-05-17T23:59:59',
+  liveUrl = 'https://lakeozark.cc/Riggins',
+} = Astro.props;
+
+const expirationDate = new Date(expiresAt);
+const isExpired = new Date() > expirationDate;
+---
+
+{!isExpired && (
+  <div
+    id={`funeralModal-${messageId}`}
+    class="fixed inset-0 bg-black/70 z-[150] flex items-center justify-center p-6"
+    role="alertdialog"
+    aria-modal="true"
+    aria-labelledby={`funeralTitle-${messageId}`}
+    style="font-family: 'Albert Sans', system-ui, sans-serif;"
+  >
+    <div class="bg-white rounded-lg max-w-sm w-full p-6 modal-content">
+      <p class="text-xs font-semibold text-brand uppercase tracking-wider mb-2">
+        Funeral Service Today
+      </p>
+      <h2 id={`funeralTitle-${messageId}`} class="text-xl font-semibold text-gray-900 mb-4">
+        In Loving Memory
+      </h2>
+      <p class="text-sm text-gray-600 leading-relaxed mb-6">
+        A funeral service is being held at our church today. You can join the family in person or watch the <strong class="text-gray-900">live stream</strong> at the link below.
+      </p>
+      <a
+        href={liveUrl}
+        class="block w-full bg-brand hover:bg-brand-dark text-white text-center text-sm font-medium py-3 rounded-lg transition-colors mb-2"
+      >
+        Watch Live Stream
+      </a>
+      <button
+        id={`closeFuneral-${messageId}`}
+        class="w-full text-gray-500 hover:text-gray-700 text-sm font-medium py-2 transition-colors"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
+
+<style>
+  .modal-content {
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+</style>
+
+<script define:vars={{ messageId, expirationDate: expirationDate.toISOString() }}>
+  const modal = document.getElementById(`funeralModal-${messageId}`);
+  const closeBtn = document.getElementById(`closeFuneral-${messageId}`);
+
+  function closeModal() {
+    if (messageId) sessionStorage.setItem(`funeral-${messageId}`, 'dismissed');
+    modal?.remove();
+  }
+
+  if (messageId && sessionStorage.getItem(`funeral-${messageId}`) === 'dismissed') {
+    modal?.remove();
+  }
+
+  if (expirationDate && new Date() > new Date(expirationDate)) {
+    modal?.remove();
+  }
+
+  closeBtn?.addEventListener('click', closeModal);
+  modal?.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+</script>

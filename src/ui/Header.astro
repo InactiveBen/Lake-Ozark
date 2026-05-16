@@ -8,6 +8,7 @@ import SelfXSS from '../components/SelfXSS.astro';
 import AccessibilityMenu from '../components/AccessibilityMenu.astro';
 import ExternalLinkWarning from '../components/ExternalLinkWarning.astro';
 import WeatherBanner from '../components/WeatherBanner.astro';
+import FuneralBanner from '../components/FuneralBanner.astro';
 
 const primaryLinks = [
   { href: '/worship', label: 'Services' },
@@ -36,6 +37,7 @@ const utm = (content: string) => `?utm_source=lakeozarkdisciples&utm_medium=head
 <CookieBanner />
 <ExternalLinkWarning />
 <WeatherBanner />
+<FuneralBanner />
 
 <!-- Top Bar -->
 <div class="top-bar">
