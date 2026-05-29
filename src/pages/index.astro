@@ -19,7 +19,7 @@ try {
 }
 
 // Toggle this to show/hide the announcement banner
-const showAnnouncementBanner = true;
+const showAnnouncementBanner = false;
 // Banner content - edit these to change the announcement
 const bannerText = "Welcome Reception for Rev. Lina Eddy, our interim minister - Sunday, January 4, 2026 following service";
 const bannerLink = "/blog/4";
@@ -59,111 +59,98 @@ function formatDate(dateStr: string): string {
 <!-- Preload critical above-the-fold images for faster LCP -->
 <link rel="preload" href={welcomeImage.url} as="image" fetchpriority="high" />
 
-<!-- Typed.js for hero text animation -->
-<script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+<!-- Hero Section -->
+<section id="hero-section" class="relative overflow-hidden hero-section flex flex-col bg-gray-900">
+  <!-- Background photo -->
+  <img
+    src={welcomeImage.url}
+    alt={welcomeImage.alt}
+    class="absolute inset-0 w-full h-full object-cover"
+    fetchpriority="high"
+    loading="eager"
+    decoding="async"
+  />
+  <!-- Gradient overlay: darker at bottom for text legibility, lighter at top to show the room -->
+  <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/20"></div>
 
-
-<!-- Hero Section - Clean and Minimalist -->
-<section id="hero-section" class="relative overflow-hidden bg-white hero-section">
-  <div class="absolute inset-0">
-    <img 
-      src={welcomeImage.url} 
-      alt={welcomeImage.alt}
-      class="w-full h-full object-cover"
-      fetchpriority="high"
-      loading="eager"
-      decoding="async"
-    />
-    <div class="absolute inset-0 bg-black/40"></div>
-    <!-- Bottom fade to white (mobile only) -->
-    <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent md:hidden"></div>
-  </div>
-
-  <div class="relative container mx-auto px-6 py-32 md:py-40">
-    {showAnnouncementBanner && (
-    <div class="mb-8">
-      <div class="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full border border-white/20">
-        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  {showAnnouncementBanner && (
+    <div class="relative pt-8 px-4 flex justify-center">
+      <a
+        href={bannerLink}
+        class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-colors text-sm max-w-full"
+      >
+        <svg class="w-4 h-4 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
         </svg>
-        <p class="text-white font-medium text-sm">
-          {bannerText}
-          <a href={bannerLink} 
-             class="underline hover:no-underline ml-2">
-            {bannerLinkText}
-          </a>
-        </p>
-      </div>
+        <span class="text-white/90 truncate">{bannerText}</span>
+        <span class="text-white font-semibold flex-shrink-0">{bannerLinkText}</span>
+      </a>
     </div>
-    )}
+  )}
 
-          <div class="max-w-4xl">
-        {isLocal ? (
-          <>
-            <p class="text-xl md:text-2xl text-white/90 mb-4 font-light leading-relaxed h-8">
-              <span id="typed-local"></span>
-            </p>
-            <h1 class="text-5xl md:text-7xl font-semibold text-white mb-8 leading-tight tracking-tight">
-              Lake Ozark Christian
-            </h1>
-            <p class="text-lg md:text-xl text-white/80 mb-12 max-w-2xl font-light leading-relaxed">
-              A community of faith dedicated to sharing the Gospel of Jesus Christ. All are welcome.
-            </p>
-            
-            <div class="flex flex-col sm:flex-row gap-4">
-              <a 
-                href="/worship?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=hero&utm_content=service_times" 
-                class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300 text-lg"
-              >
-                Service Times
-              </a>
-              <a 
-                href="https://www.youtube.com/channel/UCUcLKfZo5Su6-ypmt1dkPKA?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=hero&utm_content=watch_online" 
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-medium rounded-lg transition-all duration-300 text-lg"
-              >
-                Watch Online
-              </a>
-            </div>
-          </>
-        ) : (
-          <>
-            <p class="text-xl md:text-2xl text-white/90 mb-4 font-light leading-relaxed h-8">
-              <span id="typed-visitor"></span>
-            </p>
-            <h1 class="text-5xl md:text-7xl font-semibold text-white mb-8 leading-tight tracking-tight">
-              Plan Your Visit to<br />Lake Ozark Christian
-            </h1>
-            <p class="text-lg md:text-xl text-white/80 mb-12 max-w-2xl font-light leading-relaxed">
-              Whether you're here for vacation or just passing through, we'd love to have you join us for worship at the Lake. 
-              Located in the heart of Lake Ozark, we offer a welcoming space for visitors and seasonal residents.
-            </p>
-            
-            <div class="flex flex-col sm:flex-row gap-4">
-              <a 
-                href="/worship?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=hero&utm_content=visitor_info#visitor-info" 
-                class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-all duration-300 text-lg"
-              >
-                Visitor Information
-              </a>
-              <a 
-                href="https://www.google.com/maps/dir//Lake+Ozark+Christian+Church,+1560+Bagnell+Dam+Blvd,+Lake+Ozark,+MO+65049/@38.1981839,-92.6386717,19z/?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=hero&utm_content=get_directions"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-medium rounded-lg transition-all duration-300 text-lg"
-              >
-                Get Directions
-              </a>
-            </div>
-          </>
-        )}
-      </div>
+  <div class="relative mt-auto container mx-auto px-6 pb-20 md:pb-28 pt-20">
+    <div class="max-w-3xl">
+      {isLocal ? (
+        <>
+          <p class="text-sm font-semibold text-white/80 uppercase tracking-wider mb-5">Sunday Worship · 10:30 AM</p>
+          <h1 class="text-5xl md:text-7xl font-semibold text-white mb-6 leading-[1.05] tracking-tight">
+            Lake Ozark Christian Church
+          </h1>
+          <p class="text-lg md:text-xl text-white/85 mb-10 max-w-2xl leading-relaxed">
+            A community of faith dedicated to sharing the Gospel of Jesus Christ. All are welcome.
+          </p>
+
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a
+              href="/worship?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=hero&utm_content=service_times"
+              class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-colors text-lg"
+            >
+              Service Times
+            </a>
+            <a
+              href="https://www.youtube.com/channel/UCUcLKfZo5Su6-ypmt1dkPKA?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=hero&utm_content=watch_online"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center px-8 py-4 border-2 border-white/80 text-white hover:bg-white hover:text-gray-900 font-medium rounded-lg transition-colors text-lg"
+            >
+              Watch Online
+            </a>
+          </div>
+        </>
+      ) : (
+        <>
+          <p class="text-sm font-semibold text-white/80 uppercase tracking-wider mb-5">Visiting the Lake</p>
+          <h1 class="text-5xl md:text-7xl font-semibold text-white mb-6 leading-[1.05] tracking-tight">
+            Plan Your Visit
+          </h1>
+          <p class="text-lg md:text-xl text-white/85 mb-10 max-w-2xl leading-relaxed">
+            Whether you're here for vacation or just passing through, we'd love to have you join us for worship at the Lake.
+          </p>
+
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a
+              href="/worship?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=hero&utm_content=visitor_info#visitor-info"
+              class="inline-flex items-center justify-center px-8 py-4 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-colors text-lg"
+            >
+              Visitor Information
+            </a>
+            <a
+              href="https://www.google.com/maps/dir//Lake+Ozark+Christian+Church,+1560+Bagnell+Dam+Blvd,+Lake+Ozark,+MO+65049/@38.1981839,-92.6386717,19z/?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=hero&utm_content=get_directions"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center px-8 py-4 border-2 border-white/80 text-white hover:bg-white hover:text-gray-900 font-medium rounded-lg transition-colors text-lg"
+            >
+              Get Directions
+            </a>
+          </div>
+        </>
+      )}
+    </div>
   </div>
 </section>
 
 <!-- Visit Us Section -->
-<section id="visit" class="py-20 bg-gray-50">
+<section id="visit" class="py-20 bg-white">
   <div class="container mx-auto px-6">
     <div class="max-w-7xl mx-auto">
       <div class="grid lg:grid-cols-2 gap-12 items-start">
@@ -223,7 +210,7 @@ function formatDate(dateStr: string): string {
               href="https://www.google.com/maps/dir//Lake+Ozark+Christian+Church,+1560+Bagnell+Dam+Blvd,+Lake+Ozark,+MO+65049?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=visit_section&utm_content=get_directions"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center justify-center px-6 py-3 bg-brand hover:bg-brand-dark text-white font-medium rounded transition-colors"
+              class="inline-flex items-center justify-center px-6 py-3 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-colors"
             >
               Get Directions
             </a>
@@ -231,7 +218,7 @@ function formatDate(dateStr: string): string {
               href="https://www.youtube.com/channel/UCUcLKfZo5Su6-ypmt1dkPKA?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=visit_section&utm_content=watch_online"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded transition-colors"
+              class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded-lg transition-colors"
             >
               Watch Online
             </a>
@@ -250,7 +237,7 @@ function formatDate(dateStr: string): string {
 <link href="https://unpkg.com/@pqina/flip/dist/flip.min.css" rel="stylesheet">
 
 <!-- Live Service Countdown -->
-<section id="live-service" class="py-20 bg-white border-t border-gray-100">
+<section id="live-service" class="py-20 bg-white">
   <div class="container mx-auto px-6">
     <div class="max-w-7xl mx-auto">
       <div id="countdown-container" class="hidden">
@@ -327,7 +314,7 @@ function formatDate(dateStr: string): string {
                 href="/live?utm_source=lakeozarkdisciples&utm_medium=countdown&utm_campaign=button" 
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex items-center justify-center px-6 py-3 bg-brand hover:bg-brand-dark text-white font-medium rounded transition-colors"
+                class="inline-flex items-center justify-center px-6 py-3 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-colors"
               >
                 Join Live Stream
               </a>
@@ -335,7 +322,7 @@ function formatDate(dateStr: string): string {
                 href="https://www.youtube.com/channel/UCUcLKfZo5Su6-ypmt1dkPKA?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=live_service&utm_content=watch_past_services"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded transition-colors"
+                class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded-lg transition-colors"
               >
                 Past Services
               </a>
@@ -362,7 +349,7 @@ function formatDate(dateStr: string): string {
 <script src="https://unpkg.com/@pqina/flip/dist/flip.min.js"></script>
 
 <!-- After School Program -->
-<section id="after-school" class="py-20 bg-gray-50">
+<section id="after-school" class="py-20 bg-white">
   <div class="container mx-auto px-6">
     <div class="max-w-7xl mx-auto">
       <div class="grid lg:grid-cols-2 gap-12 items-start">
@@ -430,13 +417,13 @@ function formatDate(dateStr: string): string {
                   href="https://docs.google.com/forms/d/e/1FAIpQLSdIri3EaabwsN84Al7Xd7zVnWI7Jzfaoyu6NVkENI6w9FRaeA/viewform?usp=sf_link&utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=after_school&utm_content=reserve_spot"
                   target="_blank"
                   rel="noopener noreferrer" 
-                  class="inline-flex items-center justify-center px-6 py-3 bg-brand hover:bg-brand-dark text-white font-medium rounded transition-colors"
+                  class="inline-flex items-center justify-center px-6 py-3 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-colors"
                 >
                   Register Your Child
                 </a>
                 <a 
                   href="/children-youth?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=after_school&utm_content=learn_more" 
-                  class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded transition-colors"
+                  class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded-lg transition-colors"
                 >
                   Program Details
                 </a>
@@ -492,13 +479,13 @@ function formatDate(dateStr: string): string {
               <div class="flex flex-col sm:flex-row gap-3">
                 <a 
                   href="/children-youth?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=after_school_visitor&utm_content=what_to_expect#visitor" 
-                  class="inline-flex items-center justify-center px-6 py-3 bg-brand hover:bg-brand-dark text-white font-medium rounded transition-colors"
+                  class="inline-flex items-center justify-center px-6 py-3 bg-brand hover:bg-brand-dark text-white font-medium rounded-lg transition-colors"
                 >
                   What to Expect
                 </a>
                 <a 
                   href="/worship?utm_source=lakeozarkdisciples&utm_medium=homepage&utm_campaign=after_school_visitor&utm_content=family_faq#family-faq" 
-                  class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded transition-colors"
+                  class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded-lg transition-colors"
                 >
                   Family FAQ
                 </a>
@@ -595,26 +582,24 @@ function formatDate(dateStr: string): string {
   <div class="container mx-auto px-6">
     <div class="max-w-7xl mx-auto">
       <div class="text-center mb-16">
-        <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
-          Watch and listen
-        </span>
-        <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Recent services</h2>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-          Catch up on our latest worship services and messages
+        <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-4">Watch and Listen</p>
+        <h2 class="text-3xl lg:text-4xl font-semibold text-gray-900 mb-6">Recent Services</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          Catch up on our latest worship services and messages.
         </p>
       </div>
       
-      <div id="video-loading" class="text-center py-16">
+      <div id="video-loading" class="text-center py-12">
         <div class="inline-flex items-center gap-3">
-          <div class="animate-spin rounded-full h-8 w-8 border-2 border-brand border-t-transparent"></div>
-          <p class="text-lg text-gray-600">Loading recent services...</p>
+          <div class="animate-spin rounded-full h-6 w-6 border-2 border-brand border-t-transparent"></div>
+          <p class="text-gray-500">Loading recent services...</p>
         </div>
       </div>
       
-      <div id="video-error" class="text-center py-16 hidden">
-        <div class="bg-red-50 border border-red-200 p-8 max-w-md mx-auto">
+      <div id="video-error" class="text-center py-12 hidden">
+        <div class="bg-red-50 border border-red-200 rounded-lg p-8 max-w-md mx-auto">
           <p class="text-red-700 font-medium">Failed to load recent services</p>
-          <p class="text-red-600 text-sm mt-1">Please try again later</p>
+          <p class="text-red-600 text-sm mt-1">Please try again later.</p>
         </div>
       </div>
       
@@ -628,27 +613,25 @@ function formatDate(dateStr: string): string {
   <div class="container mx-auto px-6">
     <div class="max-w-7xl mx-auto">
       <div class="text-center mb-16">
-        <span class="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
-          Stay connected
-        </span>
-        <h2 class="text-4xl lg:text-5xl font-light mb-6 text-gray-900">Upcoming events</h2>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-          Join us for worship, fellowship, and community events
+        <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-4">Stay Connected</p>
+        <h2 class="text-3xl lg:text-4xl font-semibold text-gray-900 mb-6">Upcoming Events</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          Join us for worship, fellowship, and community events.
         </p>
       </div>
       
-              <div class="bg-white border border-gray-200 overflow-hidden rounded-2xl">
-          <div class="p-8">
-            <div class="w-full rounded-xl overflow-hidden" style="position: relative; padding-bottom: 75%;">
-              <iframe 
-                src="https://calendar.google.com/calendar/embed?src=lakeozarkdisciples%40gmail.com&ctz=America%2FChicago" 
-                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
-                title="Lake Ozark Christian Church Calendar"
-                aria-label="Google Calendar showing upcoming church events"
-              ></iframe>
-            </div>
+      <div class="bg-white border border-gray-200 overflow-hidden rounded-lg">
+        <div class="p-8">
+          <div class="w-full rounded-lg overflow-hidden" style="position: relative; padding-bottom: 75%;">
+            <iframe
+              src="https://calendar.google.com/calendar/embed?src=lakeozarkdisciples%40gmail.com&ctz=America%2FChicago"
+              style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
+              title="Lake Ozark Christian Church Calendar"
+              aria-label="Google Calendar showing upcoming church events"
+            ></iframe>
           </div>
         </div>
+      </div>
     </div>
   </div>
 </section>
@@ -698,65 +681,6 @@ function formatDate(dateStr: string): string {
 <script async src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
 
 <script>
-  // Initialize Typed.js for hero text animation
-  function initTypedHero() {
-    const Typed = (window as any).Typed;
-    if (!Typed) {
-      setTimeout(initTypedHero, 100);
-      return;
-    }
-    
-    // Local visitor messages
-    const localElement = document.getElementById('typed-local');
-    if (localElement) {
-      new Typed('#typed-local', {
-        strings: [
-          "There's a place for you here.",
-          "Come as you are.",
-          "You're always welcome.",
-          "Faith, hope, and love.",
-          "Growing together in Christ.",
-          "Your church family awaits."
-        ],
-        typeSpeed: 45,
-        backSpeed: 25,
-        backDelay: 2500,
-        startDelay: 500,
-        loop: true,
-        showCursor: true,
-        cursorChar: '|'
-      });
-    }
-    
-    // Visitor messages
-    const visitorElement = document.getElementById('typed-visitor');
-    if (visitorElement) {
-      new Typed('#typed-visitor', {
-        strings: [
-          "Welcome to the Lake.",
-          "Worship with us this Sunday.",
-          "A warm welcome awaits you.",
-          "Find rest for your soul.",
-          "All are welcome here."
-        ],
-        typeSpeed: 45,
-        backSpeed: 25,
-        backDelay: 2500,
-        startDelay: 500,
-        loop: true,
-        showCursor: true,
-        cursorChar: '|'
-      });
-    }
-  }
-  
-  // Start typed.js when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initTypedHero);
-  } else {
-    initTypedHero();
-  }
-
   // Initialize Mapbox map and personalized location experience
   // Wait for Mapbox to be available (async loaded)
   function waitForMapbox() {
@@ -956,24 +880,23 @@ function formatDate(dateStr: string): string {
       saveLocationToStorage(lng, lat, city, source);
       
       // Update greeting based on source and city
+      const eyebrowClass = 'text-sm font-semibold text-brand uppercase tracking-wider mb-4';
       if (greetingEl) {
         if (source === 'browser' || source === 'stored') {
-          // Browser geolocation (precise) - we know they're nearby
-          greetingEl.textContent = `👋 Hello, neighbor!`;
-          greetingEl.className = `inline-block px-4 py-2 bg-blue-100 text-blue-700 text-sm font-medium mb-6`;
+          greetingEl.textContent = 'Hello, Neighbor';
+          greetingEl.className = eyebrowClass;
         } else if (source === 'ip' && city) {
-          // IP geolocation with city info
           const localCities = ['lake ozark', 'osage beach', 'camdenton', 'eldon', 'versailles', 'laurie', 'sunrise beach', 'gravois mills'];
           const isLocal = localCities.some((c: string) => city.toLowerCase().includes(c));
-          
+
           if (isLocal) {
-            greetingEl.textContent = `👋 Hello, neighbor!`;
-            greetingEl.className = `inline-block px-4 py-2 bg-green-100 text-green-700 text-sm font-medium mb-6`;
-            if (distanceEl) distanceEl.textContent = `We're right here in your community. Stop by this Sunday!`;
+            greetingEl.textContent = 'Hello, Neighbor';
+            greetingEl.className = eyebrowClass;
+            if (distanceEl) distanceEl.textContent = `We're right here in your community. Stop by this Sunday.`;
           } else {
             const cityName = city.split(' ').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-            greetingEl.textContent = `Welcome from ${cityName}!`;
-            greetingEl.className = `inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-6`;
+            greetingEl.textContent = `Welcome from ${cityName}`;
+            greetingEl.className = eyebrowClass;
             if (distanceEl) distanceEl.textContent = `Visiting the Lake? We'd love to have you join us for worship.`;
           }
         }
@@ -1290,7 +1213,7 @@ function formatDate(dateStr: string): string {
           <span class="inline-block px-6 py-3 bg-red-100 text-red-600 text-lg font-semibold mb-6 rounded-full animate-pulse">
             🔴 Live Now
           </span>
-          <h2 class="text-3xl lg:text-4xl font-light mb-8 text-gray-900">
+          <h2 class="text-3xl lg:text-4xl font-semibold mb-8 text-gray-900">
             Service is Live!
           </h2>
           <a 
@@ -1486,7 +1409,7 @@ function formatDate(dateStr: string): string {
       if (loadingEl) loadingEl.style.display = 'none';
       if (errorEl) {
         errorEl.style.display = 'block';
-        errorEl.innerHTML = `<div class="bg-red-50 border border-red-200 p-8 max-w-md mx-auto"><p class="text-red-700 font-medium">Failed to load recent services</p><p class="text-red-600 text-sm mt-1">${error.message}</p></div>`;
+        errorEl.innerHTML = `<div class="bg-red-50 border border-red-200 rounded-lg p-8 max-w-md mx-auto"><p class="text-red-700 font-medium">Failed to load recent services</p><p class="text-red-600 text-sm mt-1">${error.message}</p></div>`;
       }
     }
   }
@@ -1504,7 +1427,7 @@ function formatDate(dateStr: string): string {
       <div class="space-y-12">
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="video-grid">
           ${videosToShow.map((video) => `
-             <div class="group bg-white rounded-xl overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer">
+             <div class="group bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer">
                <button 
                  onclick="window.location.href = '/live?video=${video.id}&title=${encodeURIComponent(createDisplayTitle(video.title))}'"
                  class="block w-full text-left"
@@ -1792,18 +1715,6 @@ function formatDate(dateStr: string): string {
     .flip-clock-container .tick-text-inline {
       font-size: 3.5em;
     }
-  }
-
-  /* Typed.js cursor styling */
-  .typed-cursor {
-    color: white;
-    opacity: 0.8;
-    animation: blink 0.7s infinite;
-  }
-
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
   }
 
   .tooltip {

@@ -64,14 +64,12 @@ export default function SalvationMarquee({ testimonies = defaultTestimonies }: P
     <div className="salvation-marquee-wrapper bg-white overflow-hidden" style={{ fontFamily: "'Albert Sans', system-ui, sans-serif" }}>
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
-          <span className="inline-block px-4 py-2 bg-brand/10 text-brand text-sm font-medium mb-4">
-            Stories of Faith
-          </span>
-          <h2 className="text-4xl lg:text-5xl font-light mb-6 text-gray-900">
+          <p className="text-sm font-semibold text-brand uppercase tracking-wider mb-4">Stories of Faith</p>
+          <h2 className="text-3xl lg:text-4xl font-semibold text-gray-900 mb-6">
             Lives Transformed by God's Grace
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Hear from those who have found hope, peace, and new life through Jesus Christ
+          <p className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            Hear from those who have found hope, peace, and new life through Jesus Christ.
           </p>
         </div>
         
@@ -85,7 +83,7 @@ export default function SalvationMarquee({ testimonies = defaultTestimonies }: P
               {duplicatedTestimonies.map((testimony, index) => (
                 <div
                   key={`${testimony.name}-${index}`}
-                  className="mx-3 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow min-w-[320px] max-w-[380px]"
+                  className="mx-3 bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow min-w-[320px] max-w-[380px]"
                 >
                   <div className="flex flex-col gap-4">
                     <div className="flex items-start gap-3">
