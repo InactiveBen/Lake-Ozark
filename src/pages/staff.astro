@@ -7,16 +7,7 @@ const heroImage = {
 };
 
 // Guest/Interim Ministers - temporary pulpit supply
-const guestMinisters = [
-  {
-    name: "Lina Eddy",
-    title: "Rev. Eddy · Guest Minister",
-    dates: "January 4 – February 8, 2026",
-    bio: "Rev. Eddy will be preaching and leading worship at Lake Ozark Christian Church for six weeks while our senior minister is away. We are blessed to have their leadership during this time.",
-    image: null,
-    showPhoto: false
-  }
-];
+const guestMinisters = [];
 
 const leadership = [
   {
@@ -316,9 +307,9 @@ const getInitials = (name: string) => name.split(' ').map(n => n[0]).join('').sl
               <span class="text-gray-600">Saturday</span>
               <span class="text-gray-500">Closed</span>
             </div>
-            <div class="flex justify-between items-center py-3">
+            <div class="flex justify-between items-center py-3 border-b border-gray-100">
               <span class="text-gray-600">Sunday</span>
-              <span class="font-medium text-brand">Worship at 10:30 AM</span>
+              <span class="font-medium text-brand">Worship at 8:30 AM & 10:30 AM</span>
             </div>
           </div>
           

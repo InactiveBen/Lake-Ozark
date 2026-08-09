@@ -1,10 +1,5 @@
-/**
- * @Author: BensonByte
- * @Date:   06/12/25 07:21:35 C5T
- * @Last Modified by:   BensonByte
- * @Last Modified time: 06/15/25 18:02:01 C2T
- */
-import { YouTube } from 'youtube-sr';
+const CHANNEL_ID = 'UCUcLKfZo5Su6-ypmt1dkPKA';
+const RSS_URL = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
 
 const customThumbnailMap = {
   "FIkeDt8Wcqw": "https://cdn.lakeozarkdisciples.org/images/12-29-24.png?raw=true",
@@ -30,76 +25,67 @@ const customThumbnailMap = {
   "EuNkJEFXsTo": "https://cdn.lakeozarkdisciples.org/images/Fully%20Alive.png?raw=true"
 };
 
-function parseDateFromTitle(title) {
+function decodeXmlEntities(str) {
+  return str
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&apos;/g, "'");
+}
+
+export function parseDateFromTitle(title) {
   const cleanTitle = title.replace(/^(Service|LOCC|Church Service)\s*[-|]\s*/i, '').replace(/\s*[-|]\s*(Service)$/i, '');
-  
-  // Check for MMDDYY or MDDYY format first (like "103022" for 10/30/22)
+
   const compactDateMatch = cleanTitle.match(/\b(\d{5,6})\b/);
   if (compactDateMatch) {
     const dateStr = compactDateMatch[1];
     let month, day, year;
-    
+
     if (dateStr.length === 6) {
-      // MMDDYY format
       month = parseInt(dateStr.substring(0, 2));
       day = parseInt(dateStr.substring(2, 4));
       year = parseInt(dateStr.substring(4, 6));
     } else if (dateStr.length === 5) {
-      // MDDYY format
       month = parseInt(dateStr.substring(0, 1));
       day = parseInt(dateStr.substring(1, 3));
       year = parseInt(dateStr.substring(3, 5));
     }
-    
-    // Convert 2-digit year to 4-digit year
+
     if (year !== undefined) {
       year = year + 2000;
-      
-      // Validate the parsed date
       if (month >= 1 && month <= 12 && day >= 1 && day <= 31 && year >= 2000) {
         const date = new Date(year, month - 1, day);
-        // Double-check that the date is valid (e.g., not Feb 30th)
         if (date.getMonth() === month - 1 && date.getDate() === day) {
           return date;
         }
       }
     }
   }
-  
+
   const patterns = [
-    // Standard formats
     /(\d{1,2})\/(\d{1,2})\/(\d{2,4})/,
     /(\d{1,2})-(\d{1,2})-(\d{2,4})/,
-    
-    // Full month names with optional comma
     /(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),?\s+(\d{4})/i,
-    
-    // Full month names with ordinal suffixes (st, nd, rd, th) and optional comma
     /(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})(st|nd|rd|th),?\s+(\d{4})/i,
-    
-    // Abbreviated month names with optional comma
     /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),?\s+(\d{4})/i,
-    
-    // Abbreviated month names with ordinal suffixes
     /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})(st|nd|rd|th),?\s+(\d{4})/i
   ];
-  
+
   for (const pattern of patterns) {
     const match = cleanTitle.match(pattern);
     if (match) {
       let month, day, year;
-      
+
       if (pattern.source.includes('January|February')) {
         const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
                            'July', 'August', 'September', 'October', 'November', 'December'];
         month = monthNames.indexOf(match[1]) + 1;
-        
         if (pattern.source.includes('st|nd|rd|th')) {
-          // Format: "Month DDst/nd/rd/th, YYYY" or "Month DDst/nd/rd/th YYYY"
           day = parseInt(match[2]);
           year = parseInt(match[4]);
         } else {
-          // Format: "Month DD, YYYY" or "Month DD YYYY"
           day = parseInt(match[2]);
           year = parseInt(match[3]);
         }
@@ -107,117 +93,92 @@ function parseDateFromTitle(title) {
         const monthAbbr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                           'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         month = monthAbbr.indexOf(match[1]) + 1;
-        
         if (pattern.source.includes('st|nd|rd|th')) {
-          // Format: "Mon DDst/nd/rd/th, YYYY" or "Mon DDst/nd/rd/th YYYY" 
           day = parseInt(match[2]);
           year = parseInt(match[4]);
         } else {
-          // Format: "Mon DD, YYYY" or "Mon DD YYYY"
           day = parseInt(match[2]);
           year = parseInt(match[3]);
         }
       } else {
-        // Numeric formats: MM/DD/YYYY or MM-DD-YYYY
         month = parseInt(match[1]);
         day = parseInt(match[2]);
         year = parseInt(match[3]);
       }
-      
+
       if (year < 50) year += 2000;
       else if (year < 100) year += 1900;
-      
+
       if (month >= 1 && month <= 12 && day >= 1 && day <= 31 && year >= 1900) {
         return new Date(year, month - 1, day);
       }
     }
   }
-  
+
   return null;
 }
 
-
-
 export async function fetchLatestVideos() {
   try {
-    const uploadsPlaylistId = 'UUUcLKfZo5Su6-ypmt1dkPKA';
-    const playlistUrl = `https://www.youtube.com/playlist?list=${uploadsPlaylistId}`;
-    
-    let playlist;
-    
-    try {
-      // First attempt: Fetch the playlist with fetchAll: true to get all videos
-      playlist = await YouTube.getPlaylist(playlistUrl, { fetchAll: true });
-    } catch (fetchAllError) {
-      console.log('fetchAll failed, trying manual fetch:', fetchAllError.message);
-      
-      // Fallback: Manual pagination using .fetch() method
-      playlist = await YouTube.getPlaylist(playlistUrl);
-      if (playlist && playlist.fetch) {
-        await playlist.fetch(); // Fetch remaining videos manually
-      }
+    const response = await fetch(RSS_URL, {
+      headers: { 'Accept': 'application/xml, text/xml, */*' }
+    });
+
+    if (!response.ok) {
+      throw new Error(`RSS feed returned ${response.status}`);
     }
-    
-    if (!playlist || !playlist.videos) {
-      throw new Error('No videos found in playlist');
-    }
-    
+
+    const xml = await response.text();
+
+    // Extract all <entry> blocks
+    const entryRegex = /<entry>([\s\S]*?)<\/entry>/g;
+    const videoIdRegex = /<yt:videoId>(.*?)<\/yt:videoId>/;
+    const titleRegex = /<title>([\s\S]*?)<\/title>/;
+    const publishedRegex = /<published>(.*?)<\/published>/;
+
     const excludedVideoIds = ['-29vYs8MAhc'];
-    
-    const filteredVideos = playlist.videos.filter(video => {
-      const title = video.title.toLowerCase();
-      const isServiceVideo = title.includes('service') || title.includes('locc');
-      const isNotExcluded = !excludedVideoIds.includes(video.id);
-      return isServiceVideo && isNotExcluded;
-    });
-    
-    const videosWithDates = filteredVideos.map(video => {
-      const parsedDate = parseDateFromTitle(video.title);
-      
-      const videoData = {
-        id: video.id,
-        title: video.title,
-        parsedDate: parsedDate
-      };
-      
-      // Use custom thumbnail if available in map
-      if (customThumbnailMap[video.id]) {
-        videoData.customThumbnail = customThumbnailMap[video.id];
+    const videos = [];
+    let match;
+
+    while ((match = entryRegex.exec(xml)) !== null) {
+      const entry = match[1];
+      const idMatch = videoIdRegex.exec(entry);
+      const titleMatch = titleRegex.exec(entry);
+      const publishedMatch = publishedRegex.exec(entry);
+
+      if (!idMatch || !titleMatch) continue;
+
+      const id = idMatch[1].trim();
+      const title = decodeXmlEntities(titleMatch[1].trim());
+      const publishedAt = publishedMatch ? new Date(publishedMatch[1].trim()) : null;
+
+      if (excludedVideoIds.includes(id)) continue;
+
+      const titleLower = title.toLowerCase();
+      const isServiceVideo = titleLower.includes('service') || titleLower.includes('locc');
+      if (!isServiceVideo) continue;
+
+      const parsedDate = parseDateFromTitle(title) || publishedAt;
+
+      const videoData = { id, title, parsedDate };
+      if (customThumbnailMap[id]) {
+        videoData.customThumbnail = customThumbnailMap[id];
       }
-        // For all 2026 videos, thumbnail generator will rotate between series images
-        // No need to set customThumbnail - it will be generated dynamically
-      
-      return videoData;
-    });
-    
-    const sortedVideos = videosWithDates.sort((a, b) => {
-      if (a.parsedDate && b.parsedDate) {
-        return b.parsedDate - a.parsedDate;
-      }
-      if (a.parsedDate && !b.parsedDate) return -1;
-      if (!a.parsedDate && b.parsedDate) return 1;
+
+      videos.push(videoData);
+    }
+
+    // Sort newest first
+    videos.sort((a, b) => {
+      if (a.parsedDate && b.parsedDate) return b.parsedDate - a.parsedDate;
+      if (a.parsedDate) return -1;
+      if (b.parsedDate) return 1;
       return 0;
     });
-    
-    const videos = sortedVideos.map(({ parsedDate, ...video }) => video);
-    
-    // Add dummy 2026 video for testing the new design
-    const dummy2026Video = {
-      id: 'dummy-2026-test',
-      title: 'LOCC | December 25, 2026 | Your Light Has Come! | Rev. Lina Eddy',
-    };
-    
-    // Insert dummy video at the beginning (most recent)
-   // videos.unshift(dummy2026Video);
-    
-    return videos;
-  } catch (error) {
-    console.error('Error fetching YouTube videos:', error);
-    return getFallbackVideos();
-  }
-}
 
-function getFallbackVideos() {
-  return [
-  ];
+    return videos.map(({ parsedDate, ...video }) => video);
+  } catch (error) {
+    console.error('Error fetching YouTube RSS feed:', error);
+    return [];
+  }
 }
