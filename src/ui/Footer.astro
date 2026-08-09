@@ -158,20 +158,28 @@ try {
         <span class="footer-nonprofit">501(c)(3) · EIN 43-1193150</span>
         <span class="footer-credit">Designed by <a href="https://donorkit.io" data-external="true">DonorKit, Inc</a></span>
         {commitShort && (
-          <span class="footer-build">
-            <a
-              href={`https://github.com/InactiveBen/Lake-Ozark/commit/${commitFull}`}
-              data-external="true"
-              class="footer-build-link"
-              title={commitMessage}
-            >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <circle cx="12" cy="12" r="3"/><line x1="12" y1="3" x2="12" y2="9"/><line x1="12" y1="15" x2="12" y2="21"/><line x1="3" y1="12" x2="9" y2="12"/><line x1="15" y1="12" x2="21" y2="12"/>
-              </svg>
-              {commitShort}
-            </a>
-            <span class="footer-build-date">· {commitDate}</span>
-          </span>
+          <a
+            href={`https://github.com/InactiveBen/Lake-Ozark/commit/${commitFull}`}
+            data-external="true"
+            class="footer-build-badge"
+          >
+            <span class="footer-build-label">build</span>
+            <span class="footer-build-hash">{commitShort}</span>
+            <span class="footer-build-tooltip">
+              <span class="footer-build-tooltip-row">
+                <span class="footer-build-tooltip-key">commit</span>
+                <span class="footer-build-tooltip-val">{commitFull.slice(0, 12)}</span>
+              </span>
+              <span class="footer-build-tooltip-row">
+                <span class="footer-build-tooltip-key">date</span>
+                <span class="footer-build-tooltip-val">{commitDate}</span>
+              </span>
+              <span class="footer-build-tooltip-row">
+                <span class="footer-build-tooltip-key">msg</span>
+                <span class="footer-build-tooltip-val footer-build-tooltip-msg">{commitMessage}</span>
+              </span>
+            </span>
+          </a>
         )}
       </div>
     </div>
@@ -437,31 +445,98 @@ try {
     color: var(--brand);
   }
 
-  .footer-build {
+  .footer-build-badge {
+    position: relative;
     display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    font-size: 0.7rem;
+    align-items: stretch;
+    text-decoration: none;
     font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace;
-    color: var(--text-light);
-    opacity: 0.7;
+    font-size: 0.65rem;
+    border-radius: 4px;
+    overflow: visible;
+    border: 1px solid var(--border);
+    line-height: 1;
+    transition: border-color 0.15s ease;
   }
 
-  .footer-build-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
+  .footer-build-badge:hover {
+    border-color: #ccc;
+  }
+
+  .footer-build-label {
+    padding: 0.25rem 0.4rem;
+    background: var(--bg-subtle);
     color: var(--text-light);
-    text-decoration: none;
+    border-right: 1px solid var(--border);
+    letter-spacing: 0.02em;
+  }
+
+  .footer-build-hash {
+    padding: 0.25rem 0.4rem;
+    background: #fff;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
     transition: color 0.15s ease;
   }
 
-  .footer-build-link:hover {
+  .footer-build-badge:hover .footer-build-hash {
     color: var(--brand);
   }
 
-  .footer-build-date {
-    color: var(--text-light);
+  /* Tooltip */
+  .footer-build-tooltip {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 8px);
+    right: 0;
+    background: #1a1a1a;
+    color: #e5e5e5;
+    border-radius: 6px;
+    padding: 0.6rem 0.75rem;
+    min-width: 220px;
+    font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace;
+    font-size: 0.65rem;
+    line-height: 1.6;
+    white-space: nowrap;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    z-index: 100;
+    flex-direction: column;
+    gap: 0.25rem;
+    pointer-events: none;
+  }
+
+  .footer-build-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    right: 10px;
+    border: 5px solid transparent;
+    border-top-color: #1a1a1a;
+  }
+
+  .footer-build-badge:hover .footer-build-tooltip {
+    display: flex;
+  }
+
+  .footer-build-tooltip-row {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .footer-build-tooltip-key {
+    color: #888;
+    min-width: 42px;
+    flex-shrink: 0;
+  }
+
+  .footer-build-tooltip-val {
+    color: #e5e5e5;
+  }
+
+  .footer-build-tooltip-msg {
+    white-space: normal;
+    max-width: 160px;
+    line-height: 1.4;
   }
 
   /* ========== Responsive ========== */
