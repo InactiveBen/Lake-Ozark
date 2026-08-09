@@ -4,11 +4,24 @@
  * @module SiteFooter
  */
 import { getVisitorInfo } from '../utils/locationCheck';
+import { execSync } from 'child_process';
 
 const info = await getVisitorInfo();
 const isLocal = info.isLocal;
 
 const utm = (content: string) => `?utm_source=lakeozarkdisciples&utm_medium=footer&utm_campaign=nav&utm_content=${content}`;
+
+let commitShort = '';
+let commitFull = '';
+let commitDate = '';
+let commitMessage = '';
+
+try {
+  commitShort = execSync('git rev-parse --short HEAD').toString().trim();
+  commitFull = execSync('git rev-parse HEAD').toString().trim();
+  commitDate = execSync('git log -1 --format=%cd --date=format:"%b %d, %Y"').toString().trim();
+  commitMessage = execSync('git log -1 --format=%s').toString().trim();
+} catch (_) {}
 ---
 
 <footer class="site-footer" role="contentinfo">
@@ -144,6 +157,22 @@ const utm = (content: string) => `?utm_source=lakeozarkdisciples&utm_medium=foot
       <div class="footer-bottom-right">
         <span class="footer-nonprofit">501(c)(3) · EIN 43-1193150</span>
         <span class="footer-credit">Designed by <a href="https://donorkit.io" data-external="true">DonorKit, Inc</a></span>
+        {commitShort && (
+          <span class="footer-build">
+            <a
+              href={`https://github.com/InactiveBen/Lake-Ozark/commit/${commitFull}`}
+              data-external="true"
+              class="footer-build-link"
+              title={commitMessage}
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="12" r="3"/><line x1="12" y1="3" x2="12" y2="9"/><line x1="12" y1="15" x2="12" y2="21"/><line x1="3" y1="12" x2="9" y2="12"/><line x1="15" y1="12" x2="21" y2="12"/>
+              </svg>
+              {commitShort}
+            </a>
+            <span class="footer-build-date">· {commitDate}</span>
+          </span>
+        )}
       </div>
     </div>
   </div>
@@ -406,6 +435,33 @@ const utm = (content: string) => `?utm_source=lakeozarkdisciples&utm_medium=foot
 
   .footer-credit a:hover {
     color: var(--brand);
+  }
+
+  .footer-build {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.7rem;
+    font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace;
+    color: var(--text-light);
+    opacity: 0.7;
+  }
+
+  .footer-build-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--text-light);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .footer-build-link:hover {
+    color: var(--brand);
+  }
+
+  .footer-build-date {
+    color: var(--text-light);
   }
 
   /* ========== Responsive ========== */
