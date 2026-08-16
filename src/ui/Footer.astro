@@ -21,7 +21,15 @@ try {
   commitFull = execSync('git rev-parse HEAD').toString().trim();
   commitDate = execSync('git log -1 --format=%cd --date=format:"%b %d, %Y"').toString().trim();
   commitMessage = execSync('git log -1 --format=%s').toString().trim();
-} catch (_) {}
+} catch (_) {
+  // Fallback for Vercel serverless runtime where git is not available
+  commitFull = process.env.VERCEL_GIT_COMMIT_SHA || '';
+  commitShort = commitFull ? commitFull.slice(0, 7) : '';
+  commitMessage = process.env.VERCEL_GIT_COMMIT_MESSAGE || '';
+  commitDate = process.env.VERCEL_GIT_COMMIT_AUTHORED_AT
+    ? new Date(process.env.VERCEL_GIT_COMMIT_AUTHORED_AT).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    : '';
+}
 ---
 
 <footer class="site-footer" role="contentinfo">
