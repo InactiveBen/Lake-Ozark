@@ -1,0 +1,155 @@
+---
+/**
+ * @file AfterSchoolDialog.astro
+ * @description Full-page promotional dialog for the free after-school program.
+ * Mounted in Layout.astro on every page except /children-youth.
+ * Closing only hides it for the current page view — it reappears on every
+ * page load or refresh (no dismissal persistence, by design).
+ *
+ * To turn the dialog off site-wide, set SHOW_DIALOG to false.
+ */
+const SHOW_DIALOG = true;
+const REGISTER_URL = "https://forms.gle/zrviPSSijCTesMzj8";
+---
+
+{SHOW_DIALOG && (
+  <div
+    id="afterSchoolDialog"
+    class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[150] flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="afterSchoolDialogTitle"
+    style="font-family: 'Albert Sans', system-ui, sans-serif;"
+  >
+    <div class="bg-white rounded-2xl max-w-2xl w-full my-auto overflow-hidden animate-dialog-in shadow-2xl">
+      <!-- Header -->
+      <div class="relative bg-brand px-6 sm:px-10 pt-8 pb-6 text-white">
+        <button
+          id="afterSchoolDialogClose"
+          class="absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-full bg-white/15 hover:bg-white/30 transition-colors"
+          aria-label="Close dialog"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        <p class="text-sm font-semibold uppercase tracking-wider text-white/80 mb-2">Free Community Program</p>
+        <h2 id="afterSchoolDialogTitle" class="text-3xl sm:text-4xl font-semibold leading-tight mb-2">
+          After-School Program
+        </h2>
+        <p class="text-lg text-white/90 font-light">
+          Starts September 9, 2026 &middot; Wednesdays 3:30&ndash;5:30 PM &middot; Grades K&ndash;5
+        </p>
+      </div>
+
+      <!-- Body -->
+      <div class="px-6 sm:px-10 py-8">
+        <p class="text-gray-600 leading-relaxed mb-6">
+          Lake Ozark Christian Church is offering a completely <strong class="text-gray-900">free</strong> after-school
+          program for kids &mdash; and we can pick your child up from school.
+        </p>
+
+        <div class="grid sm:grid-cols-2 gap-4 mb-8">
+          <div class="flex items-start gap-3">
+            <div class="w-9 h-9 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8m-8 4h8m-9 4h10a2 2 0 002-2V7a4 4 0 00-4-4H9a4 4 0 00-4 4v6a2 2 0 002 2zm-1 4h.01M17 19h.01M5 15v3a1 1 0 001 1h1m10-4v3a1 1 0 01-1 1h-1" />
+              </svg>
+            </div>
+            <div>
+              <p class="font-medium text-gray-900">School pick-up provided</p>
+              <p class="text-sm text-gray-500">We can pick up your child from school</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-9 h-9 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            </div>
+            <div>
+              <p class="font-medium text-gray-900">Learn about faith</p>
+              <p class="text-sm text-gray-500">Age-appropriate lessons about God's love</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-9 h-9 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z" />
+              </svg>
+            </div>
+            <div>
+              <p class="font-medium text-gray-900">Snack &amp; craft time</p>
+              <p class="text-sm text-gray-500">A snack and hands-on crafts every week</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-9 h-9 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <p class="font-medium text-gray-900">Play time</p>
+              <p class="text-sm text-gray-500">Fun, supervised play in a safe environment</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTAs -->
+        <div class="flex flex-col sm:flex-row gap-3">
+          <a
+            href={REGISTER_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            id="afterSchoolDialogRegister"
+            class="flex-1 inline-flex items-center justify-center px-6 py-4 bg-brand hover:bg-brand-dark text-white font-semibold text-lg rounded-lg transition-colors"
+          >
+            Register Online — It's Free
+          </a>
+          <a
+            href="/children-youth"
+            id="afterSchoolDialogLearnMore"
+            class="inline-flex items-center justify-center px-6 py-4 border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded-lg transition-colors"
+          >
+            Learn More
+          </a>
+        </div>
+        <button
+          id="afterSchoolDialogLater"
+          class="w-full mt-4 text-sm text-gray-400 hover:text-gray-600 transition-colors"
+        >
+          Maybe later
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+<style>
+  .animate-dialog-in {
+    animation: dialogIn 0.25s ease-out;
+  }
+
+  @keyframes dialogIn {
+    from { opacity: 0; transform: translateY(16px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+</style>
+
+<script>
+  const dialog = document.getElementById('afterSchoolDialog');
+
+  // Close only hides the dialog for this page view — no dismissal is stored,
+  // so it reappears on every navigation or refresh.
+  function dismiss() {
+    dialog?.remove();
+  }
+
+  document.getElementById('afterSchoolDialogClose')?.addEventListener('click', dismiss);
+  document.getElementById('afterSchoolDialogLater')?.addEventListener('click', dismiss);
+  document.getElementById('afterSchoolDialogRegister')?.addEventListener('click', dismiss);
+  document.getElementById('afterSchoolDialogLearnMore')?.addEventListener('click', dismiss);
+  dialog?.addEventListener('click', (e) => { if (e.target === dialog) dismiss(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') dismiss(); });
+</script>

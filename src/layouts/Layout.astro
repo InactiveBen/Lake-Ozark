@@ -15,7 +15,8 @@ import PrivacyBanner from '../components/PrivacyBanner.astro';
 import AlertSmall from '../components/AlertSmall.astro';      
 import AlertBanner from '../components/AlertBanner.astro';      
 import LocationPermission from '../components/LocationPermission.astro';
-import SeasonalBanner from '../components/SeasonalBanner.astro'; 
+import SeasonalBanner from '../components/SeasonalBanner.astro';
+import AfterSchoolDialog from '../components/AfterSchoolDialog.astro';
 
 // ----------------------------------------------------------------
 // 1. Component Props and Defaults
@@ -109,6 +110,9 @@ const jsonLd = {
 // 4. Sentry Configuration 
 // ----------------------------------------------------------------
 const SENTRY_DSN = import.meta.env.PUBLIC_SENTRY_DSN;
+
+// Show the after-school promo dialog on every page except the children page itself
+const isChildrenPage = Astro.url.pathname.replace(/\/$/, '') === '/children-youth';
 const SENTRY_TRACING_URL = "https://browser.sentry-cdn.com/8.42.0/bundle.tracing.replay.min.js";
 const IS_PRODUCTION = Astro.url.hostname === 'lakeozarkdisciples.org';
 
@@ -256,6 +260,8 @@ const IS_PRODUCTION = Astro.url.hostname === 'lakeozarkdisciples.org';
     
     <PrivacyBanner />
     <LocationPermission />
+
+    {!isChildrenPage && <AfterSchoolDialog />}
 
     {
       !IS_PRODUCTION && (
