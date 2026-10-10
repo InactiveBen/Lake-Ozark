@@ -118,15 +118,23 @@ export function parseDateFromTitle(title) {
   return null;
 }
 
+async function fetchWithRetry(url, options, retries = 3, delayMs = 500) {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    const response = await fetch(url, options);
+    if (response.ok) return response;
+    if (attempt < retries) await new Promise(r => setTimeout(r, delayMs * attempt));
+  }
+  throw new Error(`RSS feed failed after ${retries} attempts`);
+}
+
 export async function fetchLatestVideos() {
   try {
-    const response = await fetch(RSS_URL, {
-      headers: { 'Accept': 'application/xml, text/xml, */*' }
+    const response = await fetchWithRetry(RSS_URL, {
+      headers: {
+        'Accept': 'application/xml, text/xml, */*',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      }
     });
-
-    if (!response.ok) {
-      throw new Error(`RSS feed returned ${response.status}`);
-    }
 
     const xml = await response.text();
 
