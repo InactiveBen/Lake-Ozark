@@ -172,49 +172,6 @@ export const prerender = false;
       gap: 10px;
     }
 
-    /* ── OPTIONAL DETAILS ── */
-    .details-toggle {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      background: none;
-      border: none;
-      border-top: 1px solid #f3f4f6;
-      padding: 13px 20px;
-      cursor: pointer;
-      font-family: inherit;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .details-toggle-label {
-      font-size: 13px;
-      font-weight: 500;
-      color: #6b7280;
-    }
-
-    .details-toggle-right {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 13px;
-      color: #2563eb;
-      font-weight: 500;
-    }
-
-    .details-chevron { transition: transform 0.2s; }
-    .details-toggle.open .details-chevron { transform: rotate(180deg); }
-
-    .details-body {
-      display: none;
-      padding: 0 20px 20px;
-      border-top: 1px solid #f3f4f6;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .details-body.open { display: flex; }
-
     /* ── RULES ── */
     .rules-toggle {
       display: flex;
@@ -537,41 +494,30 @@ export const prerender = false;
                 <input type="email" id="email" placeholder="you@example.com" autocomplete="email" />
               </div>
             </div>
-          </div>
-          </div>
-
-          <button class="details-toggle" id="details-toggle" type="button">
-            <span class="details-toggle-label">Additional Details <span style="color:#d1d5db;font-weight:400">(optional)</span></span>
-            <span class="details-toggle-right">
-              <span id="details-hint">Add</span>
-              <svg class="details-chevron" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
-            </span>
-          </button>
-
-          <div class="details-body" id="details-body">
-            <div class="field" style="padding-top:14px">
-              <label for="vehicle-model">Make &amp; Model</label>
-              <input type="text" id="vehicle-model" placeholder="e.g. Toyota Camry" maxlength="40" />
-            </div>
-            <div class="field">
-              <label for="vehicle-color">Vehicle Color</label>
-              <select id="vehicle-color">
-                <option value="">Select color…</option>
-                <option>White</option>
-                <option>Black</option>
-                <option>Silver / Gray</option>
-                <option>Red</option>
-                <option>Blue</option>
-                <option>Green</option>
-                <option>Brown / Tan</option>
-                <option>Yellow / Gold</option>
-                <option>Orange</option>
-                <option>Purple</option>
-                <option>Other</option>
-              </select>
+            <div class="field field-row">
+              <div>
+                <label for="vehicle-color">Color</label>
+                <select id="vehicle-color">
+                  <option value="">Select…</option>
+                  <option>White</option>
+                  <option>Black</option>
+                  <option>Silver / Gray</option>
+                  <option>Red</option>
+                  <option>Blue</option>
+                  <option>Green</option>
+                  <option>Brown / Tan</option>
+                  <option>Yellow / Gold</option>
+                  <option>Orange</option>
+                  <option>Purple</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div>
+                <label for="vehicle-model">Make &amp; Model</label>
+                <input type="text" id="vehicle-model" placeholder="e.g. Toyota Camry" maxlength="40" />
+              </div>
             </div>
           </div>
-
         </div>
 
         <div class="section-block">
@@ -659,16 +605,6 @@ export const prerender = false;
 </html>
 
 <script>
-  const detailsToggle = document.getElementById('details-toggle') as HTMLButtonElement;
-  const detailsBody = document.getElementById('details-body')!;
-  const detailsHint = document.getElementById('details-hint')!;
-
-  detailsToggle.addEventListener('click', () => {
-    const open = detailsBody.classList.toggle('open');
-    detailsToggle.classList.toggle('open', open);
-    detailsHint.textContent = open ? 'Hide' : 'Add';
-  });
-
   const rulesToggle = document.getElementById('rules-toggle') as HTMLButtonElement;
   const rulesList = document.getElementById('rules-list')!;
   const rulesHintText = document.getElementById('rules-hint-text')!;
