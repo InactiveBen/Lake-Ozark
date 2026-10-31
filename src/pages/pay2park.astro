@@ -1,0 +1,487 @@
+---
+export const prerender = false;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>LOZ Parking — Day Pass</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #f0f2f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 48px 16px 64px;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04);
+      width: 100%;
+      max-width: 460px;
+      padding: 32px;
+    }
+
+    /* ── LOGO ── */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      background: #111;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: #111;
+    }
+
+    /* ── SUMMARY ── */
+    .summary {
+      margin-bottom: 28px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .summary-label {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 4px;
+    }
+
+    .summary-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .summary-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: #111;
+    }
+
+    .summary-price {
+      font-size: 28px;
+      font-weight: 800;
+      color: #111;
+      letter-spacing: -1px;
+      white-space: nowrap;
+    }
+
+    /* ── FIELD GROUP ── */
+    .field-group {
+      margin-bottom: 20px;
+    }
+
+    .field-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #444;
+      margin-bottom: 6px;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 10px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    select {
+      width: 100%;
+      height: 48px;
+      padding: 0 14px;
+      border: 1.5px solid #d8dde6;
+      border-radius: 6px;
+      font-size: 16px;
+      font-family: inherit;
+      color: #111;
+      background: #fff;
+      outline: none;
+      -webkit-appearance: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    input:focus, select:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+    }
+
+    .plate-input {
+      height: 64px !important;
+      font-size: 30px !important;
+      font-weight: 800 !important;
+      letter-spacing: 8px !important;
+      text-transform: uppercase !important;
+      text-align: center !important;
+    }
+
+    .plate-input::placeholder {
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 3px;
+      color: #c8cdd6;
+    }
+
+    /* ── RULES ── */
+    .rules-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 0;
+      margin-bottom: 10px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      font-family: inherit;
+    }
+
+    .rules-toggle-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .rules-toggle-hint {
+      font-size: 12px;
+      color: #bbb;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .chevron {
+      transition: transform 0.2s;
+    }
+
+    .rules-toggle[aria-expanded="true"] .chevron {
+      transform: rotate(180deg);
+    }
+
+    .rules-body {
+      display: none;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+
+    .rules-body.open { display: block; }
+
+    .rules-list {
+      list-style: none;
+    }
+
+    .rules-list li {
+      display: flex;
+      gap: 12px;
+      padding: 11px 16px;
+      font-size: 13px;
+      color: #444;
+      line-height: 1.6;
+      border-bottom: 1px solid #e8e8e8;
+    }
+
+    .rules-list li:last-child { border-bottom: none; }
+
+    .dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #d1d5db;
+      flex-shrink: 0;
+      margin-top: 8px;
+    }
+
+    .rules-list li strong { font-weight: 600; color: #111; }
+
+    /* ── AGREE ── */
+    .agree-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      margin-bottom: 20px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .agree-label input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      accent-color: #4f46e5;
+      cursor: pointer;
+    }
+
+    .agree-label span {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.4;
+    }
+
+    /* ── ERROR ── */
+    .error-msg {
+      display: none;
+      font-size: 13px;
+      color: #b91c1c;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+    }
+
+    .error-msg.show { display: block; }
+
+    /* ── PAY BUTTON ── */
+    .pay-btn {
+      width: 100%;
+      height: 52px;
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.1s;
+      -webkit-tap-highlight-color: transparent;
+      margin-bottom: 16px;
+    }
+
+    .pay-btn:active { background: #333; }
+    .pay-btn:disabled { background: #bbb; cursor: not-allowed; }
+
+    .spinner {
+      display: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.65s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .pay-btn.loading .spinner { display: block; }
+    .pay-btn.loading .btn-text { display: none; }
+    .pay-btn.loading .lock { display: none; }
+
+    /* ── FINE PRINT ── */
+    .fine-print {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #aaa;
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 520px) {
+      body {
+        padding: 0;
+        align-items: stretch;
+        background: #fff;
+      }
+
+      .card {
+        border-radius: 0;
+        box-shadow: none;
+        padding: 28px 20px 40px;
+        min-height: 100vh;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+
+    <div class="logo">
+      <div class="logo-mark">P</div>
+      <span class="logo-text">LOZ Parking</span>
+    </div>
+
+    <div class="summary">
+      <p class="summary-label">1560 Bagnell Dam Blvd · Lake Ozark, MO</p>
+      <div class="summary-row">
+        <span class="summary-name">Day Pass</span>
+        <span class="summary-price">$20.00</span>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label for="plate">License Plate Number</label>
+      <input type="text" id="plate" class="plate-input" placeholder="ABC 1234" maxlength="10"
+        autocomplete="off" spellcheck="false" autocorrect="off" autocapitalize="characters" />
+    </div>
+
+    <div class="field-group field-row">
+      <div>
+        <label for="state">State</label>
+        <select id="state">
+          <option value="MO" selected>MO</option>
+          <option value="AL">AL</option><option value="AK">AK</option><option value="AZ">AZ</option><option value="AR">AR</option><option value="CA">CA</option><option value="CO">CO</option><option value="CT">CT</option><option value="DE">DE</option><option value="FL">FL</option><option value="GA">GA</option><option value="HI">HI</option><option value="ID">ID</option><option value="IL">IL</option><option value="IN">IN</option><option value="IA">IA</option><option value="KS">KS</option><option value="KY">KY</option><option value="LA">LA</option><option value="ME">ME</option><option value="MD">MD</option><option value="MA">MA</option><option value="MI">MI</option><option value="MN">MN</option><option value="MS">MS</option><option value="MT">MT</option><option value="NE">NE</option><option value="NV">NV</option><option value="NH">NH</option><option value="NJ">NJ</option><option value="NM">NM</option><option value="NY">NY</option><option value="NC">NC</option><option value="ND">ND</option><option value="OH">OH</option><option value="OK">OK</option><option value="OR">OR</option><option value="PA">PA</option><option value="RI">RI</option><option value="SC">SC</option><option value="SD">SD</option><option value="TN">TN</option><option value="TX">TX</option><option value="UT">UT</option><option value="VT">VT</option><option value="VA">VA</option><option value="WA">WA</option><option value="WV">WV</option><option value="WI">WI</option><option value="WY">WY</option>
+        </select>
+      </div>
+      <div>
+        <label for="email">Email for Receipt</label>
+        <input type="email" id="email" placeholder="you@example.com" autocomplete="email" />
+      </div>
+    </div>
+
+    <button class="rules-toggle" id="rules-toggle" aria-expanded="false" aria-controls="rules-body" type="button">
+      <span class="rules-toggle-label">Parking Rules</span>
+      <span class="rules-toggle-hint">
+        View rules
+        <svg class="chevron" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+      </span>
+    </button>
+
+    <div class="rules-body" id="rules-body">
+      <ul class="rules-list">
+        <li><span class="dot"></span>This pass is valid for the date of purchase only. Non-transferable and non-refundable.</li>
+        <li><span class="dot"></span>All vehicles must be removed from the lot by <strong>3:00 AM</strong>. Overnight parking is strictly prohibited.</li>
+        <li><span class="dot"></span>No trailers, boats, or towed equipment of any kind permitted.</li>
+        <li><span class="dot"></span>Park within marked spaces only. Do not block driveways, fire lanes, or access points.</li>
+        <li><span class="dot"></span>LOZ Parking is not liable for theft, damage, or loss of any vehicle or its contents.</li>
+        <li><span class="dot"></span>Unpaid or non-compliant vehicles may be towed at the owner's expense without notice.</li>
+      </ul>
+    </div>
+
+    <label class="agree-label" for="agree">
+      <input type="checkbox" id="agree" />
+      <span>I have read and agree to the parking rules above.</span>
+    </label>
+
+    <div class="error-msg" id="error-msg"></div>
+
+    <button class="pay-btn" id="pay-btn" type="button">
+      <svg class="lock" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" opacity="0.6"><rect x="3" y="11" width="18" height="11" rx="2" stroke-width="2.5"/><path d="M7 11V7a5 5 0 0110 0v4" stroke-width="2.5" stroke-linecap="round"/></svg>
+      <div class="spinner"></div>
+      <span class="btn-text">Pay $20.00</span>
+    </button>
+
+    <p class="fine-print">
+      <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" stroke-width="2.5"/><path d="M7 11V7a5 5 0 0110 0v4" stroke-width="2.5" stroke-linecap="round"/></svg>
+      Secured by DonorKit &middot; All sales final
+    </p>
+
+  </div>
+
+</body>
+</html>
+
+<script>
+  const rulesToggle = document.getElementById('rules-toggle') as HTMLButtonElement;
+  const rulesBody = document.getElementById('rules-body')!;
+
+  const rulesHintText = rulesToggle.querySelector('.rules-toggle-hint') as HTMLElement;
+
+  rulesToggle.addEventListener('click', () => {
+    const open = rulesBody.classList.toggle('open');
+    rulesToggle.setAttribute('aria-expanded', String(open));
+    rulesHintText.childNodes[0].textContent = open ? 'Hide ' : 'View rules ';
+  });
+
+  const plateInput = document.getElementById('plate') as HTMLInputElement;
+  const errorMsg = document.getElementById('error-msg')!;
+  const payBtn = document.getElementById('pay-btn') as HTMLButtonElement;
+  const agreeCheckbox = document.getElementById('agree') as HTMLInputElement;
+
+  plateInput.addEventListener('input', () => {
+    plateInput.value = plateInput.value.toUpperCase().replace(/[^A-Z0-9 ]/g, '');
+  });
+
+  function showError(msg: string) {
+    errorMsg.textContent = msg;
+    errorMsg.classList.add('show');
+    errorMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function hideError() { errorMsg.classList.remove('show'); }
+
+  payBtn.addEventListener('click', async () => {
+    hideError();
+    const plate = plateInput.value.trim();
+    const state = (document.getElementById('state') as HTMLSelectElement).value;
+    const email = (document.getElementById('email') as HTMLInputElement).value.trim();
+    const agreed = agreeCheckbox.checked;
+
+    if (!plate || plate.length < 2) return showError('Please enter your license plate number.');
+    if (!email || !email.includes('@')) return showError('Please enter a valid email address.');
+    if (!agreed) return showError('Please agree to the parking rules to continue.');
+
+    payBtn.disabled = true;
+    payBtn.classList.add('loading');
+
+    try {
+      const res = await fetch('https://api.locc.us/api/v2/donation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: 20,
+          email,
+          donationType: 'one-time',
+          frequency: 'monthly',
+          coverFees: false,
+          note: `Parking: ${plate} (${state}) · Day Pass`
+        })
+      });
+
+      const data = await res.json();
+
+      if (data.success && data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error(data.message || 'Could not create payment session.');
+      }
+    } catch (err: any) {
+      showError(err.message || 'Something went wrong. Please try again.');
+      payBtn.disabled = false;
+      payBtn.classList.remove('loading');
+    }
+  });
+</script>
