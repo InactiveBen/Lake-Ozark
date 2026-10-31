@@ -209,9 +209,8 @@ export const prerender = false;
     }
 
     .rules-list li {
-      display: flex;
-      gap: 12px;
-      padding: 11px 16px;
+      position: relative;
+      padding: 11px 16px 11px 28px;
       font-size: 13px;
       color: #444;
       line-height: 1.6;
@@ -220,13 +219,15 @@ export const prerender = false;
 
     .rules-list li:last-child { border-bottom: none; }
 
-    .dot {
+    .rules-list li::before {
+      content: '';
+      position: absolute;
+      left: 14px;
+      top: 19px;
       width: 4px;
       height: 4px;
       border-radius: 50%;
       background: #d1d5db;
-      flex-shrink: 0;
-      margin-top: 8px;
     }
 
     .rules-list li strong { font-weight: 600; color: #111; }
@@ -382,13 +383,13 @@ export const prerender = false;
 
     <div class="rules-body" id="rules-body">
       <ul class="rules-list">
-        <li><span class="dot"></span>This pass is valid for the date of purchase only. Non-transferable and non-refundable.</li>
-        <li><span class="dot"></span>All vehicles must be removed from the lot by <strong>3:00 AM</strong>.</li>
-        <li><span class="dot"></span>Overnight parking is strictly prohibited.</li>
-        <li><span class="dot"></span>No trailers, boats, or towed equipment of any kind permitted.</li>
-        <li><span class="dot"></span>Park within marked spaces only. Do not block driveways, fire lanes, or access points.</li>
-        <li><span class="dot"></span>LOZ Parking is not liable for theft, damage, or loss of any vehicle or its contents.</li>
-        <li><span class="dot"></span>Unpaid or non-compliant vehicles may be towed at the owner's expense without notice.</li>
+        <li>This pass is valid for the date of purchase only. Non-transferable and non-refundable.</li>
+        <li>All vehicles must be removed from the lot by <strong>3:00 AM</strong>.</li>
+        <li>Overnight parking is strictly prohibited.</li>
+        <li>No trailers, boats, or towed equipment of any kind permitted.</li>
+        <li>Park within marked spaces only. Do not block driveways, fire lanes, or access points.</li>
+        <li>LOZ Parking is not liable for theft, damage, or loss of any vehicle or its contents.</li>
+        <li>Unpaid or non-compliant vehicles may be towed at the owner's expense without notice.</li>
       </ul>
     </div>
 
